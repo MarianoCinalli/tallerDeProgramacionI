@@ -3,7 +3,7 @@
  TEMP := $(subst src/,obj/,$(SOURCES))
  OBJECTS := $(subst .cpp,.o,$(TEMP))
  COMPILER := g++
- LIBRARIES := -lSDL2 -lSDL2_image
+ LIBRARIES := -lSDL2 -lSDL2_image -lyaml-cpp
  LINKING_FLAGS := $(LIBRARIES) -Wall -I headers/ -o
  COMPILING_FLAGS := -g -std=c++11 -Wall -I headers/ -c -o
 
