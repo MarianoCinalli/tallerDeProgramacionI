@@ -30,3 +30,20 @@
 *.exe
 *.out
 *.app
+main
+
+#Clion
+CMakeLists.txt
+.idea/
+cmake-build-debug
+
+#Eclipse
+.metadata/
+
+#VSCode
+.vscode
+
+# Log files
+*.log
+.DS_Store
+headers/.DS_Store
