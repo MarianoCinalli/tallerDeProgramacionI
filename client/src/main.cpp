@@ -3,14 +3,22 @@
 #include <string.h>
 #include <fstream>
 #include <stdio.h>
+#include <yaml-cpp/yaml.h>
 #include "util/Constants.h"
 #include "util/logger.h"
+<<<<<<< HEAD
 #include "controller/cancha_controller.h"
 //#include <yaml.h>
+=======
+#include "util/conf.h"
+
+>>>>>>> Implementada primera version del parser, en la clase Conf
 
 // Global variables ---------------------------------------
 int LOG_MIN_LEVEL = LOG_ERROR; // Cambiar por parametro parseado.
 std::ofstream LOG_FILE_POINTER;
+Conf conf;
+const std::string confFileName = "src/config.yaml";
 const std::string logFileName = "trabajoPractico.log";
 // Global variables ---------------------------------------
 
@@ -18,9 +26,14 @@ int main(int argc, char* argv[]) {
     // Log initialization ---------------------------------
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
-
     // Program
     startView();
+    if (conf.loadConf("src/config.yaml")){
+      conf.loadConf(confFileName); //Configuracion buena si falla
+    }
+    else {
+      conf.printConf();
+    }
     logSessionFinished();
     LOG_FILE_POINTER.close();
 
