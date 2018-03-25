@@ -1,4 +1,4 @@
-# Trabajos practicos de Tecnicas programación I FIUBA
+# Trabajos practicos de Taller de Programación I FIUBA
 
 - Facultad de Ingenieria
 - Universidad de Buenos Aires
