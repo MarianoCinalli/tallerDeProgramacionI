@@ -47,3 +47,5 @@ cmake-build-debug
 *.log
 .DS_Store
 headers/.DS_Store
+
+*.gcc-flags.json
