@@ -1,6 +1,6 @@
 # configuracion
 equipo:
   formacion: '3-3'
-  casaca: 'principal'
+  casaca: 'alternativa' #'principal' o 'alternativa'
 debug:
-  level: 'debug'
+  level: 'debug' #'debug' o "info" o "error"
