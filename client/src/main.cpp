@@ -6,13 +6,9 @@
 #include <yaml-cpp/yaml.h>
 #include "util/Constants.h"
 #include "util/logger.h"
-<<<<<<< HEAD
 #include "controller/cancha_controller.h"
 //#include <yaml.h>
-=======
 #include "util/conf.h"
-
->>>>>>> Implementada primera version del parser, en la clase Conf
 
 // Global variables ---------------------------------------
 int LOG_MIN_LEVEL = LOG_ERROR; // Cambiar por parametro parseado.
