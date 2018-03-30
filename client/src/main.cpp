@@ -26,9 +26,10 @@ int main(int argc, char* argv[]) {
     // Log initialization ---------------------------------
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
+    //Configuracion
     cargarConfiguracion(confFileName);
+    log(&conf, LOG_INFO);
     // Program
-    log(&conf, LOG_DEBUG);
     startView();
     logSessionFinished();
     LOG_FILE_POINTER.close();
