@@ -36,5 +36,6 @@
 	apt-get install libsdl2-dev
 	apt-get install libsdl2-image-dev
 	apt-get install libyaml-cpp-dev
+	apt-get install libboost-all-dev
 
 .PHONY: all clean main
