@@ -18,7 +18,7 @@ enum casacas {
 
 class Conf {
   public:
-
+    const std::string defaultFile = "src/default.yaml";
     int getFormacion();
     int getCasaca();    //principal true o alternativa false
     int getDebugLevel();
@@ -26,7 +26,7 @@ class Conf {
 
     void printConf();
   private:
-    const std::string defaultFile = "src/default.yaml";
+
     YAML::Node config;
     YAML::Node defaultConfig;
     int formacion;
@@ -35,6 +35,7 @@ class Conf {
     void cargarCasaca();
     void cargarFormacion();
     void cargarDebug();
+    int cargarParametro(string parametro, int (*fn)(YAML::Node));
 
 
 };

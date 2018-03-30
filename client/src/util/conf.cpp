@@ -3,7 +3,12 @@
 
 using namespace std;
 
-int chooseDebugLevel(string str) {
+int chooseDebugLevel(YAML::Node nod) {
+        try{
+        if (!nod["debug"]["level"]){
+          return VALOR_INVALIDO;
+        }
+        string str = nod["debug"]["level"].as<string>();
         if (!str.compare("debug")) {
                 return LOG_DEBUG;
         }
@@ -15,51 +20,67 @@ int chooseDebugLevel(string str) {
         }
         else
                 return VALOR_INVALIDO;
-}
-
-int chooseCasaca(string str) {
-        if (!str.compare("principal")) {
-                return LOG_DEBUG;
-        }
-        else if (!str.compare("alternativa")) {
-                return LOG_INFO;
-        }
-        else
-                return VALOR_INVALIDO;
-}
-
-int chooseFormacion(string str) {
-  if (!str.compare("3-3")) {
-          return 33;
-  }
-  else if (!str.compare("3-1-2")) {
-          return 312;
-  }
-  else if (!str.compare("3-2-1")) {
-          return 321;
-  }
-  else if (!str.compare("2-3-1")) {
-          return 231;
-  }
-  else if (!str.compare("2-2-2")) {
-          return 222;
-  }
-  else
+              }
+        catch (YAML::BadSubscript e){
           return VALOR_INVALIDO;
+        }
+
 }
 
-int cargarParametro(YAML::Node conf, YAML::Node defaultConf, string parametro, int (*fn)(string)){
-  int valor;
-  if(!conf){
-    printf("no hay %s\n", parametro.c_str());
-      valor = fn(defaultConf.as<std::string>());
-  }
-  else {
-    valor = fn(conf.as<std::string>());
-    if (valor == VALOR_INVALIDO){
-      printf("%s invalido, valor por default\n", parametro.c_str());
-      valor = fn(conf.as<std::string>());
+int chooseCasaca(YAML::Node nod) {
+        try{
+          if (!nod["equipo"]["casaca"]){
+            return VALOR_INVALIDO;
+          }
+          string str = nod["equipo"]["casaca"].as<string>();
+          if (!str.compare("principal")) {
+                  return LOG_DEBUG;
+          }
+          else if (!str.compare("alternativa")) {
+                  return LOG_INFO;
+          }
+          else
+                  return VALOR_INVALIDO;
         }
+        catch (YAML::BadSubscript e){
+          return VALOR_INVALIDO;
+        }
+}
+
+int chooseFormacion(YAML::Node nod) {
+  try{
+    if (!nod["equipo"]["formacion"]){
+      return VALOR_INVALIDO;
+    }
+    string str = nod["equipo"]["formacion"].as<string>();
+    if (!str.compare("3-3")) {
+            return 33;
+    }
+    else if (!str.compare("3-1-2")) {
+            return 312;
+    }
+    else if (!str.compare("3-2-1")) {
+            return 321;
+    }
+    else if (!str.compare("2-3-1")) {
+            return 231;
+    }
+    else if (!str.compare("2-2-2")) {
+            return 222;
+    }
+    else
+            return VALOR_INVALIDO;
+    }
+    catch (YAML::BadSubscript e){
+      return VALOR_INVALIDO;
+    }
+}
+
+int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)){
+  int valor = fn(config);
+  if(valor == VALOR_INVALIDO){
+    printf("%s invalido, valor por default\n", parametro.c_str());
+    valor = fn(defaultConfig);
   }
   return valor;
 }
@@ -74,9 +95,9 @@ int Conf::loadConf(string file){
                 //return ARCHIVO_INVALIDO;
         }
         defaultConfig = YAML::LoadFile(defaultFile);
-        casaca = cargarParametro(config["equipo"]["casaca"], defaultConfig["equipo"]["casaca"], "Casaca", &chooseCasaca);
-        formacion = cargarParametro(config["equipo"]["formacion"], defaultConfig["equipo"]["Formacion"], "formacion", &chooseFormacion);
-        debugLevel = cargarParametro(config["debug"]["level"], defaultConfig["debug"]["level"], "Debug level", &chooseDebugLevel);
+        debugLevel = cargarParametro("Debug level", &chooseDebugLevel);
+        casaca = cargarParametro("Casaca", &chooseCasaca);
+        formacion = cargarParametro("formacion", &chooseFormacion);
         return 0;
 }
 

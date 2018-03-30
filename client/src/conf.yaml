@@ -1,6 +1,0 @@
-# configuracion
-equipo:
-  formacion: '3-1-2'
-  casaca: 'alternativa' #'principal' o 'alternativa'
-debug:
-  level: 'info' #'debug' o "info" o "error"

@@ -15,10 +15,11 @@ std::ofstream LOG_FILE_POINTER;
 Conf conf;
 
 const std::string logFileName = "trabajoPractico.log";
+const std::string confFileName = "conf.yaml";
 // Global variables ---------------------------------------
 
-void cargarConfiguracion(){
-  conf.loadConf("src/conf.yaml");
+void cargarConfiguracion(string confFile){
+  conf.loadConf(confFile);
   conf.printConf();
 }
 
@@ -26,7 +27,7 @@ int main(int argc, char* argv[]) {
     // Log initialization ---------------------------------
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
-    cargarConfiguracion();
+    cargarConfiguracion(confFileName);
     // Program
     startView();
     logSessionFinished();
