@@ -48,50 +48,22 @@ int chooseFormacion(string str) {
           return VALOR_INVALIDO;
 }
 
-void Conf::cargarDebug(){
-  string parametro = "level debug";
-  if(!config["debug"]["level"]){
-      printf("no hay %s\n", parametro.c_str());
-      debugLevel = chooseDebugLevel(defaultConfig["debug"]["level"].as<std::string>());
+int cargarParametro(YAML::Node conf, YAML::Node defaultConf, string parametro, int (*fn)(string)){
+  int valor;
+  if(!conf){
+    printf("no hay %s\n", parametro.c_str());
+      valor = fn(defaultConf.as<std::string>());
   }
   else {
-      debugLevel = chooseDebugLevel(config["debug"]["level"].as<std::string>());
-      if (debugLevel == VALOR_INVALIDO){
-          printf("%s invalido, valor por default\n", parametro.c_str());
-          debugLevel = chooseDebugLevel(defaultConfig["debug"]["level"].as<std::string>());
+    valor = fn(conf.as<std::string>());
+    if (valor == VALOR_INVALIDO){
+      printf("%s invalido, valor por default\n", parametro.c_str());
+      valor = fn(conf.as<std::string>());
         }
   }
+  return valor;
 }
 
-void Conf::cargarFormacion(){
-  string parametro = "formacion";
-  if(!config["equipo"]["formacion"]){
-    printf("no hay %s\n", parametro.c_str());
-      formacion = chooseFormacion(defaultConfig["equipo"]["formacion"].as<std::string>());
-  }
-  else {
-    formacion = chooseFormacion(config["equipo"]["formacion"].as<std::string>());
-    if (formacion == VALOR_INVALIDO){
-      printf("%s invalido, valor por default\n", parametro.c_str());
-        formacion = chooseFormacion(defaultConfig["equipo"]["formacion"].as<std::string>());
-        }
-  }
-}
-
-void Conf::cargarCasaca(){
-  string parametro = "casaca";
-  if(!config["equipo"]["casaca"]){
-    printf("no hay %s\n", parametro.c_str());
-      casaca = chooseCasaca(defaultConfig["equipo"]["casaca"].as<std::string>());
-  }
-  else {
-    casaca = chooseCasaca(config["equipo"]["casaca"].as<std::string>());
-    if (casaca == VALOR_INVALIDO){
-      printf("%s invalido, valor por default\n", parametro.c_str());
-      casaca = chooseCasaca(defaultConfig["equipo"]["casaca"].as<std::string>());
-        }
-  }
-}
 int Conf::loadConf(string file){
         try {
                 config = YAML::LoadFile(file);
@@ -102,9 +74,9 @@ int Conf::loadConf(string file){
                 //return ARCHIVO_INVALIDO;
         }
         defaultConfig = YAML::LoadFile(defaultFile);
-        cargarDebug();
-        cargarFormacion();
-        cargarCasaca();
+        casaca = cargarParametro(config["equipo"]["casaca"], defaultConfig["equipo"]["casaca"], "Casaca", &chooseCasaca);
+        formacion = cargarParametro(config["equipo"]["formacion"], defaultConfig["equipo"]["Formacion"], "formacion", &chooseFormacion);
+        debugLevel = cargarParametro(config["debug"]["level"], defaultConfig["debug"]["level"], "Debug level", &chooseDebugLevel);
         return 0;
 }
 
