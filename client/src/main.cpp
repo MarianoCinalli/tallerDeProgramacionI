@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
     // Program
     startView();
 
-
     logSessionFinished();
     LOG_FILE_POINTER.close();
 

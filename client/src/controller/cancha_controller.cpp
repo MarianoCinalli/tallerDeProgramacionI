@@ -1,113 +1,197 @@
-#include "controller/cancha_controller.h"
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <fstream>
 #include <stdio.h>
+#include "util/logger.h"
 
-using namespace std;
-
-//Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+#include "controller/cancha_controller.h"
+#include "model/ltexture.h"
+#include "model/dot.h"
 
 //The window we'll be rendering to
-SDL_Window* window = NULL;
-    
-//The surface contained by the window
-SDL_Surface* screenSurface = NULL;
+SDL_Window* gWindow = NULL;
 
-//The image we will load and show on the screen
-SDL_Surface* canchaSurface = NULL;
+//The window renderer
+SDL_Renderer* gRenderer = NULL;
 
-bool init()
-{
+//Scene textures
+LTexture gDotTexture( gRenderer );
+LTexture gBGTexture( gRenderer );
+
+bool init() {
     //Initialization flag
     bool success = true;
 
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
-        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+        log( "SDL could not initialize! SDL Error:", SDL_GetError(), 1 );
         success = false;
     }
     else
     {
-        //Create window
-        window = SDL_CreateWindow( "ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-        if( window == NULL )
+        //Set texture filtering to linear
+        if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
         {
-            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+            log( "Warning: Linear texture filtering not enabled!", 1 );
+        }
+
+        //Create window
+        gWindow = SDL_CreateWindow( "ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        if( gWindow == NULL )
+        {
+            log( "Window could not be created! SDL Error: ", SDL_GetError(), 1 );
             success = false;
         }
         else
         {
-            //Get window surface
-            screenSurface = SDL_GetWindowSurface( window );
+            //Create vsynced renderer for window
+           = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+            if == NULL )
+            {
+                log( "Renderer could not be created! SDL Error: ", SDL_GetError(), 1 );
+                success = false;
+            }
+            else
+            {
+                //Initialize renderer color
+                SDL_SetRenderDrawColor, 0xFF, 0xFF, 0xFF, 0xFF );
+
+                //Initialize PNG loading
+                int imgFlags = IMG_INIT_PNG;
+                if( !( IMG_Init( imgFlags ) & imgFlags ) )
+                {
+                    log( "SDL_image could not initialize! SDL_image Error: ", IMG_GetError(), 1 );
+                    success = false;
+                }
+            }
         }
     }
 
     return success;
 }
 
-bool loadMedia()
-{
+bool loadMedia() {
     //Loading success flag
     bool success = true;
 
-    //Load splash image
-    canchaSurface = SDL_LoadBMP( "images/cancha_800x600.bmp" );
-    if( canchaSurface == NULL )
+    //Load dot texture
+    if( !gDotTexture.loadFromFile( "images/dot.bmp" ) )
     {
-        printf( "Unable to load image %s! SDL Error: %s\n", "images/cancha_800x600.bmp", SDL_GetError() );
+        log( "Failed to load dot texture!", 1 );
+        success = false;
+    }
+
+    //Load background texture
+    if( !gBGTexture.loadFromFile( "images/bg.png" ) )
+    {
+        log( "Failed to load background texture!", SDL_GetError(), 1 );
         success = false;
     }
 
     return success;
 }
 
-void close()
-{
-    //Deallocate surface
-    SDL_FreeSurface( canchaSurface );
-    canchaSurface = NULL;
+void close() {
+    //Free loaded images
+    gDotTexture.free();
+    gBGTexture.free();
 
-    //Destroy window
-    SDL_DestroyWindow( window );
-    window = NULL;
+    //Destroy window    
+    SDL_DestroyRenderer( gRenderer );
+    SDL_DestroyWindow( gWindow );
+    gWindow = NULL;
+    gRenderer = NULL;
 
     //Quit SDL subsystems
+    IMG_Quit();
     SDL_Quit();
 }
 
-int startView() {	
+int startView() {
     //Start up SDL and create window
     if( !init() )
     {
-        printf( "Failed to initialize!\n" );
+        log( "Failed to initialize!", 1 );
     }
     else
     {
         //Load media
         if( !loadMedia() )
         {
-            printf( "Failed to load media!\n" );
+            log( "Failed to load media!", 1 );
         }
         else
-        {
-            //Apply the image
-            SDL_BlitSurface( canchaSurface, NULL, screenSurface, NULL );
+        {   
+            //Main loop flag
+            bool quit = false;
 
-            //Update the surface
-            SDL_UpdateWindowSurface( window );
+            //Event handler
+            SDL_Event e;
 
-            //Wait
-            SDL_Delay( 5000 );
+            //The dot that will be moving around on the screen
+            Dot dot();
+
+            //The camera area
+            SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
+            //While application is running
+            while( !quit )
+            {
+                //Handle events on queue
+                while( SDL_PollEvent( &e ) != 0 )
+                {
+                    //User requests quit
+                    if( e.type == SDL_QUIT )
+                    {
+                        quit = true;
+                    }
+
+                    //Handle input for the dot
+                    dot.handleEvent( e );
+                }
+
+                //Move the dot
+                dot.move();
+
+                //Center the camera over the dot
+                camera.x = ( dot.getPosX() + Dot::DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
+                camera.y = ( dot.getPosY() + Dot::DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+
+                //Keep the camera in bounds
+                if( camera.x < 0 )
+                { 
+                    camera.x = 0;
+                }
+                if( camera.y < 0 )
+                {
+                    camera.y = 0;
+                }
+                if( camera.x > LEVEL_WIDTH - camera.w )
+                {
+                    camera.x = LEVEL_WIDTH - camera.w;
+                }
+                if( camera.y > LEVEL_HEIGHT - camera.h )
+                {
+                    camera.y = LEVEL_HEIGHT - camera.h;
+                }
+
+                //Clear screen
+                SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+                SDL_RenderClear( gRenderer );
+
+                //Render background
+                gBGTexture.render( 0, 0, &camera );
+
+                //Render objects
+                dot.render( camera.x, camera.y );
+
+                //Update screen
+                SDL_RenderPresent( gRenderer );
+            }
         }
     }
 
     //Free resources and close SDL
     close();
-
-    return 0;
 }
