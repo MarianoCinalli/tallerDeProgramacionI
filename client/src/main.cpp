@@ -7,39 +7,28 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "controller/cancha_controller.h"
-//#include <yaml.h>
 #include "util/conf.h"
 
 // Global variables ---------------------------------------
 int LOG_MIN_LEVEL = LOG_ERROR; // Cambiar por parametro parseado.
 std::ofstream LOG_FILE_POINTER;
 Conf conf;
-const std::string confFileName = "src/config.yaml";
+
 const std::string logFileName = "trabajoPractico.log";
 // Global variables ---------------------------------------
 
 void cargarConfiguracion(){
-  if (conf.loadConf("src/config.yaml")){
-    conf.loadConf(confFileName); //Configuracion buena si falla la primera
-  }
-  else {
-    conf.printConf();
-  }
+  conf.loadConf("src/conf.yaml");
+  conf.printConf();
 }
 
 int main(int argc, char* argv[]) {
     // Log initialization ---------------------------------
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
+    cargarConfiguracion();
     // Program
     startView();
-    if (conf.loadConf("src/config.yaml")){
-      conf.loadConf(confFileName); //Configuracion buena si falla
-    }
-    else {
-      conf.printConf();
-    }
-    cargarConfiguracion();
     logSessionFinished();
     LOG_FILE_POINTER.close();
 
