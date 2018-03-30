@@ -10,7 +10,7 @@
 #include "util/conf.h"
 
 // Global variables ---------------------------------------
-int LOG_MIN_LEVEL = LOG_ERROR; // Cambiar por parametro parseado.
+int LOG_MIN_LEVEL = LOG_DEBUG; // Cambiar por parametro parseado.
 std::ofstream LOG_FILE_POINTER;
 Conf conf;
 
@@ -20,7 +20,6 @@ const std::string confFileName = "conf.yaml";
 
 void cargarConfiguracion(string confFile){
   conf.loadConf(confFile);
-  conf.printConf();
 }
 
 int main(int argc, char* argv[]) {
@@ -29,6 +28,7 @@ int main(int argc, char* argv[]) {
     logSessionStarted();
     cargarConfiguracion(confFileName);
     // Program
+    log(&conf, LOG_DEBUG);
     startView();
     logSessionFinished();
     LOG_FILE_POINTER.close();

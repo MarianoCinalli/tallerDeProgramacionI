@@ -1,6 +1,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 #include "util/Constants.h"
+#include "util/logger.h"
 #ifndef CONF_H
 #define CONF_H
 
@@ -16,15 +17,16 @@ enum casacas {
   ALTERNATIVA = 2,
 };
 
-class Conf {
+class Conf : public Loggable {
   public:
+    Conf();
+    ~Conf();
     const std::string defaultFile = "src/default.yaml";
     int getFormacion();
     int getCasaca();    //principal true o alternativa false
     int getDebugLevel();
     int loadConf(string file);
-
-    void printConf();
+    string toString();
   private:
 
     YAML::Node config;

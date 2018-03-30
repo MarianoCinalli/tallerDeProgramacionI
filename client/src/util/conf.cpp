@@ -3,6 +3,17 @@
 
 using namespace std;
 
+string Conf::toString(){
+  ostringstream str;
+
+  str << "\nConfiguracion\n";
+  str << "Formacion: " << formacion << "\n";
+  str << "Casaca: " << casaca << "\n";
+  str << "Debug Level: " << debugLevel << "\n";
+
+  return str.str();
+}
+
 int chooseDebugLevel(YAML::Node nod) {
         try{
         if (!nod["debug"]["level"]){
@@ -79,7 +90,7 @@ int chooseFormacion(YAML::Node nod) {
 int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)){
   int valor = fn(config);
   if(valor == VALOR_INVALIDO){
-    printf("%s invalido, valor por default\n", parametro.c_str());
+  log("Valor invalido, usando valor por default:", parametro.c_str(),LOG_ERROR);
     valor = fn(defaultConfig);
   }
   return valor;
@@ -88,16 +99,20 @@ int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)){
 int Conf::loadConf(string file){
         try {
                 config = YAML::LoadFile(file);
+                log("archivo cargado correctamente:", file.c_str(), LOG_INFO);
         }
         catch (YAML::BadFile e) {
-                printf("archivo invalido, cargando default\n");
+              log("archivo invalido, cargando default:",file.c_str(), LOG_ERROR);
                 config = YAML::LoadFile(defaultFile);
                 //return ARCHIVO_INVALIDO;
         }
         defaultConfig = YAML::LoadFile(defaultFile);
         debugLevel = cargarParametro("Debug level", &chooseDebugLevel);
+        log("cargado debug Level con valor:",debugLevel, LOG_INFO);
         casaca = cargarParametro("Casaca", &chooseCasaca);
+        log("cargado casaca con valor:",casaca, LOG_INFO);
         formacion = cargarParametro("formacion", &chooseFormacion);
+        log("cargado formacion con valor:",formacion, LOG_INFO);
         return 0;
 }
 
@@ -113,8 +128,10 @@ int Conf::getCasaca() {
         return casaca;
 }
 
-void Conf::printConf(){
-        cout << "Debug Level: " << getDebugLevel() << "\n";
-        cout << "Formacion: "<< getFormacion() << "\n";
-        cout << "Casaca: " <<  getCasaca() << "\n";
+Conf::Conf(void){
+
+}
+
+Conf::~Conf(void){
+
 }
