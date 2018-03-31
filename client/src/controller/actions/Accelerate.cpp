@@ -4,7 +4,7 @@ Accelerate::Accelerate(int direction) {
     this->direction = direction;
 }
 
-void Accelerate::excecute(Player* player) {
+void Accelerate::execute(Player* player) {
     player->accelerate(this->direction);
 }
 

@@ -17,17 +17,17 @@ int Coordinates::getY() {
 }
 
 void Coordinates::incrementX() {
-    this->++x;
+    this->x++;
 }
 
 void Coordinates::decrementX() {
-    this->--x;
+    this->x--;
 }
 
-void incrementY() {
-    this->++y;
+void Coordinates::incrementY() {
+    this->y++;
 }
 
 void Coordinates::decrementY() {
-    this->--y;
+    this->y--;
 }

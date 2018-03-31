@@ -1,3 +1,5 @@
+#include "view/Player.h"
+
 #ifndef ACTION_H
 #define ACTION_H
 
@@ -5,7 +7,7 @@ class Action {
     private:
     public:
         Action();
-        void excecute(Player* player);
+        void execute(Player* player);
         ~Action();
 };
 #endif // ACTION_H

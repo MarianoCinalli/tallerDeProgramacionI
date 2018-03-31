@@ -1,14 +1,16 @@
+#include "controller/actions/Action.h"
 #include "util/Constants.h"
 #include "view/Player.h"
 
 #ifndef DECELERATE_H
 #define DECELERATE_H
 
-class Decelerate : Action {
+class Decelerate : public Action {
     private:
+        int direction;
     public:
-        Decelerate();
-        void excecute(Player* player);
+        Decelerate(int direction);
+        void execute(Player* player);
         ~Decelerate();
 };
 #endif // DECELERATE_H

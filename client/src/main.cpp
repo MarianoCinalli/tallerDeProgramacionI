@@ -9,7 +9,7 @@
 // Para el test.
 #include "view/Player.h"
 #include "util/Coordinates.h"
-#include "controller/Action.h"
+#include "controller/actions/Action.h"
 #include "controller/ActionsManager.h"
 // Fin Para el test.
 
@@ -162,7 +162,7 @@ int main(int argc, char* argv[]) {
     // Create Player texture
     // Dummy player. Parado en el medio de la pantalla.
     Coordinates* coordinates = new Coordinates(200, 200);
-    Player* player = new Player(PLAYER_RIGHT, coordinates);
+    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
 
     bool quit = false;
     SDL_Event e;
@@ -175,14 +175,14 @@ int main(int argc, char* argv[]) {
             } else if (e.type == SDL_KEYDOWN) {
                 // Devuelve acciones que modifican vistas/modelos.
                 // Seguramente deje crear actions todo el tiempo. Por ahora es así.
-                Action* action = actionsManager->getAction(&e);
+                Action* action = actionsManager->getAction(e);
                 action->execute(player);
                 delete(action);
             }
         }
-        SDL_RenderClear(screen);
-        player->render(screen, coordinates);
-        SDL_RenderPresent(screen);
+        SDL_RenderClear(gRenderer);
+        player->render(gRenderer, coordinates);
+        SDL_RenderPresent(gRenderer);
         sleep(1/15); // Frame rate.
     }
     delete(actionsManager);

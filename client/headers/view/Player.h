@@ -1,5 +1,8 @@
 #include "util/Constants.h"
 #include "util/Coordinates.h"
+#include "util/Velocity.h"
+#include "view/SpriteManager.h"
+#include <SDL2/SDL.h>
 
 #ifndef PLAYER_H
 #define PLAYER_H

@@ -2,14 +2,14 @@
 
 Player::Player(int orientation, Coordinates* position) {
     this->orientation = orientation;
-    this->coordinates = position;
+    this->position = position;
     this->maxVelocity = 10; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->spriteManager = new SpriteManager();
 }
 
 Coordinates* Player::getPosition() {
-    return this->coordinates;
+    return this->position;
 }
 
 int Player::getOrientation() {
@@ -26,7 +26,7 @@ void Player::accelerate(int direction) {
 }
 
 void Player::decelerate(int direction) {
-    this->velocity->deaccelerate(direction, this->maxVelocity);
+    this->velocity->decelerate(direction, this->maxVelocity);
     // modify sprite.
 }
 
@@ -35,6 +35,6 @@ void Player::render(SDL_Renderer* screen, Coordinates* position) {
 }
 
 Player::~Player() {
-    delete(this->coordinates);
+    delete(this->position);
     delete(this->velocity);
 }

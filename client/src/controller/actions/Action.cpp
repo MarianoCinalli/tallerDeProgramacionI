@@ -3,6 +3,10 @@
 Action::Action() {
 }
 
+void Action::execute(Player* player) {
+
+}
+
 Action::~Action() {
 }
 

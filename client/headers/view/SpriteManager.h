@@ -1,3 +1,6 @@
+#include "util/Coordinates.h"
+#include <SDL2/SDL.h>
+
 #ifndef SPRITEMANAGER_H
 #define SPRITEMANAGER_H
 
@@ -7,7 +10,7 @@ class SpriteManager {
     private:
     public:
         SpriteManager();
-        render(SDL_Renderer* screen, Coordinates* position);
+        void render(SDL_Renderer* screen, Coordinates* position);
         ~SpriteManager();
 };
 #endif // SPRITEMANAGER_H

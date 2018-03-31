@@ -7,11 +7,11 @@ ActionsManager::~ActionsManager() {
 }
 
 // Devuelve la accion correspondiente a un evento.
-Action* ActionsManager::getAction(SDL_Event* event) {
+Action* ActionsManager::getAction(SDL_Event event) {
     Action* action;
-    if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
+    if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         // Actions for pressed keys.
-        switch (e.key.keysym.sym) {
+        switch (event.key.keysym.sym) {
             case SDLK_UP:
                 action = new Accelerate(PLAYER_ORIENTATION_UP);
                 break;
@@ -25,9 +25,9 @@ Action* ActionsManager::getAction(SDL_Event* event) {
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
         }
-    } else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
+    } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.
-        switch (e.key.keysym.sym) {
+        switch (event.key.keysym.sym) {
             case SDLK_UP:
                 action = new Decelerate(PLAYER_ORIENTATION_UP);
                 break;
