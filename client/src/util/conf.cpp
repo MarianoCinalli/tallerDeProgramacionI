@@ -128,8 +128,8 @@ int Conf::getCasaca() {
         return casaca;
 }
 
-Conf::Conf(void){
-
+Conf::Conf(string filename){
+  defaultFile = filename;
 }
 
 Conf::~Conf(void){

@@ -19,9 +19,9 @@ enum casacas {
 
 class Conf : public Loggable {
   public:
-    Conf();
+    Conf(string);
     ~Conf();
-    const std::string defaultFile = "src/default.yaml";
+    std::string defaultFile;
     int getFormacion();
     int getCasaca();    //principal true o alternativa false
     int getDebugLevel();

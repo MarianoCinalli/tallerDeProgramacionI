@@ -12,11 +12,12 @@
 // Global variables ---------------------------------------
 int LOG_MIN_LEVEL = LOG_DEBUG; // Cambiar por parametro parseado.
 std::ofstream LOG_FILE_POINTER;
-Conf conf;
 
 const std::string logFileName = "trabajoPractico.log";
+const std::string defaultConfFileName = "src/default.yaml";
 const std::string confFileName = "conf.yaml";
-// Global variables ---------------------------------------
+
+Conf conf(defaultConfFileName);
 
 void cargarConfiguracion(string confFile){
   conf.loadConf(confFile);
