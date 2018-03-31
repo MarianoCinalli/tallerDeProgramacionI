@@ -1,11 +1,11 @@
 #include "view/Player.h"
 
-Player::Player(int orientation, Coordinates* position) {
+Player::Player(int orientation, Coordinates* position, SpriteManager* spriteManager) {
     this->orientation = orientation;
     this->position = position;
     this->maxVelocity = 10; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
-    this->spriteManager = new SpriteManager();
+    this->spriteManager = spriteManager;
 }
 
 Coordinates* Player::getPosition() {

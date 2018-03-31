@@ -1,4 +1,5 @@
 #include "util/Coordinates.h"
+#include "view/SpriteSheet.h"
 #include <SDL2/SDL.h>
 
 #ifndef SPRITEMANAGER_H
@@ -8,8 +9,9 @@
 // Sabe dibujar el sprite actual.
 class SpriteManager {
     private:
+        SpriteSheet* spriteSheet;
     public:
-        SpriteManager();
+        SpriteManager(SpriteSheet* spriteSheet);
         void render(SDL_Renderer* screen, Coordinates* position);
         ~SpriteManager();
 };

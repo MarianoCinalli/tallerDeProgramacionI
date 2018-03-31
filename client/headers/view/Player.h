@@ -16,7 +16,7 @@ class Player {
         SpriteManager* spriteManager;
 
     public:
-        Player(int orientation, Coordinates* position);
+        Player(int orientation, Coordinates* position, SpriteManager* spriteManager);
 
         // Getters
         Coordinates* getPosition();
