@@ -7,11 +7,12 @@ enum logLevels {
     LOG_ERROR = 3
 };
 
+// Para indicar a donde se mueve/mira el jugador.
 enum PlayerOrientations {
-    PLAYER_LEFT = 1,
-    PLAYER_UP = 2,
-    PLAYER_RIGHT = 3,
-    PLAYER_DOWN = 3
+    PLAYER_ORIENTATION_LEFT = 1,
+    PLAYER_ORIENTATION_UP = 2,
+    PLAYER_ORIENTATION_RIGHT = 3,
+    PLAYER_ORIENTATION_DOWN = 4
 };
 
 #endif // CONSTANTS_H_

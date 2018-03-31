@@ -7,8 +7,10 @@
 class Player {
     private:
         int orientation;
+        int maxVelocity;
+        Velocity* velocity;
         Coordinates* position;
-        Sprite* sprite;
+        SpriteManager* spriteManager;
 
     public:
         Player(int orientation, Coordinates* position);
@@ -18,10 +20,8 @@ class Player {
         int getOrientation();
 
         // Modifiers
-        void moveUp();
-        void moveDown();
-        void moveRight();
-        void moveLeft();
+        void accelerate(int direction);
+        void decelerate(int direction);
         void setOrientation(int orientation);
 
         void render(SDL_Renderer* screen, Coordinates* position);
