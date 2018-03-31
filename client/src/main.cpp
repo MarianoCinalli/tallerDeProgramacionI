@@ -11,7 +11,7 @@
 #include "util/Coordinates.h"
 #include "controller/actions/Action.h"
 #include "controller/ActionsManager.h"
-#include "view/SpriteManager.h"
+#include "view/PlayerSpriteManager.h"
 #include "view/SpriteSheet.h"
 // Fin Para el test.
 
@@ -105,11 +105,11 @@ int main(int argc, char* argv[]) {
     // Este es el encargado de dibujar el sprite correspondiente
     // en cada frame. Se lo invoca cuando el jugador hace render.
     // Cada jugador tiene su manager, puede que en futuro solo haya uno por equipo.
-    SpriteManager* spriteManager = new SpriteManager(spriteSheet);
+    PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet);
 
     // Dummy player. Parado en el medio de la pantalla.
     Coordinates* coordinates = new Coordinates(200, 200);
-    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates, spriteManager);
+    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
 
     bool quit = false;
     SDL_Event e;
@@ -128,14 +128,13 @@ int main(int argc, char* argv[]) {
             }
         }
         SDL_RenderClear(renderer);
-        player->render(renderer, coordinates);
+        playerSpriteManager->render(player, renderer, coordinates);
         SDL_RenderPresent(renderer);
         sleep(1/15); // Frame rate.
     }
     delete(actionsManager);
     delete(player);
-    delete(spriteManager);
-    delete(spriteSheet);
+    delete(playerSpriteManager);
     // Fin TEST (seguramente lo cambie) -----------------------
     logSessionFinished();
     LOG_FILE_POINTER.close();

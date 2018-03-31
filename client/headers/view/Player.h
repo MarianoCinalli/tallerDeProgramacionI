@@ -1,7 +1,6 @@
 #include "util/Constants.h"
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
-#include "view/SpriteManager.h"
 #include <SDL2/SDL.h>
 
 #ifndef PLAYER_H
@@ -13,10 +12,9 @@ class Player {
         int maxVelocity;
         Velocity* velocity;
         Coordinates* position;
-        SpriteManager* spriteManager;
 
     public:
-        Player(int orientation, Coordinates* position, SpriteManager* spriteManager);
+        Player(int orientation, Coordinates* position);
 
         // Getters
         Coordinates* getPosition();
@@ -26,8 +24,6 @@ class Player {
         void accelerate(int direction);
         void decelerate(int direction);
         void setOrientation(int orientation);
-
-        void render(SDL_Renderer* screen, Coordinates* position);
 
         ~Player();
 };

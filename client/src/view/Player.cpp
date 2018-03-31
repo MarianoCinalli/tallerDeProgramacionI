@@ -1,11 +1,10 @@
 #include "view/Player.h"
 
-Player::Player(int orientation, Coordinates* position, SpriteManager* spriteManager) {
+Player::Player(int orientation, Coordinates* position) {
     this->orientation = orientation;
     this->position = position;
     this->maxVelocity = 10; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
-    this->spriteManager = spriteManager;
 }
 
 Coordinates* Player::getPosition() {
@@ -22,16 +21,12 @@ void Player::setOrientation(int orientation) {
 
 void Player::accelerate(int direction) {
     this->velocity->accelerate(direction, this->maxVelocity);
-    // modify sprite.
+    this->orientation = direction; // Para que quede mirando para donde venia corriendo.
 }
 
 void Player::decelerate(int direction) {
     this->velocity->decelerate(direction, this->maxVelocity);
-    // modify sprite.
-}
-
-void Player::render(SDL_Renderer* screen, Coordinates* position) {
-    this->spriteManager->render(screen, position);
+    this->orientation = direction;
 }
 
 Player::~Player() {
