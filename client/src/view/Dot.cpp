@@ -1,14 +1,10 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <string.h>
-#include <fstream>
-#include <stdio.h>
-
-#include "model/dot.h"
+#include "view/Dot.h"
 #include "util/Constants.h"
-#include "model/ltexture.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sstream>
 
-//The dot that will move around on the screen
 Dot::Dot()
 {
     //Initialize the offsets
@@ -71,10 +67,10 @@ void Dot::move()
     }
 }
 
-void Dot::render( int camX, int camY )
+void Dot::render(SDL_Renderer* gRenderer,LTexture gDotTexture, int camX, int camY )
 {
     //Show the dot relative to the camera
-	gDotTexture.render( mPosX - camX, mPosY - camY );
+	gDotTexture.render(gRenderer, mPosX - camX, mPosY - camY );
 }
 
 int Dot::getPosX()

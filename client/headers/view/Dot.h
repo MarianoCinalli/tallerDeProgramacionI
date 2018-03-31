@@ -1,4 +1,12 @@
-//The dot that will move around on the screen
+#ifndef DOT_H
+#define DOT_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sstream>
+#include "view/LTexture.h"
+
 class Dot
 {
     public:
@@ -10,20 +18,20 @@ class Dot
 		static const int DOT_VEL = 10;
 
 		//Initializes the variables
-		Dot();
+		Dot(void);
 
 		//Takes key presses and adjusts the dot's velocity
 		void handleEvent( SDL_Event& e );
 
 		//Moves the dot
-		void move();
+		void move(void);
 
 		//Shows the dot on the screen relative to the camera
-		void render( int camX, int camY );
+		void render(SDL_Renderer* gRenderer,LTexture gDotTexture, int camX, int camY );
 
 		//Position accessors
-		int getPosX();
-		int getPosY();
+		int getPosX(void);
+		int getPosY(void);
 
     private:
 		//The X and Y offsets of the dot
@@ -32,3 +40,5 @@ class Dot
 		//The velocity of the dot
 		int mVelX, mVelY;
 };
+
+#endif // DOT_H
