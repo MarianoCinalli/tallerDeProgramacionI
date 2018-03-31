@@ -7,7 +7,7 @@
 #include "util/logger.h"
 
 // Para el test.
-#include "view/Player.h"
+#include "model/Player.h"
 #include "util/Coordinates.h"
 #include "controller/actions/Action.h"
 #include "controller/ActionsManager.h"

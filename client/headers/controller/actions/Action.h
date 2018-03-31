@@ -1,4 +1,4 @@
-#include "view/Player.h"
+#include "model/Player.h"
 
 #ifndef ACTION_H
 #define ACTION_H

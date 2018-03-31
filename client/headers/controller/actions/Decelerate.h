@@ -1,6 +1,6 @@
 #include "controller/actions/Action.h"
 #include "util/Constants.h"
-#include "view/Player.h"
+#include "model/Player.h"
 
 #ifndef DECELERATE_H
 #define DECELERATE_H

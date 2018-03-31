@@ -1,6 +1,6 @@
 #include "util/Coordinates.h"
 #include "view/SpriteSheet.h"
-#include "view/Player.h"
+#include "model/Player.h"
 #include <SDL2/SDL.h>
 
 #ifndef PLAYERSPRITEMANAGER_H

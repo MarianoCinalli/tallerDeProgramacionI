@@ -1,4 +1,4 @@
-#include "view/Player.h"
+#include "model/Player.h"
 
 Player::Player(int orientation, Coordinates* position) {
     this->orientation = orientation;

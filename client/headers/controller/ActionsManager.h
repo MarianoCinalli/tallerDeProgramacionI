@@ -1,5 +1,5 @@
 #include "controller/actions/Action.h"
-#include "view/Player.h"
+#include "model/Player.h"
 #include "util/Constants.h"
 #include "controller/actions/Accelerate.h"
 #include "controller/actions/Decelerate.h"
