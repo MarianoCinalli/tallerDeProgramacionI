@@ -49,3 +49,4 @@ cmake-build-debug
 headers/.DS_Store
 
 *.gcc-flags.json
+core
