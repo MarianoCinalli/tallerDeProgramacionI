@@ -8,7 +8,7 @@ ActionsManager::~ActionsManager() {
 
 // Devuelve la accion correspondiente a un evento.
 Action* ActionsManager::getAction(SDL_Event event) {
-    Action* action;
+    Action* action = NULL;
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         // Actions for pressed keys.
         switch (event.key.keysym.sym) {

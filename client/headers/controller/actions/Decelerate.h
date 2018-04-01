@@ -1,6 +1,7 @@
 #include "controller/actions/Action.h"
 #include "util/Constants.h"
 #include "model/Player.h"
+#include "util/logger.h"
 
 #ifndef DECELERATE_H
 #define DECELERATE_H
@@ -10,7 +11,7 @@ class Decelerate : public Action {
         int direction;
     public:
         Decelerate(int direction);
-        void execute(Player* player);
+        virtual void execute(Player* player);
         ~Decelerate();
 };
 #endif // DECELERATE_H

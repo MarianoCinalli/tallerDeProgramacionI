@@ -3,7 +3,7 @@
 Player::Player(int orientation, Coordinates* position) {
     this->orientation = orientation;
     this->position = position;
-    this->maxVelocity = 10; // TODO: Probar si va muy rapido.
+    this->maxVelocity = 1; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
 }
 
@@ -15,6 +15,10 @@ int Player::getOrientation() {
     return this->orientation;
 }
 
+Velocity* Player::getVelocity() {
+    return this->velocity;
+}
+
 void Player::setOrientation(int orientation) {
     this->orientation = orientation;
 }
@@ -22,11 +26,18 @@ void Player::setOrientation(int orientation) {
 void Player::accelerate(int direction) {
     this->velocity->accelerate(direction, this->maxVelocity);
     this->orientation = direction; // Para que quede mirando para donde venia corriendo.
+    log("El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::decelerate(int direction) {
     this->velocity->decelerate(direction, this->maxVelocity);
     this->orientation = direction;
+    log("El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
+}
+
+void Player::updatePosition() {
+    this->position->addX(this->velocity->getComponentX());
+    this->position->addY(this->velocity->getComponentY());
 }
 
 Player::~Player() {

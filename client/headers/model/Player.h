@@ -1,6 +1,7 @@
 #include "util/Constants.h"
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
+#include "util/logger.h"
 #include <SDL2/SDL.h>
 
 #ifndef PLAYER_H
@@ -18,11 +19,15 @@ class Player {
 
         // Getters
         Coordinates* getPosition();
+        Velocity* getVelocity();
         int getOrientation();
 
         // Modifiers
+        // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
         void decelerate(int direction);
+        // Cambia la posicion con respecto a su velocidad.
+        void updatePosition();
         void setOrientation(int orientation);
 
         ~Player();

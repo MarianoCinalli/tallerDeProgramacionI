@@ -11,11 +11,11 @@ class Coordinates {
         int getX();
         int getY();
 
-        void incrementX();
-        void decrementX();
+        void addX(int amount);
+        void subtractX(int amount);
 
-        void incrementY();
-        void decrementY();
+        void addY(int amount);
+        void subtractY(int amount);
 
         ~Coordinates();
 };

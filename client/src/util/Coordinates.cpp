@@ -16,18 +16,18 @@ int Coordinates::getY() {
     return this->y;
 }
 
-void Coordinates::incrementX() {
-    this->x++;
+void Coordinates::addX(int amount) {
+    this->x += amount;
 }
 
-void Coordinates::decrementX() {
-    this->x--;
+void Coordinates::subtractX(int amount) {
+    this->x -= amount;
 }
 
-void Coordinates::incrementY() {
-    this->y++;
+void Coordinates::addY(int amount) {
+    this->y += amount;
 }
 
-void Coordinates::decrementY() {
-    this->y--;
+void Coordinates::subtractY(int amount) {
+    this->y -= amount;
 }

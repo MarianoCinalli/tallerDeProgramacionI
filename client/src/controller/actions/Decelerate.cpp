@@ -5,6 +5,7 @@ Decelerate::Decelerate(int direction) {
 }
 
 void Decelerate::execute(Player* player) {
+    log("Frenando al jugador.", LOG_DEBUG);
     player->decelerate(this->direction);
 }
 

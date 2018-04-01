@@ -16,7 +16,7 @@
 // Fin Para el test.
 
 // Global variables ---------------------------------------
-int LOG_MIN_LEVEL = LOG_ERROR; // Cambiar por parametro parseado.
+int LOG_MIN_LEVEL = LOG_DEBUG; // Cambiar por parametro parseado.
 std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 // Global variables ---------------------------------------
@@ -92,23 +92,26 @@ int main(int argc, char* argv[]) {
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
 
-    // TEST (seguramente lo cambie) -----------------------
-
+    // TEST -----------------------------------------------
+    init();
     // Toda esta inicializacion se va a mover cuando se cree el equipo.
 
     // Carga los sprites como una textura.
     // Tiene hardcodeado la transparencia del color verde.
     // Puede que en el merge se refactoree, para que tenga
     // una clase textura como atributo.
-    SpriteSheet* spriteSheet = new SpriteSheet("img/sheet.png", renderer);
+    SpriteSheet* spriteSheet = new SpriteSheet("images/sprites.png", renderer);
 
     // Este es el encargado de dibujar el sprite correspondiente
     // en cada frame. Se lo invoca cuando el jugador hace render.
-    // Cada jugador tiene su manager, puede que en futuro solo haya uno por equipo.
+    // Cada jugador tiene su manager, porque es el que sabe que
+    // sprite tuvo el jugador y cual sigue.
+    // Seria como una PlayerView, pero este nombre es mas descriptivo.
     PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet);
 
     // Dummy player. Parado en el medio de la pantalla.
-    Coordinates* coordinates = new Coordinates(200, 200);
+    Coordinates* coordinates = new Coordinates(400, 300);
+    // Puede que se mueva la orientacion al playerSpriteManager.
     Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
 
     bool quit = false;
@@ -123,19 +126,24 @@ int main(int argc, char* argv[]) {
                 // Devuelve acciones que modifican vistas/modelos.
                 // Seguramente deje crear actions todo el tiempo. Por ahora es así.
                 Action* action = actionsManager->getAction(e);
-                action->execute(player);
-                delete(action);
+                if (action != NULL) {
+                    action->execute(player);    
+                    delete(action);
+                }
             }
         }
+        player->updatePosition();
         SDL_RenderClear(renderer);
-        playerSpriteManager->render(player, renderer, coordinates);
+        playerSpriteManager->render(player, renderer);
         SDL_RenderPresent(renderer);
-        sleep(1/15); // Frame rate.
+        sleep(1); // Frame rate.
     }
     delete(actionsManager);
     delete(player);
     delete(playerSpriteManager);
-    // Fin TEST (seguramente lo cambie) -----------------------
+    delete(spriteSheet);
+    close();
+    // Fin TEST -------------------------------------------
     logSessionFinished();
     LOG_FILE_POINTER.close();
     return 0;
