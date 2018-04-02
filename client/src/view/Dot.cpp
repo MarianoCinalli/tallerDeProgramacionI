@@ -67,10 +67,10 @@ void Dot::move()
     }
 }
 
-void Dot::render(SDL_Renderer* gRenderer,LTexture gDotTexture, int camX, int camY )
+void Dot::render(SDL_Renderer* gRenderer, LTexture* gDotTexture, int camX, int camY )
 {
     //Show the dot relative to the camera
-	gDotTexture.render(gRenderer, mPosX - camX, mPosY - camY );
+	gDotTexture->render(gRenderer, mPosX - camX, mPosY - camY );
 }
 
 int Dot::getPosX()

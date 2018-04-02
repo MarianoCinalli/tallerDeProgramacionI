@@ -27,7 +27,7 @@ class Dot
 		void move(void);
 
 		//Shows the dot on the screen relative to the camera
-		void render(SDL_Renderer* gRenderer,LTexture gDotTexture, int camX, int camY );
+		void render(SDL_Renderer* gRenderer, LTexture* gDotTexture, int camX, int camY );
 
 		//Position accessors
 		int getPosX(void);
