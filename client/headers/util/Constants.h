@@ -15,4 +15,6 @@ const int LEVEL_HEIGHT = 1000;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
+const int MARGIN_SIZE = 80;
+
 #endif // CONSTANTS_H_
