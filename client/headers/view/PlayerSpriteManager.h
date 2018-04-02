@@ -23,8 +23,17 @@ class PlayerSpriteManager {
         ~PlayerSpriteManager();
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
-        SDL_Rect getStandingSprite(int orientation);
-        SDL_Rect getRunningSprite(Velocity* velocity);
-        std::string getSpriteAsText();
+        void setStandingSprite(int orientation);
+
+        // Para los sprites del jugador corriendo.
+        void setRunningSprite(Velocity* velocity);
+        bool isRunningUp(int xComponent, int yComponent);
+        void setRunningUpSprite();
+        bool isRunningDown(int xComponent, int yComponent);
+        void setRunningDownSprite();
+        bool isRunningLeft(int xComponent, int yComponent);
+        void setRunningLeftSprite();
+        bool isRunningRight(int xComponent, int yComponent);
+        void setRunningRightSprite();
 };
 #endif // PLAYERSPRITEMANAGER_H
