@@ -1,5 +1,6 @@
 #include "view/Dot.h"
 #include "util/Constants.h"
+#include "util/logger.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

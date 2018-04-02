@@ -47,6 +47,7 @@ void CanchaController::startView(void){
 			SDL_Rect margin = { camera.x + MARGIN_SIZE, camera.y + MARGIN_SIZE, camera.w - MARGIN_SIZE * 2, camera.h - MARGIN_SIZE * 2 };
 
 			//While application is running
+			// GAME LOOP
 			while( !quit )
 			{
 				//Handle events on queue
@@ -157,7 +158,6 @@ void CanchaController::startView(void){
 	close();
 
 	return;
-
 }
 
 bool CanchaController::init()

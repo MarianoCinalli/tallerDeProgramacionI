@@ -6,6 +6,8 @@
 #include <string.h>
 #include <sstream>
 #include <cstdlib>
+#include "util/logger.h"
+#include "util/Constants.h"
 
 LTexture::LTexture()
 {
@@ -36,7 +38,8 @@ bool LTexture::loadFromFile(SDL_Renderer* gRenderer, std::string path )
 	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
 	if( loadedSurface == NULL )
 	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+		log( "Unable to load image: ", path.c_str(), LOG_ERROR );
+		log( "SDL_image Error: ", IMG_GetError(), LOG_ERROR );
 	}
 	else
 	{
@@ -47,7 +50,8 @@ bool LTexture::loadFromFile(SDL_Renderer* gRenderer, std::string path )
         newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
 		if( newTexture == NULL )
 		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+			log( "Unable to create texture from: ", path.c_str(), LOG_ERROR );
+			log( "SDL Error: ", SDL_GetError(), LOG_ERROR );
 		}
 		else
 		{
@@ -79,7 +83,7 @@ bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColo
         mTexture = SDL_CreateTextureFromSurface( gRenderer, textSurface );
 		if( mTexture == NULL )
 		{
-			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+			log( "Unable to create texture from rendered text! SDL Error: ", SDL_GetError(), LOG_ERROR );
 		}
 		else
 		{
@@ -93,7 +97,7 @@ bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColo
 	}
 	else
 	{
-		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+		log( "Unable to render text surface! SDL_ttf Error: ", TTF_GetError(), LOG_ERROR );
 	}
 
 
