@@ -19,7 +19,8 @@ class PlayerSpriteManager {
         SDL_Rect sprite;
     public:
         PlayerSpriteManager(SpriteSheet* spriteSheet);
-        void render(Player* player, SDL_Renderer* screen);
+        // Dibuja un jugador, en las coordenadas del render que se le pase.
+        void render(Player* player, SDL_Renderer* screen, Coordinates* coordinates);
         ~PlayerSpriteManager();
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);

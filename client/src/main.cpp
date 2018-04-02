@@ -102,8 +102,7 @@ int main(int argc, char* argv[]) {
     // una clase textura como atributo.
     SpriteSheet* spriteSheet = new SpriteSheet("images/sprites.png", renderer);
 
-    // Este es el encargado de dibujar el sprite correspondiente
-    // en cada frame. Se lo invoca cuando el jugador hace render.
+    // Este es el encargado de dibujar el sprite correspondiente en cada frame.
     // Cada jugador tiene su manager, porque es el que sabe que
     // sprite tuvo el jugador y cual sigue.
     // Seria como una PlayerView, pero este nombre es mas descriptivo.
@@ -123,18 +122,28 @@ int main(int argc, char* argv[]) {
             if (e.type == SDL_QUIT) {
                 quit = true;
             } else {
-                // Devuelve acciones que modifican vistas/modelos.
-                // Seguramente deje crear actions todo el tiempo. Por ahora es asi.
+                // Devuelve acciones que modifican modelos.
+                // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
-                    action->execute(player);    
+                    action->execute(player);
+                    // Aca estaria bueno tener una clase que valide el estado del
+                    // jugador luego de la accion. Por ej.: que no salga afuera de la cancha.
+                    // Si no es valido: la accion puede tener un deshacer()
                     delete(action);
                 }
             }
         }
+        // Este metodo es para que en el ciclo actual se actualize la posicion del jugador.
+        // Cuando se presiona alguna tecla de movimiento se le asigna una velocidad en una componente.
         player->updatePosition();
         SDL_RenderClear(renderer);
-        playerSpriteManager->render(player, renderer);
+        // Aca se deberian transformar las coordenadas absolutas del 
+        // player a las relativas del display.
+        Coordinates* coordenadas = player->getPosition();
+        // La "vista" es un obsevador del modelo que se fija los 
+        // valores del jugador y dibuja lo que corresponde.
+        playerSpriteManager->render(player, renderer, coordenadas);
         SDL_RenderPresent(renderer);
         sleep(1/15); // Frame rate.
     }
