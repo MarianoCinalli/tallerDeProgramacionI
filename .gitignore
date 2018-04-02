@@ -40,6 +40,10 @@ cmake-build-debug
 #Eclipse
 .metadata/
 
+#CodeBlocks
+#.cbp
+#.layout
+
 #VSCode
 .vscode
 
