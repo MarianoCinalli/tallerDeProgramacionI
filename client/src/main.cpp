@@ -16,7 +16,7 @@
 // Fin Para el test.
 
 // Global variables ---------------------------------------
-int LOG_MIN_LEVEL = LOG_DEBUG; // Cambiar por parametro parseado.
+int LOG_MIN_LEVEL = LOG_ERROR; // Cambiar por parametro parseado.
 std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 // Global variables ---------------------------------------
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderClear(renderer);
         playerSpriteManager->render(player, renderer);
         SDL_RenderPresent(renderer);
-        sleep(1); // Frame rate.
+        sleep(1/15); // Frame rate.
     }
     delete(actionsManager);
     delete(player);
