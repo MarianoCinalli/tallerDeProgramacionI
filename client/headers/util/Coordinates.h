@@ -1,7 +1,10 @@
+#include <string>
+#include "interfaces/Loggable.h"
+
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
-class Coordinates {
+class Coordinates : public Loggable {
     private:
         int x;
         int y;
@@ -16,6 +19,8 @@ class Coordinates {
 
         void addY(int amount);
         void subtractY(int amount);
+
+        std::string toString();
 
         ~Coordinates();
 };

@@ -29,6 +29,7 @@ void PlayerSpriteManager::render(Player* player, SDL_Renderer* screen) {
     }
     Coordinates* coordinates = player->getPosition();
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
+    log("PlayerSpriteManager: Dibujando sprite: " + this->getSpriteAsText(), LOG_DEBUG);
     SDL_RenderCopy(
         screen,
         this->spriteSheet->getSpriteSheetTexture(),
@@ -58,6 +59,7 @@ SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* 
 // Por ahora solo mira para arriba.
 SDL_Rect PlayerSpriteManager::getStandingSprite(int orientation) {
     SDL_Rect newSprite;
+    log("PlayerSpriteManager: Creando el sprite parado.", LOG_DEBUG);
     newSprite = {
         0,
         0,
@@ -73,11 +75,16 @@ SDL_Rect PlayerSpriteManager::getRunningSprite(Velocity* velocity) {
     // Ocho sprites por secuencia de corrida.
     // Cada sprite tiene 16x16.
     // El que empieza en (0, 0) es el primero que corre para arriba.
-    // El que empieza en (0, 72) es el ultimo que corre para arriba.  
-    if (this->sprite.x == 72) {
+    // El que empieza en (7 * 16 = 112, 0) es el ultimo que corre para arriba.
+    log("PlayerSpriteManager: Creando el sprite corriendo.", LOG_DEBUG);
+    if (this->sprite.x == 112) {
         this->sprite.x = 0; // Reinicio la secuencia.
     } else {
         this->sprite.x += this->spriteWidth; // Avanzo la secuencia en un frame.
     }
     return this->sprite; // Esto tambien es temporal.
+}
+
+std::string PlayerSpriteManager::getSpriteAsText() {
+    return "x: " + std::to_string(this->sprite.x) + " y: " + std::to_string(this->sprite.y);
 }

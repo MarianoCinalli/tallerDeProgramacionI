@@ -122,9 +122,9 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
-            } else if (e.type == SDL_KEYDOWN) {
+            } else {
                 // Devuelve acciones que modifican vistas/modelos.
-                // Seguramente deje crear actions todo el tiempo. Por ahora es así.
+                // Seguramente deje crear actions todo el tiempo. Por ahora es asi.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
                     action->execute(player);    

@@ -26,18 +26,19 @@ void Player::setOrientation(int orientation) {
 void Player::accelerate(int direction) {
     this->velocity->accelerate(direction, this->maxVelocity);
     this->orientation = direction; // Para que quede mirando para donde venia corriendo.
-    log("El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
+    log("Jugador: El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::decelerate(int direction) {
     this->velocity->decelerate(direction, this->maxVelocity);
     this->orientation = direction;
-    log("El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
+    log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::updatePosition() {
     this->position->addX(this->velocity->getComponentX());
     this->position->addY(this->velocity->getComponentY());
+    log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
 }
 
 Player::~Player() {

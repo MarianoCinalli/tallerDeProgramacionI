@@ -1,5 +1,7 @@
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
+#include "util/Constants.h"
+#include "util/logger.h"
 #include "view/SpriteSheet.h"
 #include "model/Player.h"
 #include <SDL2/SDL.h>
@@ -23,5 +25,6 @@ class PlayerSpriteManager {
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
         SDL_Rect getStandingSprite(int orientation);
         SDL_Rect getRunningSprite(Velocity* velocity);
+        std::string getSpriteAsText();
 };
 #endif // PLAYERSPRITEMANAGER_H

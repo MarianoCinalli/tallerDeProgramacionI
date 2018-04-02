@@ -11,6 +11,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
     Action* action = NULL;
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         // Actions for pressed keys.
+        log("ActionsManager: Se registro una tecla presionada.", LOG_DEBUG);
         switch (event.key.keysym.sym) {
             case SDLK_UP:
                 action = new Accelerate(PLAYER_ORIENTATION_UP);
@@ -27,6 +28,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
         }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.
+        log("ActionsManager: Se registro una tecla soltada.", LOG_DEBUG);
         switch (event.key.keysym.sym) {
             case SDLK_UP:
                 action = new Decelerate(PLAYER_ORIENTATION_UP);

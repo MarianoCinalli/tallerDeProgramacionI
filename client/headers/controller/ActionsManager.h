@@ -3,6 +3,7 @@
 #include "util/Constants.h"
 #include "controller/actions/Accelerate.h"
 #include "controller/actions/Decelerate.h"
+#include "util/logger.h"
 
 #ifndef ACTIONSMANAGER_H
 #define ACTIONSMANAGER_H

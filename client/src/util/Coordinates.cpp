@@ -31,3 +31,7 @@ void Coordinates::addY(int amount) {
 void Coordinates::subtractY(int amount) {
     this->y -= amount;
 }
+
+std::string Coordinates::toString() {
+    return "x: " + std::to_string(this->x) + " y: " + std::to_string(this->y);
+}
