@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sstream>
-
+#include "util/logger.h"
 
 
 CanchaController::CanchaController(void){
@@ -24,14 +24,14 @@ void CanchaController::startView(void){
      //Start up SDL and create window
 	if( !init() )
 	{
-		printf( "Failed to initialize!\n" );
+		log( "Failed to initialize!\n", logLevels::LOG_ERROR );
 	}
 	else
 	{
 		//Load media
 		if( !loadMedia() )
 		{
-			printf( "Failed to load media!\n" );
+			log( "Failed to load media!\n", logLevels::LOG_ERROR );
 		}
 		else
 		{
@@ -46,6 +46,9 @@ void CanchaController::startView(void){
 
 			//The camera area
 			SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
+			//The margin area
+			SDL_Rect margin = { camera.x + 20, camera.y + 20, camera.w - 40, camera.h - 40 };
 
 			//While application is running
 			while( !quit )
@@ -70,6 +73,21 @@ void CanchaController::startView(void){
 				camera.x = ( dot.getPosX() + Dot::DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
 				camera.y = ( dot.getPosY() + Dot::DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 
+				// Se pasa del margen derecho
+				// if( ( dot.getPosX() + Dot::DOT_WIDTH ) > ( margin.w + 20 ) )
+				// {
+				//     printf("1 getPosX %d\n", dot.getPosX());
+				//  	camera.x = ( dot.getPosX() + Dot::DOT_WIDTH ) - ( margin.w + 20 );
+				//  	margin.x = camera.x + 20;
+				// }
+
+				// if( dot.getPosX() < margin.x )
+				// {
+				//     printf("2 getPosX %d\n", dot.getPosX());
+				//  	camera.x = dot.getPosX() - margin.x;
+				//  	margin.x = camera.x + 20;
+				// }
+
 				//Keep the camera in bounds
 				if( camera.x < 0 )
 				{
@@ -93,7 +111,7 @@ void CanchaController::startView(void){
 				SDL_RenderClear( gRenderer );
 
 				//Render background
-				gBGTexture.render(gRenderer,  0, 0, &camera );
+				gBGTexture.render( gRenderer, 0, 0, &camera );
 
 				//Render objects
 				dot.render(gRenderer, &gDotTexture, camera.x, camera.y );
@@ -119,7 +137,7 @@ bool CanchaController::init()
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
-		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		log( "SDL could not initialize! SDL Error: %s\n", SDL_GetError(), logLevels::LOG_ERROR );
 		success = false;
 	}
 	else
@@ -127,14 +145,14 @@ bool CanchaController::init()
 		//Set texture filtering to linear
 		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
 		{
-			printf( "Warning: Linear texture filtering not enabled!" );
+			log( "Warning: Linear texture filtering not enabled!", logLevels::LOG_ERROR );
 		}
 
 		//Create window
 		gWindow = SDL_CreateWindow( "ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( gWindow == NULL )
 		{
-			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+			log( "Window could not be created! SDL Error: %s\n", SDL_GetError(), logLevels::LOG_ERROR );
 			success = false;
 		}
 		else
@@ -143,7 +161,7 @@ bool CanchaController::init()
 			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( gRenderer == NULL )
 			{
-				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+				log( "Renderer could not be created! SDL Error: %s\n", SDL_GetError(), logLevels::LOG_ERROR );
 				success = false;
 			}
 			else
@@ -155,7 +173,7 @@ bool CanchaController::init()
 				int imgFlags = IMG_INIT_PNG;
 				if( !( IMG_Init( imgFlags ) & imgFlags ) )
 				{
-					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+					log( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError(), logLevels::LOG_ERROR );
 					success = false;
 				}
 			}
@@ -190,14 +208,14 @@ bool CanchaController::loadMedia()
 	//Load dot texture
 	if( !gDotTexture.loadFromFile(gRenderer, "images/dot.bmp" ) )
 	{
-		printf( "Failed to load dot texture!\n" );
+		log( "Failed to load dot texture!\n", logLevels::LOG_ERROR );
 		success = false;
 	}
 
 	//Load background texture
 	if( !gBGTexture.loadFromFile(gRenderer, "images/bg.png" ) )
 	{
-		printf( "Failed to load background texture!\n" );
+		log( "Failed to load background texture!\n", logLevels::LOG_ERROR );
 		success = false;
 	}
 
