@@ -1,6 +1,10 @@
 # configuracion
 equipo:
+  nombre: "Zinedine"
   formacion: '3-3' # '3-3', '3-1-2', '3-2-1', '2-3-1', '2-2-2'
   casaca: 'alternativa' #'principal' o 'alternativa'
+performance:
+  framerate: 60
+  margenes: 80
 debug:
   level: 'error' #'debug' o "info" o "error"
