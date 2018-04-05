@@ -106,8 +106,9 @@ int chequearOpciones(int argc, char* argv[]){
 
 int main(int argc, char* argv[]) {
 
-    if(chequearOpciones(argc, argv)){
-      return SALIDA_LINEA_COMANDOS;
+    if(chequearOpciones(argc, argv)){		//Si da 1 es o la version o el help o un flag inexistente
+			log("Salida del programa por flags o argumento invalido", SALIDA_LINEA_COMANDOS);
+			return SALIDA_LINEA_COMANDOS;
     }
     // Log initialization ---------------------------------
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
