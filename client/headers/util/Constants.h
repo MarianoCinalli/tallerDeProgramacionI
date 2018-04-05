@@ -7,6 +7,8 @@ enum logLevels {
     LOG_ERROR = 3
 };
 
+const int SALIDA_LINEA_COMANDOS = 4;
+
 //The dimensions of the level
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;

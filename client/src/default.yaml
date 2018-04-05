@@ -3,4 +3,4 @@ equipo:
   formacion: '3-3' # '3-3', '3-1-2', '3-2-1', '2-3-1', '2-2-2'
   casaca: 'alternativa' #'principal' o 'alternativa'
 debug:
-  level: 'debug' #'debug' o "info" o "error"
+  level: 'error' #'debug' o "info" o "error"
