@@ -85,6 +85,11 @@ int log(std::string messageToConcatenate, int integerToConcatenate, int messageL
     return log(concatenatedMessage, messageLevel);
 }
 
+int log(std::string messageToConcatenate, std::string stringToConcatenate, int messageLevel) {
+    std::string concatenatedMessage = messageToConcatenate + stringToConcatenate;
+    return log(concatenatedMessage, messageLevel);
+}
+
 int log(std::string messageToConcatenate, const char* charsToConcatenate, int messageLevel) {
     std::string concatenatedMessage = "";
     if (charsToConcatenate != NULL) {
