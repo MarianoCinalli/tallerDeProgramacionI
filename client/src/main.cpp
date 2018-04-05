@@ -14,20 +14,20 @@
 
 void imprimir_ayuda()
 {
-	printf("Usage:\n");
-	printf("main -h\n");
-	printf("main -V\n");
-	printf("main [options]\n");
-	printf("-V, --version		Imprimir version y salir.\n");
-	printf("-h, --help		Imprimir esta ayuda.\n");
-	printf("-i, --input		Path del archivo de configuracion YAML.\n");
-	printf("Ejemplo:\n");
-	printf("tp0 -i ~/conf.yaml \n");
+	cout << "Usage:\n";
+	cout << "main -h\n";
+	cout << "main -V\n";
+	cout << "main [options]\n";
+	cout << "-V, --version		Imprimir version y salir.\n";
+	cout << "-h, --help		Imprimir esta ayuda.\n";
+	cout << "-i, --input		Path del archivo de configuracion YAML.\n";
+	cout << "Ejemplo:\n";
+	cout << "main -i ~/conf.yaml \n";
 }
 
 void imprimir_version()
 {
-	printf("Version = 1.0000000000001\n");
+	cout << "Version = tp1\n";
 }
 
 // Global variables ---------------------------------------
@@ -36,12 +36,12 @@ std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 const std::string defaultConfFileName = "src/default.yaml";
 std::string confFileName;
-int LOG_MIN_LEVEL;
+int LOG_MIN_LEVEL = LOG_DEBUG;
 Conf conf(defaultConfFileName);
 
 void cargarConfiguracion(string confFile){
   conf.loadConf(confFile);
-  //LOG_MIN_LEVEL = conf.getDebugLevel(); // Cambiar por parametro parseado.
+  LOG_MIN_LEVEL = conf.getDebugLevel(); // Cambiar por parametro parseado.
 }
 
 int chequearOpciones(int argc, char* argv[]){
@@ -54,7 +54,6 @@ int chequearOpciones(int argc, char* argv[]){
         {"version", no_argument, 0, 'v'},
         {"help", no_argument, 0, 'h'},
         {"input", required_argument, 0, 'i'},
-
         {0, 0, 0, 0}
       };
 
