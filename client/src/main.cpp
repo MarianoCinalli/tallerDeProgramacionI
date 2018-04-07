@@ -116,6 +116,12 @@ int main(int argc, char* argv[]) {
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
     // Main loop ------------------------------------------
+    // Esquema de inicializacion.
+    // Crear los jugadores.
+    // Agregarlos a su equipo.
+    // Crear las views.
+    // Crear la pitchView pasando le los jugadores.
+    // Crear el game manager.
     bool quit = false;
     SDL_Event e;
     // Va a manejar los eventos de teclado.
