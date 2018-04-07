@@ -1,15 +1,16 @@
 #include "view/PlayerSpriteManager.h"
 
-PlayerSpriteManager::PlayerSpriteManager(SpriteSheet* spriteSheet) {
+PlayerSpriteManager::PlayerSpriteManager(SpriteSheet* spriteSheet, Player* player) {
+    this->player = player;
     this->spriteSheet = spriteSheet;
     this->spriteWidth = 16;
     this->spriteHeight = 16;
     this->sprite = {
         0,
-        0,
+        48,
         this->spriteWidth,
         this->spriteHeight
-    }; // Sprite actual.
+    }; // Sprite actual. Esta mirando para la derecha.
 }
 
 // Dibuja un jugador, en las coordenadas del render que se le pase.
@@ -17,11 +18,11 @@ PlayerSpriteManager::PlayerSpriteManager(SpriteSheet* spriteSheet) {
 // Con eso arma un cuadrado que encierra el sprite a dibujar.
 // Tambien arma otro cuadrado que representa el lugar de la pantalla (renderer)
 // en el que se dibuja el sprite.
-void PlayerSpriteManager::render(Player* player, SDL_Renderer* screen, Coordinates* coordinates) {
-    Velocity* velocity = player->getVelocity();
+void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
+    Velocity* velocity = this->player->getVelocity();
     if (velocity->isZero()) {
         // Esta quieto, se dibuja parado.
-        this->setStandingSprite(player->getOrientation());
+        this->setStandingSprite(this->player->getOrientation());
     } else {
         // Esta corriendo.
         this->setRunningSprite(velocity);
@@ -34,6 +35,11 @@ void PlayerSpriteManager::render(Player* player, SDL_Renderer* screen, Coordinat
         &positionOnScreen
     );
 }
+
+Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
+    return this->player->getPosition();
+}
+
 
 PlayerSpriteManager::~PlayerSpriteManager() {
     

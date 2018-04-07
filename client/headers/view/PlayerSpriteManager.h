@@ -13,14 +13,16 @@
 // Sabe dibujar el sprite actual.
 class PlayerSpriteManager {
     private:
+        Player* player;
         SpriteSheet* spriteSheet;
         int spriteWidth;
         int spriteHeight;
         SDL_Rect sprite;
     public:
-        PlayerSpriteManager(SpriteSheet* spriteSheet);
+        PlayerSpriteManager(SpriteSheet* spriteSheet, Player* player);
         // Dibuja un jugador, en las coordenadas del render que se le pase.
-        void render(Player* player, SDL_Renderer* screen, Coordinates* coordinates);
+        void render(SDL_Renderer* screen, Coordinates* coordinates);
+        Coordinates* getPlayerCoordinates();
         ~PlayerSpriteManager();
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);

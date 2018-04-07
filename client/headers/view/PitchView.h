@@ -3,14 +3,14 @@
 
 /*
 VistaCancha:
-        - Tiene las vistas de los jugadores.
-        - Tiene la textura de la cancha. (falta)
-        - render() dibuja todo.
-        Primero la cancha y despues a cada player view,
-        les transforma las coordenadas para que queden el la
-        ventana (falta el metodo get coordinates y agregarle
-        una referencia al Player model dentro de PlayerSpriteManager)
-        y despues le hace el render() a todas los PlayerSpriteManager.
+    - Tiene las vistas de los jugadores.
+    - Tiene la textura de la cancha. (falta)
+    - render() dibuja todo.
+    Primero la cancha y despues a cada player view,
+    les transforma las coordenadas para que queden el la
+    ventana (falta el metodo get coordinates y agregarle
+    una referencia al Player model dentro de PlayerSpriteManager)
+    y despues le hace el render() a todas los PlayerSpriteManager.
 */
 
 #ifndef PITCHVIEW_H
