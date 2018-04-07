@@ -21,10 +21,16 @@ class Conf : public Loggable {
   public:
     Conf(string);
     ~Conf();
-    std::string defaultFile;
+    string defaultFile;
+    string nombre;
+    int framerate;
+    int margenes;
     int getFormacion();
     int getCasaca();    //principal true o alternativa false
     int getDebugLevel();
+    string getNombre();
+    int getFramerate();
+    int getMargenes();
     int loadConf(string file);
     string toString();
   private:
@@ -37,8 +43,11 @@ class Conf : public Loggable {
     void cargarCasaca();
     void cargarFormacion();
     void cargarDebug();
+    void cargarNombre();
+    void cargarFramerate();
+    void cargarMargenes();
     int cargarParametro(string parametro, int (*fn)(YAML::Node));
-
+    string cargarParametro(string parametro, string (*fn)(YAML::Node));
 
 };
 

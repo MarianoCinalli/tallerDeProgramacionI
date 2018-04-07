@@ -7,6 +7,7 @@ enum logLevels {
     LOG_ERROR = 3
 };
 
+
 // Para indicar a donde se mueve/mira el jugador.
 enum PlayerOrientations {
     PLAYER_ORIENTATION_LEFT = 1,
@@ -14,6 +15,8 @@ enum PlayerOrientations {
     PLAYER_ORIENTATION_RIGHT = 3,
     PLAYER_ORIENTATION_DOWN = 4
 };
+
+const int SALIDA_LINEA_COMANDOS = 4;
 
 //The dimensions of the level
 const int LEVEL_WIDTH = 1600;
