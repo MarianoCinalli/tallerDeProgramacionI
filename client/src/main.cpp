@@ -107,7 +107,43 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
+int main(int argc, char* argv[]) {
+    if (chequearOpciones(argc, argv)) {     //Si da 1 es o la version o el help o un flag inexistente
+        log("Salida del programa por flags o argumento invalido", SALIDA_LINEA_COMANDOS);
+        return SALIDA_LINEA_COMANDOS;
+    }
+    // Log initialization ---------------------------------
+    LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
+    logSessionStarted();
+    // Main loop ------------------------------------------
+    bool quit = false;
+    SDL_Event e;
+    // Va a manejar los eventos de teclado.
+    ActionsManager* actionsManager = new ActionsManager();
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            } else {
+                // Devuelve acciones que modifican modelos.
+                // Se puede optimizar para que deje de hacer actions todo el tiempo.
+                Action* action = actionsManager->getAction(e);
+                if (action != NULL) {
+                    // gameManager->execute(Action);
+                    delete(action);
+                }
+            }
+        }
+        // gameManager->updatePlayers();
+        // pitchView->draw();
+    }
+    // Main loop ------------------------------------------
+    logSessionFinished();
+    LOG_FILE_POINTER.close();
+    return 0;
+}
 
+/*
 // --------------------------------------------------------
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
@@ -170,21 +206,6 @@ void close() {
     SDL_Quit();
 }
 // --------------------------------------------------------
-
-
-
-int main(int argc, char* argv[]) {
-
-    if (chequearOpciones(argc, argv)) {     //Si da 1 es o la version o el help o un flag inexistente
-        log("Salida del programa por flags o argumento invalido", SALIDA_LINEA_COMANDOS);
-        return SALIDA_LINEA_COMANDOS;
-    }
-    // Log initialization ---------------------------------
-    LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
-    // logSessionStarted();
-
-    // TEST -----------------------------------------------
-    init();
     // Toda esta inicializacion se va a mover cuando se cree el equipo.
 
     // Carga los sprites como una textura.
@@ -192,7 +213,7 @@ int main(int argc, char* argv[]) {
     // Puede que en el merge se refactoree, para que tenga
     // una clase textura como atributo.
     SpriteSheet* spriteSheet = new SpriteSheet("images/sprites.png", renderer);
-
+    init();
     // Este es el encargado de dibujar el sprite correspondiente en cada frame.
     // Cada jugador tiene su manager, porque es el que sabe que
     // sprite tuvo el jugador y cual sigue.
@@ -244,7 +265,6 @@ int main(int argc, char* argv[]) {
     delete(spriteSheet);
     close();
     // Fin TEST -------------------------------------------
-    /*
     =======
         //Configuracion
         cargarConfiguracion(confFileName);
@@ -255,9 +275,4 @@ int main(int argc, char* argv[]) {
         canchaController.startView();
 
     >>>>>>> origin/tp1
-    */
-    logSessionFinished();
-    LOG_FILE_POINTER.close();
-
-    return 0;
-}
+*/
