@@ -1,4 +1,5 @@
 #include "util/Coordinates.h"
+#include <cmath>
 
 Coordinates::Coordinates(int x, int y) {
     this->x = x;
@@ -30,6 +31,10 @@ void Coordinates::addY(int amount) {
 
 void Coordinates::subtractY(int amount) {
     this->y -= amount;
+}
+
+int Coordinates::distanceTo(Coordinates other){
+  return sqrt(pow(this->x-other.getX(),2) + pow(this->y-other.getY(),2));
 }
 
 std::string Coordinates::toString() {
