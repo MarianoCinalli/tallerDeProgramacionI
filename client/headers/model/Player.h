@@ -29,6 +29,7 @@ class Player {
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void setOrientation(int orientation);
+        void setPosition(Coordinates coord);
 
         ~Player();
 };

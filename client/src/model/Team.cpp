@@ -1,4 +1,5 @@
 #include "model/Team.h"
+#include "util/Formaciones.h"
 
 Team::Team() {
     this->players = {};
@@ -20,4 +21,14 @@ Team::~Team() {
     }
     // Como la lista sigue llena, de punteros borrados, la vacio.
     this->players.clear();
+}
+
+void Team::setFormacion(int formacion){
+  this->formacion = formacion;
+}
+
+void Team::order(){
+  for (Player* p : players){
+    p->setPosition(formaciones[1].front());
+  }
 }

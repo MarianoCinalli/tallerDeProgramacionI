@@ -41,6 +41,10 @@ void Player::updatePosition() {
     log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
 }
 
+void Player::setPosition(Coordinates pos) {
+  this->position->setCoord(pos);
+}
+
 Player::~Player() {
     delete(this->position);
     delete(this->velocity);

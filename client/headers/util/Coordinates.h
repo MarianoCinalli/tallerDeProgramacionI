@@ -14,12 +14,14 @@ class Coordinates : public Loggable {
         int getX();
         int getY();
 
+
         void addX(int amount);
         void subtractX(int amount);
 
         void addY(int amount);
         void subtractY(int amount);
 
+        void setCoord(Coordinates other);
         int distanceTo(Coordinates other);
         std::string toString();
 
