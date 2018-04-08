@@ -1,8 +1,10 @@
 #include "view/PitchView.h"
 
 PitchView::PitchView(Texture* pitch, Camera* camera) {
+    log("PitchView: Creando vista de la cancha...", LOG_INFO);
     this->pitch = pitch;
     this->camera = camera;
+    log("PitchView: Vista de la cancha creada...", LOG_INFO);
 }
 
 void PitchView::addPlayerView(PlayerSpriteManager* playerView) {
@@ -24,19 +26,25 @@ void PitchView::render(SDL_Renderer* screen) {
         (*viewIter)->render(screen, coordinates);
         delete(coordinates);
     }
+    SDL_RenderPresent(screen);
 }
 
 PitchView::~PitchView() {
+    log("PitchView: Liberando memoria...", LOG_INFO);
     // Borro la imagen de la cancha.
+    log("PitchView: Borrando cancha...", LOG_INFO);
     delete(this->pitch);
+    log("PitchView: Borrando camara...", LOG_INFO);
     delete(this->camera);
     // Libero todos los player views.
+    log("PitchView: Borrando vista de jugadores...", LOG_INFO);
     std::list<PlayerSpriteManager*>::iterator it;
     for (it = this->playerViews.begin(); it != this->playerViews.end(); it++) {
         delete(*it);
     }
     // Como la lista sigue llena, de punteros borrados, la vacio.
     this->playerViews.clear();
+    log("PitchView: Memoria liberada.", LOG_INFO);
 }
 
 void PitchView::renderPitch(SDL_Renderer* screen) {

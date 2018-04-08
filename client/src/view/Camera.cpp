@@ -1,9 +1,11 @@
 #include "view/Camera.h"
 
 Camera::Camera(Coordinates* position, int width, int height) {
+    log("Camera: Creando camara...", LOG_INFO);
     this->position = position;
     this->width = width;
     this->height = height;
+    log("Camera: Camara creada.", LOG_INFO);
 }
 
 Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
@@ -30,5 +32,7 @@ SDL_Rect Camera::getRectToDraw() {
 }
 
 Camera::~Camera() {
+    log("Camera: Liberando memoria. Borrando posicion...", LOG_INFO);
     delete(this->position);
+    log("Camera: Posicion borrada. Memoria liberada.", LOG_INFO);
 }

@@ -1,6 +1,7 @@
 #include "view/PlayerSpriteManager.h"
 
 PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
+    log("PlayerSpriteManager: Creando vista...", LOG_INFO);
     this->player = player;
     this->spriteSheet = spriteSheet;
     this->spriteWidth = 16;
@@ -11,6 +12,7 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
         this->spriteWidth,
         this->spriteHeight
     }; // Sprite actual. Esta mirando para la derecha.
+    log("PlayerSpriteManager: Vista creada.", LOG_INFO);
 }
 
 // Dibuja un jugador, en las coordenadas del render que se le pase.
@@ -42,7 +44,9 @@ Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
 
 
 PlayerSpriteManager::~PlayerSpriteManager() {
+    log("PlayerSpriteManager: Liberando memoria. Borrando textura...", LOG_INFO);
     delete(this->spriteSheet);
+    log("PlayerSpriteManager: Textura eliminada. Memoria liberada.", LOG_INFO);
 }
 
 // Metodos privados.
@@ -86,7 +90,6 @@ void PlayerSpriteManager::setStandingSprite(int orientation) {
 // Cada sprite tiene 16x16.
 // Ocho sprites por secuencia de corrida.
 void PlayerSpriteManager::setRunningSprite(Velocity* velocity) {
-    // Este metodo se hizo feo, puede que lo refactoree.
     int xComponent = velocity->getComponentX();
     int yComponent = velocity->getComponentY();
     if (this->isRunningUp(xComponent, yComponent)) {

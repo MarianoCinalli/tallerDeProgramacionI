@@ -48,7 +48,7 @@ std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 const std::string defaultConfFileName = "src/default.yaml";
 std::string confFileName;
-int LOG_MIN_LEVEL = LOG_DEBUG;
+int LOG_MIN_LEVEL = LOG_INFO;
 Conf conf(defaultConfFileName);
 
 void cargarConfiguracion(string confFile) {
@@ -216,6 +216,7 @@ int main(int argc, char* argv[]) {
 
     bool quit = false;
     SDL_Event e;
+    log("Main: Entrando en el main loop...", LOG_INFO);
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
@@ -232,14 +233,20 @@ int main(int argc, char* argv[]) {
         }
         gameController->updatePlayers();
         pitchView->render(renderer);
+        sleep(1 / 15); // Frame rate.
     }
+    log("Main: Main loop finalizado.", LOG_INFO);
     // Main loop ------------------------------------------
+    log("Main: Liberando gameController, actionsManager, pitchView.", LOG_INFO);
     delete(gameController);
     delete(actionsManager);
     delete(pitchView);
+    log("Main: Memoria liberado.", LOG_INFO);
+    log("Main: Liberado recursos de SDL.", LOG_INFO);
     close();
-    LOG_FILE_POINTER.close();
+    log("Main: Recursos de SDL liberados.", LOG_INFO);
     logSessionFinished();
+    LOG_FILE_POINTER.close();
     return 0;
 }
 
