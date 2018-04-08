@@ -3,20 +3,18 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "view/PlayerSpriteManager.h"
+#include "view/Texture.h"
+#include "view/Camera.h"
+#include <SDL2/SDL.h>
 
 /*
 VistaCancha:
     - Tiene las vistas de los jugadores.
     - Tiene la textura de la cancha. (falta)
-    - Tiene una clase camara (falta):
-        - Un metodo devuelve el SDL_Rect para dibujar la parte de
-        la cancha.
-        - Un metodo devuelve los jugadores dentro de la camara.
-        - Otro metodo transforma las coordenadas para que queden
-        relativas a la camara.
-    La camara la va a actualizar algun controlador para que se 
-    mueva conforme se muevan los jugadores en los bordes.
-    Por eso la va a recibir en el constructor.
+    - Tiene la camara.
+        La camara la va a actualizar algun controlador para que se
+        mueva conforme se muevan los jugadores en los bordes.
+        Por eso la va a recibir en el constructor.
     - render()
         Aca se dibuja.
         Primero dibuja la parte de la cancha que la camara indica.
@@ -31,12 +29,16 @@ VistaCancha:
 
 class PitchView {
     private:
+        Texture* pitch;
+        Camera* camera;
         std::list<PlayerSpriteManager*> playerViews;
     public:
-        PitchView();
+        PitchView(Texture* pitch, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
-        void render();
+        void render(SDL_Renderer* screen);
         ~PitchView();
+    private:
+        void renderPitch(SDL_Renderer* screen);
 };
 #endif // PITCHVIEW_H
 

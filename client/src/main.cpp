@@ -20,6 +20,7 @@
 #include "model/Team.h"
 #include "view/PitchView.h"
 #include "util/Colour.h"
+#include "view/Camera.h"
 // Fin Para el test.
 
 
@@ -110,6 +111,63 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
+bool init();
+void close();
+
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL; // Para dibujar el sprite.
+
+bool init() {
+    //Initialization flag
+    bool success = true;
+
+    //Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+        success = false;
+    } else {
+        //Set texture filtering to linear
+        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
+            printf("Warning: Linear texture filtering not enabled!");
+        }
+        //Create window
+        window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        if (window == NULL) {
+            printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+            success = false;
+        } else {
+            //Create renderer for window
+            renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+            if (renderer == NULL) {
+                printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+                success = false;
+            } else {
+                //Initialize renderer color
+                SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                //Initialize PNG loading
+                int imgFlags = IMG_INIT_PNG;
+                if (!(IMG_Init(imgFlags) & imgFlags)) {
+                    printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+                    success = false;
+                }
+            }
+        }
+    }
+    return success;
+}
+
+void close() {
+    //Destroy window
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    window = NULL;
+    renderer = NULL;
+
+    //Quit SDL subsystems
+    IMG_Quit();
+    SDL_Quit();
+}
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {     //Si da 1 es o la version o el help o un flag inexistente
         log("Salida del programa por flags o argumento invalido", SALIDA_LINEA_COMANDOS);
@@ -120,6 +178,7 @@ int main(int argc, char* argv[]) {
     logSessionStarted();
     // Main loop ------------------------------------------
     // Esquema de inicializacion.
+    init();
     // Crear los jugadores.
     Coordinates* coordinates = new Coordinates(400, 300);
     Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
@@ -128,12 +187,16 @@ int main(int argc, char* argv[]) {
     team->addPlayer(player);
     // Crear las views.
     Colour* transparency = new Colour(0, 0xa0, 0, 0); // green
-    // Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency);
+    Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency);
     delete(transparency);
-    // PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
+    PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
     // Crear la pitchView pasandole los jugadores.
-    // PitchView* pitchView = new PitchView();
-    // pitchView->addPlayerView(playerSpriteManager);
+    Texture* pitchImg = new Texture("images/bg.png", renderer, transparency);
+    // punto arriba a la izquierda = (1600/2  - 800/2, 1000/2 - 600/2) = (400, 200)
+    Coordinates* cameraPosition = new Coordinates(400, 200);
+    Camera* camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT);
+    PitchView* pitchView = new PitchView(pitchImg, camera);
+    pitchView->addPlayerView(playerSpriteManager);
     // Crear el game manager.
     bool quit = false;
     SDL_Event e;
@@ -157,16 +220,14 @@ int main(int argc, char* argv[]) {
         // pitchView->draw();
     }
     // Main loop ------------------------------------------
-    logSessionFinished();
+    close();
     LOG_FILE_POINTER.close();
+    logSessionFinished();
     return 0;
 }
 
 /*
 // --------------------------------------------------------
-//Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
 
 bool init();
 void close();
