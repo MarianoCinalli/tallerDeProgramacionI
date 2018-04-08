@@ -42,7 +42,7 @@ Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
 
 
 PlayerSpriteManager::~PlayerSpriteManager() {
-    
+    delete(this->spriteSheet);
 }
 
 // Metodos privados.

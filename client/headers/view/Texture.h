@@ -13,6 +13,7 @@ class Texture {
         int width;
     public:
         Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency);
+        Texture(std::string sheetPath, SDL_Renderer* renderer);
         SDL_Texture* getSpriteSheetTexture();
         ~Texture();
         SDL_Texture* loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency);

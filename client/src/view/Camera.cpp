@@ -15,7 +15,7 @@ Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
 }
 
 std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteManager*>& views) {
-    // TODO:
+    // TODO: Por ahora devuelve todos, falta filtrar.
     return views;
 }
 

@@ -24,11 +24,11 @@ Team::~Team() {
 }
 
 void Team::setFormacion(int formacion){
-  this->formacion = formacion;
+    this->formacion = formacion;
 }
 
 void Team::order(){
-  for (Player* p : players){
-    p->setPosition(formaciones[1].front());
-  }
+    for (Player* p : players){
+        p->setPosition(formaciones[1].front());
+    }
 }

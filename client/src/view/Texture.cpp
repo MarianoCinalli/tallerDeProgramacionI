@@ -4,6 +4,10 @@ Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transpar
     this->sdlTexture = this->loadSheet(sheetPath, renderer, transparency);
 }
 
+Texture::Texture(std::string sheetPath, SDL_Renderer* renderer) {
+    this->sdlTexture = this->loadSheet(sheetPath, renderer, NULL);
+}
+
 SDL_Texture* Texture::getSpriteSheetTexture() {
     return this->sdlTexture;
 }

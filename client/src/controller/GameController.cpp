@@ -14,4 +14,5 @@ void GameController::updatePlayers() {
 }
 
 GameController::~GameController() {
+    delete(this->pitch);
 }

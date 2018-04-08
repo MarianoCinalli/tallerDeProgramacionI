@@ -27,6 +27,9 @@ void PitchView::render(SDL_Renderer* screen) {
 }
 
 PitchView::~PitchView() {
+    // Borro la imagen de la cancha.
+    delete(this->pitch);
+    delete(this->camera);
     // Libero todos los player views.
     std::list<PlayerSpriteManager*>::iterator it;
     for (it = this->playerViews.begin(); it != this->playerViews.end(); it++) {

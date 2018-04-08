@@ -21,6 +21,8 @@
 #include "view/PitchView.h"
 #include "util/Colour.h"
 #include "view/Camera.h"
+#include "controller/GameController.h"
+#include "model/Pitch.h"
 // Fin Para el test.
 
 
@@ -179,29 +181,41 @@ int main(int argc, char* argv[]) {
     // Main loop ------------------------------------------
     // Esquema de inicializacion.
     init();
+
     // Crear los jugadores.
-    Coordinates* coordinates = new Coordinates(400, 300);
-    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
+    Coordinates* coordinates = new Coordinates(800, 500);
+    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates); // Liberado en team.
+
     // Agregarlos a su equipo.
-    Team* team = new Team();
+    Team* team = new Team(); // Liberado en Pitch.
     team->addPlayer(player);
+
     // Crear las views.
-    Colour* transparency = new Colour(0, 0xa0, 0, 0); // green
-    Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency);
+    Colour* transparency = new Colour(0, 0xa0, 0, 0); // green. Se libera abajo.
+    Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
     delete(transparency);
     PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
+
     // Crear la pitchView pasandole los jugadores.
-    Texture* pitchImg = new Texture("images/bg.png", renderer, transparency);
+    Texture* pitchImg = new Texture("images/bg.png", renderer); // Liberado en PitchView.
     // punto arriba a la izquierda = (1600/2  - 800/2, 1000/2 - 600/2) = (400, 200)
-    Coordinates* cameraPosition = new Coordinates(400, 200);
-    Camera* camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT);
-    PitchView* pitchView = new PitchView(pitchImg, camera);
+    Coordinates* cameraPosition = new Coordinates(400, 200); // Liberado en Camera.
+    Camera* camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT); // Liberado en PitchView.
+    PitchView* pitchView = new PitchView(pitchImg, camera); // Liberado al final.
     pitchView->addPlayerView(playerSpriteManager);
+
+    // Crear la cancha.
+    Pitch* pitch = new Pitch(); // Liberado en game controller.
+    pitch->setLocalTeam(team);
+
     // Crear el game manager.
+    GameController* gameController = new GameController(pitch); // Liberado al final.
+
+    // Va a manejar los eventos de teclado.
+    ActionsManager* actionsManager = new ActionsManager(); // Liberado al final.
+
     bool quit = false;
     SDL_Event e;
-    // Va a manejar los eventos de teclado.
-    ActionsManager* actionsManager = new ActionsManager();
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
@@ -211,15 +225,18 @@ int main(int argc, char* argv[]) {
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
-                    // gameManager->execute(Action);
+                    gameController->execute(action);
                     delete(action);
                 }
             }
         }
-        // gameManager->updatePlayers();
-        // pitchView->draw();
+        gameController->updatePlayers();
+        pitchView->render(renderer);
     }
     // Main loop ------------------------------------------
+    delete(gameController);
+    delete(actionsManager);
+    delete(pitchView);
     close();
     LOG_FILE_POINTER.close();
     logSessionFinished();
