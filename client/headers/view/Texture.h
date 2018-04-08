@@ -2,19 +2,19 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
-#ifndef SPRITESHEET_H
-#define SPRITESHEET_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
-class SpriteSheet {
+class Texture {
     private:
-        SDL_Texture* spriteSheetTexture;
+        SDL_Texture* sdlTexture;
         int height;
         int width;
     public:
-        SpriteSheet(std::string sheetPath, SDL_Renderer* renderer);
+        Texture(std::string sheetPath, SDL_Renderer* renderer);
         SDL_Texture* getSpriteSheetTexture();
-        ~SpriteSheet();
+        ~Texture();
         SDL_Texture* loadSheet(std::string path, SDL_Renderer* renderer);
         void free();
 };
-#endif // SPRITESHEET_H
+#endif // TEXTURE_H

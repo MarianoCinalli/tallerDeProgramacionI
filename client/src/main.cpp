@@ -16,7 +16,7 @@
 #include "controller/actions/Action.h"
 #include "controller/ActionsManager.h"
 #include "view/PlayerSpriteManager.h"
-#include "view/SpriteSheet.h"
+#include "view/Texture.h"
 #include "model/Team.h"
 #include "view/PitchView.h"
 // Fin Para el test.
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
     Team* team = new Team();
     team->addPlayer(player);
     // Crear las views.
-    // SpriteSheet* spriteSheet = new SpriteSheet("images/sprites.png", renderer);
+    // Texture* spriteSheet = new Texture("images/sprites.png", renderer);
     // PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
     // Crear la pitchView pasandole los jugadores.
     // PitchView* pitchView = new PitchView();
@@ -228,7 +228,7 @@ void close() {
     // Tiene hardcodeado la transparencia del color verde.
     // Puede que en el merge se refactoree, para que tenga
     // una clase textura como atributo.
-    SpriteSheet* spriteSheet = new SpriteSheet("images/sprites.png", renderer);
+    Texture* spriteSheet = new Texture("images/sprites.png", renderer);
     init();
     // Este es el encargado de dibujar el sprite correspondiente en cada frame.
     // Cada jugador tiene su manager, porque es el que sabe que

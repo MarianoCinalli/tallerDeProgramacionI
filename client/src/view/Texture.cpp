@@ -1,18 +1,18 @@
-#include "view/SpriteSheet.h"
+#include "view/Texture.h"
 
-SpriteSheet::SpriteSheet(std::string sheetPath, SDL_Renderer* renderer) {
-    this->spriteSheetTexture = this->loadSheet(sheetPath, renderer);
+Texture::Texture(std::string sheetPath, SDL_Renderer* renderer) {
+    this->sdlTexture = this->loadSheet(sheetPath, renderer);
 }
 
-SDL_Texture* SpriteSheet::getSpriteSheetTexture() {
-    return this->spriteSheetTexture;
+SDL_Texture* Texture::getSpriteSheetTexture() {
+    return this->sdlTexture;
 }
 
-SpriteSheet::~SpriteSheet() {
+Texture::~Texture() {
     this->free();
 }
 
-SDL_Texture* SpriteSheet::loadSheet(std::string path, SDL_Renderer* renderer) {
+SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer) {
     //Get rid of preexisting texture
     this->free();
     //The final texture
@@ -39,11 +39,11 @@ SDL_Texture* SpriteSheet::loadSheet(std::string path, SDL_Renderer* renderer) {
     return newTexture;
 }
 
-void SpriteSheet::free() {
+void Texture::free() {
     //Free texture if it exists
-    if (this->spriteSheetTexture != NULL) {
-        SDL_DestroyTexture(this->spriteSheetTexture);
-        this->spriteSheetTexture = NULL;
+    if (this->sdlTexture != NULL) {
+        SDL_DestroyTexture(this->sdlTexture);
+        this->sdlTexture = NULL;
         this->width = 0;
         this->height = 0;
     }
