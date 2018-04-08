@@ -2,7 +2,7 @@
 #include "util/Velocity.h"
 #include "util/Constants.h"
 #include "util/logger.h"
-#include "view/SpriteSheet.h"
+#include "view/Texture.h"
 #include "model/Player.h"
 #include <SDL2/SDL.h>
 
@@ -14,12 +14,12 @@
 class PlayerSpriteManager {
     private:
         Player* player;
-        SpriteSheet* spriteSheet;
+        Texture* spriteSheet;
         int spriteWidth;
         int spriteHeight;
         SDL_Rect sprite;
     public:
-        PlayerSpriteManager(SpriteSheet* spriteSheet, Player* player);
+        PlayerSpriteManager(Texture* spriteSheet, Player* player);
         // Dibuja un jugador, en las coordenadas del render que se le pase.
         void render(SDL_Renderer* screen, Coordinates* coordinates);
         Coordinates* getPlayerCoordinates();

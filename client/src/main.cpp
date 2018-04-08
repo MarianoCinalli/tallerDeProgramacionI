@@ -16,7 +16,10 @@
 #include "controller/actions/Action.h"
 #include "controller/ActionsManager.h"
 #include "view/PlayerSpriteManager.h"
-#include "view/SpriteSheet.h"
+#include "view/Texture.h"
+#include "model/Team.h"
+#include "view/PitchView.h"
+#include "util/Colour.h"
 // Fin Para el test.
 
 
@@ -118,9 +121,19 @@ int main(int argc, char* argv[]) {
     // Main loop ------------------------------------------
     // Esquema de inicializacion.
     // Crear los jugadores.
+    Coordinates* coordinates = new Coordinates(400, 300);
+    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
     // Agregarlos a su equipo.
+    Team* team = new Team();
+    team->addPlayer(player);
     // Crear las views.
-    // Crear la pitchView pasando le los jugadores.
+    Colour* transparency = new Colour(0, 0xa0, 0, 0); // green
+    // Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency);
+    delete(transparency);
+    // PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
+    // Crear la pitchView pasandole los jugadores.
+    // PitchView* pitchView = new PitchView();
+    // pitchView->addPlayerView(playerSpriteManager);
     // Crear el game manager.
     bool quit = false;
     SDL_Event e;
@@ -218,13 +231,14 @@ void close() {
     // Tiene hardcodeado la transparencia del color verde.
     // Puede que en el merge se refactoree, para que tenga
     // una clase textura como atributo.
-    SpriteSheet* spriteSheet = new SpriteSheet("images/sprites.png", renderer);
+    Texture* spriteSheet = new Texture("images/sprites.png", renderer);
     init();
     // Este es el encargado de dibujar el sprite correspondiente en cada frame.
     // Cada jugador tiene su manager, porque es el que sabe que
     // sprite tuvo el jugador y cual sigue.
     // Seria como una PlayerView, pero este nombre es mas descriptivo.
     PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet);
+
 
     // Dummy player. Parado en el medio de la pantalla.
     Coordinates* coordinates = new Coordinates(400, 300);

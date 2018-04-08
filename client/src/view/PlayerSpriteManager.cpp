@@ -1,6 +1,6 @@
 #include "view/PlayerSpriteManager.h"
 
-PlayerSpriteManager::PlayerSpriteManager(SpriteSheet* spriteSheet, Player* player) {
+PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
     this->player = player;
     this->spriteSheet = spriteSheet;
     this->spriteWidth = 16;
