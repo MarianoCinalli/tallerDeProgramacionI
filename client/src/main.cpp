@@ -19,6 +19,7 @@
 #include "view/Texture.h"
 #include "model/Team.h"
 #include "view/PitchView.h"
+#include "util/Colour.h"
 // Fin Para el test.
 
 
@@ -126,7 +127,9 @@ int main(int argc, char* argv[]) {
     Team* team = new Team();
     team->addPlayer(player);
     // Crear las views.
-    // Texture* spriteSheet = new Texture("images/sprites.png", renderer);
+    Colour* transparency = new Colour(0, 0xa0, 0, 0); // green
+    // Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency);
+    delete(transparency);
     // PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
     // Crear la pitchView pasandole los jugadores.
     // PitchView* pitchView = new PitchView();

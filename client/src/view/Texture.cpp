@@ -1,7 +1,7 @@
 #include "view/Texture.h"
 
-Texture::Texture(std::string sheetPath, SDL_Renderer* renderer) {
-    this->sdlTexture = this->loadSheet(sheetPath, renderer);
+Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency) {
+    this->sdlTexture = this->loadSheet(sheetPath, renderer, transparency);
 }
 
 SDL_Texture* Texture::getSpriteSheetTexture() {
@@ -12,7 +12,7 @@ Texture::~Texture() {
     this->free();
 }
 
-SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer) {
+SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency) {
     //Get rid of preexisting texture
     this->free();
     //The final texture
@@ -22,8 +22,19 @@ SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer) {
     if (loadedSurface == NULL) {
         printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
     } else {
-        //Color key image (Le saca el fondo verde 00a000 en exa)
-        SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xa0, 0));
+        if (transparency != NULL) {
+            //Color key image (Le saca el fondo verde 00a000 en exa)
+            SDL_SetColorKey(
+                loadedSurface,
+                SDL_TRUE,
+                SDL_MapRGB(
+                    loadedSurface->format,
+                    transparency->getRed(),
+                    transparency->getGreen(),
+                    transparency->getBlue()
+                )
+            );
+        }
         //Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
         if (newTexture == NULL) {
