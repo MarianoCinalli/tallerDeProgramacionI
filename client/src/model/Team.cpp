@@ -13,4 +13,11 @@ std::list<Player*> Team::getPlayers() {
 }
 
 Team::~Team() {
+    // Deleting all players.
+    std::list<Player*>::iterator it;
+    for (it = this->players.begin(); it != this->players.end(); it++) {
+        delete(*it);
+    }
+    // Como la lista sigue llena, de punteros borrados, la vacio.
+    this->players.clear();
 }
