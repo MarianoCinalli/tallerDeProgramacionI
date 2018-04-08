@@ -20,10 +20,9 @@ class Coordinates : public Loggable {
         void addY(int amount);
         void subtractY(int amount);
 
+        int distanceTo(Coordinates other);
         std::string toString();
 
         ~Coordinates();
 };
 #endif // COORDINATES_H
-
-
