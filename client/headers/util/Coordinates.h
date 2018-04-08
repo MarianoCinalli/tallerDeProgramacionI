@@ -22,7 +22,7 @@ class Coordinates : public Loggable {
         void subtractY(int amount);
 
         void setCoord(Coordinates other);
-        int distanceTo(Coordinates other);
+        int distanceTo(Coordinates* other);
         std::string toString();
 
         ~Coordinates();

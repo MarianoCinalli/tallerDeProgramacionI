@@ -6,13 +6,13 @@ Pitch::Pitch() {
 Pitch::~Pitch() {
 }
 
-Coordinates getCenter(){
+Coordinates* getCenter(){
   //harcodeado TODO
-  return Coordinates(0,0);
+  return new Coordinates(0,0);
 }
 
 Player* Pitch::activePlayer(){
-  Coordinates center = getCenter();
+  Coordinates* center = getCenter();
   std::list <Player*>players = localTeam->getPlayers();
   int nearestDistance = 1000; //max distance harcodeadeo TODO
   Player* nearestPlayer = players.front();
@@ -23,5 +23,6 @@ Player* Pitch::activePlayer(){
       nearestPlayer = p;
     }
   }
+  free(center);
   return nearestPlayer;
 }

@@ -170,7 +170,7 @@ void close() {
 
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {     //Si da 1 es o la version o el help o un flag inexistente
-        log("Salida del programa por flags o argumento invalido", SALIDA_LINEA_COMANDOS);
+        printf("Salida del programa por flags o argumento invalido");
         return SALIDA_LINEA_COMANDOS;
     }
     // Log initialization ---------------------------------

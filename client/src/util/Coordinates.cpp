@@ -38,8 +38,8 @@ void Coordinates::setCoord(Coordinates other){
   this->y = other.y;
 }
 
-int Coordinates::distanceTo(Coordinates other){
-  return sqrt(pow(this->x-other.x,2) + pow(this->y-other.y,2));
+int Coordinates::distanceTo(Coordinates* other){
+  return sqrt(pow(this->x-other->x,2) + pow(this->y-other->y,2));
 }
 
 std::string Coordinates::toString() {
