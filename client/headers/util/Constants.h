@@ -15,6 +15,13 @@ enum PlayerOrientations {
     PLAYER_ORIENTATION_DOWN = 4
 };
 
+//para indicar accion a realizar
+enum PlayerStandedActions {
+    STANDED_PLAYER = 0,
+    SLIDE_ACTION = 5,
+    KICK_ACTION = 6,
+};
+
 const int SALIDA_LINEA_COMANDOS = 4;
 
 //The dimensions of the level

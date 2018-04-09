@@ -6,6 +6,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->position = position;
     this->maxVelocity = 3; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
+    this->sliding = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -21,6 +22,18 @@ Velocity* Player::getVelocity() {
     return this->velocity;
 }
 
+bool Player::isSliding() {
+    return this->sliding;
+}
+
+void Player::startSliding() {
+    this->sliding = true;
+}
+
+void Player::stopSliding() {
+    this->sliding = false;
+}
+
 void Player::setOrientation(int orientation) {
     this->orientation = orientation;
 }
@@ -32,9 +45,13 @@ void Player::accelerate(int direction) {
 }
 
 void Player::decelerate(int direction) {
-    this->velocity->decelerate(direction, this->maxVelocity);
+    this->velocity->decelerate(direction, this->maxVelocity); //no uso getter? por si cambia algo
     this->orientation = direction;
     log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
+}
+
+void Player::kick() {
+//hacer
 }
 
 void Player::updatePosition() {
