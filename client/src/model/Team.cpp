@@ -20,9 +20,12 @@ std::list<Player*> Team::getPlayers() {
 Team::~Team() {
     log("Team: Liberando memoria. Borrando jugadores...", LOG_INFO);
     // Deleting all players.
-    std::list<Player*>::iterator it;
-    for (it = this->players.begin(); it != this->players.end(); it++) {
-        delete(*it);
+    // std::list<Player*>::iterator it;
+    // for (it = this->players.begin(); it != this->players.end(); it++) {
+    //     delete(*it);
+
+    for(Player* p : players){
+      delete(p);
     }
     // Como la lista sigue llena, de punteros borrados, la vacio.
     this->players.clear();
@@ -34,7 +37,9 @@ void Team::setFormacion(int formacion){
 }
 
 void Team::order(){
+    int i = 0;
     for (Player* p : players){
-        p->setPosition(formaciones[1].front());
+        p->setPosition(formaciones[33][i]);
+        i++;
     }
 }
