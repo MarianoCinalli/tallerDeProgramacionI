@@ -1,9 +1,11 @@
 #include "controller/ActionsManager.h"
 
 ActionsManager::ActionsManager() {
+    log("ActionsManager: Creando actionsManager.", LOG_INFO);
 }
 
 ActionsManager::~ActionsManager() {
+    log("ActionsManager: Eliminando actionsManager.", LOG_INFO);
 }
 
 // Devuelve la accion correspondiente a un evento.

@@ -1,6 +1,10 @@
 #include "controller/GameController.h"
 
 GameController::GameController(Pitch* pitch) {
+    log("ActionsManager: Creando gameController...", LOG_INFO);
+    this->pitch = pitch;
+    this->activePlayer = this->pitch->activePlayer();
+    log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
 void GameController::execute(Action* action) {
@@ -14,4 +18,7 @@ void GameController::updatePlayers() {
 }
 
 GameController::~GameController() {
+    log("ActionsManager: Liberando memoria. Borrando cancha...", LOG_INFO);
+    delete(this->pitch);
+    log("ActionsManager: Cancha borrada.", LOG_INFO);
 }

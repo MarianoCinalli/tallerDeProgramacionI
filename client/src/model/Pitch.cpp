@@ -5,12 +5,21 @@
 Pitch::Pitch() {
 }
 
-Pitch::~Pitch() {
+void Pitch::setLocalTeam(Team* team) {
+    this->localTeam = team;
 }
 
-Coordinates* getCenter(){
-  //harcodeado TODO
-  return new Coordinates(0,0);
+Team* Pitch::getLocalTeam() {
+    return this->localTeam;
+}
+
+Pitch::~Pitch() {
+    delete(this->localTeam);
+}
+
+Coordinates* getCenter() {
+    //harcodeado TODO
+    return new Coordinates(800, 500);
 }
 
 Player* Pitch::activePlayer(){
@@ -24,7 +33,6 @@ Player* Pitch::activePlayer(){
       nearestDistance = distance;
       nearestPlayer = p;
     }
-  }
-  free(center);
-  return nearestPlayer;
+    delete(center);
+    return nearestPlayer;
 }
