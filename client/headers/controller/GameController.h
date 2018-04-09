@@ -1,5 +1,6 @@
 #include "model/Pitch.h"
 #include "controller/actions/Action.h"
+#include "view/Camera.h"
 
 /*
 Controlador de juego:
@@ -30,6 +31,8 @@ class GameController {
         void execute(Action* action);
         // Para actualizar los modelos.
         void updatePlayers();
+        // Dependiendo de la posicion del active player, mueve la camara.
+        void updateCameraPosition(Camera* camera);
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

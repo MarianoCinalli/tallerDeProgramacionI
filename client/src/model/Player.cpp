@@ -4,7 +4,7 @@ Player::Player(int orientation, Coordinates* position) {
     log("Jugador: Creando jugador.", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
-    this->maxVelocity = 1; // TODO: Probar si va muy rapido.
+    this->maxVelocity = 3; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     log("Jugador: Jugador creado.", LOG_INFO);
 }

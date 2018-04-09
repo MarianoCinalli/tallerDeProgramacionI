@@ -232,6 +232,7 @@ int main(int argc, char* argv[]) {
             }
         }
         gameController->updatePlayers();
+        gameController->updateCameraPosition(camera);
         pitchView->render(renderer);
         sleep(1 / 15); // Frame rate.
     }

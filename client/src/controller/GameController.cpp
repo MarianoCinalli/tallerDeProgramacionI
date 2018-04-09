@@ -15,6 +15,13 @@ void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
     activePlayer->updatePosition();
+    // TODO: Validar posiciones de los jugadores.
+}
+
+// Cuando el jugador pise el borde mueve la camara.
+// En este punto las coordenadas de el jugador son validas.
+void GameController::updateCameraPosition(Camera* camera) {
+    Coordinates* playerPosition = this->activePlayer->getPosition();
 }
 
 GameController::~GameController() {
