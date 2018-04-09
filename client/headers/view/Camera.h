@@ -15,10 +15,14 @@ class Camera {
         Coordinates* position;
         int width;
         int height;
+        // La camara tiene sus margenes
+        SDL_Rect margin;
     public:
         Camera(Coordinates* position, int width, int height);
         // transforma las coordenadas para que queden relativas a la camara.
         Coordinates* getRelativeCoordinates(Coordinates* coordinates);
+        // calcular la nueva posicion de la camara basado en el jugador activo
+        void calculateNewPostion(Coordinates* playerPosition);
         // devuelve los jugadores dentro de la camara.
         std::list<PlayerSpriteManager*> getPlayersInside(std::list<PlayerSpriteManager*>& views);
         // devuelve el SDL_Rect para dibujar la parte de la cancha.

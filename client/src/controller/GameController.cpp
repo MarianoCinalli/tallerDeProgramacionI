@@ -22,6 +22,7 @@ void GameController::updatePlayers() {
 // En este punto las coordenadas de el jugador son validas.
 void GameController::updateCameraPosition(Camera* camera) {
     Coordinates* playerPosition = this->activePlayer->getPosition();
+    camera->calculateNewPostion(playerPosition);
 }
 
 GameController::~GameController() {

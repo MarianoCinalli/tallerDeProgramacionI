@@ -13,7 +13,8 @@ class Coordinates : public Loggable {
         Coordinates(int x, int y);
         int getX();
         int getY();
-
+        void setX(int otherX);
+        void setY(int otherY);
 
         void addX(int amount);
         void subtractX(int amount);

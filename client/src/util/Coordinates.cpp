@@ -18,6 +18,14 @@ int Coordinates::getY() {
     return this->y;
 }
 
+void Coordinates::setX(int otherX) {
+    this->x = otherX;
+}
+
+void Coordinates::setY(int otherY) {
+    this->y = otherY;
+}
+
 void Coordinates::addX(int amount) {
     this->x += amount;
 }
