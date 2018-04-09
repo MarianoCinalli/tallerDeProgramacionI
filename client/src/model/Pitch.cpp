@@ -33,6 +33,7 @@ Player* Pitch::activePlayer(){
       nearestDistance = distance;
       nearestPlayer = p;
     }
+  }
     delete(center);
     return nearestPlayer;
-}
+  }
