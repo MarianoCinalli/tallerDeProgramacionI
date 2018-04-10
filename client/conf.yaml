@@ -4,3 +4,6 @@ equipo:
   casaca: 'alternativa' #'principal' o 'alternativa'
 debug:
   level: 'info' #'debug' o "info" o "error"
+performance:
+  framerate: 1
+  margenes: 80

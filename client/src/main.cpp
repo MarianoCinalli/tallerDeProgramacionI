@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 #include <fstream>
+#include <unistd.h>
 #include <stdio.h>
 #include <yaml-cpp/yaml.h>
 #include <getopt.h>
@@ -181,6 +182,8 @@ int main(int argc, char* argv[]) {
     // Main loop ------------------------------------------
     // Esquema de inicializacion.
     init();
+    cargarConfiguracion("conf.yaml");
+    log(&conf, LOG_INFO);
 
     // Crear los jugadores.
     Team* team = new Team(); // Liberado en Pitch.
@@ -257,7 +260,9 @@ int main(int argc, char* argv[]) {
     bool quit = false;
     SDL_Event e;
     log("Main: Entrando en el main loop...", LOG_INFO);
+    int frameRate = conf.getFramerate();
     while (!quit) {
+
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -274,7 +279,7 @@ int main(int argc, char* argv[]) {
         gameController->updatePlayers();
         gameController->updateCameraPosition(camera);
         pitchView->render(renderer);
-        sleep(1 / 15); // Frame rate.
+        usleep((float)20000/(float)frameRate); // Frame rate.
     }
     log("Main: Main loop finalizado.", LOG_INFO);
     // Main loop ------------------------------------------
