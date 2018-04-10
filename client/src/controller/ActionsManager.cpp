@@ -35,6 +35,8 @@ Action* ActionsManager::getAction(SDL_Event event) {
         // Actions for released keys.
         log("ActionsManager: Se registro una tecla soltada.", LOG_DEBUG);
         switch (event.key.keysym.sym) {
+            case SDLK_SPACE:
+                break;
             case SDLK_UP:
                 action = new Decelerate(PLAYER_ORIENTATION_UP);
                 break;
