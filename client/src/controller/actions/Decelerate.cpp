@@ -9,7 +9,10 @@ void Decelerate::execute(Player* player) {
     player->decelerate(this->direction);
 }
 
-Decelerate::~Decelerate() {
+
+bool Decelerate::valid(Player* player){
+  return true;
 }
 
-
+Decelerate::~Decelerate() {
+}

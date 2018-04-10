@@ -12,8 +12,7 @@ class Decelerate : public Action {
     public:
         Decelerate(int direction);
         virtual void execute(Player* player);
+        virtual bool valid(Player* player);
         ~Decelerate();
 };
 #endif // DECELERATE_H
-
-

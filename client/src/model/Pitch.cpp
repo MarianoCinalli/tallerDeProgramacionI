@@ -7,6 +7,7 @@ Pitch::Pitch() {
 
 void Pitch::setLocalTeam(Team* team) {
     this->localTeam = team;
+    changeActivePlayer();
 }
 
 Team* Pitch::getLocalTeam() {
@@ -22,18 +23,20 @@ Coordinates* getCenter() {
     return new Coordinates(800, 500);
 }
 
-Player* Pitch::activePlayer(){
+void Pitch::changeActivePlayer(){
   Coordinates* center = getCenter();
   std::list <Player*>players = localTeam->getPlayers();
   int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
   Player* nearestPlayer = players.back();
   for (Player* p : players) {
     int distance = p->getPosition()->distanceTo(center);
+    log("Distancia: ",distance, LOG_DEBUG);
     if (distance < nearestDistance){
       nearestDistance = distance;
       nearestPlayer = p;
     }
   }
     delete(center);
-    return nearestPlayer;
+    activePlayer = nearestPlayer;
+    //delete(nearestPlayer);
   }

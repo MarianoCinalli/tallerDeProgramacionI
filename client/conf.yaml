@@ -3,7 +3,7 @@ equipo:
   formacion: '3-1-2' # '3-3', '3-1-2', '3-2-1', '2-3-1', '2-2-2'
   casaca: 'alternativa' #'principal' o 'alternativa'
 debug:
-  level: 'info' #'debug' o "info" o "error"
+  level: 'debug' #'debug' o "info" o "error"
 performance:
   framerate: 1
   margenes: 80

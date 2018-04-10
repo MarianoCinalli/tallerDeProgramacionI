@@ -14,7 +14,8 @@ class Pitch {
         Team* localTeam;
     public:
         Pitch();
-        Player* activePlayer();
+        Player* activePlayer;
+        void changeActivePlayer();
         void setLocalTeam(Team* team);
         Team* getLocalTeam();
         ~Pitch();

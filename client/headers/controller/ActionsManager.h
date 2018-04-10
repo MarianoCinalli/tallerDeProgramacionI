@@ -3,6 +3,7 @@
 #include "util/Constants.h"
 #include "controller/actions/Accelerate.h"
 #include "controller/actions/Decelerate.h"
+#include "controller/actions/ChangeActivePlayer.h"
 #include "util/logger.h"
 
 #ifndef ACTIONSMANAGER_H
@@ -16,5 +17,3 @@ class ActionsManager {
         ~ActionsManager();
 };
 #endif // ACTIONSMANAGER_H
-
-
