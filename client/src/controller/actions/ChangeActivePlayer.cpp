@@ -5,7 +5,7 @@ ChangeActivePlayer::ChangeActivePlayer() {
 
 void ChangeActivePlayer::execute(Pitch* pitch) {
     log("ChangeActivePlayer: Cambiando el jugador activo.", LOG_DEBUG);
-    //pitch->activePlayer->decelerate(pitch->activePlayer->getOrientation());
+    pitch->activePlayer->stop(pitch->activePlayer->getOrientation());
     pitch->changeActivePlayer();
 }
 

@@ -26,6 +26,7 @@ class Player {
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
         void decelerate(int direction);
+        void stop(int direction);
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void setOrientation(int orientation);

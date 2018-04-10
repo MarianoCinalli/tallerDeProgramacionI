@@ -21,6 +21,11 @@ void Velocity::decelerate(int direction, int amount) {
     this->changeOnDirection(direction, (-1) * amount);
 }
 
+void Velocity::stop(){
+  this->x = 0;
+  this->y = 0;
+}
+
 bool Velocity::isZero() {
     return ((this->x == 0) && (this->y == 0));
 }

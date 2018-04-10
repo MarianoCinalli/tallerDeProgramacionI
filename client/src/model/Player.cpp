@@ -32,9 +32,18 @@ void Player::accelerate(int direction) {
 }
 
 void Player::decelerate(int direction) {
-    this->velocity->decelerate(direction, this->maxVelocity);
-    this->orientation = direction;
-    log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
+    if (!this->velocity->isZero()){
+      this->velocity->decelerate(direction, this->maxVelocity);
+      this->orientation = direction;
+      log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
+    }
+}
+
+void Player::stop(int direction){
+  this->velocity->stop();
+  this->orientation = direction;
+  log("Jugador: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_DEBUG);
+
 }
 
 void Player::updatePosition() {
