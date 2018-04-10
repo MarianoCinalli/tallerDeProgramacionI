@@ -10,10 +10,10 @@ void StandedAction::execute(Player* player) {
             log("StandedAction: jugador se desliza.", LOG_DEBUG);
             player->startSliding();
             break;
-        case KICK_ACTION:
+        /*case KICK_ACTION:
             log("StandedAction: Jugador patea.", LOG_DEBUG);
             player->kick();
-            break;
+            break;*/
 	}
 }
 

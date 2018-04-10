@@ -32,15 +32,12 @@ class PlayerSpriteManager {
         void setRunningSprite(Velocity* velocity, bool sliding);
         bool isRunningUp(int xComponent, int yComponent);
         void setRunningUpSprite();
-        void setSlidingUpSprite();
         bool isRunningDown(int xComponent, int yComponent);
         void setRunningDownSprite();
-        void setSlidingDownSprite();
         bool isRunningLeft(int xComponent, int yComponent);
         void setRunningLeftSprite();
-        void setSlidingLeftSprite();
         bool isRunningRight(int xComponent, int yComponent);
         void setRunningRightSprite();
-        void setSlidingRightSprite();
+        void setSlidingSprite(int orientacion);
 };
 #endif // PLAYERSPRITEMANAGER_H

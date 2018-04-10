@@ -7,6 +7,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->maxVelocity = 3; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
+    this->wasSliding = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -26,12 +27,21 @@ bool Player::isSliding() {
     return this->sliding;
 }
 
+bool Player::wasSlidingYet() {
+    return this->wasSliding;
+}
+
 void Player::startSliding() {
     this->sliding = true;
 }
 
+void Player::isAlreadySliding(){
+    this->wasSliding = true;
+}
+
 void Player::stopSliding() {
     this->sliding = false;
+    this->wasSliding = false;
 }
 
 void Player::setOrientation(int orientation) {

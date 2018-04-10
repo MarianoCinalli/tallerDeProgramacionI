@@ -14,6 +14,7 @@ class Player {
         Velocity* velocity;
         Coordinates* position;
         bool sliding;
+        bool wasSliding;
 
     public:
         Player(int orientation, Coordinates* position);
@@ -22,6 +23,7 @@ class Player {
         Coordinates* getPosition();
         Velocity* getVelocity();
         int getOrientation();
+        bool wasSlidingYet();
         bool isSliding();
 
         // Modifiers
@@ -35,6 +37,7 @@ class Player {
         // Acciones
         void startSliding();
         void stopSliding();
+        void isAlreadySliding();   //TODO mejorar nombres de slide!
         void kick();
 
         ~Player();

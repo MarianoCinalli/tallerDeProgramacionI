@@ -27,11 +27,12 @@ Action* ActionsManager::getAction(SDL_Event event) {
             case SDLK_RIGHT:
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
-            case SDLK_SLIDE:
+            case SDLK_SPACE:
                 action = new StandedAction(SLIDE_ACTION);
                 break;
-            case SDLK_KICK:
+            /*case SDLK_KICK:
                 action = new StandedAction(KICK_ACTION);
+                break;*/
         }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.
