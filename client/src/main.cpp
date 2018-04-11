@@ -238,7 +238,7 @@ int main(int argc, char* argv[]) {
     Texture* pitchImg = new Texture("images/bg.png", renderer); // Liberado en PitchView.
     // punto arriba a la izquierda = (1600/2  - 800/2, 1000/2 - 600/2) = (400, 200)
     Coordinates* cameraPosition = new Coordinates(400, 200); // Liberado en Camera.
-    Camera* camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT); // Liberado en PitchView.
+    Camera* camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf.getMargen()); // Liberado en PitchView.
     PitchView* pitchView = new PitchView(pitchImg, camera); // Liberado al final.
     pitchView->addPlayerView(playerSpriteManager);
     pitchView->addPlayerView(playerSpriteManager2);

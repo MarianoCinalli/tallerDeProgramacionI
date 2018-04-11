@@ -198,7 +198,7 @@ int Conf::getFramerate()
 {
 	return framerate;
 }
-int Conf::getMargenes()
+int Conf::getMargen()
 {
 	return margenes;
 }

@@ -6,4 +6,4 @@ debug:
   level: 'debug' #'debug' o "info" o "error"
 performance:
   framerate: 4
-  margenes: 80
+  margenes: 150

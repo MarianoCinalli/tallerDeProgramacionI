@@ -1,12 +1,12 @@
 #include "view/Camera.h"
 
-Camera::Camera(Coordinates* position, int width, int height) {
+Camera::Camera(Coordinates* position, int width, int height, int margen) {
     log("Camera: Creando camara...", LOG_INFO);
     this->position = position;
     this->width = width;
     this->height = height;
     //The margin area
-    this->margin = { position->getX() + MARGIN_SIZE, position->getY() + MARGIN_SIZE, width - MARGIN_SIZE * 2, height - MARGIN_SIZE * 2 };
+    this->margin = { position->getX() + margen, position->getY() + margen, width - margen * 2, height - margen * 2 };
     log("Camera: Camara creada.", LOG_INFO);
 }
 

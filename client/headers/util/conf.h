@@ -30,7 +30,7 @@ class Conf : public Loggable {
     int getDebugLevel();
     string getNombre();
     int getFramerate();
-    int getMargenes();
+    int getMargen();
     int loadConf(string file);
     string toString();
   private:
