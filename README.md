@@ -8,8 +8,8 @@
 - Mariano Cinalli [@MarianoCinalli](https://github.com/MarianoCinalli)
 - Joaquin [@joakoracing](https://github.com/joakoracing)
 - Claudio [@claucapo](https://github.com/claucapo)
-- Juan [@nicolascian](https://github.com/nicolascian)
-- Facundo [@juandambra](https://github.com/juandambra)
+- Nicolas [@nicolascian](https://github.com/nicolascian)
+- Juan [@juandambra](https://github.com/juandambra)
 
 ### Uso del makefile:
 	sudo make dependencies - Instala las librerias necesarias.
