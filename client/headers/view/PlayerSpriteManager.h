@@ -29,15 +29,16 @@ class PlayerSpriteManager {
         //para sprite de jugador parado.
         void setStandingSprite(int orientation);
         // Para los sprites del jugador corriendo.
-        void setRunningSprite(Velocity* velocity, bool sliding);
+        void setRunningSprite(Velocity* velocity, bool sliding, bool kicking);
         bool isRunningUp(int xComponent, int yComponent);
-        void setRunningUpSprite();
+        void setRunningUpSprite(bool sliding, bool kicking);
         bool isRunningDown(int xComponent, int yComponent);
-        void setRunningDownSprite();
+        void setRunningDownSprite(bool sliding, bool kicking);
         bool isRunningLeft(int xComponent, int yComponent);
-        void setRunningLeftSprite();
+        void setRunningLeftSprite(bool sliding, bool kicking);
         bool isRunningRight(int xComponent, int yComponent);
-        void setRunningRightSprite();
+        void setRunningRightSprite(bool sliding, bool kicking);
         void setSlidingSprite(int orientacion);
+        void setKickingSprite(int orientation);
 };
 #endif // PLAYERSPRITEMANAGER_H

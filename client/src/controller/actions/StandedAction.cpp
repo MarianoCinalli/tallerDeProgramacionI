@@ -8,12 +8,12 @@ void StandedAction::execute(Player* player) {
 	switch (this->action) {
         case SLIDE_ACTION:
             log("StandedAction: jugador se desliza.", LOG_DEBUG);
-            player->startSliding();
+            player->startsSliding();
             break;
-        /*case KICK_ACTION:
+        case KICK_ACTION:
             log("StandedAction: Jugador patea.", LOG_DEBUG);
-            player->kick();
-            break;*/
+            player->startsKicking();
+            break;
 	}
 }
 

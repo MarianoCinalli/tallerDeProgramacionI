@@ -7,7 +7,9 @@ Player::Player(int orientation, Coordinates* position) {
     this->maxVelocity = 3; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
-    this->wasSliding = false;
+    this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
+    this->kicking = false;
+    this->wasKicking = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -21,27 +23,6 @@ int Player::getOrientation() {
 
 Velocity* Player::getVelocity() {
     return this->velocity;
-}
-
-bool Player::isSliding() {
-    return this->sliding;
-}
-
-bool Player::wasSlidingYet() {
-    return this->wasSliding;
-}
-
-void Player::startSliding() {
-    this->sliding = true;
-}
-
-void Player::isAlreadySliding(){
-    this->wasSliding = true;
-}
-
-void Player::stopSliding() {
-    this->sliding = false;
-    this->wasSliding = false;
 }
 
 void Player::setOrientation(int orientation) {
@@ -60,9 +41,6 @@ void Player::decelerate(int direction) {
     log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
-void Player::kick() {
-//hacer
-}
 
 void Player::updatePosition() {
     this->position->addX(this->velocity->getComponentX());
@@ -77,4 +55,50 @@ void Player::setPosition(Coordinates pos) {
 Player::~Player() {
     delete(this->position);
     delete(this->velocity);
+}
+
+//SLIDE AND KICK FUNCTIONS
+
+void Player::startsKicking() {
+    if (!this->sliding)
+        this->kicking = true;
+}
+
+void Player::stopKicking() {
+    this->kicking = false;
+    this->wasKicking = false;
+}
+
+bool Player::isKicking() {
+    return this->kicking;
+}
+
+bool Player::wasKickingYet() {
+    return this->wasKicking;
+}
+
+void Player::isAlreadyKicking() {
+    this->wasKicking = true;
+}
+bool Player::isSliding() {
+    return this->sliding;
+}
+
+bool Player::wasSlidingYet() {
+    return this->wasSliding;
+}
+
+void Player::startsSliding() {
+    if (!this->iskicking)
+        this->sliding = true;
+    //this->velocity->accelerate(this->orientation, this->maxVelocity);
+}
+
+void Player::isAlreadySliding(){
+    this->wasSliding = true;
+}
+
+void Player::stopSliding() {
+    this->sliding = false;
+    this->wasSliding = false;
 }

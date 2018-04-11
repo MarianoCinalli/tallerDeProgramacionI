@@ -23,12 +23,13 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
 void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
     Velocity* velocity = this->player->getVelocity();
     bool sliding = this->player->isSliding();
-    if (velocity->isZero() && !sliding) {
+    bool kicking = this->player->isKicking();
+    if (velocity->isZero() && !sliding && !kicking) {
         // Esta quieto, se dibuja parado.
         this->setStandingSprite(this->player->getOrientation());
     } else {
         // Esta corriendo.
-        this->setRunningSprite(velocity, sliding);
+        this->setRunningSprite(velocity, sliding, kicking);
     }
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
     SDL_RenderCopy(
@@ -90,17 +91,17 @@ void PlayerSpriteManager::setStandingSprite(int orientation) {
 // Devuelve el cuadrado que encierra al sprite actual.
 // Cada sprite tiene 16x16.
 // Ocho sprites por secuencia de corrida.
-void PlayerSpriteManager::setRunningSprite(Velocity* velocity, bool sliding) {
+void PlayerSpriteManager::setRunningSprite(Velocity* velocity, bool sliding, bool kicking) {
     int xComponent = velocity->getComponentX();
     int yComponent = velocity->getComponentY();
     if (this->isRunningUp(xComponent, yComponent)) {
-        this->setRunningUpSprite(sliding);
+        this->setRunningUpSprite(sliding, kicking);
     } else if (this->isRunningDown(xComponent, yComponent)) {
-        this->setRunningDownSprite(sliding);
+        this->setRunningDownSprite(sliding, kicking);
     } else if (this->isRunningLeft(xComponent, yComponent)) {
-        this->setRunningLeftSprite(sliding);
+        this->setRunningLeftSprite(sliding, kicking);
     } else if (this->isRunningRight(xComponent, yComponent)) {
-        this->setRunningRightSprite(sliding);
+        this->setRunningRightSprite(sliding, kicking);
     }
 }
 
@@ -108,11 +109,14 @@ bool PlayerSpriteManager::isRunningUp(int xComponent, int yComponent) {
     return ((xComponent == 0) && (yComponent < 0));
 }
 
-void PlayerSpriteManager::setRunningUpSprite(bool sliding) {
+void PlayerSpriteManager::setRunningUpSprite(bool sliding, bool kicking) {
     // El que empieza en (0, 0) es el primero que corre para arriba.
     // El que empieza en (7 * 16 = 112, 0) es el ultimo que corre para arriba.
-    if (sliding){
-        this->setSlidingUpSprite();
+    if (sliding || kicking){  //NUNCA HACE LAS DOS A LA VEZ
+        if (sliding)
+            this->setSlidingSprite(PLAYER_ORIENTATION_UP);
+        else 
+            this->setKickingSprite(PLAYER_ORIENTATION_UP);
     }
     else{
         log("PlayerSpriteManager: Creando el sprite corriendo arriba.", LOG_DEBUG);
@@ -129,12 +133,15 @@ bool PlayerSpriteManager::isRunningDown(int xComponent, int yComponent) {
     return ((xComponent == 0) && (yComponent > 0));
 }
 
-void PlayerSpriteManager::setRunningDownSprite(bool sliding) {
+void PlayerSpriteManager::setRunningDownSprite(bool sliding, bool kicking) {
     // El primero es el sprite numero 13 de la segunda linea.
     // El que empieza en (0, 16) es el primero que corre para abajo.
     // El que empieza en (7 * 16 = 112, 16) es el ultimo que corre para abajo.
-    if (sliding){
-    this->setSlidingDownUpSprite();
+    if (sliding || kicking){  //NUNCA HACE LAS DOS A LA VEZ
+        if (sliding)
+            this->setSlidingSprite(PLAYER_ORIENTATION_DOWN);
+        else 
+            this->setKickingSprite(PLAYER_ORIENTATION_DOWN);
     }
     else{
         log("PlayerSpriteManager: Creando el sprite corriendo abajo.", LOG_DEBUG);
@@ -154,12 +161,15 @@ bool PlayerSpriteManager::isRunningLeft(int xComponent, int yComponent) {
     return (xComponent < 0);
 }
 
-void PlayerSpriteManager::setRunningLeftSprite(bool sliding) {
+void PlayerSpriteManager::setRunningLeftSprite(bool sliding, bool kicking) {
     // El primero es el sprite numero 9 de la tercera linea.
     // El que empieza en (0, 32) es el primero que corre para la izquierda.
     // El que empieza en (7 * 16 = 112, 32) es el ultimo que corre para la izquierda.
-    if (sliding){
-    this->setSlidingLeftSprite();
+    if (sliding || kicking){  //NUNCA HACE LAS DOS A LA VEZ
+        if (sliding)
+            this->setSlidingSprite(PLAYER_ORIENTATION_LEFT);
+        else 
+            this->setKickingSprite(PLAYER_ORIENTATION_LEFT);
     }
     else{
         log("PlayerSpriteManager: Creando el sprite corriendo a la izquierda.", LOG_DEBUG);
@@ -177,11 +187,14 @@ bool PlayerSpriteManager::isRunningRight(int xComponent, int yComponent) {
     return (xComponent > 0);
 }
 
-void PlayerSpriteManager::setRunningRightSprite(bool sliding) {
+void PlayerSpriteManager::setRunningRightSprite(bool sliding, bool kicking) {
     // El que empieza en (0, 48) es el primero que corre para la derecha.
     // El que empieza en (7 * 16 = 112, 48) es el ultimo que corre para la derecha.
-    if (sliding){
-    this->setSlidingRightSprite();
+    if (sliding || kicking){  //NUNCA HACE LAS DOS A LA VEZ
+        if (sliding)
+            this->setSlidingSprite(PLAYER_ORIENTATION_RIGHT);
+        else 
+            this->setKickingSprite(PLAYER_ORIENTATION_RIGHT);
     }
     else{
         log("PlayerSpriteManager: Creando el sprite corriendo a la derecha.", LOG_DEBUG);
@@ -198,32 +211,32 @@ void PlayerSpriteManager::setSlidingSprite(int orientacion) {
     if this->player->!wasSliding() {
         log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
         this->sprite.x = 0;
-        this->sprite.y = (80 + (16 * orientacion));
-        /*switch (orientacion) {
-            case(PLAYER_ORIENTATION_UP):
-                this->sprite.x = PRIMER_X;
-                this->sprite.y = PRIMER_Y;
-                break;
-            case(PLAYER_ORIENTATION_DOWN):
-                this->sprite.x = PRIMER_X;
-                this->sprite.y = PRIMER_Y;
-                break;
-            case(PLAYER_ORIENTATION_LEFT):
-                this->sprite.x = PRIMER_X;
-                this->sprite.y = PRIMER_Y;
-                break;
-            case(PLAYER_ORIENTATION_RIGHT):
-                this->sprite.x = PRIMER_X;
-                this->sprite.y = PRIMER_Y;
-                break;
-        }*/
+        this->sprite.y = (80 + (16 * orientacion))
         player->isAlreadySliding();
     } 
     else {
         if ((this->sprite.x == 112) || (this->sprite.y != (80 + (16 * orientacion)))) {
             this->setStandingSprite(PLAYER_ORIENTATION_UP);
             this->player->stopSliding();
-        }
+        } //TODO hacer ctes para sprites
         else this->sprite.x += this->spriteWidth; //que es esto?
+    }
+}
+
+void PlayerSpriteManager::setKickingSprite(int orientacion) {
+    if this->player->!wasKicking() {
+        log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
+        this->sprite.x = 0;
+        this->sprite.y = (144 + (16 * orientacion));
+        this->player->isAlreadyKicking();
+        //this->player->stopMoving();
+    }
+    else {
+        if ((this->sprite.x == 56) || (this->sprite.y != (144 + (16 * orientacion)))) {
+            this->setStandingSprite(PLAYER_ORIENTATION_UP);
+            this->player->stopKicking();
+        //    this->player->moveAgain();
+        }
+        else this->sprite.x += this->spriteWidth;
     }
 }
