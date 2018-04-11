@@ -38,5 +38,9 @@ class PlayerSpriteManager {
         void setRunningLeftSprite();
         bool isRunningRight(int xComponent, int yComponent);
         void setRunningRightSprite();
+
+        // Para el marcador de jugador activo.
+        SDL_Rect getActivePlayerMarker();
+        SDL_Rect getActivePlayerMarkerPosition(Coordinates* coordinates);
 };
 #endif // PLAYERSPRITEMANAGER_H

@@ -1,11 +1,15 @@
 #include "view/Texture.h"
 
+Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt) {
+    this->sdlTexture = this->loadSheet(sheetPath, renderer, transparency, shirt);
+}
+
 Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency) {
-    this->sdlTexture = this->loadSheet(sheetPath, renderer, transparency);
+    this->sdlTexture = this->loadSheet(sheetPath, renderer, transparency, NULL);
 }
 
 Texture::Texture(std::string sheetPath, SDL_Renderer* renderer) {
-    this->sdlTexture = this->loadSheet(sheetPath, renderer, NULL);
+    this->sdlTexture = this->loadSheet(sheetPath, renderer, NULL, NULL);
 }
 
 SDL_Texture* Texture::getSpriteSheetTexture() {
@@ -16,7 +20,7 @@ Texture::~Texture() {
     this->free();
 }
 
-SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency) {
+SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency, Colour* shirt) {
     log("Texture: Cargando textura...", LOG_INFO);
     //Get rid of preexisting texture
     this->free();
@@ -55,6 +59,14 @@ SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour
             //Get image dimensions
             this->width = loadedSurface->w;
             this->height = loadedSurface->h;
+            if (shirt != NULL) {
+                SDL_SetTextureColorMod(
+                    newTexture,
+                    shirt->getRed(),
+                    shirt->getGreen(),
+                    shirt->getBlue()
+                );
+            }
         }
         //Get rid of old loaded surface
         SDL_FreeSurface(loadedSurface);

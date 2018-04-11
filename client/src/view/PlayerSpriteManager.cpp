@@ -30,12 +30,24 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         this->setRunningSprite(velocity);
     }
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
+    SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
     SDL_RenderCopy(
         screen,
-        this->spriteSheet->getSpriteSheetTexture(),
+        spriteSheet,
         &this->sprite,
         &positionOnScreen
     );
+    // Active player marker.
+    if (this->player->getIsSelected()) {
+        SDL_Rect markerSprite = this->getActivePlayerMarker();
+        SDL_Rect markerPositionOnScreen = this->getActivePlayerMarkerPosition(coordinates);
+        SDL_RenderCopy(
+            screen,
+            spriteSheet,
+            &markerSprite,
+            &markerPositionOnScreen
+        );
+    }
 }
 
 Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
@@ -171,4 +183,24 @@ void PlayerSpriteManager::setRunningRightSprite() {
     } else {
         this->sprite.x += this->spriteWidth; // Avanzo la secuencia en un frame.
     }
+}
+
+// Active player marker ----------------------------
+
+SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
+    return {
+        0,
+        96,
+        this->spriteWidth,
+        this->spriteHeight
+    };
+}
+
+SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {
+    return {
+        coordinates->getX(),
+        coordinates->getY() - this->spriteHeight,
+        this->spriteWidth,
+        this->spriteHeight
+    };
 }
