@@ -68,10 +68,10 @@ int chooseFormacion(YAML::Node nod)
 			return 312;
 		else if (!str.compare("3-2-1"))
 			return 321;
-		else if (!str.compare("2-3-1"))
-			return 231;
-		else if (!str.compare("2-2-2"))
-			return 222;
+		// else if (!str.compare("2-3-1"))
+		// 	return 231;
+		// else if (!str.compare("2-2-2"))
+		// 	return 222;
 		else
 			return VALOR_INVALIDO;
 	}

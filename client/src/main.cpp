@@ -187,6 +187,7 @@ int main(int argc, char* argv[]) {
 
     // Crear los jugadores.
     Team* team = new Team(); // Liberado en Pitch.
+    team->setFormacion(conf.getFormacion());
     Coordinates* coordinates = new Coordinates(800, 500);
     Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates); // Liberado en team.
     team->addPlayer(player);

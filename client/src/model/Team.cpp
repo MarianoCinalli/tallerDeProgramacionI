@@ -39,7 +39,7 @@ void Team::setFormacion(int formacion){
 void Team::order(){
     int i = 0;
     for (Player* p : players){
-        p->setPosition(formaciones[33][i]);
+        p->setPosition(formaciones[this->formacion][i]);  
         i++;
     }
 }
