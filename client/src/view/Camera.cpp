@@ -5,8 +5,9 @@ Camera::Camera(Coordinates* position, int width, int height, int margen) {
     this->position = position;
     this->width = width;
     this->height = height;
+    this->margin_size = margen;
     //The margin area
-    this->margin = { position->getX() + margen, position->getY() + margen, width - margen * 2, height - margen * 2 };
+    this->margin = { position->getX() + margin_size, position->getY() + margin_size, width - margin_size * 2, height - margin_size * 2 };
     log("Camera: Camara creada.", LOG_INFO);
 }
 
@@ -23,28 +24,28 @@ void Camera::calculateNewPostion(Coordinates* playerPosition) {
     if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
         log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
         this->position->addX(10);
-        margin.x = this->position->getX() + MARGIN_SIZE;
+        margin.x = this->position->getX() + margin_size;
     }
 
     // Margen izquierdo
     if (playerPosition->getX() < margin.x) {
         log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
         this->position->subtractX(10);
-        margin.x = this->position->getX() + MARGIN_SIZE;
+        margin.x = this->position->getX() + margin_size;
     }
 
     // Margen inferior
     if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
         log("Jugador activo debajo del margen inferior", LOG_DEBUG);
         this->position->addY(10);
-        margin.y = this->position->getY() + MARGIN_SIZE;
+        margin.y = this->position->getY() + margin_size;
     }
 
     // Margen superior
     if (playerPosition->getY() < margin.y) {
         log("Jugador activo sobre el margen superior", LOG_DEBUG);
         this->position->subtractY(10);
-        margin.y = this->position->getY() + MARGIN_SIZE;
+        margin.y = this->position->getY() + margin_size;
     }
 
     //Keep the camera in bounds

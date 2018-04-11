@@ -28,7 +28,7 @@ void CanchaController::startView(void) {
             SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
             //The margin area
-            SDL_Rect margin = { camera.x + MARGIN_SIZE, camera.y + MARGIN_SIZE, camera.w - MARGIN_SIZE * 2, camera.h - MARGIN_SIZE * 2 };
+            SDL_Rect margin = { camera.x + 80, camera.y + 80, camera.w - 80 * 2, camera.h - 80 * 2 };
 
             //While application is running
             // GAME LOOP
@@ -55,28 +55,28 @@ void CanchaController::startView(void) {
                 if ((dot.getPosX() + Dot::DOT_WIDTH) > (margin.x + margin.w)) {
                     log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
                     camera.x += 10;
-                    margin.x = camera.x + MARGIN_SIZE;
+                    margin.x = camera.x + 80;
                 }
 
                 // Margen izquierdo
                 if (dot.getPosX() < margin.x) {
                     log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
                     camera.x -= 10;
-                    margin.x = camera.x + MARGIN_SIZE;
+                    margin.x = camera.x + 80;
                 }
 
                 // Margen inferstartViewior
                 if ((dot.getPosY() + Dot::DOT_WIDTH) > (margin.y + margin.h)) {
                     log("Jugador activo debajo del margen inferior", LOG_DEBUG);
                     camera.y += 10;
-                    margin.y = camera.y + MARGIN_SIZE;
+                    margin.y = camera.y + 80;
                 }
 
                 // Margen superior
                 if (dot.getPosY() < margin.y) {
                     log("Jugador activo sobre el margen superior", LOG_DEBUG);
                     camera.y -= 10;
-                    margin.y = camera.y + MARGIN_SIZE;
+                    margin.y = camera.y + 80;
                 }
 
                 //Keep the camera in bounds

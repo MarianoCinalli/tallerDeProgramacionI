@@ -15,6 +15,7 @@ class Camera {
         Coordinates* position;
         int width;
         int height;
+        int margin_size;
         // La camara tiene sus margenes
         SDL_Rect margin;
     public:

@@ -17,16 +17,15 @@ enum PlayerOrientations {
 
 const int SALIDA_LINEA_COMANDOS = 4;
 
-//The dimensions of the level
+// The dimensions of the level
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
 
-//Screen dimension constants
+// Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-const int MARGIN_SIZE = 80;
+// Necesario para la camara
 const int SPRITE_SIZE = 16;
-
 
 #endif // CONSTANTS_H_
