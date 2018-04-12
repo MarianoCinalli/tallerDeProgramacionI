@@ -29,7 +29,7 @@ class Player {
         void accelerate(int direction);
         void decelerate(int direction);
         void stop(int direction);
-        void toogleIsSelected();
+        void toggleIsSelected();
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void setOrientation(int orientation);

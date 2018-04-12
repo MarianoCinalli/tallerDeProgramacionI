@@ -6,7 +6,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->position = position;
     this->maxVelocity = 3; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
-    this->isSelected = true;
+    this->isSelected = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -26,7 +26,7 @@ void Player::setOrientation(int orientation) {
     this->orientation = orientation;
 }
 
-void Player::toogleIsSelected() {
+void Player::toggleIsSelected() {
     this->isSelected = !this->isSelected;
 }
 

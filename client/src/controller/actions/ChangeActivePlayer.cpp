@@ -5,8 +5,13 @@ ChangeActivePlayer::ChangeActivePlayer() {
 
 void ChangeActivePlayer::execute(Pitch* pitch) {
     log("ChangeActivePlayer: Cambiando el jugador activo.", LOG_DEBUG);
-    pitch->activePlayer->stop(pitch->activePlayer->getOrientation());
+    Player* lastActivePlayer = pitch->activePlayer;
     pitch->changeActivePlayer();
+    if(pitch->activePlayer!=lastActivePlayer){
+      lastActivePlayer->stop(pitch->activePlayer->getOrientation());
+      // lastActivePlayer->toggleIsSelected();
+      // pitch->activePlayer->toggleIsSelected();
+    }
 }
 
 bool ChangeActivePlayer::valid(Pitch* pitch){
