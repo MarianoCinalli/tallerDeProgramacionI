@@ -56,9 +56,9 @@ Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
 
 
 PlayerSpriteManager::~PlayerSpriteManager() {
-    log("PlayerSpriteManager: Liberando memoria. Borrando textura...", LOG_INFO);
-    delete(this->spriteSheet);
-    log("PlayerSpriteManager: Textura eliminada. Memoria liberada.", LOG_INFO);
+    // log("PlayerSpriteManager: Liberando memoria. Borrando textura...", LOG_INFO);
+    // delete(this->spriteSheet);
+    // log("PlayerSpriteManager: Textura eliminada. Memoria liberada.", LOG_INFO);
 }
 
 // Metodos privados.

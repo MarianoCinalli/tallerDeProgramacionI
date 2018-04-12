@@ -215,13 +215,7 @@ int main(int argc, char* argv[]) {
 
     // Crear las views.
     Colour* transparency = new Colour(0, 0xa0, 0, 0); // green. Se libera abajo.
-    Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    Texture* spriteSheet2 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    Texture* spriteSheet3 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    Texture* spriteSheet4 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    Texture* spriteSheet5 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    Texture* spriteSheet6 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    Texture* spriteSheet7 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
+    // Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
 
 
     Colour* shirt = new Colour(0, 0xa0, 128, 0); // modulo el rojo. Se libera abajo.
@@ -229,12 +223,12 @@ int main(int argc, char* argv[]) {
     delete(transparency);
     delete(shirt);
     PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
-    PlayerSpriteManager* playerSpriteManager2 = new PlayerSpriteManager(spriteSheet2, player2);
-    PlayerSpriteManager* playerSpriteManager3 = new PlayerSpriteManager(spriteSheet3, player3);
-    PlayerSpriteManager* playerSpriteManager4 = new PlayerSpriteManager(spriteSheet4, player4);
-    PlayerSpriteManager* playerSpriteManager5 = new PlayerSpriteManager(spriteSheet5, player5);
-    PlayerSpriteManager* playerSpriteManager6 = new PlayerSpriteManager(spriteSheet6, player6);
-    PlayerSpriteManager* playerSpriteManager7 = new PlayerSpriteManager(spriteSheet7, player7);
+    PlayerSpriteManager* playerSpriteManager2 = new PlayerSpriteManager(spriteSheet, player2);
+    PlayerSpriteManager* playerSpriteManager3 = new PlayerSpriteManager(spriteSheet, player3);
+    PlayerSpriteManager* playerSpriteManager4 = new PlayerSpriteManager(spriteSheet, player4);
+    PlayerSpriteManager* playerSpriteManager5 = new PlayerSpriteManager(spriteSheet, player5);
+    PlayerSpriteManager* playerSpriteManager6 = new PlayerSpriteManager(spriteSheet, player6);
+    PlayerSpriteManager* playerSpriteManager7 = new PlayerSpriteManager(spriteSheet, player7);
 
 
     // Crear la pitchView pasandole los jugadores.
@@ -288,6 +282,7 @@ int main(int argc, char* argv[]) {
     log("Main: Main loop finalizado.", LOG_INFO);
     // Main loop ------------------------------------------
     log("Main: Liberando gameController, actionsManager, pitchView.", LOG_INFO);
+    delete(spriteSheet);
     delete(gameController);
     delete(actionsManager);
     delete(pitchView);
