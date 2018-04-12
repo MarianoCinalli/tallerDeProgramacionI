@@ -28,10 +28,10 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
             case SDLK_SPACE:
-                action = new StandedAction(SLIDE_ACTION);
+                action = new SlidingAction();
                 break;
             case SDLK_TAB:
-                action = new StandedAction(KICK_ACTION);
+                action = new KickingAction();
                 break;
         }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {

@@ -10,6 +10,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
     this->kicking = false;
     this->wasKicking = false;
+    this->canMove = true;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -43,9 +44,11 @@ void Player::decelerate(int direction) {
 
 
 void Player::updatePosition() {
-    this->position->addX(this->velocity->getComponentX());
-    this->position->addY(this->velocity->getComponentY());
-    log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
+    if(this->canMove){
+        this->position->addX(this->velocity->getComponentX());
+        this->position->addY(this->velocity->getComponentY());
+        log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
+    }
 }
 
 void Player::setPosition(Coordinates pos) {
@@ -60,13 +63,16 @@ Player::~Player() {
 //SLIDE AND KICK FUNCTIONS
 
 void Player::startsKicking() {
-    if (!this->sliding)
+    if (!this->sliding){
         this->kicking = true;
+        this->canMove = false;
+    }
 }
 
 void Player::stopKicking() {
     this->kicking = false;
     this->wasKicking = false;
+    this->canMove = true;
 }
 
 bool Player::isKicking() {
@@ -89,7 +95,7 @@ bool Player::wasSlidingYet() {
 }
 
 void Player::startsSliding() {
-    if (!this->iskicking)
+    if (!this->kicking)
         this->sliding = true;
     //this->velocity->accelerate(this->orientation, this->maxVelocity);
 }

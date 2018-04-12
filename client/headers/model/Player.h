@@ -17,6 +17,7 @@ class Player {
         bool wasSliding;
         bool kicking;
         bool wasKicking;
+        bool canMove;
 
     public:
         Player(int orientation, Coordinates* position);
