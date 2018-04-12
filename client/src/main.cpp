@@ -49,7 +49,7 @@ std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 const std::string defaultConfFileName = "src/default.yaml";
 std::string confFileName;
-int LOG_MIN_LEVEL = LOG_INFO;
+int LOG_MIN_LEVEL = LOG_ERROR;
 Conf conf(defaultConfFileName);
 
 void cargarConfiguracion(string confFile) {
@@ -224,7 +224,10 @@ int main(int argc, char* argv[]) {
     Texture* spriteSheet7 = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
 
 
+    Colour* shirt = new Colour(0, 0xa0, 128, 0); // modulo el rojo. Se libera abajo.
+    Texture* spriteSheet = new Texture("images/newnew.png", renderer, transparency, shirt); // Liberado en PlayerSpriteManager.
     delete(transparency);
+    delete(shirt);
     PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
     PlayerSpriteManager* playerSpriteManager2 = new PlayerSpriteManager(spriteSheet2, player2);
     PlayerSpriteManager* playerSpriteManager3 = new PlayerSpriteManager(spriteSheet3, player3);

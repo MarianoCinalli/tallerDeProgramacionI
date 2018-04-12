@@ -1,11 +1,12 @@
 #include "model/Player.h"
 
 Player::Player(int orientation, Coordinates* position) {
-    log("Jugador: Creando jugador.", LOG_INFO);
+    log("Jugador: Creando jugador...", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
     this->maxVelocity = 3; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
+    this->isSelected = true;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -23,6 +24,14 @@ Velocity* Player::getVelocity() {
 
 void Player::setOrientation(int orientation) {
     this->orientation = orientation;
+}
+
+void Player::toogleIsSelected() {
+    this->isSelected = !this->isSelected;
+}
+
+bool Player::getIsSelected() {
+    return this->isSelected;
 }
 
 void Player::accelerate(int direction) {
