@@ -28,4 +28,9 @@ const int SCREEN_HEIGHT = 600;
 // Necesario para la camara
 const int SPRITE_SIZE = 16;
 
+const int VALOR_INVALIDO = 5;
+const int ARCHIVO_INVALIDO = 6;
+const int CASACA_PRINCIPAL = 2;
+const int CASACA_ALTERNATIVA = 3;
+
 #endif // CONSTANTS_H_

@@ -7,10 +7,10 @@
 
 using namespace std;
 
-enum valorInvalido {
-  VALOR_INVALIDO = 5,
-  ARCHIVO_INVALIDO = 6
-};
+// enum valorInvalido {
+//   VALOR_INVALIDO = 5,
+//   ARCHIVO_INVALIDO = 6
+// };
 
 enum casacas {
   PRINCIPAL = 1,

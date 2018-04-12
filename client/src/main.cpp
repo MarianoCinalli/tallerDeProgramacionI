@@ -216,10 +216,13 @@ int main(int argc, char* argv[]) {
     // Crear las views.
     Colour* transparency = new Colour(0, 0xa0, 0, 0); // green. Se libera abajo.
     // Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-
-
-    Colour* shirt = new Colour(0, 0xa0, 128, 0); // modulo el rojo. Se libera abajo.
-    Texture* spriteSheet = new Texture("images/newnew.png", renderer, transparency, shirt); // Liberado en PlayerSpriteManager.
+    int shirtColour = 0;
+    if (conf.getCasaca() == CASACA_PRINCIPAL ){
+      shirtColour = 255;
+    }
+    // si le pongo ceros a otra cosa cambian los colores
+    Colour* shirt = new Colour(shirtColour, 0, 0, 0); // modulo el rojo. Se libera abajo.
+    Texture* spriteSheet = new Texture("images/newnew.png", "images/newnewShirts.png", renderer, transparency, shirt); // Liberado en PlayerSpriteManager.
     delete(transparency);
     delete(shirt);
     PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);

@@ -45,9 +45,9 @@ int chooseCasaca(YAML::Node nod)
 			return VALOR_INVALIDO;
 		string str = nod["equipo"]["casaca"].as<string>();
 		if (!str.compare("principal"))
-			return LOG_DEBUG;
+			return CASACA_PRINCIPAL;
 		else if (!str.compare("alternativa"))
-			return LOG_INFO;
+			return CASACA_ALTERNATIVA;
 		else
 			return VALOR_INVALIDO;
 	}
