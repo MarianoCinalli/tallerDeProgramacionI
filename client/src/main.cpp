@@ -1,30 +1,25 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <string>
 #include <fstream>
 #include <unistd.h>
 #include <stdio.h>
 #include <yaml-cpp/yaml.h>
 #include <getopt.h>
+#include "GameInitializer.h"
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/conf.h"
-#include "controller/CanchaController.h"
-
-// Para el test.
-#include "model/Player.h"
-#include "util/Coordinates.h"
-#include "controller/actions/Action.h"
 #include "controller/ActionsManager.h"
-#include "view/PlayerSpriteManager.h"
-#include "view/Texture.h"
-#include "model/Team.h"
-#include "view/PitchView.h"
-#include "util/Colour.h"
-#include "view/Camera.h"
 #include "controller/GameController.h"
-#include "model/Pitch.h"
-// Fin Para el test.
+#include "view/Camera.h"
+
+// Global variables ---------------------------------------
+std::ofstream LOG_FILE_POINTER;
+const std::string logFileName = "trabajoPractico.log";
+const std::string defaultConfFileName = "src/default.yaml";
+std::string confFileName = "conf.yaml";
+int LOG_MIN_LEVEL = LOG_ERROR;
+// Global variables ---------------------------------------
 
 
 void imprimir_ayuda() {
@@ -32,29 +27,15 @@ void imprimir_ayuda() {
     cout << "main -h\n";
     cout << "main -V\n";
     cout << "main [options]\n";
-    cout << "-V, --version		Imprimir version y salir.\n";
-    cout << "-h, --help		Imprimir esta ayuda.\n";
-    cout << "-i, --input		Path del archivo de configuracion YAML.\n";
+    cout << "-V, --version      Imprimir version y salir.\n";
+    cout << "-h, --help     Imprimir esta ayuda.\n";
+    cout << "-i, --input        Path del archivo de configuracion YAML.\n";
     cout << "Ejemplo:\n";
     cout << "main -i ~/conf.yaml \n";
 }
 
 void imprimir_version() {
     cout << "Version = tp1\n";
-}
-
-// Global variables ---------------------------------------
-std::ofstream LOG_FILE_POINTER;
-
-const std::string logFileName = "trabajoPractico.log";
-const std::string defaultConfFileName = "src/default.yaml";
-std::string confFileName;
-int LOG_MIN_LEVEL = LOG_ERROR;
-Conf conf(defaultConfFileName);
-
-void cargarConfiguracion(string confFile) {
-    conf.loadConf(confFile);
-    LOG_MIN_LEVEL = conf.getDebugLevel(); // Cambiar por parametro parseado.
 }
 
 int chequearOpciones(int argc, char* argv[]) {
@@ -114,154 +95,37 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
-bool init();
-void close();
-
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL; // Para dibujar el sprite.
-
-bool init() {
-    //Initialization flag
-    bool success = true;
-
-    //Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-        success = false;
-    } else {
-        //Set texture filtering to linear
-        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
-            printf("Warning: Linear texture filtering not enabled!");
-        }
-        //Create window
-        window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        if (window == NULL) {
-            printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-            success = false;
-        } else {
-            //Create renderer for window
-            renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-            if (renderer == NULL) {
-                printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-                success = false;
-            } else {
-                //Initialize renderer color
-                SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-                //Initialize PNG loading
-                int imgFlags = IMG_INIT_PNG;
-                if (!(IMG_Init(imgFlags) & imgFlags)) {
-                    printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-                    success = false;
-                }
-            }
-        }
-    }
-    return success;
-}
-
-void close() {
-    //Destroy window
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    window = NULL;
-    renderer = NULL;
-
-    //Quit SDL subsystems
-    IMG_Quit();
-    SDL_Quit();
-}
-
 int main(int argc, char* argv[]) {
-    if (chequearOpciones(argc, argv)) {     //Si da 1 es o la version o el help o un flag inexistente
+    if (chequearOpciones(argc, argv)) {
+        //Si da 1 es o la version o el help o un flag inexistente.
         printf("Salida del programa por flags o argumento invalido");
         return SALIDA_LINEA_COMANDOS;
     }
-    // Log initialization ---------------------------------
+    // Inicializacion -------------------------------------
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
-    // Main loop ------------------------------------------
-    // Esquema de inicializacion.
-    init();
-    cargarConfiguracion("conf.yaml");
-    log(&conf, LOG_INFO);
-
-    // Crear los jugadores.
-    Team* team = new Team(); // Liberado en Pitch.
-    team->setFormacion(conf.getFormacion());
-    Coordinates* coordinates = new Coordinates(800, 500);
-    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates); // Liberado en team.
-    team->addPlayer(player);
-    Coordinates* coordinates2 = new Coordinates(800, 500);
-    Player* player2 = new Player(PLAYER_ORIENTATION_RIGHT, coordinates2); // Liberado en team.
-    team->addPlayer(player2);
-    Coordinates* coordinates3 = new Coordinates(800, 500);
-    Player* player3 = new Player(PLAYER_ORIENTATION_RIGHT, coordinates3); // Liberado en team.
-    team->addPlayer(player3);
-    Coordinates* coordinates4 = new Coordinates(800, 500);
-    Player* player4 = new Player(PLAYER_ORIENTATION_RIGHT, coordinates4); // Liberado en team.
-    team->addPlayer(player4);
-    Coordinates* coordinates5 = new Coordinates(800, 500);
-    Player* player5 = new Player(PLAYER_ORIENTATION_RIGHT, coordinates5); // Liberado en team.
-    team->addPlayer(player5);
-    Coordinates* coordinates6 = new Coordinates(800, 500);
-    Player* player6 = new Player(PLAYER_ORIENTATION_RIGHT, coordinates6); // Liberado en team.
-    team->addPlayer(player6);
-    Coordinates* coordinates7 = new Coordinates(800, 500);
-    Player* player7 = new Player(PLAYER_ORIENTATION_RIGHT, coordinates7); // Liberado en team.
-    team->addPlayer(player7);
-
-    team->order();
-    // Agregarlos a su equipo.
-
-    // Crear las views.
-    Colour* transparency = new Colour(0, 0xa0, 0, 0); // green. Se libera abajo.
-    // Texture* spriteSheet = new Texture("images/sprites.png", renderer, transparency); // Liberado en PlayerSpriteManager.
-    int shirtColour = 0;
-    if (conf.getCasaca() == CASACA_PRINCIPAL ){
-      shirtColour = 255;
-    }
-    // si le pongo ceros a otra cosa cambian los colores
-    Colour* shirt = new Colour(shirtColour, 0, 0, 0); // modulo el rojo. Se libera abajo.
-    Texture* spriteSheet = new Texture("images/newnew.png", "images/newnewShirts.png", renderer, transparency, shirt); // Liberado en PlayerSpriteManager.
-    delete(transparency);
-    delete(shirt);
-    PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(spriteSheet, player);
-    PlayerSpriteManager* playerSpriteManager2 = new PlayerSpriteManager(spriteSheet, player2);
-    PlayerSpriteManager* playerSpriteManager3 = new PlayerSpriteManager(spriteSheet, player3);
-    PlayerSpriteManager* playerSpriteManager4 = new PlayerSpriteManager(spriteSheet, player4);
-    PlayerSpriteManager* playerSpriteManager5 = new PlayerSpriteManager(spriteSheet, player5);
-    PlayerSpriteManager* playerSpriteManager6 = new PlayerSpriteManager(spriteSheet, player6);
-    PlayerSpriteManager* playerSpriteManager7 = new PlayerSpriteManager(spriteSheet, player7);
-
-
-    // Crear la pitchView pasandole los jugadores.
-    Texture* pitchImg = new Texture("images/bg.png", renderer); // Liberado en PitchView.
-    // punto arriba a la izquierda = (1600/2  - 800/2, 1000/2 - 600/2) = (400, 200)
-    Coordinates* cameraPosition = new Coordinates(400, 200); // Liberado en Camera.
-    Camera* camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf.getMargen()); // Liberado en PitchView.
-    PitchView* pitchView = new PitchView(pitchImg, camera); // Liberado al final.
-    pitchView->addPlayerView(playerSpriteManager);
-    pitchView->addPlayerView(playerSpriteManager2);
-    pitchView->addPlayerView(playerSpriteManager3);
-    pitchView->addPlayerView(playerSpriteManager4);
-    pitchView->addPlayerView(playerSpriteManager5);
-    pitchView->addPlayerView(playerSpriteManager6);
-    pitchView->addPlayerView(playerSpriteManager7);
-
-    // Crear la cancha.
-    Pitch* pitch = new Pitch(); // Liberado en game controller.
-    pitch->setLocalTeam(team);
-
-    // Crear el game manager.
-    GameController* gameController = new GameController(pitch); // Liberado al final.
-
-    // Va a manejar los eventos de teclado.
-    ActionsManager* actionsManager = new ActionsManager(); // Liberado al final.
-
+    // Inicializacion -------------------------------------
+    log("Main: Cargando configuracion...", LOG_INFO);
+    Conf* configuration = new Conf(defaultConfFileName);
+    configuration->loadConf(confFileName);
+    log("Main: Configuracion cargada: ", configuration, LOG_INFO);
+    LOG_MIN_LEVEL = configuration->getDebugLevel();
+    log("Main: Nivel de log cambiado a: ", LOG_MIN_LEVEL, LOG_INFO);
+    GameInitializer* initializer = new GameInitializer(configuration);
+    GameController* gameController = initializer->getGameController();
+    ActionsManager* actionsManager = initializer->getActionsManager();
+    Camera* camera = initializer->getCamera();
+    SDL_Renderer* renderer = initializer->getRenderer();
+    PitchView* pitchView = initializer->getPitchView();
     bool quit = false;
     SDL_Event e;
+    int frameRate = configuration->getFramerate();
+    float sleepTime = (float)20000/(float)frameRate;
+    log("Main: Frame rate: ", frameRate, LOG_INFO);
+    delete(configuration);
+    log("Main: Juego inicializado correctamente.", LOG_INFO);
+    // Main loop ------------------------------------------
     log("Main: Entrando en el main loop...", LOG_INFO);
-    int frameRate = conf.getFramerate();
     while (!quit) {
 
         while (SDL_PollEvent(&e) != 0) {
@@ -280,19 +144,11 @@ int main(int argc, char* argv[]) {
         gameController->updatePlayers();
         gameController->updateCameraPosition(camera);
         pitchView->render(renderer);
-        usleep((float)20000/(float)frameRate); // Frame rate.
+        usleep(sleepTime); // Frame rate.
     }
     log("Main: Main loop finalizado.", LOG_INFO);
-    // Main loop ------------------------------------------
-    log("Main: Liberando gameController, actionsManager, pitchView.", LOG_INFO);
-    delete(spriteSheet);
-    delete(gameController);
-    delete(actionsManager);
-    delete(pitchView);
-    log("Main: Memoria liberado.", LOG_INFO);
-    log("Main: Liberado recursos de SDL.", LOG_INFO);
-    close();
-    log("Main: Recursos de SDL liberados.", LOG_INFO);
+    // Liberacion de memoria -------------------------------
+    delete(initializer);
     logSessionFinished();
     LOG_FILE_POINTER.close();
     return 0;

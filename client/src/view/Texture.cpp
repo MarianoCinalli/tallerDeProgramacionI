@@ -4,8 +4,8 @@ Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transpar
     this->sdlTexture = this->loadSheet(sheetPath, renderer, transparency, shirt);
 }
 
-Texture::Texture(std::string sheetPath, std::string shirtPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt){
-  this->sdlTexture = this->loadSheet(sheetPath, shirtPath, renderer, transparency, shirt);
+Texture::Texture(std::string sheetPath, std::string shirtPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt) {
+    this->sdlTexture = this->loadSheet(sheetPath, shirtPath, renderer, transparency, shirt);
 }
 
 Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency) {
@@ -36,20 +36,20 @@ SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Ren
     //Load image at specified path
     log("Texture: Cargando superficie...", LOG_INFO);
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-    SDL_Surface* loadedSurface2 = IMG_Load(shirtPath.c_str());
+    SDL_Surface* shirtSurface = IMG_Load(shirtPath.c_str());
 
     if (loadedSurface == NULL) {
         std::string error = "Texture: No se pudo cargar la imagen '"
-            + path + "'! SDL Error: "  + IMG_GetError();
+                            + path + "'! SDL Error: "  + IMG_GetError();
         log(error, LOG_ERROR);
-    } else if (loadedSurface2 == NULL) {
+    } else if (shirtSurface == NULL) {
         std::string error = "Texture: No se pudo cargar la imagen '"
-            + shirtPath + "'! SDL Error: "  + IMG_GetError();
+                            + shirtPath + "'! SDL Error: "  + IMG_GetError();
         log(error, LOG_ERROR);
     } else {
         if (transparency != NULL) {
             //Color key image (Le saca el fondo verde 00a000 en exa)
-            log("Texture: Aplicando transparencia...", LOG_INFO);
+            log("Texture: Aplicando transparencia a los sprites de los colores: ", transparency, LOG_INFO);
             SDL_SetColorKey(
                 loadedSurface,
                 SDL_TRUE,
@@ -60,9 +60,9 @@ SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Ren
                     transparency->getBlue()
                 )
             );
-            log("Texture: Aplicando transparencia 2...", LOG_INFO);
+            log("Texture: Aplicando transparencia a superficie de las remeras de los colores: ", transparency, LOG_INFO);
             SDL_SetColorKey(
-                loadedSurface2,
+                shirtSurface,
                 SDL_TRUE,
                 SDL_MapRGB(
                     loadedSurface->format,
@@ -72,19 +72,21 @@ SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Ren
                 )
             );
         }
-        SDL_SetSurfaceColorMod(loadedSurface2,
-          shirt->getRed(),
-          shirt->getGreen(),
-          shirt->getBlue()
+        log("Texture: Pintando remeras de color: ", shirt, LOG_INFO);
+        SDL_SetSurfaceColorMod(
+            shirtSurface,
+            shirt->getRed(),
+            shirt->getGreen(),
+            shirt->getBlue()
         );
 
-        SDL_BlitSurface(loadedSurface2, NULL, loadedSurface, NULL);
+        SDL_BlitSurface(shirtSurface, NULL, loadedSurface, NULL);
         //Create texture from surface pixels
         log("Texture: Creando textura desde superficie...", LOG_INFO);
         newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
         if (newTexture == NULL) {
             std::string error = "Texture: No se pudo cargar la textura '"
-                + path + "'! SDL Error: "  + SDL_GetError();
+                                + path + "'! SDL Error: "  + SDL_GetError();
             log(error, LOG_ERROR);
         } else {
             //Get image dimensions
@@ -101,7 +103,7 @@ SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Ren
         }
         //Get rid of old loaded surface
         SDL_FreeSurface(loadedSurface);
-        SDL_FreeSurface(loadedSurface2);
+        SDL_FreeSurface(shirtSurface);
     }
     log("Texture: Textura cargada.", LOG_INFO);
     return newTexture;
@@ -119,7 +121,7 @@ SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == NULL) {
         std::string error = "Texture: No se pudo cargar la imagen '"
-            + path + "'! SDL Error: "  + IMG_GetError();
+                            + path + "'! SDL Error: "  + IMG_GetError();
         log(error, LOG_ERROR);
     } else {
         if (transparency != NULL) {
@@ -141,7 +143,7 @@ SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour
         newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
         if (newTexture == NULL) {
             std::string error = "Texture: No se pudo cargar la textura '"
-                + path + "'! SDL Error: "  + SDL_GetError();
+                                + path + "'! SDL Error: "  + SDL_GetError();
             log(error, LOG_ERROR);
         } else {
             //Get image dimensions
