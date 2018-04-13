@@ -51,7 +51,7 @@ GameInitializer::~GameInitializer() {
 
 void GameInitializer::initializePitchView(Conf* conf) {
     log("GameInitializer: Creando vista de la cancha...", LOG_INFO);
-    Texture* pitchImg = new Texture("images/bg.png", this->renderer);
+    Texture* pitchImg = new Texture(conf->getAssetsCancha(), this->renderer);
     // punto arriba a la izquierda = (1600/2  - 800/2, 1000/2 - 600/2) = (400, 200)
     Coordinates* cameraPosition = new Coordinates(400, 200);
     this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf->getMargen());

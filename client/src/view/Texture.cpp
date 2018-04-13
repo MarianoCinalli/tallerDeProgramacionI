@@ -16,8 +16,6 @@ Texture::Texture(std::string sheetPath, SDL_Renderer* renderer) {
     this->sdlTexture = this->loadSheet(sheetPath, renderer, NULL, NULL);
 }
 
-
-
 SDL_Texture* Texture::getSpriteSheetTexture() {
     return this->sdlTexture;
 }
@@ -25,7 +23,6 @@ SDL_Texture* Texture::getSpriteSheetTexture() {
 Texture::~Texture() {
     this->free();
 }
-
 
 SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt) {
     log("Texture: Cargando textura...", LOG_INFO);
@@ -108,7 +105,6 @@ SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Ren
     log("Texture: Textura cargada.", LOG_INFO);
     return newTexture;
 }
-
 
 SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency, Colour* shirt) {
     log("Texture: Cargando textura...", LOG_INFO);

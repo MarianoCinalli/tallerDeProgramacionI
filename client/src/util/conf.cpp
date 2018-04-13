@@ -8,12 +8,12 @@ string Conf::toString()
 	ostringstream str;
 
 	str << "\nConfiguracion\n";
-  str << "Nombre: " << nombre << "\n";
+	str << "Nombre: " << nombre << "\n";
 	str << "Formacion: " << formacion << "\n";
 	str << "Casaca: " << casaca << "\n";
 	str << "Debug Level: " << debugLevel << "\n";
-  str << "Framerate: " << framerate << "\n";
-  str << "Margenes: " << margenes << "\n";
+	str << "Framerate: " << framerate << "\n";
+	str << "Margenes: " << margenes << "\n";
 
 	return str.str();
 }
@@ -178,6 +178,21 @@ int Conf::loadConf(string file)
 int Conf::getDebugLevel()
 {
 	return debugLevel;
+}
+
+string Conf::getAssetsCancha() 
+{
+	return "images/cancha.png"; //TODO
+}
+
+string Conf::getCasacaPrincipal() 
+{
+	return "/images/principal.png"; //TODO
+}
+
+string Conf::getCasacaAlternativa() 
+{
+	return "/images/alternativa.png"; //TODO
 }
 
 int Conf::getFormacion()

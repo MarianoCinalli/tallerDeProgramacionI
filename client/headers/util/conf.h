@@ -28,6 +28,9 @@ class Conf : public Loggable {
     int getFormacion();
     int getCasaca();    //principal true o alternativa false
     int getDebugLevel();
+    string getAssetsCancha();
+    string getCasacaPrincipal();
+    string getCasacaAlternativa();
     string getNombre();
     int getFramerate();
     int getMargen();
