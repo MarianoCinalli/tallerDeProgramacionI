@@ -1,5 +1,6 @@
 #include <string>
 #include "interfaces/Loggable.h"
+#include "util/logger.h"
 
 #ifndef COORDINATES_H
 #define COORDINATES_H
@@ -8,6 +9,7 @@ class Coordinates : public Loggable {
     private:
         int x;
         int y;
+        void validatePositionInBounds();
 
     public:
         Coordinates(int x, int y);
