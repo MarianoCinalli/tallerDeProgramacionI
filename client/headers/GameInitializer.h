@@ -4,7 +4,6 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/conf.h"
-#include "controller/CanchaController.h"
 #include "model/Player.h"
 #include "util/Coordinates.h"
 #include "controller/actions/Action.h"
