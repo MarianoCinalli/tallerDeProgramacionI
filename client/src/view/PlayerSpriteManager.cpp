@@ -31,12 +31,24 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         this->setSprite(velocity, sliding, kicking);
     }
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
+    SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
     SDL_RenderCopy(
         screen,
-        this->spriteSheet->getSpriteSheetTexture(),
+        spriteSheet,
         &this->sprite,
         &positionOnScreen
     );
+    // Active player marker.
+    if (this->player->getIsSelected()) {
+        SDL_Rect markerSprite = this->getActivePlayerMarker();
+        SDL_Rect markerPositionOnScreen = this->getActivePlayerMarkerPosition(coordinates);
+        SDL_RenderCopy(
+            screen,
+            spriteSheet,
+            &markerSprite,
+            &markerPositionOnScreen
+        );
+    }
 }
 
 void PlayerSpriteManager::setSprite(Velocity* velocity, bool sliding, bool kicking) {
@@ -57,9 +69,9 @@ Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
 
 
 PlayerSpriteManager::~PlayerSpriteManager() {
-    log("PlayerSpriteManager: Liberando memoria. Borrando textura...", LOG_INFO);
-    delete(this->spriteSheet);
-    log("PlayerSpriteManager: Textura eliminada. Memoria liberada.", LOG_INFO);
+    // log("PlayerSpriteManager: Liberando memoria. Borrando textura...", LOG_INFO);
+    // delete(this->spriteSheet);
+    // log("PlayerSpriteManager: Textura eliminada. Memoria liberada.", LOG_INFO);
 }
 
 // Metodos privados.
@@ -186,6 +198,8 @@ void PlayerSpriteManager::setRunningRightSprite() {
     }
 }
 
+// Sliding --------------------------------------------------------------------------
+
 void PlayerSpriteManager::setSlidingSprite() {
     int orientation = this->player->getOrientation();
     if (!this->player->wasSlidingYet()) {
@@ -203,6 +217,8 @@ void PlayerSpriteManager::setSlidingSprite() {
     }
 }
 
+// Kicking --------------------------------------------------------------------------
+
 void PlayerSpriteManager::setKickingSprite() {
     int orientation = this->player->getOrientation();
     if (!this->player->wasKickingYet()) {
@@ -218,4 +234,24 @@ void PlayerSpriteManager::setKickingSprite() {
         }
         else this->sprite.x += this->spriteWidth;
     }
+}
+
+// Active player marker ----------------------------
+
+SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
+    return {
+        0,
+        224,
+        this->spriteWidth,
+        this->spriteHeight
+    };
+}
+
+SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {
+    return {
+        coordinates->getX(),
+        coordinates->getY() - this->spriteHeight,
+        this->spriteWidth,
+        this->spriteHeight
+    };
 }

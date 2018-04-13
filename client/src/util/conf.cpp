@@ -45,9 +45,9 @@ int chooseCasaca(YAML::Node nod)
 			return VALOR_INVALIDO;
 		string str = nod["equipo"]["casaca"].as<string>();
 		if (!str.compare("principal"))
-			return LOG_DEBUG;
+			return CASACA_PRINCIPAL;
 		else if (!str.compare("alternativa"))
-			return LOG_INFO;
+			return CASACA_ALTERNATIVA;
 		else
 			return VALOR_INVALIDO;
 	}
@@ -68,10 +68,10 @@ int chooseFormacion(YAML::Node nod)
 			return 312;
 		else if (!str.compare("3-2-1"))
 			return 321;
-		else if (!str.compare("2-3-1"))
-			return 231;
-		else if (!str.compare("2-2-2"))
-			return 222;
+		// else if (!str.compare("2-3-1"))
+		// 	return 231;
+		// else if (!str.compare("2-2-2"))
+		// 	return 222;
 		else
 			return VALOR_INVALIDO;
 	}
@@ -198,7 +198,7 @@ int Conf::getFramerate()
 {
 	return framerate;
 }
-int Conf::getMargenes()
+int Conf::getMargen()
 {
 	return margenes;
 }

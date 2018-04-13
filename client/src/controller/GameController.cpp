@@ -3,17 +3,23 @@
 GameController::GameController(Pitch* pitch) {
     log("ActionsManager: Creando gameController...", LOG_INFO);
     this->pitch = pitch;
-    this->activePlayer = this->pitch->activePlayer();
+    this->activePlayer = this->pitch->activePlayer;
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
 void GameController::execute(Action* action) {
-    action->execute(this->activePlayer);
+    if(action->valid(this->activePlayer)){
+      action->execute(this->activePlayer);
+    } else if (action->valid(this->pitch)){
+      action->execute(this->pitch);
+    }
+
 }
 
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
+    this->activePlayer = this->pitch->activePlayer;
     activePlayer->updatePosition();
     // TODO: Validar posiciones de los jugadores.
 }

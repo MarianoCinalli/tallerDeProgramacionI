@@ -23,5 +23,9 @@ uint8_t Colour::getAlpha() {
     return this->alpha;
 }
 
+std::string Colour::toString() {
+    return "Rojo: " + std::to_string(this->red) + " Verde: " + std::to_string(this->green) + " Azul: " + std::to_string(this->blue);
+}
+
 Colour::~Colour() {
 }

@@ -27,11 +27,14 @@ Action* ActionsManager::getAction(SDL_Event event) {
             case SDLK_RIGHT:
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
-            case SDLK_SPACE:
+            case SDLK_a:
                 action = new SlidingAction();
                 break;
-            case SDLK_TAB:
+            case SDLK_b:
                 action = new KickingAction();
+                break;
+            case SDLK_SPACE:
+                action = new ChangeActivePlayer();
                 break;
         }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
@@ -50,10 +53,6 @@ Action* ActionsManager::getAction(SDL_Event event) {
             case SDLK_RIGHT:
                 action = new Decelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
-        /*    case SDLK_SLIDE:
-                break;
-            case SDLK_KICK:
-                break;  */
         }
     }
     return action;

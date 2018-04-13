@@ -39,7 +39,12 @@ class PlayerSpriteManager {
         void setRunningLeftSprite();
         bool isRunningRight(int xComponent, int yComponent);
         void setRunningRightSprite();
+
         void setSlidingSprite();
         void setKickingSprite();
+
+        // Para el marcador de jugador activo.
+        SDL_Rect getActivePlayerMarker();
+        SDL_Rect getActivePlayerMarkerPosition(Coordinates* coordinates);
 };
 #endif // PLAYERSPRITEMANAGER_H

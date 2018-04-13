@@ -9,7 +9,10 @@ void Accelerate::execute(Player* player) {
     player->accelerate(this->direction);
 }
 
-Accelerate::~Accelerate() {
+bool Accelerate::valid(Player* player){
+  return true;
 }
 
 
+Accelerate::~Accelerate() {
+}

@@ -16,6 +16,7 @@ class Velocity : public Loggable {
         int getComponentX();
         int getComponentY();
         bool isZero();
+        void stop();
         std::string toString();
         ~Velocity();
 
@@ -23,5 +24,3 @@ class Velocity : public Loggable {
         void changeOnDirection(int direction, int amount);
 };
 #endif // VELOCITY_H
-
-

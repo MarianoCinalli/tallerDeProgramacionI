@@ -15,10 +15,11 @@ class Camera {
         Coordinates* position;
         int width;
         int height;
+        int margin_size;
         // La camara tiene sus margenes
         SDL_Rect margin;
     public:
-        Camera(Coordinates* position, int width, int height);
+        Camera(Coordinates* position, int width, int height, int margin);
         // transforma las coordenadas para que queden relativas a la camara.
         Coordinates* getRelativeCoordinates(Coordinates* coordinates);
         // calcular la nueva posicion de la camara basado en el jugador activo
@@ -30,5 +31,3 @@ class Camera {
         ~Camera();
 };
 #endif // CAMERA_H
-
-

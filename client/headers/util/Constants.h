@@ -24,16 +24,21 @@ enum PlayerStandedActions {
 
 const int SALIDA_LINEA_COMANDOS = 4;
 
-//The dimensions of the level
+// The dimensions of the level
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
 
-//Screen dimension constants
+// Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-const int MARGIN_SIZE = 80;
+// Necesario para la camara
 const int SPRITE_SIZE = 16;
 
+const int VALOR_INVALIDO = 5;
+const int ARCHIVO_INVALIDO = 6;
+const int CASACA_PRINCIPAL = 2;
+const int CASACA_ALTERNATIVA = 3;
+const int PLAYERS_PER_TEAM = 7;
 
 #endif // CONSTANTS_H_

@@ -14,11 +14,15 @@ class Texture {
         int height;
         int width;
     public:
+        Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt);
+        Texture(std::string sheetPath, std::string shirtPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt);
         Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency);
         Texture(std::string sheetPath, SDL_Renderer* renderer);
         SDL_Texture* getSpriteSheetTexture();
         ~Texture();
-        SDL_Texture* loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency);
+        SDL_Texture* loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency, Colour* shirt);
+        SDL_Texture* loadSheet(std::string path, std::string shirtPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt);
+
         void free();
 };
 #endif // TEXTURE_H
