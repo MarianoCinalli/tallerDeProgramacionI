@@ -9,6 +9,10 @@ void SlidingAction::execute(Player* player) {
     player->startsSliding();
 }
 
+bool SlidingAction::valid(Player* player) {
+    return true;
+}
+
 SlidingAction::~SlidingAction() {
 	//preguntar por esto!
 }

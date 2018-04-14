@@ -9,6 +9,10 @@ void KickingAction::execute(Player* player) {
     player->startsKicking();
 }
 
+bool KickingAction::valid(Player* player) {
+    return true;
+}
+
 KickingAction::~KickingAction() {
 	//preguntar por esto!
 }

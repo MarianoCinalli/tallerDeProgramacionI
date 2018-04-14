@@ -68,12 +68,9 @@ Coordinates* PlayerSpriteManager::getPlayerCoordinates() {
 
 
 PlayerSpriteManager::~PlayerSpriteManager() {
-    // log("PlayerSpriteManager: Liberando memoria. Borrando textura...", LOG_INFO);
-    // delete(this->spriteSheet);
-    // log("PlayerSpriteManager: Textura eliminada. Memoria liberada.", LOG_INFO);
 }
 
-// Metodos privados.
+// Metodos privados. -------------------------------------------------------------------------
 
 // Devuelve el cuadrado que va a ocupar el sprite en la pantalla.
 SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates) {

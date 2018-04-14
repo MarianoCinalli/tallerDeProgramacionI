@@ -11,6 +11,7 @@ class KickingAction : public Action {
     public:
         KickingAction();
         virtual void execute(Player* player);
+        virtual bool valid(Player* player);
         ~KickingAction();
 };
 #endif // KICKINGACTION_H
