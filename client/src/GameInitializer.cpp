@@ -95,7 +95,7 @@ void GameInitializer::initializeLocalTeamSprites(Colour* shirt) {
     // Supongo que el path de los sprites lo deberia sacar de conf, no?
     this->localTeamSprites = new Texture(
         "images/sprites.png",
-        "images/shirts.png",
+        "images/spritesShirts.png",
         this->renderer,
         transparency,
         shirt
