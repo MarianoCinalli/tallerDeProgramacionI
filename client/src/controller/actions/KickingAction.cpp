@@ -5,7 +5,7 @@ KickingAction::KickingAction() {
 }
 
 void KickingAction::execute(Player* player) {
-    log("StandedAction: Tecla deslizar detectad.", LOG_DEBUG);
+    log("KickingAction: Tecla patear detectada.", LOG_DEBUG);
     player->startsKicking();
 }
 

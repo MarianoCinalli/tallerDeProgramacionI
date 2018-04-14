@@ -5,7 +5,7 @@ SlidingAction::SlidingAction() {
 }
 
 void SlidingAction::execute(Player* player) {
-    log("StandedAction: Tecla deslizar detectad.", LOG_DEBUG);
+    log("SlidingAction: Tecla deslizar detectada.", LOG_DEBUG);
     player->startsSliding();
 }
 

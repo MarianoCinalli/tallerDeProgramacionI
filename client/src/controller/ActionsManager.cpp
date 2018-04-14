@@ -15,6 +15,15 @@ Action* ActionsManager::getAction(SDL_Event event) {
         // Actions for pressed keys.
         log("ActionsManager: Se registro una tecla presionada.", LOG_DEBUG);
         switch (event.key.keysym.sym) {
+            case SDLK_a:
+                action = new SlidingAction();
+                break;
+            case SDLK_s:
+                action = new KickingAction();
+                break;
+            case SDLK_SPACE:
+                action = new ChangeActivePlayer();
+                break;
             case SDLK_UP:
                 action = new Accelerate(PLAYER_ORIENTATION_UP);
                 break;
@@ -27,15 +36,12 @@ Action* ActionsManager::getAction(SDL_Event event) {
             case SDLK_RIGHT:
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
-            case SDLK_a:
-                action = new SlidingAction();
-                break;
-            case SDLK_b:
-                action = new KickingAction();
-                break;
-            case SDLK_SPACE:
-                action = new ChangeActivePlayer();
-                break;
+            default:
+                log(
+                    "ActionsManager: Tecla erronea presionada: ",
+                    SDL_GetKeyName(event.key.keysym.sym),
+                    LOG_DEBUG
+                );
         }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.

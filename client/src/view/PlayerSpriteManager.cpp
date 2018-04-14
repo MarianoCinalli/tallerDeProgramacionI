@@ -57,8 +57,7 @@ void PlayerSpriteManager::setSprite(Velocity* velocity, bool sliding, bool kicki
             this->setSlidingSprite();
         else
             this->setKickingSprite();
-    }
-    else {
+    } else {
         setRunningSprite(velocity);
     }
 }
@@ -92,23 +91,23 @@ SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* 
 void PlayerSpriteManager::setStandingSprite(int orientation) {
     log("PlayerSpriteManager: Creando el sprite parado.", LOG_DEBUG);
     switch (orientation) {
-            case PLAYER_ORIENTATION_UP:
-                this->sprite.x = 0;
-                this->sprite.y = 0;
-                break;
-            case PLAYER_ORIENTATION_DOWN:
-                this->sprite.x = 0;
-                this->sprite.y = 16;
-                break;
-            case PLAYER_ORIENTATION_LEFT:
-                this->sprite.x = 0;
-                this->sprite.y = 32;
-                break;
-            case PLAYER_ORIENTATION_RIGHT:
-                this->sprite.x = 0;
-                this->sprite.y = 48;
-                break;
-        }
+        case PLAYER_ORIENTATION_UP:
+            this->sprite.x = 0;
+            this->sprite.y = 0;
+            break;
+        case PLAYER_ORIENTATION_DOWN:
+            this->sprite.x = 0;
+            this->sprite.y = 16;
+            break;
+        case PLAYER_ORIENTATION_LEFT:
+            this->sprite.x = 0;
+            this->sprite.y = 32;
+            break;
+        case PLAYER_ORIENTATION_RIGHT:
+            this->sprite.x = 0;
+            this->sprite.y = 48;
+            break;
+    }
 }
 
 // Devuelve el cuadrado que encierra al sprite actual.
@@ -207,8 +206,7 @@ void PlayerSpriteManager::setSlidingSprite() {
         this->sprite.x = 0;
         this->sprite.y = (80 + (16 * orientation));
         this->player->isAlreadySliding();
-    } 
-    else {
+    } else {
         if ((this->sprite.x == 112) || (this->sprite.y != (80 + (16 * orientation)))) {
             this->setStandingSprite(orientation);
             this->player->stopSliding();
@@ -226,13 +224,11 @@ void PlayerSpriteManager::setKickingSprite() {
         this->sprite.x = 0;
         this->sprite.y = (144 + (16 * orientation));
         this->player->isAlreadyKicking();
-    }
-    else {
+    } else {
         if ((this->sprite.x == 64) || (this->sprite.y != (144 + (16 * orientation)))) {
             this->setStandingSprite(orientation);
             this->player->stopKicking();
-        }
-        else this->sprite.x += this->spriteWidth;
+        } else this->sprite.x += this->spriteWidth;
     }
 }
 
