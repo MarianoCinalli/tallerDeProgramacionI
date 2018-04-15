@@ -25,8 +25,14 @@ class PlayerSpriteManager {
         ~PlayerSpriteManager();
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
-        //para sprite de jugador parado.
+
+        // Para los sprites de jugador parado.
         void setStandingSprite(int orientation);
+        void setStandingSpriteViewUp();
+        void setStandingSpriteViewRight();
+        void setStandingSpriteViewDown();
+        void setStandingSpriteViewLeft();
+
         // Para los sprites del jugador corriendo.
         void setSprite(Velocity* velocity, bool sliding, bool kicking);
         void setRunningSprite(Velocity* velocity);

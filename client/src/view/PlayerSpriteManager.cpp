@@ -87,29 +87,65 @@ SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* 
     return renderQuad;
 }
 
+// Standing sprite --------------------------------------------------------------------------
+
 // Devuelve el cuadrado que encierra al sprite actual.
 // Por ahora solo mira para arriba.
 void PlayerSpriteManager::setStandingSprite(int orientation) {
     log("PlayerSpriteManager: Creando el sprite parado.", LOG_DEBUG);
     switch (orientation) {
         case PLAYER_ORIENTATION_UP:
-            this->sprite.x = 0;
-            this->sprite.y = 12 * SPRITE_SIZE;
+            this->setStandingSpriteViewUp();
             break;
         case PLAYER_ORIENTATION_RIGHT:
-            this->sprite.x = 0;
-            this->sprite.y = 13 * SPRITE_SIZE;
+            this->setStandingSpriteViewRight();
             break;
         case PLAYER_ORIENTATION_DOWN:
-            this->sprite.x = 0;
-            this->sprite.y = 14 * SPRITE_SIZE;
+            this->setStandingSpriteViewDown();
             break;
         case PLAYER_ORIENTATION_LEFT:
-            this->sprite.x = 0;
-            this->sprite.y = 15 * SPRITE_SIZE;
+            this->setStandingSpriteViewLeft();
             break;
     }
 }
+
+void PlayerSpriteManager::setStandingSpriteViewUp() {
+    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 12 * SPRITE_SIZE)) {
+        this->sprite.x = 0;
+        this->sprite.y = 12 * SPRITE_SIZE;
+    } else {
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    }
+}
+
+void PlayerSpriteManager::setStandingSpriteViewRight() {
+    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 13 * SPRITE_SIZE)) {
+        this->sprite.x = 0;
+        this->sprite.y = 13 * SPRITE_SIZE;
+    } else {
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    }
+}
+
+void PlayerSpriteManager::setStandingSpriteViewDown() {
+    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 14 * SPRITE_SIZE)) {
+        this->sprite.x = 0;
+        this->sprite.y = 14 * SPRITE_SIZE;
+    } else {
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    }
+}
+
+void PlayerSpriteManager::setStandingSpriteViewLeft() {
+    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 15 * SPRITE_SIZE)) {
+        this->sprite.x = 0;
+        this->sprite.y = 15 * SPRITE_SIZE;
+    } else {
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    }
+}
+
+// Running sprite --------------------------------------------------------------------------
 
 // Devuelve el cuadrado que encierra al sprite actual.
 // Cada sprite tiene SPRITE_SIZE x SPRITE_SIZE.
