@@ -5,8 +5,8 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
     this->player = player;
     this->spriteSheet = spriteSheet;
     this->sprite = {
-        0,
-        3 * SPRITE_SIZE,
+        4 * SPRITE_SIZE,
+        SPRITE_SIZE,
         SPRITE_SIZE,
         SPRITE_SIZE
     }; // Sprite actual. Esta mirando para la derecha.
@@ -88,26 +88,26 @@ void PlayerSpriteManager::setStandingSprite(int orientation) {
     switch (orientation) {
         case PLAYER_ORIENTATION_UP:
             this->sprite.x = 0;
-            this->sprite.y = 0;
-            break;
-        case PLAYER_ORIENTATION_DOWN:
-            this->sprite.x = 0;
-            this->sprite.y = SPRITE_SIZE;
-            break;
-        case PLAYER_ORIENTATION_LEFT:
-            this->sprite.x = 0;
-            this->sprite.y = SPRITE_SIZE * 2;
+            this->sprite.y = 12 * SPRITE_SIZE;
             break;
         case PLAYER_ORIENTATION_RIGHT:
             this->sprite.x = 0;
-            this->sprite.y = SPRITE_SIZE * 3;
+            this->sprite.y = 13 * SPRITE_SIZE;
+            break;
+        case PLAYER_ORIENTATION_DOWN:
+            this->sprite.x = 0;
+            this->sprite.y = 14 * SPRITE_SIZE;
+            break;
+        case PLAYER_ORIENTATION_LEFT:
+            this->sprite.x = 0;
+            this->sprite.y = 15 * SPRITE_SIZE;
             break;
     }
 }
 
 // Devuelve el cuadrado que encierra al sprite actual.
-// Cada sprite tiene 16x16.
-// Ocho sprites por secuencia de corrida.
+// Cada sprite tiene SPRITE_SIZE x SPRITE_SIZE.
+// Cuatro sprites por secuencia de corrida.
 void PlayerSpriteManager::setRunningSprite(Velocity* velocity) {
     int xComponent = velocity->getComponentX();
     int yComponent = velocity->getComponentY();
@@ -127,49 +127,10 @@ bool PlayerSpriteManager::isRunningUp(int xComponent, int yComponent) {
 }
 
 void PlayerSpriteManager::setRunningUpSprite() {
-    // El que empieza en (0, 0) es el primero que corre para arriba.
-    // El que empieza en (7 * 16 = 112, 0) es el ultimo que corre para arriba.
     log("PlayerSpriteManager: Creando el sprite corriendo arriba.", LOG_DEBUG);
-    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 0)) {
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 0)) {
         this->sprite.x = 0; // Reinicio la secuencia.
         this->sprite.y = 0;
-    } else {
-        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-    }
-}
-
-bool PlayerSpriteManager::isRunningDown(int xComponent, int yComponent) {
-    return ((xComponent == 0) && (yComponent > 0));
-}
-
-void PlayerSpriteManager::setRunningDownSprite() {
-    // El primero es el sprite numero 13 de la segunda linea.
-    // El que empieza en (0, 16) es el primero que corre para abajo.
-    // El que empieza en (7 * 16 = 112, 16) es el ultimo que corre para abajo.
-    log("PlayerSpriteManager: Creando el sprite corriendo abajo.", LOG_DEBUG);
-    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 16)) {
-        // Si esta en el ultimo sprite de la secuencia, o si estoy en otra secuencia.
-        // Reinicio la secuencia.
-        this->sprite.x = 0;
-        this->sprite.y = SPRITE_SIZE;
-    } else {
-        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-    }
-}
-
-bool PlayerSpriteManager::isRunningLeft(int xComponent, int yComponent) {
-    // Si se mueve en diagonal tambien va este.
-    return (xComponent < 0);
-}
-
-void PlayerSpriteManager::setRunningLeftSprite() {
-    // El primero es el sprite numero 9 de la tercera linea.
-    // El que empieza en (0, 32) es el primero que corre para la izquierda.
-    // El que empieza en (7 * 16 = 112, 32) es el ultimo que corre para la izquierda.
-    log("PlayerSpriteManager: Creando el sprite corriendo a la izquierda.", LOG_DEBUG);
-    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 32)) {
-        this->sprite.x = 0; // Reinicio la secuencia.
-        this->sprite.y = 2 * SPRITE_SIZE;
     } else {
         this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
@@ -181,32 +142,43 @@ bool PlayerSpriteManager::isRunningRight(int xComponent, int yComponent) {
 }
 
 void PlayerSpriteManager::setRunningRightSprite() {
-    // El que empieza en (0, 48) es el primero que corre para la derecha.
-    // El que empieza en (7 * 16 = 112, 48) es el ultimo que corre para la derecha.
     log("PlayerSpriteManager: Creando el sprite corriendo a la derecha.", LOG_DEBUG);
-    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 48)) {
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != SPRITE_SIZE)) {
         this->sprite.x = 0; // Reinicio la secuencia.
-        this->sprite.y = 3 * SPRITE_SIZE;
+        this->sprite.y = SPRITE_SIZE;
     } else {
         this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
 }
 
-// Sliding --------------------------------------------------------------------------
+bool PlayerSpriteManager::isRunningDown(int xComponent, int yComponent) {
+    return ((xComponent == 0) && (yComponent > 0));
+}
 
-void PlayerSpriteManager::setSlidingSprite() {
-    int orientation = this->player->getOrientation();
-    if (!this->player->wasSlidingYet()) {
-        log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
+void PlayerSpriteManager::setRunningDownSprite() {
+    log("PlayerSpriteManager: Creando el sprite corriendo abajo.", LOG_DEBUG);
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 2 * SPRITE_SIZE)) {
+        // Si esta en el ultimo sprite de la secuencia, o si estoy en otra secuencia.
+        // Reinicio la secuencia.
         this->sprite.x = 0;
-        this->sprite.y = (5 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
-        this->player->isAlreadySliding();
+        this->sprite.y = 2 * SPRITE_SIZE;
     } else {
-        if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != (5 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
-            this->setStandingSprite(orientation);
-            this->player->stopSliding();
-        } //TODO hacer ctes para sprites
-        else this->sprite.x += SPRITE_SIZE;
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    }
+}
+
+bool PlayerSpriteManager::isRunningLeft(int xComponent, int yComponent) {
+    // Si se mueve en diagonal tambien va este.
+    return (xComponent < 0);
+}
+
+void PlayerSpriteManager::setRunningLeftSprite() {
+    log("PlayerSpriteManager: Creando el sprite corriendo a la izquierda.", LOG_DEBUG);
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 3 * SPRITE_SIZE)) {
+        this->sprite.x = 0; // Reinicio la secuencia.
+        this->sprite.y = 3 * SPRITE_SIZE;
+    } else {
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
 }
 
@@ -217,22 +189,42 @@ void PlayerSpriteManager::setKickingSprite() {
     if (!this->player->wasKickingYet()) {
         log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
         this->sprite.x = 0;
-        this->sprite.y = (9 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
+        this->sprite.y = (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
         this->player->isAlreadyKicking();
     } else {
-        if ((this->sprite.x == 4 * SPRITE_SIZE) || (this->sprite.y != (9 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
+        if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
             this->setStandingSprite(orientation);
             this->player->stopKicking();
-        } else this->sprite.x += SPRITE_SIZE;
+        } else {
+            this->sprite.x += SPRITE_SIZE;
+        }
     }
 }
 
+// Sliding --------------------------------------------------------------------------
+
+void PlayerSpriteManager::setSlidingSprite() {
+    int orientation = this->player->getOrientation();
+    if (!this->player->wasSlidingYet()) {
+        log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
+        this->sprite.x = 0;
+        this->sprite.y = (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
+        this->player->isAlreadySliding();
+    } else {
+        if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
+            this->setStandingSprite(orientation);
+            this->player->stopSliding();
+        } else {
+            this->sprite.x += SPRITE_SIZE;
+        }
+    }
+}
 // Active player marker ----------------------------
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
     return {
         0,
-        14 * SPRITE_SIZE,
+        16 * SPRITE_SIZE,
         SPRITE_SIZE,
         SPRITE_SIZE
     };

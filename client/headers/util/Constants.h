@@ -8,11 +8,12 @@ enum logLevels {
 };
 
 // Para indicar a donde se mueve/mira el jugador.
+// No cambiar porque se rompen los sprites de barrer y patear.
 enum PlayerOrientations {
     PLAYER_ORIENTATION_UP = 1,
-    PLAYER_ORIENTATION_DOWN = 2,
-    PLAYER_ORIENTATION_LEFT = 3,
-    PLAYER_ORIENTATION_RIGHT = 4
+    PLAYER_ORIENTATION_RIGHT = 2,
+    PLAYER_ORIENTATION_DOWN = 3,
+    PLAYER_ORIENTATION_LEFT = 4
 };
 
 //para indicar accion a realizar
@@ -33,7 +34,7 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
 // Necesario para la camara
-const int SPRITE_SIZE = 16;
+const int SPRITE_SIZE = 63;
 
 const int VALOR_INVALIDO = 5;
 const int ARCHIVO_INVALIDO = 6;
