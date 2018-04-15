@@ -53,15 +53,23 @@ bool Player::getIsSelected() {
 }
 
 void Player::accelerate(int direction) {
-    this->setOrientation(direction); // Para que quede mirando para donde venia corriendo.
     this->velocity->accelerate(direction, this->maxVelocity);
+    this->setOrientation(direction); // Para que quede mirando para donde venia corriendo.
     log("Jugador: El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::decelerate(int direction) {
-    this->setOrientation(direction);
     if (!this->velocity->isZero()) {
         this->velocity->decelerate(direction, this->maxVelocity);
+        if (this->velocity->getComponentY() != 0) {
+            if (this->velocity->getComponentY() > 0) {
+                this->orientation = PLAYER_ORIENTATION_DOWN;
+            } else {
+                this->orientation = PLAYER_ORIENTATION_UP;
+            }
+        } else {
+            this->orientation = orientation;
+        }
         log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
     }
 }
