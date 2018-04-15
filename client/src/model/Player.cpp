@@ -28,7 +28,20 @@ Velocity* Player::getVelocity() {
 }
 
 void Player::setOrientation(int orientation) {
-    this->orientation = orientation;
+    if (this->isRunningDiagonaly()) {
+        if (this->velocity->getComponentX() > 0) {
+            this->orientation = PLAYER_ORIENTATION_RIGHT;
+        } else {
+            this->orientation = PLAYER_ORIENTATION_LEFT;
+        }
+    } else {
+        this->orientation = orientation;
+    }
+}
+
+// Si corre en dos direcciones devuelve true.
+bool Player::isRunningDiagonaly() {
+    return ((this->velocity->getComponentX() != 0) && (this->velocity->getComponentY() != 0));
 }
 
 void Player::toggleIsSelected() {
@@ -40,15 +53,15 @@ bool Player::getIsSelected() {
 }
 
 void Player::accelerate(int direction) {
+    this->setOrientation(direction); // Para que quede mirando para donde venia corriendo.
     this->velocity->accelerate(direction, this->maxVelocity);
-    this->orientation = direction; // Para que quede mirando para donde venia corriendo.
     log("Jugador: El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::decelerate(int direction) {
+    this->setOrientation(direction);
     if (!this->velocity->isZero()) {
         this->velocity->decelerate(direction, this->maxVelocity);
-        this->orientation = direction;
         log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
     }
 }

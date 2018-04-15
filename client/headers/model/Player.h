@@ -32,6 +32,7 @@ class Player {
         bool isSliding();
         bool isKicking();
         bool getIsSelected();
+        bool isRunningDiagonaly();
 
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
