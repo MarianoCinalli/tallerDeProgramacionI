@@ -4,13 +4,11 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
     log("PlayerSpriteManager: Creando vista...", LOG_INFO);
     this->player = player;
     this->spriteSheet = spriteSheet;
-    this->spriteWidth = 16;
-    this->spriteHeight = 16;
     this->sprite = {
         0,
-        48,
-        this->spriteWidth,
-        this->spriteHeight
+        3 * SPRITE_SIZE,
+        SPRITE_SIZE,
+        SPRITE_SIZE
     }; // Sprite actual. Esta mirando para la derecha.
     log("PlayerSpriteManager: Vista creada.", LOG_INFO);
 }
@@ -77,8 +75,8 @@ SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* 
     SDL_Rect renderQuad = {
         coordinates->getX(),
         coordinates->getY(),
-        this->spriteWidth,
-        this->spriteHeight
+        SPRITE_SIZE,
+        SPRITE_SIZE
     };
     return renderQuad;
 }
@@ -94,15 +92,15 @@ void PlayerSpriteManager::setStandingSprite(int orientation) {
             break;
         case PLAYER_ORIENTATION_DOWN:
             this->sprite.x = 0;
-            this->sprite.y = 16;
+            this->sprite.y = SPRITE_SIZE;
             break;
         case PLAYER_ORIENTATION_LEFT:
             this->sprite.x = 0;
-            this->sprite.y = 32;
+            this->sprite.y = SPRITE_SIZE * 2;
             break;
         case PLAYER_ORIENTATION_RIGHT:
             this->sprite.x = 0;
-            this->sprite.y = 48;
+            this->sprite.y = SPRITE_SIZE * 3;
             break;
     }
 }
@@ -132,11 +130,11 @@ void PlayerSpriteManager::setRunningUpSprite() {
     // El que empieza en (0, 0) es el primero que corre para arriba.
     // El que empieza en (7 * 16 = 112, 0) es el ultimo que corre para arriba.
     log("PlayerSpriteManager: Creando el sprite corriendo arriba.", LOG_DEBUG);
-    if ((this->sprite.x == 112) || (this->sprite.y != 0)) {
+    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 0)) {
         this->sprite.x = 0; // Reinicio la secuencia.
         this->sprite.y = 0;
     } else {
-        this->sprite.x += this->spriteWidth; // Avanzo la secuencia en un frame.
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
 }
 
@@ -149,13 +147,13 @@ void PlayerSpriteManager::setRunningDownSprite() {
     // El que empieza en (0, 16) es el primero que corre para abajo.
     // El que empieza en (7 * 16 = 112, 16) es el ultimo que corre para abajo.
     log("PlayerSpriteManager: Creando el sprite corriendo abajo.", LOG_DEBUG);
-    if ((this->sprite.x == 112) || (this->sprite.y != 16)) {
+    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 16)) {
         // Si esta en el ultimo sprite de la secuencia, o si estoy en otra secuencia.
         // Reinicio la secuencia.
         this->sprite.x = 0;
-        this->sprite.y = 16;
+        this->sprite.y = SPRITE_SIZE;
     } else {
-        this->sprite.x += this->spriteWidth; // Avanzo la secuencia en un frame.
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
 }
 
@@ -169,11 +167,11 @@ void PlayerSpriteManager::setRunningLeftSprite() {
     // El que empieza en (0, 32) es el primero que corre para la izquierda.
     // El que empieza en (7 * 16 = 112, 32) es el ultimo que corre para la izquierda.
     log("PlayerSpriteManager: Creando el sprite corriendo a la izquierda.", LOG_DEBUG);
-    if ((this->sprite.x == 112) || (this->sprite.y != 32)) {
+    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 32)) {
         this->sprite.x = 0; // Reinicio la secuencia.
-        this->sprite.y = 32;
+        this->sprite.y = 2 * SPRITE_SIZE;
     } else {
-        this->sprite.x += this->spriteWidth; // Avanzo la secuencia en un frame.
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
 }
 
@@ -186,11 +184,11 @@ void PlayerSpriteManager::setRunningRightSprite() {
     // El que empieza en (0, 48) es el primero que corre para la derecha.
     // El que empieza en (7 * 16 = 112, 48) es el ultimo que corre para la derecha.
     log("PlayerSpriteManager: Creando el sprite corriendo a la derecha.", LOG_DEBUG);
-    if ((this->sprite.x == 112) || (this->sprite.y != 48)) {
+    if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != 48)) {
         this->sprite.x = 0; // Reinicio la secuencia.
-        this->sprite.y = 48;
+        this->sprite.y = 3 * SPRITE_SIZE;
     } else {
-        this->sprite.x += this->spriteWidth; // Avanzo la secuencia en un frame.
+        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
 }
 
@@ -201,14 +199,14 @@ void PlayerSpriteManager::setSlidingSprite() {
     if (!this->player->wasSlidingYet()) {
         log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
         this->sprite.x = 0;
-        this->sprite.y = (80 + (16 * orientation));
+        this->sprite.y = (5 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
         this->player->isAlreadySliding();
     } else {
-        if ((this->sprite.x == 112) || (this->sprite.y != (80 + (16 * orientation)))) {
+        if ((this->sprite.x == 7 * SPRITE_SIZE) || (this->sprite.y != (5 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
             this->setStandingSprite(orientation);
             this->player->stopSliding();
         } //TODO hacer ctes para sprites
-        else this->sprite.x += this->spriteWidth;
+        else this->sprite.x += SPRITE_SIZE;
     }
 }
 
@@ -219,13 +217,13 @@ void PlayerSpriteManager::setKickingSprite() {
     if (!this->player->wasKickingYet()) {
         log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
         this->sprite.x = 0;
-        this->sprite.y = (144 + (16 * orientation));
+        this->sprite.y = (9 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
         this->player->isAlreadyKicking();
     } else {
-        if ((this->sprite.x == 64) || (this->sprite.y != (144 + (16 * orientation)))) {
+        if ((this->sprite.x == 4 * SPRITE_SIZE) || (this->sprite.y != (9 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
             this->setStandingSprite(orientation);
             this->player->stopKicking();
-        } else this->sprite.x += this->spriteWidth;
+        } else this->sprite.x += SPRITE_SIZE;
     }
 }
 
@@ -234,17 +232,17 @@ void PlayerSpriteManager::setKickingSprite() {
 SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
     return {
         0,
-        224,
-        this->spriteWidth,
-        this->spriteHeight
+        14 * SPRITE_SIZE,
+        SPRITE_SIZE,
+        SPRITE_SIZE
     };
 }
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {
     return {
         coordinates->getX(),
-        coordinates->getY() - this->spriteHeight,
-        this->spriteWidth,
-        this->spriteHeight
+        coordinates->getY() - SPRITE_SIZE,
+        SPRITE_SIZE,
+        SPRITE_SIZE
     };
 }

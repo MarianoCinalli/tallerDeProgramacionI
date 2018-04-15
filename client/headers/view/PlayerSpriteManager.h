@@ -15,8 +15,6 @@ class PlayerSpriteManager {
     private:
         Player* player;
         Texture* spriteSheet;
-        int spriteWidth;
-        int spriteHeight;
         SDL_Rect sprite;
     public:
         PlayerSpriteManager(Texture* spriteSheet, Player* player);
