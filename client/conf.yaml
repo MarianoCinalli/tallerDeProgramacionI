@@ -5,9 +5,8 @@ equipo:
 debug:
   level: 'debug' #'debug' o "info" o "error"
 assets:
-  cancha: '/images/cancha.png'
-  casaca_principal: '/images/principal.png'
-  casaca_alternativa: '/images/alternativa.png'
+  cancha: 'images/cancha.png'
+  sprites: 'images/sprites.png'
 performance:
   framerate: 4
   margenes: 100 #250

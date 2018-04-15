@@ -1,10 +1,12 @@
 # configuracion
 equipo:
-  nombre: "Zinedine"
-  formacion: '3-3' # '3-3', '3-1-2', '3-2-1', '2-3-1', '2-2-2'
-  casaca: 'alternativa' #'principal' o 'alternativa'
-performance:
-  framerate: 20
-  margenes: 80
+  formacion: '3-3' # '3-3', '3-1-2', '3-2-1',   NO IMPLEMENTADAS :'2-3-1', '2-2-2'
+  casaca: 'principal' #'principal' o 'alternativa'
 debug:
-  level: 'error' #'debug' o "info" o "error"
+  level: 'debug' #'debug' o "info" o "error"
+assets:
+  cancha: 'images/cancha.png'
+  sprites: 'images/spritesDefaults.png'
+performance:
+  framerate: 4
+  margenes: 100 #250

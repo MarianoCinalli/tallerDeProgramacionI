@@ -18,7 +18,7 @@ std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 const std::string defaultConfFileName = "src/default.yaml";
 std::string confFileName = "conf.yaml";
-int LOG_MIN_LEVEL = LOG_ERROR;
+int LOG_MIN_LEVEL = LOG_DEBUG;
 // Global variables ---------------------------------------
 
 
@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
     configuration->loadConf(confFileName);
     log("Main: Configuracion cargada: ", configuration, LOG_INFO);
     LOG_MIN_LEVEL = configuration->getDebugLevel();
-    log("Main: Nivel de log cambiado a: ", LOG_MIN_LEVEL, LOG_INFO);
+    log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_INFO);
     GameInitializer* initializer = new GameInitializer(configuration);
     GameController* gameController = initializer->getGameController();
     ActionsManager* actionsManager = initializer->getActionsManager();
