@@ -18,7 +18,7 @@ std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 const std::string defaultConfFileName = "src/default.yaml";
 std::string confFileName = "conf.yaml";
-int LOG_MIN_LEVEL = LOG_DEBUG;
+int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 // Global variables ---------------------------------------
 
 
