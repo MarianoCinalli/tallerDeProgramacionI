@@ -4,6 +4,10 @@ equipo:
   casaca: 'principal' #'principal' o 'alternativa'
 debug:
   level: 'debug' #'debug' o "info" o "error"
+assets:
+  cancha: '/images/cancha.png'
+  casaca_principal: '/images/principal.png'
+  casaca_alternativa: '/images/alternativa.png'
 performance:
   framerate: 4
-  margenes: 250
+  margenes: 100 #250

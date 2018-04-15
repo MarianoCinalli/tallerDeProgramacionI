@@ -21,8 +21,7 @@ Pitch::~Pitch() {
 }
 
 Coordinates* getCenter() {
-    //harcodeado TODO
-    return new Coordinates(800, 500);
+    return new Coordinates(LEVEL_WIDTH/2, SCREEN_HEIGHT/2);
 }
 
 void Pitch::changeActivePlayer(){
