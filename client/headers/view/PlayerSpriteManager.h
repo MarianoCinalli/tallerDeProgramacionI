@@ -16,6 +16,7 @@ class PlayerSpriteManager {
         Player* player;
         Texture* spriteSheet;
         SDL_Rect sprite;
+        SDL_Rect activePlayerMarker;
     public:
         PlayerSpriteManager(Texture* spriteSheet, Player* player);
         // Dibuja un jugador, en las coordenadas del render que se le pase.

@@ -10,6 +10,12 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
         SPRITE_SIZE,
         SPRITE_SIZE
     }; // Sprite actual. Esta mirando para la derecha.
+    this->activePlayerMarker = {
+        0,
+        16 * SPRITE_SIZE,
+        SPRITE_SIZE,
+        SPRITE_SIZE
+    };
     log("PlayerSpriteManager: Vista creada.", LOG_INFO);
 }
 
@@ -222,12 +228,22 @@ void PlayerSpriteManager::setSlidingSprite() {
 // Active player marker ----------------------------
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
-    return {
-        0,
-        16 * SPRITE_SIZE,
-        SPRITE_SIZE,
-        SPRITE_SIZE
-    };
+    if ((this->activePlayerMarker.x == 0) && (this->activePlayerMarker.y == 16 * SPRITE_SIZE)) {
+        this->activePlayerMarker = {
+            SPRITE_SIZE,
+            16 * SPRITE_SIZE,
+            SPRITE_SIZE,
+            SPRITE_SIZE
+        };
+    } else {
+        this->activePlayerMarker = {
+            0,
+            16 * SPRITE_SIZE,
+            SPRITE_SIZE,
+            SPRITE_SIZE
+        };
+    }
+    return this->activePlayerMarker;
 }
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {
