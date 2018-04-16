@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
     while (!quit) {
 
         while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
+            if (actionsManager->shouldQuit(e)) {
                 quit = true;
             } else {
                 // Devuelve acciones que modifican modelos.

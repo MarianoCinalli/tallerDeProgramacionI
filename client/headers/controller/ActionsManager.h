@@ -16,6 +16,7 @@ class ActionsManager {
     public:
         ActionsManager();
         Action* getAction(SDL_Event event);
+        bool shouldQuit(SDL_Event event);
         ~ActionsManager();
 };
 #endif // ACTIONSMANAGER_H

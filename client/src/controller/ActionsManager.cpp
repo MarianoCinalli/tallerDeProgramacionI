@@ -63,3 +63,14 @@ Action* ActionsManager::getAction(SDL_Event event) {
     }
     return action;
 }
+
+bool ActionsManager::shouldQuit(SDL_Event event) {
+    bool quit = false;
+    bool quitByQ = ((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_q));
+    bool quitByWindowExit = (event.type == SDL_QUIT);
+    if ( quitByWindowExit || quitByQ ) {
+        log("ActionsManager: Se registro la salida del programa.", LOG_INFO);
+        quit = true;
+    }
+    return quit;
+}
