@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "util/conf.h"
 
 using namespace std;
@@ -17,7 +18,7 @@ string Conf::toString() {
         casacaStr = "Alternativa";
     }
     str << "Casaca: " << casacaStr << "\n";
-    str << "Shirts Path: " << shirtsPath << "\n";
+    str << "Shirts Path: " << spritesPath << "\n";
     str << "Debug Level: " << debugLevel << "\n";
     str << "Framerate: " << framerate << "\n";
     str << "Margenes: " << margenes << "\n";
@@ -92,11 +93,16 @@ string chooseNombre(YAML::Node nod) {
     }
 }
 
-string chooseShirtsPath(YAML::Node nod) {
+string chooseSpritesPath(YAML::Node nod) {
     try {
         if (!nod["assets"]["sprites"])
             return "";
         string str = nod["assets"]["sprites"].as<string>();
+        //chequea que el archivo exista
+        int res = access(str.c_str(), R_OK);
+        if (res < 0) {
+            return "invalid file";
+        }
         return str;
     } catch (YAML::BadSubscript e) {
         return "";
@@ -152,12 +158,15 @@ float Conf::cargarParametro(string parametro, float (*fn)(YAML::Node)) {
     return valor;
 }
 
-string Conf::cargarParametro(string parametro, string(*fn)(YAML::Node)) {
+string Conf::cargarParametro(string parametro, string defaultPath, string(*fn)(YAML::Node)) {
     string valor = fn(config);
 
     if (valor.length() == 0) {
         log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
         valor = fn(defaultConfig);
+    }
+    if (valor =="invalid file"){
+      return defaultPath;
     }
     return valor;
 }
@@ -178,10 +187,10 @@ int Conf::loadConf(string file) {
     log("Conf: cargado casaca con valor: ", casaca, LOG_INFO);
     formacion = cargarParametro("formacion", &chooseFormacion);
     log("Conf: cargado formacion con valor: ", formacion, LOG_INFO);
-    nombre = cargarParametro("nombre", &chooseNombre);
+    nombre = cargarParametro("nombre", "zidane", &chooseNombre);
     log("Conf: cargado nombre con valor:", nombre, LOG_INFO);
-    shirtsPath = cargarParametro("nombre", &chooseShirtsPath);
-    log("Conf: cargado shirtsPath con valor:", shirtsPath, LOG_INFO);
+    spritesPath = cargarParametro("spritesPath", this->defaultSprites, &chooseSpritesPath);
+    log("Conf: cargado shirtsPath con valor:", spritesPath, LOG_INFO);
     margenes = cargarParametro("margenes", &chooseMargenes);
     log("Conf: cargado margenes con valor: ", margenes, LOG_INFO);
     framerate = cargarParametro("framerate", &chooseFramerate);
@@ -209,8 +218,8 @@ string Conf::getNombre() {
     return nombre;
 }
 
-string Conf::getShirtsPath() {
-    return shirtsPath;
+string Conf::getSpritesPath() {
+    return spritesPath;
 }
 
 float Conf::getFramerate() {
@@ -220,8 +229,9 @@ int Conf::getMargen() {
     return margenes;
 }
 
-Conf::Conf(string filename) {
+Conf::Conf(string filename, string defaultSpritesFilename) {
     defaultFile = filename;
+    defaultSprites = defaultSpritesFilename;
 }
 
 Conf::~Conf(void) {

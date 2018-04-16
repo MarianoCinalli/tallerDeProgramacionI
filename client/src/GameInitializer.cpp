@@ -67,7 +67,7 @@ void GameInitializer::initializeLocalTeam(Conf* conf) {
     }
     Colour* shirt = new Colour(shirtColour, 0, 0, 0);
     log("GameInitializer: Creando sprites para el equipo local.", LOG_INFO);
-    this->initializeLocalTeamSprites(conf->getShirtsPath(),shirt);
+    this->initializeLocalTeamSprites(conf->getSpritesPath(),shirt);
     delete(shirt);
     // Crear los jugadores.
     log("GameInitializer: Creando equipo.", LOG_INFO);
