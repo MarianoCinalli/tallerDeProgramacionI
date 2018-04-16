@@ -19,11 +19,12 @@ enum casacas {
 
 class Conf : public Loggable {
   public:
-    Conf(string);
+    Conf(string, string);
     ~Conf();
     string defaultFile;
+    string defaultSprites;
     string nombre;
-    string shirtsPath;
+    string spritesPath;
     float framerate;
     int margenes;
     int getFormacion();
@@ -31,7 +32,8 @@ class Conf : public Loggable {
     int getDebugLevel();
     string getAssetsCancha();
     string getNombre();
-    string getShirtsPath();
+    string getSpritesPath();
+    // string chooseShirtsPath(YAML::Node nod);
     float getFramerate();
     int getMargen();
     int loadConf(string file);
@@ -45,7 +47,7 @@ class Conf : public Loggable {
     int debugLevel;
     int cargarParametro(string parametro, int (*fn)(YAML::Node));
     float cargarParametro(string parametro, float (*fn)(YAML::Node));
-    string cargarParametro(string parametro, string (*fn)(YAML::Node));
+    string cargarParametro(string parametro, string parametro2, string (*fn)(YAML::Node));
 
 };
 

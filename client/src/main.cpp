@@ -17,6 +17,7 @@
 std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
 const std::string defaultConfFileName = "src/default.yaml";
+const std::string defaultSpritesFileName = "images/spritesDefaults.png";
 std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 // Global variables ---------------------------------------
@@ -106,7 +107,7 @@ int main(int argc, char* argv[]) {
     logSessionStarted();
     // Inicializacion -------------------------------------
     log("Main: Cargando configuracion...", LOG_INFO);
-    Conf* configuration = new Conf(defaultConfFileName);
+    Conf* configuration = new Conf(defaultConfFileName, defaultSpritesFileName);
     configuration->loadConf(confFileName);
     log("Main: Configuracion cargada: ", configuration, LOG_INFO);
     LOG_MIN_LEVEL = configuration->getDebugLevel();
