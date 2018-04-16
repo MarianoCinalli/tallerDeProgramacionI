@@ -6,10 +6,10 @@
 ## Integrantes:
 
 - Mariano Cinalli [@MarianoCinalli](https://github.com/MarianoCinalli)
-- Joaquin [@joakoracing](https://github.com/joakoracing)
-- Claudio [@claucapo](https://github.com/claucapo)
-- Nicolas [@nicolascian](https://github.com/nicolascian)
-- Juan [@juandambra](https://github.com/juandambra)
+- Joaquin Carbon [@joakoracing](https://github.com/joakoracing)
+- Claudio Smith [@claucapo](https://github.com/claucapo)
+- Nicolas Cian [@nicolascian](https://github.com/nicolascian)
+- Juan D'Ambra [@juandambra](https://github.com/juandambra)
 
 ### Uso del makefile:
 	sudo make dependencies - Instala las librerias necesarias.

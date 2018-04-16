@@ -27,8 +27,6 @@ Coordinates* getCenter() {
 
 void Pitch::changeActivePlayer(){
   Coordinates* center = activePlayer->getPosition();
-
-  //std::list<Player*> players = localTeam->getPlayers();
   // Solo puede seleccionar de los jugadores dentro de los margenes
   std::list<Player*> players = this->camera->getPlayersInsideMargin(localTeam->getPlayers());
   if (!players.empty()){
