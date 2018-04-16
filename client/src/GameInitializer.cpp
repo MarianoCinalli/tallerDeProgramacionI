@@ -105,7 +105,7 @@ void GameInitializer::initializeLocalTeamSprites(std::string shirtsPath, Colour*
 
 void GameInitializer::initializePitch() {
     log("GameInitializer: Creando la cancha...", LOG_INFO);
-    this->pitch = new Pitch();
+    this->pitch = new Pitch(this->camera);
 }
 
 void GameInitializer::initializeGameController() {
@@ -126,7 +126,7 @@ void GameInitializer::initializeCommonSdlResources() {
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
             printf("Warning: Linear texture filtering not enabled!");
         }
-        this->window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        this->window = SDL_CreateWindow("ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (this->window == NULL) {
             printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
         } else {

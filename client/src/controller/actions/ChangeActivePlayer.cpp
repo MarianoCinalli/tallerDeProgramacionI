@@ -17,5 +17,6 @@ void ChangeActivePlayer::execute(Pitch* pitch) {
 bool ChangeActivePlayer::valid(Pitch* pitch){
   return true;
 }
+
 ChangeActivePlayer::~ChangeActivePlayer() {
 }

@@ -2,7 +2,8 @@
 #include "util/Constants.h"
 
 
-Pitch::Pitch() {
+Pitch::Pitch(Camera* camera) {
+  this->camera = camera;
 }
 
 void Pitch::setLocalTeam(Team* team) {
@@ -26,7 +27,11 @@ Coordinates* getCenter() {
 
 void Pitch::changeActivePlayer(){
   Coordinates* center = activePlayer->getPosition();
-  std::list <Player*>players = localTeam->getPlayers();
+
+  //std::list<Player*> players = localTeam->getPlayers();
+  // Solo puede seleccionar de los jugadores dentro de los margenes
+  std::list<Player*> players = this->camera->getPlayersInsideMargin(localTeam->getPlayers());
+
   int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
   Player* nearestPlayer = players.back();
   for (Player* p : players) {

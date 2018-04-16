@@ -23,28 +23,28 @@ void Camera::calculateNewPostion(Coordinates* playerPosition) {
     // Margen derecho
     if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
         log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
-        this->position->addX(10);
+        this->position->addX(13);
         margin.x = this->position->getX() + margin_size;
     }
 
     // Margen izquierdo
     if (playerPosition->getX() < margin.x) {
         log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
-        this->position->subtractX(10);
+        this->position->subtractX(13);
         margin.x = this->position->getX() + margin_size;
     }
 
     // Margen inferior
     if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
         log("Jugador activo debajo del margen inferior", LOG_DEBUG);
-        this->position->addY(10);
+        this->position->addY(13);
         margin.y = this->position->getY() + margin_size;
     }
 
     // Margen superior
     if (playerPosition->getY() < margin.y) {
         log("Jugador activo sobre el margen superior", LOG_DEBUG);
-        this->position->subtractY(10);
+        this->position->subtractY(13);
         margin.y = this->position->getY() + margin_size;
     }
 
@@ -78,8 +78,45 @@ void Camera::calculateNewPostion(Coordinates* playerPosition) {
 }
 
 std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteManager*>& views) {
-    // TODO: Por ahora devuelve todos, falta filtrar.
-    return views;
+    // Solo los que estan dentro de la camara
+    std::list<PlayerSpriteManager*> resultado;
+    int playerX = 0;
+    int playerY = 0;
+    for (PlayerSpriteManager* p : views){
+        playerX = p->getPlayerCoordinates()->getX();
+        playerY = p->getPlayerCoordinates()->getY();
+        
+        if ( (playerX > 0 - SPRITE_SIZE) && 
+             (playerX < LEVEL_WIDTH) && 
+             (playerY > 0 - SPRITE_SIZE) && 
+             (playerY < LEVEL_HEIGHT) ) {
+            // Esta dentro de los limites
+            resultado.push_back(p);
+        }
+    }
+
+    return resultado;
+}
+
+std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players) {
+    // Solo los que estan dentro de los margenes
+    std::list<Player*> resultado;
+    int playerX = 0;
+    int playerY = 0;
+    for (Player* p : players){
+        playerX = p->getPosition()->getX();
+        playerY = p->getPosition()->getY();
+        
+        // if ( (playerX > margin.x) && 
+        //      (playerX < margin.x + margin.w) && 
+        //      (playerY > margin.y) && 
+        //      (playerY < margin.y + margin.h ) ) {
+        //     // Esta dentro de los margenes
+            resultado.push_back(p);
+        // }
+    }
+
+    return resultado;
 }
 
 SDL_Rect Camera::getRectToDraw() {
