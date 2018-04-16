@@ -3,7 +3,7 @@
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
     this->initializeCommonSdlResources();
-    this->initializePitch();
+    this->initializePitch(configuration);
     this->initializePitchView(configuration);
     this->initializeLocalTeam(configuration);
     this->initializeGameController();
@@ -53,9 +53,7 @@ void GameInitializer::initializePitchView(Conf* conf) {
     log("GameInitializer: Creando vista de la cancha...", LOG_INFO);
     Texture* pitchImg = new Texture(conf->getAssetsCancha(), this->renderer);
     // punto arriba a la izquierda = (1600/2  - 800/2, 1000/2 - 600/2) = (400, 200)
-    Coordinates* cameraPosition = new Coordinates(400, 200);
-    this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf->getMargen());
-    this->pitchView = new PitchView(pitchImg, camera);
+    this->pitchView = new PitchView(pitchImg, this->camera);
     log("GameInitializer: Vista de la cancha creada.", LOG_INFO);
 }
 
@@ -103,8 +101,10 @@ void GameInitializer::initializeLocalTeamSprites(std::string shirtsPath, Colour*
     delete(transparency);
 }
 
-void GameInitializer::initializePitch() {
+void GameInitializer::initializePitch(Conf* conf) {
     log("GameInitializer: Creando la cancha...", LOG_INFO);
+    Coordinates* cameraPosition = new Coordinates(400, 200);
+    this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf->getMargen());
     this->pitch = new Pitch(this->camera);
 }
 

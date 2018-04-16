@@ -42,7 +42,7 @@ class GameInitializer {
         PitchView* getPitchView();
         ~GameInitializer();
     private:
-        void initializePitch();
+        void initializePitch(Conf* conf);
         void initializePitchView(Conf* conf);
         void initializeLocalTeam(Conf* conf);
         void initializeLocalTeamSprites(std::string path, Colour* shirt);
