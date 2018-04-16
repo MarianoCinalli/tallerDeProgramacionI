@@ -115,8 +115,6 @@ bool isInsideMargin(Player* p,SDL_Rect* margin){
 std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players) {
     // Solo los que estan dentro de los margenes
     std::list<Player*> resultado;
-    int playerX = 0;
-    int playerY = 0;
     for (Player* p : players){
         if (isInsideMargin(p,&margin)){
           resultado.push_back(p);
