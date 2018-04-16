@@ -110,7 +110,7 @@ void PlayerSpriteManager::setStandingSprite(int orientation) {
 }
 
 void PlayerSpriteManager::setStandingSpriteViewUp() {
-    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 12 * SPRITE_SIZE)) {
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 12 * SPRITE_SIZE)) {
         this->sprite.x = 0;
         this->sprite.y = 12 * SPRITE_SIZE;
     } else {
@@ -119,7 +119,7 @@ void PlayerSpriteManager::setStandingSpriteViewUp() {
 }
 
 void PlayerSpriteManager::setStandingSpriteViewRight() {
-    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 13 * SPRITE_SIZE)) {
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 13 * SPRITE_SIZE)) {
         this->sprite.x = 0;
         this->sprite.y = 13 * SPRITE_SIZE;
     } else {
@@ -128,7 +128,7 @@ void PlayerSpriteManager::setStandingSpriteViewRight() {
 }
 
 void PlayerSpriteManager::setStandingSpriteViewDown() {
-    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 14 * SPRITE_SIZE)) {
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 14 * SPRITE_SIZE)) {
         this->sprite.x = 0;
         this->sprite.y = 14 * SPRITE_SIZE;
     } else {
@@ -137,7 +137,7 @@ void PlayerSpriteManager::setStandingSpriteViewDown() {
 }
 
 void PlayerSpriteManager::setStandingSpriteViewLeft() {
-    if ((this->sprite.x == SPRITE_SIZE) || (this->sprite.y != 15 * SPRITE_SIZE)) {
+    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 15 * SPRITE_SIZE)) {
         this->sprite.x = 0;
         this->sprite.y = 15 * SPRITE_SIZE;
     } else {

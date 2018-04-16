@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
         gameController->updatePlayers();
         gameController->updateCameraPosition(camera);
         pitchView->render(renderer);
-        usleep(sleepTime); // Frame rate.
+        usleep(7 * sleepTime); // Frame rate.
     }
     log("Main: Main loop finalizado.", LOG_INFO);
     // Liberacion de memoria -------------------------------
