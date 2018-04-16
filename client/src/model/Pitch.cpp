@@ -31,20 +31,21 @@ void Pitch::changeActivePlayer(){
   //std::list<Player*> players = localTeam->getPlayers();
   // Solo puede seleccionar de los jugadores dentro de los margenes
   std::list<Player*> players = this->camera->getPlayersInsideMargin(localTeam->getPlayers());
-
-  int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
-  Player* nearestPlayer = players.back();
-  for (Player* p : players) {
-    int distance = p->getPosition()->distanceTo(center);
-    log("Distancia: ",distance, LOG_DEBUG);
-    if (distance < nearestDistance && distance > 0){
-      nearestDistance = distance;
-      nearestPlayer = p;
+  if (!players.empty()){
+    int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
+    Player* nearestPlayer = players.back();
+    for (Player* p : players) {
+      int distance = p->getPosition()->distanceTo(center);
+      log("Distancia: ",distance, LOG_DEBUG);
+      if (distance < nearestDistance && distance > 0){
+        nearestDistance = distance;
+        nearestPlayer = p;
+      }
     }
-  }
     // delete(center);
     this->activePlayer->toggleIsSelected();
     this->activePlayer = nearestPlayer;
     this->activePlayer->toggleIsSelected();
+  }
     //delete(nearestPlayer);
   }
