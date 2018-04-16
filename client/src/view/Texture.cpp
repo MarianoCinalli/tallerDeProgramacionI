@@ -77,7 +77,7 @@ SDL_Texture* Texture::loadSheet(std::string path, std::string shirtPath, SDL_Ren
             shirt->getBlue()
         );
 
-        SDL_BlitSurface(loadedSurface, NULL, shirtSurface, NULL);
+        SDL_BlitSurface(shirtSurface, NULL, loadedSurface, NULL);
         //Create texture from surface pixels
         log("Texture: Creando textura desde superficie...", LOG_INFO);
         newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);

@@ -45,7 +45,7 @@ class GameInitializer {
         void initializePitch();
         void initializePitchView(Conf* conf);
         void initializeLocalTeam(Conf* conf);
-        void initializeLocalTeamSprites(Colour* shirt);
+        void initializeLocalTeamSprites(std::string path, Colour* shirt);
         void initializeGameController();
         void initializeActionsManager();
         void initializeCommonSdlResources();

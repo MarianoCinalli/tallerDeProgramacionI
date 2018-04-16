@@ -1,7 +1,7 @@
 # configuracion
 equipo:
   formacion: '3-3' # '3-3', '3-1-2', '3-2-1',   NO IMPLEMENTADAS :'2-3-1', '2-2-2'
-  casaca: 'principal' #'principal' o 'alternativa'
+  casaca: 'alternativa' #'principal' o 'alternativa'
 debug:
   level: 'debug' #'debug' o "info" o "error"
 assets:

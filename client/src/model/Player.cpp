@@ -4,7 +4,7 @@ Player::Player(int orientation, Coordinates* position) {
     log("Jugador: Creando jugador...", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
-    this->maxVelocity = 3; // TODO: Probar si va muy rapido.
+    this->maxVelocity = 13; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
     this->wasSliding = false;   //Deberia estar en PlayerSpriteManager

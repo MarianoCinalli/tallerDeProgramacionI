@@ -17,6 +17,7 @@ string Conf::toString() {
         casacaStr = "Alternativa";
     }
     str << "Casaca: " << casacaStr << "\n";
+    str << "Shirts Path: " << shirtsPath << "\n";
     str << "Debug Level: " << debugLevel << "\n";
     str << "Framerate: " << framerate << "\n";
     str << "Margenes: " << margenes << "\n";
@@ -85,6 +86,17 @@ string chooseNombre(YAML::Node nod) {
         if (!nod["equipo"]["nombre"])
             return "";
         string str = nod["equipo"]["nombre"].as<string>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return "";
+    }
+}
+
+string chooseShirtsPath(YAML::Node nod) {
+    try {
+        if (!nod["assets"]["sprites"])
+            return "";
+        string str = nod["assets"]["sprites"].as<string>();
         return str;
     } catch (YAML::BadSubscript e) {
         return "";
@@ -168,6 +180,8 @@ int Conf::loadConf(string file) {
     log("Conf: cargado formacion con valor: ", formacion, LOG_INFO);
     nombre = cargarParametro("nombre", &chooseNombre);
     log("Conf: cargado nombre con valor:", nombre, LOG_INFO);
+    shirtsPath = cargarParametro("nombre", &chooseShirtsPath);
+    log("Conf: cargado shirtsPath con valor:", shirtsPath, LOG_INFO);
     margenes = cargarParametro("margenes", &chooseMargenes);
     log("Conf: cargado margenes con valor: ", margenes, LOG_INFO);
     framerate = cargarParametro("framerate", &chooseFramerate);
@@ -194,6 +208,11 @@ int Conf::getCasaca() {
 string Conf::getNombre() {
     return nombre;
 }
+
+string Conf::getShirtsPath() {
+    return shirtsPath;
+}
+
 float Conf::getFramerate() {
     return framerate;
 }

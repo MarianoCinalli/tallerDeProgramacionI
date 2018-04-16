@@ -23,6 +23,7 @@ class Conf : public Loggable {
     ~Conf();
     string defaultFile;
     string nombre;
+    string shirtsPath;
     float framerate;
     int margenes;
     int getFormacion();
@@ -30,6 +31,7 @@ class Conf : public Loggable {
     int getDebugLevel();
     string getAssetsCancha();
     string getNombre();
+    string getShirtsPath();
     float getFramerate();
     int getMargen();
     int loadConf(string file);
@@ -41,12 +43,6 @@ class Conf : public Loggable {
     int formacion;
     int casaca;    //principal true o alternativa false
     int debugLevel;
-    void cargarCasaca();
-    void cargarFormacion();
-    void cargarDebug();
-    void cargarNombre();
-    void cargarFramerate();
-    void cargarMargenes();
     int cargarParametro(string parametro, int (*fn)(YAML::Node));
     float cargarParametro(string parametro, float (*fn)(YAML::Node));
     string cargarParametro(string parametro, string (*fn)(YAML::Node));

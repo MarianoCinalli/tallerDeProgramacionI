@@ -67,7 +67,7 @@ void GameInitializer::initializeLocalTeam(Conf* conf) {
     }
     Colour* shirt = new Colour(shirtColour, 0, 0, 0);
     log("GameInitializer: Creando sprites para el equipo local.", LOG_INFO);
-    this->initializeLocalTeamSprites(shirt);
+    this->initializeLocalTeamSprites(conf->getShirtsPath(),shirt);
     delete(shirt);
     // Crear los jugadores.
     log("GameInitializer: Creando equipo.", LOG_INFO);
@@ -90,11 +90,11 @@ void GameInitializer::initializeLocalTeam(Conf* conf) {
 }
 
 
-void GameInitializer::initializeLocalTeamSprites(Colour* shirt) {
+void GameInitializer::initializeLocalTeamSprites(std::string shirtsPath, Colour* shirt) {
     Colour* transparency = new Colour(0, 0xa0, 0, 0);
     // Supongo que el path de los sprites lo deberia sacar de conf, no?
     this->localTeamSprites = new Texture(
-        "images/sprites.png",
+        shirtsPath,
         "images/spritesShirts.png",
         this->renderer,
         transparency,
