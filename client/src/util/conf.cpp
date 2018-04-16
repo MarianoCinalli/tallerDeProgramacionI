@@ -9,7 +9,14 @@ string Conf::toString() {
     str << "\nConfiguracion\n";
     str << "Nombre: " << nombre << "\n";
     str << "Formacion: " << formacion << "\n";
-    str << "Casaca: " << casaca << "\n";
+    string casacaStr;
+    if (casaca == CASACA_PRINCIPAL){
+      casacaStr = "Principal";
+    }
+    else {
+        casacaStr = "Alternativa";
+    }
+    str << "Casaca: " << casacaStr << "\n";
     str << "Debug Level: " << debugLevel << "\n";
     str << "Framerate: " << framerate << "\n";
     str << "Margenes: " << margenes << "\n";
@@ -84,12 +91,12 @@ string chooseNombre(YAML::Node nod) {
     }
 }
 
-int chooseFramerate(YAML::Node nod) {
+float chooseFramerate(YAML::Node nod) {
     try {
         if (!nod["performance"]["framerate"])
             return VALOR_INVALIDO;
-        int str = nod["performance"]["framerate"].as<int>();
-        if (str > 0 && str < 300)
+        float str = nod["performance"]["framerate"].as<float>();
+        if (str > 0 && str < 300) //harcode
             return str;
         else
             return VALOR_INVALIDO;
@@ -115,6 +122,16 @@ int chooseMargenes(YAML::Node nod) {
 
 int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)) {
     int valor = fn(config);
+
+    if (valor == VALOR_INVALIDO) {
+        log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
+        valor = fn(defaultConfig);
+    }
+    return valor;
+}
+
+float Conf::cargarParametro(string parametro, float (*fn)(YAML::Node)) {
+    float valor = fn(config);
 
     if (valor == VALOR_INVALIDO) {
         log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
@@ -177,7 +194,7 @@ int Conf::getCasaca() {
 string Conf::getNombre() {
     return nombre;
 }
-int Conf::getFramerate() {
+float Conf::getFramerate() {
     return framerate;
 }
 int Conf::getMargen() {
