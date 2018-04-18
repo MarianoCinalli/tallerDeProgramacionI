@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Coordinates arquero (110, 500 - SPRITE_SIZE/2);
+Coordinates arquero (120, 500 - SPRITE_SIZE/2);
 Coordinates defensa1 (400 - SPRITE_SIZE/2, 500 - SPRITE_SIZE/2);
 Coordinates defensa2 (400 - SPRITE_SIZE/2, 250 - SPRITE_SIZE/2);
 Coordinates defensa3 (400 - SPRITE_SIZE/2, 750 - SPRITE_SIZE/2);

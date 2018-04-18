@@ -13,6 +13,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->wasKicking = false;
     this->canMove = true;
     this->isSelected = false;
+    this->isReturning = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -88,13 +89,20 @@ void Player::updatePosition() {
         this->position->addY(this->velocity->getComponentY());
         log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
     }
+
+    // Si selecciona un jugador que estaba regresando lo detengo
+    if (this->isSelected && this->isReturning) {
+        this->isReturning = false;
+        this->stop(this->orientation);
+    }
+
     // Detener si el jugador no seleccionado regresando llego a su posicion inicial
     int abs_delta_x = 0;
     int abs_delta_y = 0;
     if (!this->isSelected) {
         abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
         abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-        if ((abs_delta_x < 30) && (abs_delta_y < 30)) {
+        if ((abs_delta_x == 0) && (abs_delta_y == 0)) {
             this->stop(this->orientation);
         } else {
             this->returnToBasePosition();
@@ -112,37 +120,32 @@ void Player::setBasePosition(Coordinates pos) {
 
 void Player::returnToBasePosition() {
     log("Jugador: Volviendo a su posicion base ", LOG_DEBUG);
+    this->isReturning = true;
 
     // Calcular en que direccion debe regresar
     int newX = this->position->getX() - this->basePosition->getX();
     int newY = this->position->getY() - this->basePosition->getY();
 
-    std::cout << "newX: " << newX << " newY: " << newY << std::endl;
-
     //TODO: Normalizar el vector al factor maxVelocity para que corra por el camino mas corto
     int setX = newX;
     int setY = newY;
-    if (newX == 0) {
+    if (newX == 0)
         setX = 0;
-    }
-    if (newX < 0) {
+    
+    if (newX < 0)
         setX = this->maxVelocity;
-    }
-    if (newX > 0) {
+    
+    if (newX > 0) 
         setX = this->maxVelocity * -1;
-    }
-
-    if (newY == 0) {
+    
+    if (newY == 0) 
         setY = 0;
-    }
-    if (newY < 0) {
+    
+    if (newY < 0) 
         setY = this->maxVelocity;
-    }
-    if (newY > 0) {
+    
+    if (newY > 0) 
         setY = this->maxVelocity * -1;
-    }
-
-    std::cout << "setX: " << setX << " setY: " << setY << std::endl;
 
     this->velocity->setComponentX(setX);
     this->velocity->setComponentY(setY);

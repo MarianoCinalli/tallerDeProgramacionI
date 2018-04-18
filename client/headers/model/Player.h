@@ -12,6 +12,7 @@ class Player {
         int orientation;
         int maxVelocity;
         bool isSelected;
+        bool isReturning;
         Velocity* velocity;
         Coordinates* position;
         Coordinates* basePosition;

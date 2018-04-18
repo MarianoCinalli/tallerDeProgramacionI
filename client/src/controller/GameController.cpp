@@ -19,9 +19,8 @@ void GameController::execute(Action* action) {
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
-    //this->activePlayer = this->pitch->activePlayer;
-    //activePlayer->updatePosition();
-    // TODO: Validar posiciones de los jugadores.
+    this->activePlayer = this->pitch->activePlayer;
+    // Actualizar la posicion de todos los jugadores
     std::list<Player*> players = this->pitch->getLocalTeam()->getPlayers();
     if (!players.empty()){
         for (Player* p : players) {

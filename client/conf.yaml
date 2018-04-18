@@ -9,4 +9,4 @@ assets:
   sprites: 'images/sprites.png'
 performance:
   framerate: 1
-  margenes: 100 #250
+  margenes: 80 #250
