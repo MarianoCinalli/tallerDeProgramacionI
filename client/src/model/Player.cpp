@@ -31,7 +31,12 @@ Velocity* Player::getVelocity() {
 }
 
 int Player::getCurrentSpeed() {
-    return NORMAL_VELOCITY;
+    if (this->runningFast){
+      return NORMAL_VELOCITY*2;
+    }
+    else {
+      return NORMAL_VELOCITY;
+    }
 }
 
 void Player::setOrientation(int orientation) {
@@ -144,20 +149,20 @@ void Player::returnToBasePosition() {
     int setY = newY;
     if (newX == 0)
         setX = 0;
-    
+
     if (newX < 0)
         setX = this->maxVelocity;
-    
-    if (newX > 0) 
+
+    if (newX > 0)
         setX = this->maxVelocity * -1;
-    
-    if (newY == 0) 
+
+    if (newY == 0)
         setY = 0;
-    
-    if (newY < 0) 
+
+    if (newY < 0)
         setY = this->maxVelocity;
-    
-    if (newY > 0) 
+
+    if (newY > 0)
         setY = this->maxVelocity * -1;
 
     this->velocity->setComponentX(setX);
@@ -171,9 +176,9 @@ Player::~Player() {
 }
 
 void Player::startsRunningFast() {
-    if (!this->sliding && 
-        !this->kicking && 
-        !this->velocity->isZero() && 
+    if (!this->sliding &&
+        !this->kicking &&
+        !this->velocity->isZero() &&
         !this->isRunningFast() &&
         !this->isRunningDiagonaly()) {
             this->velocity->accelerate(this->orientation, this->maxVelocity);
