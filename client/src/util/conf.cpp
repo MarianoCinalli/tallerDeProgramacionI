@@ -193,7 +193,12 @@ int Conf::loadConf(string file) {
         log("Conf: archivo invalido, cargando default: ", file, LOG_ERROR);
         config = YAML::LoadFile(defaultFile);
         //return ARCHIVO_INVALIDO;
+    } catch (YAML::ParserException e) {
+        log("Conf: archivo invalido, cargando default: ", file, LOG_ERROR);
+        config = YAML::LoadFile(defaultFile);
+        //return ARCHIVO_INVALIDO;
     }
+
     defaultConfig = YAML::LoadFile(defaultFile);
     debugLevel = cargarParametro("Debug level", &chooseDebugLevel);
     log("Conf: cargado debug Level con valor: ", getMessageLevelString(debugLevel), LOG_INFO);
