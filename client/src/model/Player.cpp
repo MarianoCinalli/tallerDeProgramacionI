@@ -5,7 +5,6 @@ Player::Player(int orientation, Coordinates* position) {
     this->orientation = orientation;
     this->position = position;
     this->basePosition = new Coordinates(800, 500);
-    this->maxVelocity = 15; // TODO: Probar si va muy rapido.
     this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
@@ -29,6 +28,10 @@ int Player::getOrientation() {
 
 Velocity* Player::getVelocity() {
     return this->velocity;
+}
+
+int Player::getCurrentSpeed() {
+    return NORMAL_VELOCITY;
 }
 
 void Player::setOrientation(int orientation) {

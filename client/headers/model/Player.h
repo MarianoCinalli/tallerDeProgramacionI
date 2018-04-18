@@ -29,6 +29,7 @@ class Player {
         // Getters
         Coordinates* getPosition();
         Velocity* getVelocity();
+        int getCurrentSpeed();
         int getOrientation();
         bool wasSlidingYet();
         bool wasKickingYet();
