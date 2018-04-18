@@ -6,6 +6,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->position = position;
     this->basePosition = new Coordinates(800, 500);
     this->maxVelocity = 15; // TODO: Probar si va muy rapido.
+    this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
     this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
@@ -14,6 +15,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->canMove = true;
     this->isSelected = false;
     this->isReturning = false;
+    this->runningFast = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -61,9 +63,9 @@ void Player::accelerate(int direction) {
 }
 
 void Player::decelerate(int direction) {
-    if (!this->velocity->isZero()) {
+    if (this->isRunningFast()) {
         this->velocity->decelerate(direction, this->maxVelocity);
-        if (this->velocity->getComponentY() != 0) {
+        /*if (this->velocity->getComponentY() != 0) {
             if (this->velocity->getComponentY() > 0) {
                 this->orientation = PLAYER_ORIENTATION_DOWN;
             } else {
@@ -71,9 +73,17 @@ void Player::decelerate(int direction) {
             }
         } else {
             this->orientation = orientation;
-        }
+        }*/
         log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
     }
+}
+
+void Player::stopRunningInDirection(int direction) {
+    if(this->isRunningFast()) {
+        this->stopsRunningFast();
+    }
+    this->velocity->stopRunningIn(direction);
+    log("Jugador: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
 }
 
 void Player::stop(int direction) {
@@ -155,6 +165,32 @@ Player::~Player() {
     delete(this->position);
     delete(this->basePosition);
     delete(this->velocity);
+}
+
+void Player::startsRunningFast() {
+    if (!this->sliding && 
+        !this->kicking && 
+        !this->velocity->isZero() && 
+        !this->isRunningFast() &&
+        !this->isRunningDiagonaly()) {
+            this->velocity->accelerate(this->orientation, this->maxVelocity);
+            this->runningFast = true;
+            log("Jugador: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
+    }
+}
+//TODO ver que hay que apretar la tecla cuando estas corriendo, sino no tiene efecto
+//TODO anda mal en diagonal
+
+void Player::stopsRunningFast() {
+    if (this->runningFast) {
+        this->velocity->decelerate(this->orientation, this->maxVelocity);
+        this->runningFast = false;
+        //log("Jugador: El jugador deja de correr rapido", LOG_DEBUG);
+    }
+}
+
+bool Player::isRunningFast() {
+    return this->runningFast;
 }
 
 //SLIDE AND KICK FUNCTIONS

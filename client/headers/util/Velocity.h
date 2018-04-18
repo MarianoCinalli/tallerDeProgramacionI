@@ -18,7 +18,9 @@ class Velocity : public Loggable {
         void setComponentX(int x);
         void setComponentY(int y);
         bool isZero();
+        
         void stop();
+        void stopRunningIn(int direction);
         std::string toString();
         ~Velocity();
 
