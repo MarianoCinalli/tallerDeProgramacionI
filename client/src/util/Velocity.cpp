@@ -26,7 +26,8 @@ void Velocity::accelerate(int direction, int amount) {
 }
 
 void Velocity::decelerate(int direction, int amount) {
-    this->changeOnDirection(direction, (-1) * amount);
+    if (!this->isZero())
+        this->changeOnDirection(direction, (-1) * amount);
 }
 
 void Velocity::stop(){
@@ -34,10 +35,18 @@ void Velocity::stop(){
   this->y = 0;
 }
 
+void Velocity::stopRunningIn(int direction) {
+    if (direction == PLAYER_ORIENTATION_LEFT || direction == PLAYER_ORIENTATION_RIGHT) {
+        this->x = 0;
+    }
+    else {
+        this->y = 0;
+    }
+}
+
 bool Velocity::isZero() {
     return ((this->x == 0) && (this->y == 0));
 }
-
 
 // Como el origen esta arriba a la izquierda.
 // Para la derecha y abajo suma si acelera, resta si desacelera.

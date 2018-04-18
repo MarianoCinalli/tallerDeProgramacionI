@@ -21,6 +21,7 @@ class Player {
         bool kicking;
         bool wasKicking;
         bool canMove;
+        bool runningFast;
 
     public:
         Player(int orientation, Coordinates* position);
@@ -28,6 +29,7 @@ class Player {
         // Getters
         Coordinates* getPosition();
         Velocity* getVelocity();
+        int getCurrentSpeed();
         int getOrientation();
         bool wasSlidingYet();
         bool wasKickingYet();
@@ -35,12 +37,14 @@ class Player {
         bool isKicking();
         bool getIsSelected();
         bool isRunningDiagonaly();
+        bool isRunningFast();
 
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
         void decelerate(int direction);
         void stop(int direction);
+        void stopRunningInDirection(int direction);
         void toggleIsSelected();
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
@@ -49,6 +53,8 @@ class Player {
         void setBasePosition(Coordinates coord);
         void returnToBasePosition();
         // Acciones
+        void startsRunningFast();
+        void stopsRunningFast();
         void startsSliding();
         void stopSliding();
         void isAlreadySliding();   //TODO mejorar nombres de slide!

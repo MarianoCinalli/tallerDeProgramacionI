@@ -8,5 +8,5 @@ assets:
   cancha: 'images/cancha.png'
   sprites: 'images/spritesDefaults.png'
 performance:
-  framerate: 4
+  framerate: 1
   margenes: 100 #250

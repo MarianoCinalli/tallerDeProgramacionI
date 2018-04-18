@@ -46,4 +46,7 @@ const int CASACA_PRINCIPAL = 2;
 const int CASACA_ALTERNATIVA = 3;
 const int PLAYERS_PER_TEAM = 7;
 
+//Velocidad
+const int NORMAL_VELOCITY = 15;
+
 #endif // CONSTANTS_H_
