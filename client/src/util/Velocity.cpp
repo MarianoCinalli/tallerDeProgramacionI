@@ -14,9 +14,7 @@ int Velocity::getComponentY() {
 }
 
 void Velocity::accelerate(int direction, int amount) {
-    if (this->isZero() || this->isNormalVelocity(direction)) {
-        this->changeOnDirection(direction, amount);
-    }
+    this->changeOnDirection(direction, amount);
 }
 
 void Velocity::decelerate(int direction, int amount) {
@@ -27,6 +25,15 @@ void Velocity::decelerate(int direction, int amount) {
 void Velocity::stop(){
   this->x = 0;
   this->y = 0;
+}
+
+void Velocity::stopRunningIn(int direction) {
+    if (direction == PLAYER_ORIENTATION_LEFT || direction == PLAYER_ORIENTATION_RIGHT) {
+        this->x = 0;
+    }
+    else {
+        this->y = 0;
+    }
 }
 
 bool Velocity::isZero() {
@@ -50,19 +57,6 @@ void Velocity::changeOnDirection(int direction, int amount) {
         case PLAYER_ORIENTATION_DOWN:
             this->y += amount;
             break;
-    }
-}
-
-bool Velocity::isNormalVelocity(int direction) {
-    switch(direction) {
-        case PLAYER_ORIENTATION_LEFT:
-            return (this->x == -NORMAL_VELOCITY);
-        case PLAYER_ORIENTATION_UP:
-            return (this->y == -NORMAL_VELOCITY);
-        case PLAYER_ORIENTATION_RIGHT:
-            return (this->x == NORMAL_VELOCITY);
-        case PLAYER_ORIENTATION_DOWN:
-            return (this->y == NORMAL_VELOCITY);
     }
 }
 

@@ -41,6 +41,7 @@ class Player {
         void accelerate(int direction);
         void decelerate(int direction);
         void stop(int direction);
+        void stopRunningInDirection(int direction);
         void toggleIsSelected();
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
