@@ -31,7 +31,11 @@ Velocity* Player::getVelocity() {
 }
 
 int Player::getCurrentSpeed() {
-    return NORMAL_VELOCITY;
+    if (this->runningFast) {
+        return this->maxVelocity * 2;
+    } else {
+        return this->maxVelocity;
+    }
 }
 
 void Player::setOrientation(int orientation) {
@@ -233,7 +237,6 @@ bool Player::wasSlidingYet() {
 void Player::startsSliding() {
     if (!this->kicking)
         this->sliding = true;
-    //this->velocity->accelerate(this->orientation, this->maxVelocity);
 }
 
 void Player::isAlreadySliding() {
