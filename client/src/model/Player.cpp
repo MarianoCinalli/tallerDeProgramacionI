@@ -4,7 +4,7 @@ Player::Player(int orientation, Coordinates* position) {
     log("Jugador: Creando jugador...", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
-    this->maxVelocity = 15; // TODO: Probar si va muy rapido.
+    this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
     this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
@@ -12,6 +12,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->wasKicking = false;
     this->canMove = true;
     this->isSelected = false;
+    this->runningFast = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -59,6 +60,9 @@ void Player::accelerate(int direction) {
 }
 
 void Player::decelerate(int direction) {
+    if (this->isRunningFast()) {
+        this->stopsRunningFast();
+    }
     if (!this->velocity->isZero()) {
         this->velocity->decelerate(direction, this->maxVelocity);
         if (this->velocity->getComponentY() != 0) {
@@ -96,6 +100,28 @@ void Player::setPosition(Coordinates pos) {
 Player::~Player() {
     delete(this->position);
     delete(this->velocity);
+}
+
+void Player::startsRunningFast() { 
+    if (!this->sliding && !this->kicking && !this->velocity->isZero()) {
+        if (!this->isRunningDiagonaly()) {
+            this->velocity->accelerate(this->orientation, this->maxVelocity);
+            this->runningFast = true;
+        }
+    }
+}
+//TODO ver que hay que apretar la tecla cuando estas corriendo, sino no tiene efecto
+//TODO anda mal en diagonal
+
+void Player::stopsRunningFast() {
+    if(this->isRunningFast()) {
+        this->velocity->decelerate(this->orientation, this->maxVelocity); 
+        this->runningFast = false;
+    }
+}
+
+bool Player::isRunningFast() {
+    return this->runningFast;
 }
 
 //SLIDE AND KICK FUNCTIONS

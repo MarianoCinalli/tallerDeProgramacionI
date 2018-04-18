@@ -15,6 +15,9 @@ Action* ActionsManager::getAction(SDL_Event event) {
         // Actions for pressed keys.
         log("ActionsManager: Se registro una tecla presionada.", LOG_DEBUG);
         switch (event.key.keysym.sym) {
+            case SDLK_w:
+                action = new RunningFastAction();
+                break;
             case SDLK_a:
                 action = new SlidingAction();
                 break;
@@ -47,6 +50,9 @@ Action* ActionsManager::getAction(SDL_Event event) {
         // Actions for released keys.
         log("ActionsManager: Se registro una tecla soltada.", LOG_DEBUG);
         switch (event.key.keysym.sym) {
+            case SDLK_w:
+                action = new StopRunningFastAction();
+                break;
             case SDLK_UP:
                 action = new Decelerate(PLAYER_ORIENTATION_UP);
                 break;

@@ -16,6 +16,7 @@ class Velocity : public Loggable {
         int getComponentX();
         int getComponentY();
         bool isZero();
+        bool isNormalVelocity(int direction);
         void stop();
         std::string toString();
         ~Velocity();
