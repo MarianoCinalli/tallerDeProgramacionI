@@ -13,6 +13,14 @@ int Velocity::getComponentY() {
     return this->y;
 }
 
+void Velocity::setComponentX(int x) {
+    this->x = x;
+}
+
+void Velocity::setComponentY(int y) {
+    this->y = y;
+}
+
 void Velocity::accelerate(int direction, int amount) {
     this->changeOnDirection(direction, amount);
 }

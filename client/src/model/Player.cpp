@@ -47,11 +47,6 @@ bool Player::isRunningDiagonaly() {
 
 void Player::toggleIsSelected() {
     this->isSelected = !this->isSelected;
-
-    // Si ya no esta seleccionado debe volver al basePosition
-    if (!this->isSelected) {
-        this->returnToBasePosition();
-    }
 }
 
 bool Player::getIsSelected() {
@@ -107,13 +102,37 @@ void Player::returnToBasePosition() {
     log("Jugador: Volviendo a su posicion base ", LOG_DEBUG);
 
     // Calcular en que direccion debe regresar
-    this->basePosition->getX();
-    this->basePosition->getY();
+    int newX = this->position->getX() - this->basePosition->getX();
+    int newY = this->position->getY() - this->basePosition->getY();
 
-    this->position->getX();
-    this->position->getY();
+    std::cout << "newX: " << newX << " newY: " << newY << std::endl;
 
-    this->velocity->accelerate(0, this->maxVelocity);
+    int setX = newX;
+    int setY = newY;
+    if (newX == 0) {
+        setX = 0;
+    }
+    if (newX < 0) {
+        setX = this->maxVelocity;
+    }
+    if (newX > 0) {
+        setX = this->maxVelocity * -1;
+    }
+
+    if (newY == 0) {
+        setY = 0;
+    }
+    if (newY < 0) {
+        setY = this->maxVelocity;
+    }
+    if (newY > 0) {
+        setY = this->maxVelocity * -1;
+    }
+    
+    std::cout << "setX: " << setX << " setY: " << setY << std::endl;
+
+    this->velocity->setComponentX(newX);
+    this->velocity->setComponentY(newY);
 }
 
 Player::~Player() {

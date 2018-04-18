@@ -8,9 +8,11 @@ void ChangeActivePlayer::execute(Pitch* pitch) {
     Player* lastActivePlayer = pitch->activePlayer;
     pitch->changeActivePlayer();
     if(pitch->activePlayer!=lastActivePlayer){
-      lastActivePlayer->stop(pitch->activePlayer->getOrientation());
-      // lastActivePlayer->toggleIsSelected();
-      // pitch->activePlayer->toggleIsSelected();
+        // El lastActivePlayer debe regresar a base position
+        lastActivePlayer->returnToBasePosition();
+        lastActivePlayer->stop(pitch->activePlayer->getOrientation());
+        // lastActivePlayer->toggleIsSelected();
+        // pitch->activePlayer->toggleIsSelected();
     }
 }
 

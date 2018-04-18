@@ -15,6 +15,8 @@ class Velocity : public Loggable {
         void decelerate(int direction, int amount);
         int getComponentX();
         int getComponentY();
+        void setComponentX(int x);
+        void setComponentY(int y);
         bool isZero();
         void stop();
         std::string toString();
