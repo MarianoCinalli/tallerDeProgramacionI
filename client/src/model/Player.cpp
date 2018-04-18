@@ -102,7 +102,7 @@ void Player::updatePosition() {
     if (!this->isSelected) {
         abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
         abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-        if ((abs_delta_x == 0) && (abs_delta_y == 0)) {
+        if ((abs_delta_x < 15) && (abs_delta_y < 15)) {
             this->stop(this->orientation);
         } else {
             this->returnToBasePosition();
