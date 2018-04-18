@@ -35,6 +35,8 @@ const int SCREEN_HEIGHT = 600;
 
 // Necesario para la camara
 const int SPRITE_SIZE = 63;
+// Velocidad de desplazamiento scroll camara
+const int SCROLL_SPEED = 13;
 
 const int VALOR_INVALIDO = 5;
 const int ARCHIVO_INVALIDO = 6;

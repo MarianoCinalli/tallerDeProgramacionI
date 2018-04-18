@@ -23,28 +23,28 @@ void Camera::calculateNewPostion(Coordinates* playerPosition) {
     // Margen derecho
     if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
         log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
-        this->position->addX(13);
+        this->position->addX(SCROLL_SPEED);
         margin.x = this->position->getX() + margin_size;
     }
 
     // Margen izquierdo
     if (playerPosition->getX() < margin.x) {
         log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
-        this->position->subtractX(13);
+        this->position->subtractX(SCROLL_SPEED);
         margin.x = this->position->getX() + margin_size;
     }
 
     // Margen inferior
     if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
         log("Jugador activo debajo del margen inferior", LOG_DEBUG);
-        this->position->addY(13);
+        this->position->addY(SCROLL_SPEED);
         margin.y = this->position->getY() + margin_size;
     }
 
     // Margen superior
     if (playerPosition->getY() < margin.y) {
         log("Jugador activo sobre el margen superior", LOG_DEBUG);
-        this->position->subtractY(13);
+        this->position->subtractY(SCROLL_SPEED);
         margin.y = this->position->getY() + margin_size;
     }
 

@@ -14,6 +14,7 @@ class Player {
         bool isSelected;
         Velocity* velocity;
         Coordinates* position;
+        Coordinates* basePosition;
         bool sliding;
         bool wasSliding;
         bool kicking;
@@ -44,6 +45,8 @@ class Player {
         void updatePosition();
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
+        void setBasePosition(Coordinates coord);
+        void returnToBasePosition();
         // Acciones
         void startsSliding();
         void stopSliding();

@@ -40,6 +40,8 @@ void Team::order(){
     int i = 0;
     for (Player* p : players){
         p->setPosition(formaciones[this->formacion][i]);  
+        // Coloca la posicion base de regreso
+        p->setBasePosition(formaciones[this->formacion][i]);  
         i++;
     }
 }

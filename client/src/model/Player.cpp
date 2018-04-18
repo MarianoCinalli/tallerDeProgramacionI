@@ -4,6 +4,7 @@ Player::Player(int orientation, Coordinates* position) {
     log("Jugador: Creando jugador...", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
+    this->basePosition = new Coordinates(800, 500);
     this->maxVelocity = 15; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
@@ -46,6 +47,11 @@ bool Player::isRunningDiagonaly() {
 
 void Player::toggleIsSelected() {
     this->isSelected = !this->isSelected;
+
+    // Si ya no esta seleccionado debe volver al basePosition
+    if (!this->isSelected) {
+        this->returnToBasePosition();
+    }
 }
 
 bool Player::getIsSelected() {
@@ -93,8 +99,26 @@ void Player::setPosition(Coordinates pos) {
     this->position->setCoord(pos);
 }
 
+void Player::setBasePosition(Coordinates pos) {
+    this->basePosition->setCoord(pos);
+}
+
+void Player::returnToBasePosition() {
+    log("Jugador: Volviendo a su posicion base ", LOG_DEBUG);
+
+    // Calcular en que direccion debe regresar
+    this->basePosition->getX();
+    this->basePosition->getY();
+
+    this->position->getX();
+    this->position->getY();
+
+    this->velocity->accelerate(0, this->maxVelocity);
+}
+
 Player::~Player() {
     delete(this->position);
+    delete(this->basePosition);
     delete(this->velocity);
 }
 
