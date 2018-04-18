@@ -46,4 +46,4 @@ void Pitch::changeActivePlayer(){
     this->activePlayer->toggleIsSelected();
   }
     //delete(nearestPlayer);
-  }
+}

@@ -19,9 +19,15 @@ void GameController::execute(Action* action) {
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
-    this->activePlayer = this->pitch->activePlayer;
-    activePlayer->updatePosition();
+    //this->activePlayer = this->pitch->activePlayer;
+    //activePlayer->updatePosition();
     // TODO: Validar posiciones de los jugadores.
+    std::list<Player*> players = this->pitch->getLocalTeam()->getPlayers();
+    if (!players.empty()){
+        for (Player* p : players) {
+            p->updatePosition();
+        }
+    }
 }
 
 // Cuando el jugador pise el borde mueve la camara.
