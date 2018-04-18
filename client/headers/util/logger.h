@@ -2,6 +2,7 @@
 #define LOGGER_H
 
 #include <iostream>
+#include <algorithm>
 #include <string>
 #include "interfaces/Loggable.h"
 #include "util/Constants.h"
@@ -19,6 +20,7 @@ std::string getDate();
 std::string getTime();
 std::string getPID();
 std::string getMessageLevelString(int messageLevel);
+int getLogLevelFromString(std::string level);
 
 // Logea
 int log(std::string message, int messageLevel);

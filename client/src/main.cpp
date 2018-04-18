@@ -20,6 +20,7 @@ const std::string defaultConfFileName = "src/default.yaml";
 const std::string defaultSpritesFileName = "images/spritesDefaults.png";
 std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
+std::string CLI_LOG_LEVEL = "";
 // Global variables ---------------------------------------
 
 
@@ -31,6 +32,7 @@ void imprimir_ayuda() {
     cout << "-V, --version      Imprimir version y salir.\n";
     cout << "-h, --help     Imprimir esta ayuda.\n";
     cout << "-i, --input        Path del archivo de configuracion YAML.\n";
+    cout << "-l, --logLevel        El nivel de log para la aplicacion.\n";
     cout << "Ejemplo:\n";
     cout << "main -i ~/conf.yaml \n";
 }
@@ -41,18 +43,20 @@ void imprimir_version() {
 
 int chequearOpciones(int argc, char* argv[]) {
     int ch;
+    std::string tempConf = "";
     while (1) {
         static struct option long_options[] = {
             //Flags posibles
             {"version", no_argument, 0, 'v'},
             {"help", no_argument, 0, 'h'},
             {"input", required_argument, 0, 'i'},
+            {"logLevel", required_argument, 0, 'l'},
             {0, 0, 0, 0}
         };
 
         int option_index = 0;
 
-        ch = getopt_long(argc, argv, "vhi:",
+        ch = getopt_long(argc, argv, "vhi:l:",
                          long_options, &option_index);
 
         /* Detecta fin de opciones. */
@@ -83,8 +87,11 @@ int chequearOpciones(int argc, char* argv[]) {
                 break;
 
             case 'i':
-                confFileName = optarg;
-                return 0;
+                tempConf = optarg;
+                break;
+
+            case 'l':
+                CLI_LOG_LEVEL = optarg;
                 break;
 
             default:
@@ -92,14 +99,18 @@ int chequearOpciones(int argc, char* argv[]) {
                 return 1;
         }
     }
-    confFileName = "conf.yaml";
+    if (tempConf != "") {
+        confFileName = tempConf;
+    } else {
+        confFileName = "conf.yaml"; 
+    }
     return 0;
 }
 
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
-        printf("Salida del programa por flags o argumento invalido");
+        printf("Salida del programa por flags o argumento invalido\n");
         return SALIDA_LINEA_COMANDOS;
     }
     // Inicializacion -------------------------------------
@@ -110,8 +121,17 @@ int main(int argc, char* argv[]) {
     Conf* configuration = new Conf(defaultConfFileName, defaultSpritesFileName);
     configuration->loadConf(confFileName);
     log("Main: Configuracion cargada: ", configuration, LOG_INFO);
+    int cliLogLevelInt = LOG_WRONGLEVEL;
     LOG_MIN_LEVEL = configuration->getDebugLevel();
-    log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_INFO);
+    if (CLI_LOG_LEVEL != "") {
+        cliLogLevelInt = getLogLevelFromString(CLI_LOG_LEVEL);
+        if (cliLogLevelInt == LOG_WRONGLEVEL) {
+            log("Main: Nivel de logeo especificado erroneo " + CLI_LOG_LEVEL + " usando default valor de config.", LOG_ERROR);
+        } else {
+            LOG_MIN_LEVEL = cliLogLevelInt;
+        }
+    }
+    log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
     GameInitializer* initializer = new GameInitializer(configuration);
     GameController* gameController = initializer->getGameController();
     ActionsManager* actionsManager = initializer->getActionsManager();

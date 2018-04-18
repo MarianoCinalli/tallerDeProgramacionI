@@ -43,6 +43,19 @@ std::string getMessageLevelString(int messageLevel) {
     }
 }
 
+int getLogLevelFromString(std::string level) {
+    std::transform(level.begin(), level.end(), level.begin(), ::tolower);
+    if (level == "error") {
+        return LOG_ERROR;
+    } else if (level == "info") {
+        return LOG_INFO;
+    } else if (level == "debug") {
+        return LOG_DEBUG;
+    } else {
+        return LOG_WRONGLEVEL;
+    }
+}
+
 // PRE: Global variables LOG_MIN_LEVEL and LOG_FILE_POINTER have to be initialized.
 // Returns 0 if the message was logged, 1 otherwise.
 int log(std::string message, int messageLevel) {

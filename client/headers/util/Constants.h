@@ -1,10 +1,12 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+// No tocar que revienta una validacion
 enum logLevels {
     LOG_DEBUG = 1,
     LOG_INFO = 2,
-    LOG_ERROR = 3
+    LOG_ERROR = 3,
+    LOG_WRONGLEVEL = 4
 };
 
 // Para indicar a donde se mueve/mira el jugador.
