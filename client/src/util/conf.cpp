@@ -41,6 +41,8 @@ int chooseDebugLevel(YAML::Node nod) {
             return VALOR_INVALIDO;
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+      return VALOR_INVALIDO;
     }
 }
 
@@ -57,6 +59,8 @@ int chooseCasaca(YAML::Node nod) {
             return VALOR_INVALIDO;
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+      return VALOR_INVALIDO;
     }
 }
 
@@ -79,6 +83,8 @@ int chooseFormacion(YAML::Node nod) {
             return VALOR_INVALIDO;
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+      return VALOR_INVALIDO;
     }
 }
 
@@ -90,6 +96,8 @@ string chooseNombre(YAML::Node nod) {
         return str;
     } catch (YAML::BadSubscript e) {
         return "";
+    } catch (YAML::TypedBadConversion<string> e) {
+      return "";
     }
 }
 
@@ -106,6 +114,8 @@ string chooseSpritesPath(YAML::Node nod) {
         return str;
     } catch (YAML::BadSubscript e) {
         return "";
+    } catch (YAML::TypedBadConversion<string> e) {
+      return "";
     }
 }
 
@@ -120,6 +130,8 @@ float chooseFramerate(YAML::Node nod) {
             return VALOR_INVALIDO;
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<float> e) {
+      return VALOR_INVALIDO;
     }
 }
 
@@ -134,6 +146,8 @@ int chooseMargenes(YAML::Node nod) {
             return VALOR_INVALIDO;
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+      return VALOR_INVALIDO;
     }
 }
 
