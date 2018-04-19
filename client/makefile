@@ -11,6 +11,7 @@
 # Deleted old files. Create directories. Compile and link.
  all: clean directories main
 
+ fast: main run
 # Compile and link.
  main: $(OBJECTS)
 	$(COMPILER) $(LINKING_FLAGS) $@ $^ $(LIBRARIES)
@@ -19,6 +20,9 @@
  directories:
 	mkdir ./obj
 	find src -type d | sed -e 's/src/obj/g' | xargs mkdir -p
+
+ run:
+	./main
 
 # Pattern
  obj/%.o: src/%.cpp

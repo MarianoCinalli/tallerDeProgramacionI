@@ -151,12 +151,16 @@ int chooseMargenes(YAML::Node nod) {
     }
 }
 
+string parametroInvalido(string par){
+  return "Conf: parametro: " + par + " invalido, usando valor por default";
+}
 
 int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)) {
     int valor = fn(config);
 
     if (valor == VALOR_INVALIDO) {
-        log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
+        // log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
+        log(parametroInvalido(parametro), LOG_ERROR);
         valor = fn(defaultConfig);
     }
     return valor;
@@ -166,17 +170,18 @@ float Conf::cargarParametro(string parametro, float (*fn)(YAML::Node)) {
     float valor = fn(config);
 
     if (valor == VALOR_INVALIDO) {
-        log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
+        log(parametroInvalido(parametro), LOG_ERROR);
         valor = fn(defaultConfig);
     }
     return valor;
 }
 
+
 string Conf::cargarParametro(string parametro, string defaultPath, string(*fn)(YAML::Node)) {
     string valor = fn(config);
 
     if (valor.length() == 0) {
-        log("Conf: Valor invalido, usando valor por default: ", parametro, LOG_ERROR);
+        log(parametroInvalido(parametro), LOG_ERROR);
         valor = fn(defaultConfig);
     }
     if (valor =="invalid file"){

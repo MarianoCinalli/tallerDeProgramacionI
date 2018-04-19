@@ -32,10 +32,10 @@ Velocity* Player::getVelocity() {
 
 int Player::getCurrentSpeed() {
     if (this->runningFast){
-      return NORMAL_VELOCITY*2;
+      return this->maxVelocity*2;
     }
     else {
-      return NORMAL_VELOCITY;
+      return this->maxVelocity;
     }
 }
 

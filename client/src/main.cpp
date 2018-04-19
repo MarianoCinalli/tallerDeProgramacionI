@@ -32,9 +32,10 @@ void imprimir_ayuda() {
     cout << "-V, --version      Imprimir version y salir.\n";
     cout << "-h, --help     Imprimir esta ayuda.\n";
     cout << "-i, --input        Path del archivo de configuracion YAML.\n";
-    cout << "-l, --logLevel        El nivel de log para la aplicacion.\n";
+    cout << "-l, --logLevel        El nivel de log para la aplicacion. info;debug;error\n";
     cout << "Ejemplo:\n";
-    cout << "main -i ~/conf.yaml \n";
+    cout << "main -i ~/conf.yaml -l info\n";
+    cout << "\nREFERENCIA\nCon las flechas: se corre, \nCon W sprint, \nCon A barrida, \nCon S: patear, \nCon BARRA: cambiar de jugador";
 }
 
 void imprimir_version() {
@@ -102,7 +103,7 @@ int chequearOpciones(int argc, char* argv[]) {
     if (tempConf != "") {
         confFileName = tempConf;
     } else {
-        confFileName = "conf.yaml"; 
+        confFileName = "conf.yaml";
     }
     return 0;
 }
@@ -141,7 +142,7 @@ int main(int argc, char* argv[]) {
     bool quit = false;
     SDL_Event e;
     int frameRate = configuration->getFramerate();
-    float sleepTime = (float)20000/(float)frameRate;
+    float sleepTime = (float)200000/(float)frameRate;
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
     log("Main: Juego inicializado correctamente.", LOG_INFO);
@@ -165,7 +166,7 @@ int main(int argc, char* argv[]) {
         gameController->updatePlayers();
         gameController->updateCameraPosition(camera);
         pitchView->render(renderer);
-        usleep(7 * sleepTime); // Frame rate.
+        usleep(sleepTime); // Frame rate.
     }
     log("Main: Main loop finalizado.", LOG_INFO);
     // Liberacion de memoria -------------------------------
