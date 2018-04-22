@@ -9,7 +9,7 @@
 
 # Target
 # Deleted old files. Create directories. Compile and link.
- all: clean directories main
+ all: directories main
 
  fast: main run
 # Compile and link.
@@ -18,7 +18,7 @@
 
 # Create directories for compiled files.
  directories:
-	mkdir ./obj
+	mkdir -p ./obj
 	find src -type d | sed -e 's/src/obj/g' | xargs mkdir -p
 
  run:
@@ -37,9 +37,6 @@
 # Install dependencies:
  dependencies:
 	apt-get update
-	apt-get install libsdl2-dev
-	apt-get install libsdl2-image-dev
-	apt-get install libyaml-cpp-dev
-	apt-get install libboost-all-dev
+	apt-get install libsdl2-dev libsdl2-image-dev libyaml-cpp-dev libboost-all-dev
 
 .PHONY: all clean main
