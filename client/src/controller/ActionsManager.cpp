@@ -54,16 +54,16 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 action = new StopRunningFastAction();
                 break;
             case SDLK_UP:
-                action = new StopRunningAction(PLAYER_ORIENTATION_UP);
+                action = new Accelerate(PLAYER_ORIENTATION_DOWN);
                 break;
             case SDLK_DOWN:
-                action = new StopRunningAction(PLAYER_ORIENTATION_DOWN);
+                action = new Accelerate(PLAYER_ORIENTATION_UP);
                 break;
             case SDLK_LEFT:
-                action = new StopRunningAction(PLAYER_ORIENTATION_LEFT);
+                action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
             case SDLK_RIGHT:
-                action = new StopRunningAction(PLAYER_ORIENTATION_RIGHT);
+                action = new Accelerate(PLAYER_ORIENTATION_LEFT);
                 break;
         }
     }
