@@ -90,7 +90,7 @@ void Player::stopRunningInDirection(int direction) {
     if(this->isRunningFast()) {
         this->stopsRunningFast();
     }
-    this->velocity->stopRunningIn(direction);
+    this->velocity->stopDirection(direction);
     log("Jugador: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
 }
 
@@ -147,23 +147,29 @@ void Player::returnToBasePosition() {
     //TODO: Normalizar el vector al factor maxVelocity para que corra por el camino mas corto
     int setX = newX;
     int setY = newY;
-    if (newX == 0)
+    if (newX == 0) {
         setX = 0;
+    }
 
-    if (newX < 0)
+    if (newX < 0) {
         setX = this->maxVelocity;
+    }
 
-    if (newX > 0)
+    if (newX > 0) {
         setX = this->maxVelocity * -1;
+    }
 
-    if (newY == 0)
+    if (newY == 0) {
         setY = 0;
+    }
 
-    if (newY < 0)
+    if (newY < 0) {
         setY = this->maxVelocity;
+    }
 
-    if (newY > 0)
+    if (newY > 0) {
         setY = this->maxVelocity * -1;
+    }
 
     this->velocity->setComponentX(setX);
     this->velocity->setComponentY(setY);
@@ -236,8 +242,9 @@ bool Player::wasSlidingYet() {
 }
 
 void Player::startsSliding() {
-    if (!this->kicking)
+    if (!this->kicking) {
         this->sliding = true;
+    }
     //this->velocity->accelerate(this->orientation, this->maxVelocity);
 }
 

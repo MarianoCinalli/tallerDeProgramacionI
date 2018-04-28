@@ -20,7 +20,7 @@ class Velocity : public Loggable {
         bool isZero();
         
         void stop();
-        void stopRunningIn(int direction);
+        void stopDirection(int direction);
         std::string toString();
         ~Velocity();
 
