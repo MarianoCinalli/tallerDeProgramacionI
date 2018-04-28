@@ -1,5 +1,3 @@
-#include <iostream>
-#include <unistd.h>
 #include "util/conf.h"
 
 using namespace std;
@@ -11,10 +9,9 @@ string Conf::toString() {
     str << "Nombre: " << nombre << "\n";
     str << "Formacion: " << formacion << "\n";
     string casacaStr;
-    if (casaca == CASACA_PRINCIPAL){
-      casacaStr = "Principal";
-    }
-    else {
+    if (casaca == CASACA_PRINCIPAL) {
+        casacaStr = "Principal";
+    } else {
         casacaStr = "Alternativa";
     }
     str << "Casaca: " << casacaStr << "\n";
@@ -28,83 +25,87 @@ string Conf::toString() {
 
 int chooseDebugLevel(YAML::Node nod) {
     try {
-        if (!nod["debug"]["level"])
+        if (!nod["debug"]["level"]) {
             return VALOR_INVALIDO;
+        }
         string str = nod["debug"]["level"].as<string>();
-        if (!str.compare("debug"))
+        if (!str.compare("debug")) {
             return LOG_DEBUG;
-        else if (!str.compare("info"))
+        } else if (!str.compare("info")) {
             return LOG_INFO;
-        else if (!str.compare("error"))
+        } else if (!str.compare("error")) {
             return LOG_ERROR;
-        else
+        } else {
             return VALOR_INVALIDO;
+        }
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<int> e) {
-      return VALOR_INVALIDO;
+        return VALOR_INVALIDO;
     }
 }
 
 int chooseCasaca(YAML::Node nod) {
     try {
-        if (!nod["equipo"]["casaca"])
+        if (!nod["equipo"]["casaca"]) {
             return VALOR_INVALIDO;
+        }
         string str = nod["equipo"]["casaca"].as<string>();
-        if (!str.compare("principal"))
+        if (!str.compare("principal")) {
             return CASACA_PRINCIPAL;
-        else if (!str.compare("alternativa"))
+        } else if (!str.compare("alternativa")) {
             return CASACA_ALTERNATIVA;
-        else
+        } else {
             return VALOR_INVALIDO;
+        }
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<int> e) {
-      return VALOR_INVALIDO;
+        return VALOR_INVALIDO;
     }
 }
 
 int chooseFormacion(YAML::Node nod) {
     try {
-        if (!nod["equipo"]["formacion"])
+        if (!nod["equipo"]["formacion"]) {
             return VALOR_INVALIDO;
+        }
         string str = nod["equipo"]["formacion"].as<string>();
-        if (!str.compare("3-3"))
+        if (!str.compare("3-3")) {
             return 33;
-        else if (!str.compare("3-1-2"))
+        } else if (!str.compare("3-1-2")) {
             return 312;
-        else if (!str.compare("3-2-1"))
+        } else if (!str.compare("3-2-1")) {
             return 321;
-        // else if (!str.compare("2-3-1"))
-        // 	return 231;
-        // else if (!str.compare("2-2-2"))
-        // 	return 222;
-        else
+        } else {
             return VALOR_INVALIDO;
+        }
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<int> e) {
-      return VALOR_INVALIDO;
+        return VALOR_INVALIDO;
     }
 }
 
 string chooseNombre(YAML::Node nod) {
     try {
-        if (!nod["equipo"]["nombre"])
+        if (!nod["equipo"]["nombre"]) {
             return "";
+        }
         string str = nod["equipo"]["nombre"].as<string>();
         return str;
     } catch (YAML::BadSubscript e) {
         return "";
     } catch (YAML::TypedBadConversion<string> e) {
-      return "";
+        return "";
     }
 }
 
 string chooseSpritesPath(YAML::Node nod) {
     try {
-        if (!nod["assets"]["sprites"])
+        if (!nod["assets"]["sprites"]) {
             return "";
+        }
         string str = nod["assets"]["sprites"].as<string>();
         //chequea que el archivo exista
         int res = access(str.c_str(), R_OK);
@@ -115,44 +116,48 @@ string chooseSpritesPath(YAML::Node nod) {
     } catch (YAML::BadSubscript e) {
         return "";
     } catch (YAML::TypedBadConversion<string> e) {
-      return "";
+        return "";
     }
 }
 
 float chooseFramerate(YAML::Node nod) {
     try {
-        if (!nod["performance"]["framerate"])
+        if (!nod["performance"]["framerate"]) {
             return VALOR_INVALIDO;
+        }
         float str = nod["performance"]["framerate"].as<float>();
-        if (str > 0 && str < 300) //harcode
+        if (str > 0 && str < 300) { //harcode
             return str;
-        else
+        } else {
             return VALOR_INVALIDO;
+        }
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<float> e) {
-      return VALOR_INVALIDO;
+        return VALOR_INVALIDO;
     }
 }
 
 int chooseMargenes(YAML::Node nod) {
     try {
-        if (!nod["performance"]["margenes"])
+        if (!nod["performance"]["margenes"]) {
             return VALOR_INVALIDO;
+        }
         int str = nod["performance"]["margenes"].as<int>();
-        if (str > 0 && str < 300)
+        if (str > 0 && str < 300) {
             return str;
-        else
+        } else {
             return VALOR_INVALIDO;
+        }
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<int> e) {
-      return VALOR_INVALIDO;
+        return VALOR_INVALIDO;
     }
 }
 
-string parametroInvalido(string par){
-  return "Conf: parametro: " + par + " invalido, usando valor por default";
+string parametroInvalido(string par) {
+    return "Conf: parametro: " + par + " invalido, usando valor por default";
 }
 
 int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)) {
@@ -184,8 +189,9 @@ string Conf::cargarParametro(string parametro, string defaultPath, string(*fn)(Y
         log(parametroInvalido(parametro), LOG_ERROR);
         valor = fn(defaultConfig);
     }
-    if (valor =="invalid file"){
-      return defaultPath;
+    if (valor == "invalid file") {
+        log(parametroInvalido(parametro), LOG_ERROR);
+        return defaultPath;
     }
     return valor;
 }
@@ -193,32 +199,32 @@ string Conf::cargarParametro(string parametro, string defaultPath, string(*fn)(Y
 int Conf::loadConf(string file) {
     try {
         config = YAML::LoadFile(file);
-        log("Conf: archivo cargado correctamente: ", file, LOG_INFO);
+        log("Conf: Archivo cargado correctamente: ", file, LOG_INFO);
     } catch (YAML::BadFile e) {
-        log("Conf: archivo invalido, cargando default: ", file, LOG_ERROR);
+        log("Conf: Archivo invalido, cargando default: ", file, LOG_ERROR);
         config = YAML::LoadFile(defaultFile);
         //return ARCHIVO_INVALIDO;
     } catch (YAML::ParserException e) {
-        log("Conf: archivo invalido, cargando default: ", file, LOG_ERROR);
+        log("Conf: Archivo invalido, cargando default: ", file, LOG_ERROR);
         config = YAML::LoadFile(defaultFile);
         //return ARCHIVO_INVALIDO;
     }
 
     defaultConfig = YAML::LoadFile(defaultFile);
     debugLevel = cargarParametro("Debug level", &chooseDebugLevel);
-    log("Conf: cargado debug Level con valor: ", getMessageLevelString(debugLevel), LOG_INFO);
+    log("Conf: Cargado debug Level con valor: ", getMessageLevelString(debugLevel), LOG_INFO);
     casaca = cargarParametro("Casaca", &chooseCasaca);
-    log("Conf: cargado casaca con valor: ", casaca, LOG_INFO);
+    log("Conf: Cargado casaca con valor: ", casaca, LOG_INFO);
     formacion = cargarParametro("formacion", &chooseFormacion);
-    log("Conf: cargado formacion con valor: ", formacion, LOG_INFO);
+    log("Conf: Cargado formacion con valor: ", formacion, LOG_INFO);
     nombre = cargarParametro("nombre", "zidane", &chooseNombre);
-    log("Conf: cargado nombre con valor:", nombre, LOG_INFO);
+    log("Conf: Cargado nombre con valor:", nombre, LOG_INFO);
     spritesPath = cargarParametro("spritesPath", this->defaultSprites, &chooseSpritesPath);
-    log("Conf: cargado shirtsPath con valor:", spritesPath, LOG_INFO);
+    log("Conf: Cargado shirtsPath con valor:", spritesPath, LOG_INFO);
     margenes = cargarParametro("margenes", &chooseMargenes);
-    log("Conf: cargado margenes con valor: ", margenes, LOG_INFO);
+    log("Conf: Cargado margenes con valor: ", margenes, LOG_INFO);
     framerate = cargarParametro("framerate", &chooseFramerate);
-    log("Conf: cargado framerate con valor: ", framerate, LOG_INFO);
+    log("Conf: Cargado framerate con valor: ", framerate, LOG_INFO);
     return 0;
 }
 

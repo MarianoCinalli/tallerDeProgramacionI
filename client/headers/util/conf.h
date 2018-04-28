@@ -1,5 +1,6 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
+#include <unistd.h>
 #include "util/Constants.h"
 #include "util/logger.h"
 #ifndef CONF_H
