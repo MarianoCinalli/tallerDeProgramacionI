@@ -19,6 +19,13 @@ enum PlayerOrientations {
     PLAYER_ORIENTATION_INVALID = 5
 };
 
+enum KeyboardBools {
+  KUP = 0,
+  KDOWN = 1,
+  KLEFT = 2,
+  KRIGHT = 3
+};
+
 //para indicar accion a realizar
 enum PlayerStandedActions {
     STANDED_PLAYER = 0,

@@ -2,6 +2,7 @@
 #include "model/Player.h"
 #include "util/Constants.h"
 #include "controller/actions/Accelerate.h"
+#include "controller/actions/Stop.h"
 #include "controller/actions/Decelerate.h"
 #include "controller/actions/ChangeActivePlayer.h"
 #include "util/logger.h"
@@ -18,6 +19,7 @@ class ActionsManager {
     private:
     public:
         ActionsManager();
+        bool keys[4] = {false};
         Action* getAction(SDL_Event event);
         bool shouldQuit(SDL_Event event);
         ~ActionsManager();

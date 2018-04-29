@@ -40,10 +40,10 @@ void Pitch::changeActivePlayer(){
         nearestPlayer = p;
       }
     }
-    // delete(center);
+    this->activePlayer->copyStats(nearestPlayer);
     this->activePlayer->toggleIsSelected();
     this->activePlayer = nearestPlayer;
     this->activePlayer->toggleIsSelected();
+    log("Pitch: Se cambio el jugador activo.", LOG_INFO);
   }
-    //delete(nearestPlayer);
 }

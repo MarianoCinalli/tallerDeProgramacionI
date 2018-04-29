@@ -43,7 +43,7 @@ class Player {
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
         void decelerate(int direction);
-        void stop(int direction);
+        void stop();
         void stopRunningInDirection(int direction);
         void toggleIsSelected();
         void copyStats(Player* copyTo);

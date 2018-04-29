@@ -8,9 +8,23 @@ ActionsManager::~ActionsManager() {
     log("ActionsManager: Eliminando actionsManager.", LOG_INFO);
 }
 
+bool anyKeyPressed(bool* keys){
+  log("TECLAS", LOG_DEBUG);
+  // int i = 0;
+  // for (bool b : keys){
+  for(int i = 0; i < 4; i++){
+    if (keys[i]){
+      log("Tecla: ", i,LOG_DEBUG);
+      return true;
+    }
+  }
+  return false;
+}
+
 // Devuelve la accion correspondiente a un evento.
 Action* ActionsManager::getAction(SDL_Event event) {
     Action* action = NULL;
+    bool* keys = this->keys;
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         // Actions for pressed keys.
         log("ActionsManager: Se registro una tecla presionada.", LOG_DEBUG);
@@ -29,15 +43,19 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 break;
             case SDLK_UP:
                 action = new Accelerate(PLAYER_ORIENTATION_UP);
+                keys[KUP] = true;
                 break;
             case SDLK_DOWN:
                 action = new Accelerate(PLAYER_ORIENTATION_DOWN);
+                keys[KDOWN] = true;
                 break;
             case SDLK_LEFT:
                 action = new Accelerate(PLAYER_ORIENTATION_LEFT);
+                keys[KLEFT] = true;
                 break;
             case SDLK_RIGHT:
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
+                keys[KRIGHT] = true;
                 break;
             default:
                 log(
@@ -54,21 +72,31 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 action = new StopRunningFastAction();
                 break;
             case SDLK_UP:
+                keys[KUP] = false;
                 action = new Accelerate(PLAYER_ORIENTATION_DOWN);
                 break;
             case SDLK_DOWN:
+                keys[KDOWN] = false;
                 action = new Accelerate(PLAYER_ORIENTATION_UP);
                 break;
             case SDLK_LEFT:
+                keys[KLEFT] = false;
                 action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
                 break;
             case SDLK_RIGHT:
+                keys[KRIGHT] = false;
                 action = new Accelerate(PLAYER_ORIENTATION_LEFT);
                 break;
         }
+        if (!anyKeyPressed(keys)){
+          delete(action);
+          action = new Stop();
+        }
     }
+
     return action;
 }
+
 
 bool ActionsManager::shouldQuit(SDL_Event event) {
     bool quit = false;

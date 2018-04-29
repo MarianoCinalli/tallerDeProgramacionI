@@ -13,14 +13,13 @@ int Velocity::getComponentY() {
     return this->y;
 }
 
-void Velocity::set(Velocity* velocity) {
-    this->setComponentX(velocity->getComponentX());
-    this->setComponentY(velocity->getComponentY());
-}
-
-
 void Velocity::setComponentX(int x) {
     this->x = x;
+}
+
+void Velocity::set(Velocity* vel) {
+  this->x = vel -> x;
+  this->y = vel -> y;
 }
 
 void Velocity::setComponentY(int y) {
@@ -29,6 +28,10 @@ void Velocity::setComponentY(int y) {
 
 void Velocity::accelerate(int direction, int amount) {
     this->changeOnDirection(direction, amount);
+}
+
+void Velocity::accelerate(int direction) {
+    this->changeOnDirection(direction);
 }
 
 void Velocity::decelerate(int direction, int amount) {
@@ -54,29 +57,6 @@ bool Velocity::isZero() {
     return ((this->x == 0) && (this->y == 0));
 }
 
-// Devuelve una de las constantes de orientacion dependiendo de la
-// direccion del vector.
-int Velocity::getAsOrientation() {
-    if (this->isZero()) {
-        return PLAYER_ORIENTATION_INVALID;
-    }
-    // Si el vector tiene componente en x, es irrelevante la componente y.
-    // Porque las diagonales las tratamos como movimientos en x.
-    if (this->x != 0) {
-        if (this->x < 0) {
-            return PLAYER_ORIENTATION_RIGHT;
-        } else {
-            return PLAYER_ORIENTATION_LEFT;
-        }
-    } else {
-        if (this->y < 0) {
-            return PLAYER_ORIENTATION_DOWN;
-        } else {
-            return PLAYER_ORIENTATION_UP;
-        }
-    }
-}
-
 // Como el origen esta arriba a la izquierda.
 // Para la derecha y abajo suma si acelera, resta si desacelera.
 // Para la izquierda y arriba resta si acelera, suma si desacelera.
@@ -97,7 +77,57 @@ void Velocity::changeOnDirection(int direction, int amount) {
     }
 }
 
+void Velocity::changeOnDirection(int direction) {
+
+    int newx = 0;
+    int newy = 0;
+    switch(direction) {
+        case PLAYER_ORIENTATION_LEFT:
+            newx = -1;
+            break;
+        case PLAYER_ORIENTATION_UP:
+            newy = -1;
+            break;
+        case PLAYER_ORIENTATION_RIGHT:
+            newx = 1;
+            break;
+        case PLAYER_ORIENTATION_DOWN:
+            newy = 1;
+            break;
+    }
+    if (newx) {
+      if(this->x + newx){
+        this->x = newx;
+      } else{
+        this->x = 0;
+      }
+    } else {
+    if(this->y + newy){
+      this->y = newy ;
+    } else {
+      this->y = 0;
+    }
+  }
+}
+
 Velocity::~Velocity() {
+}
+
+int Velocity::getAsOrientation() {
+  if (this->x > 0) {
+    return PLAYER_ORIENTATION_RIGHT;
+  }
+  else if (this->x < 0) {
+    return PLAYER_ORIENTATION_LEFT;
+  }
+  else if (this->y > 0) {
+    return PLAYER_ORIENTATION_DOWN;
+  }
+  else if (this->y < 0) {
+    return PLAYER_ORIENTATION_UP;
+  }
+  else
+    return PLAYER_ORIENTATION_INVALID;
 }
 
 std::string Velocity::toString() {

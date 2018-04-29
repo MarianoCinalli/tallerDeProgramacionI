@@ -39,4 +39,4 @@
 	apt-get update
 	apt-get install libsdl2-dev libsdl2-image-dev libyaml-cpp-dev libboost-all-dev
 
-.PHONY: all clean main
+.PHONY: all clean main fast

@@ -55,6 +55,7 @@ bool Player::isRunningDiagonaly() {
 
 void Player::toggleIsSelected() {
     this->isSelected = !this->isSelected;
+    this->isReturning = true;
 }
 
 bool Player::getIsSelected() {
@@ -63,10 +64,10 @@ bool Player::getIsSelected() {
 
 void Player::accelerate(int direction) {
     // Todo: Renombrar velocity a trayectory.
-    this->velocity->accelerate(direction, this->maxVelocity);
+    this->velocity->accelerate(direction);
     // Para que quede mirando para donde venia corriendo.
     this->setOrientation(this->velocity->getAsOrientation());
-    log("Jugador: El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
+    log("Jugador: El jugador esta acelerando, direccion actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::decelerate(int direction) {
@@ -85,34 +86,42 @@ void Player::stopRunningInDirection(int direction) {
     log("Jugador: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
 }
 
-void Player::stop(int direction) {
+void Player::stop() {
     this->velocity->stop();
-    this->orientation = direction;
+    this->runningFast = false;
     log("Jugador: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 
 void Player::updatePosition() {
+    float speed = 1;
+    if (this->runningFast) {
+      speed = 1.8; //TODO hardcode
+    }
+    int maxSpeed = this->maxVelocity;
     if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX());
-        this->position->addY(this->velocity->getComponentY());
+        this->position->addX(this->velocity->getComponentX()*speed*maxSpeed);
+        this->position->addY(this->velocity->getComponentY()*speed*maxSpeed);
         log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
     }
 
     // Si selecciona un jugador que estaba regresando lo detengo
     if (this->isSelected && this->isReturning) {
         this->isReturning = false;
-        this->stop(this->orientation);
+        log("Player: jugador deja de volver por seleccion.", LOG_INFO);
     }
 
     // Detener si el jugador no seleccionado regresando llego a su posicion inicial
-    int abs_delta_x = 0;
-    int abs_delta_y = 0;
-    if (!this->isSelected) {
+    if (this->isReturning) {
+        int abs_delta_x = 0;
+        int abs_delta_y = 0;
         abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
         abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-        if ((abs_delta_x < 15) && (abs_delta_y < 15)) {
-            this->stop(this->orientation);
+        if ((abs_delta_x < 20) && (abs_delta_y < 20)) { //TODO hardcode valores
+            this->stop();
+            this->isReturning = false;
+            log("Player: jugador llega a la posicion.", LOG_INFO);
+
         } else {
             this->returnToBasePosition();
         }
@@ -143,11 +152,11 @@ void Player::returnToBasePosition() {
     }
 
     if (newX < 0) {
-        setX = this->maxVelocity;
+        setX = 1;
     }
 
     if (newX > 0) {
-        setX = this->maxVelocity * -1;
+        setX = -1;
     }
 
     if (newY == 0) {
@@ -155,11 +164,11 @@ void Player::returnToBasePosition() {
     }
 
     if (newY < 0) {
-        setY = this->maxVelocity;
+        setY = 1;
     }
 
     if (newY > 0) {
-        setY = this->maxVelocity * -1;
+        setY =-1;
     }
 
     this->velocity->setComponentX(setX);
@@ -176,9 +185,9 @@ void Player::startsRunningFast() {
     if (!this->sliding &&
         !this->kicking &&
         !this->velocity->isZero() &&
-        !this->isRunningFast() &&
-        !this->isRunningDiagonaly()) {
-            this->velocity->accelerate(this->orientation, this->maxVelocity);
+        !this->isRunningFast()) {
+        // !this->isRunningDiagonaly()) {
+            // this->velocity->accelerate(this->orientation, this->maxVelocity);
             this->runningFast = true;
             log("Jugador: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
     }
@@ -188,7 +197,7 @@ void Player::startsRunningFast() {
 
 void Player::stopsRunningFast() {
     if (this->runningFast) {
-        this->velocity->decelerate(this->orientation, this->maxVelocity);
+        // this->velocity->decelerate(this->orientation, this->maxVelocity);
         this->runningFast = false;
         //log("Jugador: El jugador deja de correr rapido", LOG_DEBUG);
     }

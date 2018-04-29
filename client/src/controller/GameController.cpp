@@ -27,6 +27,7 @@ void GameController::updatePlayers() {
             p->updatePosition();
         }
     }
+    log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);
 }
 
 // Cuando el jugador pise el borde mueve la camara.
