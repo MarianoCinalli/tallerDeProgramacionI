@@ -15,7 +15,8 @@ enum PlayerOrientations {
     PLAYER_ORIENTATION_UP = 1,
     PLAYER_ORIENTATION_RIGHT = 2,
     PLAYER_ORIENTATION_DOWN = 3,
-    PLAYER_ORIENTATION_LEFT = 4
+    PLAYER_ORIENTATION_LEFT = 4,
+    PLAYER_ORIENTATION_INVALID = 5
 };
 
 //para indicar accion a realizar

@@ -18,6 +18,7 @@ class Velocity : public Loggable {
         void setComponentX(int x);
         void setComponentY(int y);
         bool isZero();
+        int getAsOrientation();
         
         void stop();
         void stopDirection(int direction);

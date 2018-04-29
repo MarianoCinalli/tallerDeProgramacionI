@@ -39,14 +39,11 @@ int Player::getCurrentSpeed() {
     }
 }
 
+// Setea la orientacion del jugador (a donde mira).
 void Player::setOrientation(int orientation) {
-    if (this->isRunningDiagonaly()) {
-        if (this->velocity->getComponentX() > 0) {
-            this->orientation = PLAYER_ORIENTATION_RIGHT;
-        } else {
-            this->orientation = PLAYER_ORIENTATION_LEFT;
-        }
-    } else {
+    // Para el caso en que el vector trayectoria sea nulo
+    // deberia ser suficiente que mire en la ultima direccion
+    if (orientation != PLAYER_ORIENTATION_INVALID) {
         this->orientation = orientation;
     }
 }
@@ -65,23 +62,17 @@ bool Player::getIsSelected() {
 }
 
 void Player::accelerate(int direction) {
+    // Todo: Renombrar velocity a trayectory.
     this->velocity->accelerate(direction, this->maxVelocity);
-    this->setOrientation(direction); // Para que quede mirando para donde venia corriendo.
+    // Para que quede mirando para donde venia corriendo.
+    this->setOrientation(this->velocity->getAsOrientation());
     log("Jugador: El jugador esta acelerando, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
 void Player::decelerate(int direction) {
     if (this->isRunningFast()) {
         this->velocity->decelerate(direction, this->maxVelocity);
-        /*if (this->velocity->getComponentY() != 0) {
-            if (this->velocity->getComponentY() > 0) {
-                this->orientation = PLAYER_ORIENTATION_DOWN;
-            } else {
-                this->orientation = PLAYER_ORIENTATION_UP;
-            }
-        } else {
-            this->orientation = orientation;
-        }*/
+        this->setOrientation(this->velocity->getAsOrientation());
         log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
     }
 }
