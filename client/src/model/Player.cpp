@@ -224,6 +224,7 @@ bool Player::wasKickingYet() {
 void Player::isAlreadyKicking() {
     this->wasKicking = true;
 }
+
 bool Player::isSliding() {
     return this->sliding;
 }
@@ -246,4 +247,16 @@ void Player::isAlreadySliding() {
 void Player::stopSliding() {
     this->sliding = false;
     this->wasSliding = false;
+}
+
+void Player::copyStats(Player* copyTo) {
+    copyTo->setOrientation(this->getOrientation());
+    copyTo->setTrayectory(this->getVelocity());
+    if (this->isRunningFast()) {
+        copyTo->startsRunningFast();
+    }
+}
+
+void Player::setTrayectory(Velocity* trayectory) {
+    this->velocity->set(trayectory);
 }

@@ -46,6 +46,8 @@ class Player {
         void stop(int direction);
         void stopRunningInDirection(int direction);
         void toggleIsSelected();
+        void copyStats(Player* copyTo);
+        void setTrayectory(Velocity* trayectory);
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void setOrientation(int orientation);

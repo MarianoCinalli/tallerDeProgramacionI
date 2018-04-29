@@ -13,6 +13,12 @@ int Velocity::getComponentY() {
     return this->y;
 }
 
+void Velocity::set(Velocity* velocity) {
+    this->setComponentX(velocity->getComponentX());
+    this->setComponentY(velocity->getComponentY());
+}
+
+
 void Velocity::setComponentX(int x) {
     this->x = x;
 }
