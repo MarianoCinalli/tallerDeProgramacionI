@@ -32,7 +32,7 @@ Velocity* Player::getVelocity() {
 
 int Player::getCurrentSpeed() {
     if (this->runningFast){
-      return this->maxVelocity*2;
+      return this->maxVelocity*1.8; //Hardcode
     }
     else {
       return this->maxVelocity;
@@ -117,7 +117,7 @@ void Player::updatePosition() {
         int abs_delta_y = 0;
         abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
         abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-        if ((abs_delta_x < 20) && (abs_delta_y < 20)) { //TODO hardcode valores
+        if ((abs_delta_x < 30) && (abs_delta_y < 30)) { //TODO hardcode valores
             this->stop();
             this->isReturning = false;
             log("Player: jugador llega a la posicion.", LOG_INFO);
@@ -184,7 +184,7 @@ Player::~Player() {
 void Player::startsRunningFast() {
     if (!this->sliding &&
         !this->kicking &&
-        !this->velocity->isZero() &&
+        //!this->velocity->isZero() &&
         !this->isRunningFast()) {
         // !this->isRunningDiagonaly()) {
             // this->velocity->accelerate(this->orientation, this->maxVelocity);
