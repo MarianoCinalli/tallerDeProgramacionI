@@ -54,6 +54,9 @@ bool Player::isRunningDiagonaly() {
 }
 
 void Player::toggleIsSelected() {
+  if (this->isSelected) {
+    this->runningFast = false;
+  }
     this->isSelected = !this->isSelected;
     this->isReturning = true;
 }
@@ -88,7 +91,7 @@ void Player::stopRunningInDirection(int direction) {
 
 void Player::stop() {
     this->velocity->stop();
-    this->runningFast = false;
+    // this->runningFast = false;
     log("Jugador: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
