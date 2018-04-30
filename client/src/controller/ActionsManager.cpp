@@ -71,9 +71,6 @@ Action* ActionsManager::getAction(SDL_Event event) {
           return new StopRunningFastAction();
         } else {
         switch (event.key.keysym.sym) {
-            case SDLK_w:
-                action = new StopRunningFastAction();
-                break;
             case SDLK_UP:
                 keys[KUP] = false;
                 action = new Accelerate(PLAYER_ORIENTATION_DOWN);
