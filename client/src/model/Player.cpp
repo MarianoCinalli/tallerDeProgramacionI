@@ -202,7 +202,7 @@ void Player::stopsRunningFast() {
     if (this->runningFast) {
         // this->velocity->decelerate(this->orientation, this->maxVelocity);
         this->runningFast = false;
-        //log("Jugador: El jugador deja de correr rapido", LOG_DEBUG);
+        log("Jugador: El jugador deja de correr rapido", LOG_DEBUG);
     }
 }
 
