@@ -49,6 +49,7 @@ const int SPRITE_SIZE = 63;
 const int SCROLL_SPEED = 13;
 
 const int VALOR_INVALIDO = 5;
+const int VALOR_OK = 0;
 const int ARCHIVO_INVALIDO = 6;
 const int CASACA_PRINCIPAL = 2;
 const int CASACA_ALTERNATIVA = 3;

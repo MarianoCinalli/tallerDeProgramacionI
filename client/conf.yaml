@@ -1,13 +1,13 @@
 # configuracion
 equipo:
-  formacion: '3-3' # '3-3', '3-1-2', '3-2-1',
-  casaca: 'alternativa' #'principal' o 'alternativa'
+  formacion: '3-3' # '3-3', '3-1-2', '3-2-1',   NO IMPLEMENTADAS :'2-3-1', '2-2-2'
+  casaca: 'principal' #'principal' o 'alternativa'
   nombre: 'zidane'
 debug:
   level: 'debug' #'debug' o "info" o "error"
 assets:
   cancha: 'images/cancha.png'
-  sprites: 'images/sprites.png'
+  sprites: 'images/spritesDefaults.png'
 performance:
-  framerate: 2
-  margenes: "80" #250
+  framerate: 1
+  margenes: 100 #250

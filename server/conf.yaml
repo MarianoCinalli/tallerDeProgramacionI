@@ -1,21 +1,9 @@
 # configuracion
-equipo:
-  formacion: '3-3' # '3-3', '3-1-2', '3-2-1',
-  casaca: 'alternativa' #'principal' o 'alternativa'
-  nombre: 'zidane'
 debug:
   level: 'debug' #'debug' o "info" o "error"
-assets:
-  cancha: 'images/cancha.png'
-  sprites: 'images/sprites.png'
-performance:
-  framerate: 2
-  margenes: "80" #250
-network:
-  max_jugadores: 4
-credentials:
-- ['mariano', 'mariano']
-- ['joaquin', 'joaquin']
-- ['claudio', 'claudio']
-- ['nico', 'nico']
-- ['juan', 'juan']
+usuarios:
+  - {name: juan, password: juan}
+  - {name: nicolas, password: nicolas}
+  - {name: joaquin, password: joaquin}
+  - {name: claudio, password: claudio}
+  - {name: zidane, password: zidane}

@@ -24,31 +24,23 @@ class Conf : public Loggable {
     ~Conf();
     string defaultFile;
     string defaultSprites;
-    string nombre;
-    string spritesPath;
-    float framerate;
-    int margenes;
-    int getFormacion();
-    int getCasaca();    //principal true o alternativa false
+
+
     int getDebugLevel();
-    string getAssetsCancha();
-    string getNombre();
-    string getSpritesPath();
-    // string chooseShirtsPath(YAML::Node nod);
-    float getFramerate();
-    int getMargen();
+    // string getUsuarios();
     int loadConf(string file);
     string toString();
   private:
 
     YAML::Node config;
     YAML::Node defaultConfig;
-    int formacion;
-    int casaca;    //principal true o alternativa false
+    map<string, string> usuarios;
+    // int chooseUsuarios(YAML::Node nod);
     int debugLevel;
     int cargarParametro(string parametro, int (*fn)(YAML::Node));
+    int cargarParametro(string parametro, map<string, string>* usr, int (*fn)(YAML::Node, map<string,string>*));
     float cargarParametro(string parametro, float (*fn)(YAML::Node));
-    string cargarParametro(string parametro, string parametro2, string (*fn)(YAML::Node));
+    string cargarParametro(string parametro, string (*fn)(YAML::Node));
 
 };
 
