@@ -147,87 +147,77 @@ int main(int argc, char* argv[])
 			LOG_MIN_LEVEL = cliLogLevelInt;
 	}
 	log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
-
-	// GameInitializer* initializer = new GameInitializer(configuration);
-	// GameController* gameController = initializer->getGameController();
-	// ActionsManager* actionsManager = initializer->getActionsManager();
-	// Camera* camera = initializer->getCamera();
-	// SDL_Renderer* renderer = initializer->getRenderer();
-	// PitchView* pitchView = initializer->getPitchView();
-	bool quit = false;
-	// SDL_Event e;
-	// int frameRate = configuration->getFramerate();
-	// float sleepTime = (float)200000/(float)frameRate;
-	// log("Main: Frame rate: ", frameRate, LOG_INFO);
 	delete(configuration);
 	log("Main: Juego inicializado correctamente.", LOG_INFO);
 	// Main loop ------------------------------------------
-	log("Main: Entrando en el main loop...", LOG_INFO);
-	// memset(&hints, 0, sizeof(struct addrinfo))
+	// Crear game manager.
+	// Crear broadcaster.
+	// Crear server.
 
-//
-// 	unsigned int sockfd, newsockfd, clilen;
-// 	struct sockaddr_in cli_addr, serv_addr;
-// 	printf("Creando socket...n");
-// // Creo el socket
-// 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-// 		perror("creando socket");
-// 		printf("%sn", strerror(errno));
-// 		exit(1);
-// 	}
-// // Lleno de ceros la estructura
-// 	memset((char*)&serv_addr, 0, sizeof(serv_addr));
-// 	serv_addr.sin_family = AF_INET; // Tipo internet
-// 	serv_addr.sin_port = htons(SERVER_PORT);
-// 	serv_addr.sin_addr.s_addr = INADDR_ANY;
-// // Enlazo la dirección al socket
-// 	printf("Bindeando...n");
-//
-// 	if ( bind( sockfd,
-// 		   (struct sockaddr *)&serv_addr,
-// 		   (socklen_t)sizeof(struct sockaddr)) < 0 ) {
-// 		perror("bind");
-// 		printf("%sn", strerror(errno));
-// 		exit(1);
-// 	}
-// 	printf("Escuchando...n");
-// 	listen(sockfd, 5); // Escucho por conexiones
-// 	printf("Aceptando...n");
-// 	clilen = (socklen_t)sizeof(cli_addr);
-// // Acepto la conexión entrante
-// 	newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
-// 	if (newsockfd < 0) {
-// 		perror("acept");
-// 		printf("%sn", strerror(errno));
-// 		exit(1);
-// 	}
-//
-// 	printf("Conexión establecida.n");
-// 	write(newsockfd, "Recibí el mensajen", 19);
-// 	close(sockfd);
-	// while (!quit) {
-		//
-		//     while (SDL_PollEvent(&e) != 0) {
-		//         if (actionsManager->shouldQuit(e)) {
-		//             quit = true;
-		//         } else {
-		//             // Devuelve acciones que modifican modelos.
-		//             // Se puede optimizar para que deje de hacer actions todo el tiempo.
-		//             Action* action = actionsManager->getAction(e);
-		//             if (action != NULL) {
-		//                 gameController->execute(action);
-		//                 delete(action);
-		//             }
-		//         }
-		//     }
-		//     gameController->updatePlayers();
-		//     gameController->updateCameraPosition(camera);
-		//     pitchView->render(renderer);
-		//     usleep(sleepTime); // Frame rate.
-	// }
-	log("Main: Main loop finalizado.", LOG_INFO);
-	// Liberacion de memoria -------------------------------
-	// delete(initializer);
+    int server_fd, new_socket;
+    struct sockaddr_in address;
+    int opt = 1;
+    int addrlen = sizeof(address);
+    LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
+
+    // Creating socket file descriptor
+    log("socket\n", LOG_INFO);
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        log("socket failed\n", LOG_ERROR);
+        exit(EXIT_FAILURE);
+    }
+
+    // Forcefully attaching socket to the port 8080
+    log("setsockopt\n", LOG_INFO);
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+        log("setsockopt failed\n", LOG_ERROR);
+        exit(EXIT_FAILURE);
+    }
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(PORT);
+
+    // Forcefully attaching socket to the port 8080
+    log("bind\n", LOG_INFO);
+    if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
+        log("bind failed\n", LOG_ERROR);
+        exit(EXIT_FAILURE);
+    }
+    if (listen(server_fd, 3) < 0) {
+        log("listen error\n", LOG_ERROR);
+        exit(EXIT_FAILURE);
+    }
+    pthread_t clients[4];
+    int sockets[4];
+    int result_code;
+    int index = 0;
+    // Launch thread for each connection.
+    log("listening\n", LOG_INFO);
+    while (index < 4) {
+        log("accepting\n", LOG_INFO);
+        if ((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) > 0) {
+            log("accepted\n", LOG_INFO);
+            sockets[index] = new_socket;
+            result_code = pthread_create(&clients[index], NULL, readClient, &sockets[index]);
+            log("%d - %d\n", result_code, index, LOG_INFO);
+            ++index;
+        } else {
+            log("rejected\n", LOG_ERROR);
+        }
+    }
+    // wait for each thread to complete
+    for (int index = 0; index < NUM_THREADS; ++index) {
+        log("join\n", LOG_INFO);
+        // block until thread 'index' completes
+        result_code = pthread_join(clients[index], NULL);
+        log("In main: thread %d has completed\n", index, LOG_INFO);
+    }
+    // Close open sockets.
+    for (int index = 0; index < NUM_THREADS; ++index) {
+        close(sockets[index]);
+        log("In main: socket %d closed\n", sockets[index], LOG_INFO);
+    }
+
 	logSessionFinished();
 	LOG_FILE_POINTER.close();
 	return 0;
