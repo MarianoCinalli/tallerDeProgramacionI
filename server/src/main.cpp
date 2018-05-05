@@ -117,8 +117,18 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
-extern int errno;
-#define SERVER_PORT 4321
+void* readClient(void* argument) {
+    int socket;
+    int valread;
+    char buffer[1024] = {0};
+    socket = *((int*) argument);
+    // Variable global != 0 false
+    while (1) {
+        valread = read(socket, buffer, 1024);
+        printf("%d - %s\n", valread, buffer);
+    }
+    return NULL;
+}
 
 
 int main(int argc, char* argv[]) {
@@ -159,16 +169,16 @@ int main(int argc, char* argv[]) {
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
 
     // Creating socket file descriptor
-    log("socket\n", LOG_INFO);
+    log("socket", LOG_INFO);
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        log("socket failed\n", LOG_ERROR);
+        log("socket failed", LOG_ERROR);
         exit(EXIT_FAILURE);
     }
 
     // Forcefully attaching socket to the port 8080
-    log("setsockopt\n", LOG_INFO);
+    log("setsockopt", LOG_INFO);
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
-        log("setsockopt failed\n", LOG_ERROR);
+        log("setsockopt failed", LOG_ERROR);
         exit(EXIT_FAILURE);
     }
     address.sin_family = AF_INET;
@@ -176,13 +186,13 @@ int main(int argc, char* argv[]) {
     address.sin_port = htons(PORT);
 
     // Forcefully attaching socket to the port 8080
-    log("bind\n", LOG_INFO);
+    log("bind", LOG_INFO);
     if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
-        log("bind failed\n", LOG_ERROR);
+        log("bind failed", LOG_ERROR);
         exit(EXIT_FAILURE);
     }
     if (listen(server_fd, 3) < 0) {
-        log("listen error\n", LOG_ERROR);
+        log("listen error", LOG_ERROR);
         exit(EXIT_FAILURE);
     }
     pthread_t clients[4];
@@ -190,30 +200,29 @@ int main(int argc, char* argv[]) {
     int result_code;
     int index = 0;
     // Launch thread for each connection.
-    log("listening\n", LOG_INFO);
+    log("listening", LOG_INFO);
     while (index < 4) {
-        log("accepting\n", LOG_INFO);
+        log("accepting", LOG_INFO);
         if ((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) > 0) {
-            log("accepted\n", LOG_INFO);
+            log("accepted", LOG_INFO);
             sockets[index] = new_socket;
             result_code = pthread_create(&clients[index], NULL, readClient, &sockets[index]);
-            log("%d - %d\n", result_code, index, LOG_INFO);
             ++index;
         } else {
-            log("rejected\n", LOG_ERROR);
+            log("rejected", LOG_ERROR);
         }
     }
     // wait for each thread to complete
     for (int index = 0; index < NUM_THREADS; ++index) {
-        log("join\n", LOG_INFO);
+        log("join", LOG_INFO);
         // block until thread 'index' completes
         result_code = pthread_join(clients[index], NULL);
-        log("In main: thread %d has completed\n", index, LOG_INFO);
+        log("In main: Completed thread", index, LOG_INFO);
     }
     // Close open sockets.
     for (int index = 0; index < NUM_THREADS; ++index) {
         close(sockets[index]);
-        log("In main: socket %d closed\n", sockets[index], LOG_INFO);
+        log("In main: closed socket ", sockets[index], LOG_INFO);
     }
 
     logSessionFinished();
