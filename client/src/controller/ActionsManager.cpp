@@ -67,10 +67,10 @@ Action* ActionsManager::getAction(SDL_Event event) {
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.
         log("ActionsManager: Se registro una tecla soltada.", LOG_DEBUG);
+        if (event.key.keysym.sym== SDLK_w){
+          return new StopRunningFastAction();
+        } else {
         switch (event.key.keysym.sym) {
-            case SDLK_w:
-                action = new StopRunningFastAction();
-                break;
             case SDLK_UP:
                 keys[KUP] = false;
                 action = new Accelerate(PLAYER_ORIENTATION_DOWN);
@@ -92,6 +92,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
           delete(action);
           action = new Stop();
         }
+      }
     }
 
     return action;
