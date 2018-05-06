@@ -14,6 +14,8 @@
 #include <ctime>
 #include <unistd.h>
 
+#include <mutex>
+
 // Funciones de uso interno.
 std::string getFormatedDateTime(const char* format);
 std::string getDate();

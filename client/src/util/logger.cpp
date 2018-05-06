@@ -2,6 +2,7 @@
 
 extern int LOG_MIN_LEVEL;
 extern std::ofstream LOG_FILE_POINTER;
+extern std::mutex log_mutex;
 
 std::string getFormatedDateTime(const char* format) {
     std::time_t now = std::time(nullptr);
@@ -63,8 +64,10 @@ int log(std::string message, int messageLevel) {
         return 1;
     }
     std::string toLog = getTime() + " - " + getPID() + " <" + getMessageLevelString(messageLevel) +"> " + message + "\n";
+    log_mutex.lock();
     LOG_FILE_POINTER << toLog;
     flushLog();
+    log_mutex.unlock();
     return 0;
 }
 

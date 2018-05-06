@@ -13,7 +13,7 @@
 #include "controller/GameController.h"
 #include "view/Camera.h"
 #include "util/ConnectionManager.h"
-
+#include <mutex>
 
 // Global variables ---------------------------------------
 std::ofstream LOG_FILE_POINTER;
@@ -23,6 +23,7 @@ const std::string defaultSpritesFileName = "images/spritesDefaults.png";
 std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 std::string CLI_LOG_LEVEL = "";
+std::mutex log_mutex;
 // Global variables ---------------------------------------
 
 
