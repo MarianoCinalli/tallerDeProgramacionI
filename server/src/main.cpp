@@ -122,7 +122,7 @@ void* readClient(void* argument) {
     int valread;
     char buffer[1024] = {0};
     socket = *((int*) argument);
-    // Variable global != 0 false
+    // Poner algo global para controlar el juego.
     while (1) {
         valread = read(socket, buffer, 1024);
         printf("%d - %s\n", valread, buffer);
