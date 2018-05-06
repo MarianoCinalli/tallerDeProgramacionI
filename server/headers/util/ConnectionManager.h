@@ -29,8 +29,8 @@ class ConnectionManager {
         void acceptConnections();
         // Acepta un numero finito de conecciones.
         void acceptConnectionsUntilMax();
+        void waitForAllConnectionsToFinish();
+        void closeOpenedSockets();
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H
-
-

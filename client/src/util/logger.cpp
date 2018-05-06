@@ -64,6 +64,7 @@ int log(std::string message, int messageLevel) {
     }
     std::string toLog = getTime() + " - " + getPID() + " <" + getMessageLevelString(messageLevel) +"> " + message + "\n";
     LOG_FILE_POINTER << toLog;
+    flushLog();
     return 0;
 }
 
@@ -74,6 +75,7 @@ int logSessionStarted() {
     LOG_FILE_POINTER << separator;
     LOG_FILE_POINTER << sessionStartHeader;
     LOG_FILE_POINTER << separator;
+    flushLog();
     return 0;
 }
 
@@ -83,6 +85,7 @@ int logSessionFinished() {
     std::string sessionFinishedHeader = "Program finished at " + getDate() + " by PID " + getPID() + "\n";
     LOG_FILE_POINTER << separator;
     LOG_FILE_POINTER << sessionFinishedHeader;
+    flushLog();
     return 0;
 }
 

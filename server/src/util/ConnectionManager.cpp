@@ -2,11 +2,9 @@
 
 ConnectionManager::ConnectionManager(int port, int maxConnections) {
     this->port = port;
+    this->maxConnections = maxConnections;
     this->openedSockets = {};
-    // Inicializacion en 0 para que luego el .in() no falle.
-    for (int i = 0; i < maxConnections; ++i) {
-        this->clientsThreadIds.push_back(0);
-    }
+    this->clientsThreadIds = {};
 }
 
 bool ConnectionManager::openConnections() {
@@ -42,6 +40,9 @@ bool ConnectionManager::openConnections() {
     return true;
 }
 
+// Este es para la reconexion.
+// Se va a quedar aceptando las connecciones entrantes. Cuando las actuales,
+// size del vector, son menores que el maximo aceptar.
 void ConnectionManager::acceptConnections() {
     // TODO.
 }
@@ -59,18 +60,45 @@ void ConnectionManager::acceptConnectionsUntilMax() {
             this->openedSockets.push_back(new_socket);
             log("ConnectionManager: Creando thread para nueva conexion", LOG_INFO);
             // Validar el resultado de la creacion del thread.
+            pthread_t threadId;
             pthread_create(
-                &(this->clientsThreadIds.at(acceptedConnections)),
+                &threadId,
                 NULL,
                 read_client,
                 &(this->openedSockets.at(acceptedConnections))
             );
+            this->clientsThreadIds.push_back(threadId);
             ++acceptedConnections;
         } else {
             log("ConnectionManager: Conexion rechazada.", LOG_ERROR);
         }
     }
 }
+
+void ConnectionManager::waitForAllConnectionsToFinish() {
+    log("ConnectionManager: Esperando a que los threads terminen...", LOG_INFO);
+    for(pthread_t threadId : this->clientsThreadIds) {
+        log("ConnectionManager: Esperando al thread de ID: ", threadId, LOG_INFO);
+        pthread_join(threadId, NULL);
+        log("ConnectionManager: Termino el thread de ID: ", threadId, LOG_INFO);
+    }
+    log("ConnectionManager: Los threads terminaron.", LOG_INFO);
+}
+
+void ConnectionManager::closeOpenedSockets() {
+    log("ConnectionManager: Cerrando sockets abiertos...", LOG_INFO);
+    for(int openedSocket : this->openedSockets) {
+        close(openedSocket);
+        log("ConnectionManager: Se cerro el socket ", openedSocket, LOG_INFO);
+    }
+    log("ConnectionManager: Socket cerrados.", LOG_INFO);
+}
+
+/*
+    TODO:
+    Falta manejar la desconexion y reconexion.
+    Sacar el thread ID de la lista luego de cerrar el socket de la connexion que finaliza.
+*/
 
 ConnectionManager::~ConnectionManager() {
 

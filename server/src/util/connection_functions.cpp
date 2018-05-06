@@ -4,11 +4,16 @@ void* read_client(void* argument) {
     int socket;
     int valread;
     char buffer[1024] = {0};
+    char firstChar = 'A';
     socket = *((int*) argument);
+    log("read_client: Socket: ", socket, LOG_DEBUG);
+    log("read_client: Thread spawneado.", LOG_DEBUG);
     // Poner algo global para controlar el juego.
-    while (1) {
+    while (firstChar != 'F') {
         valread = read(socket, buffer, 1024);
-        printf("%d - %s\n", valread, buffer);
+        firstChar = buffer[0];
+        log("read_client: Bytes Recibidos " + std::to_string(valread) + " - Mensaje: ", buffer, LOG_DEBUG);
     }
+    log("read_client: Termino el Thread.", valread, LOG_DEBUG);
     return NULL;
 }

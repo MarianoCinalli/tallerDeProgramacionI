@@ -33,6 +33,8 @@ int log(std::string messageToConcatenate, char* charsToConcatenate, int messageL
 int log(Loggable* classToConcatenate, int messageLevel);
 int log(std::string messageToConcatenate, Loggable* classToConcatenate, int messageLevel);
 
+void flushLog();
+
 // Funciones para el encabezado y pie de archivos.
 int logSessionStarted();
 int logSessionFinished();
