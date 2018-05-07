@@ -12,12 +12,7 @@
 #include "controller/ActionsManager.h"
 #include "controller/GameController.h"
 #include "view/Camera.h"
-
-#include <sys/socket.h>
-#include <stdlib.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#define PORT 8080
+#include "util/ConnectionManager.h"
 
 #include <iostream>
 #include <mutex>
@@ -128,6 +123,7 @@ int main(int argc, char* argv[]) {
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
     // Inicializacion -------------------------------------
+    /*
     log("Main: Cargando configuracion...", LOG_INFO);
     Conf* configuration = new Conf(defaultConfFileName, defaultSpritesFileName);
     configuration->loadConf(confFileName);
@@ -156,42 +152,19 @@ int main(int argc, char* argv[]) {
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
     log("Main: Juego inicializado correctamente.", LOG_INFO);
-
-    // Client code. Will be moved.
-    int sock = 0;
-    struct sockaddr_in serv_addr;
-    log("sock", LOG_INFO);
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        log("\n Socket creation error ", LOG_ERROR);
-        return -1;
+    */
+    ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
+    if(!connectionManager->connectToServer()) {
+        log("Main: No se pudo abrir la conexion.", LOG_ERROR);
+        delete(connectionManager);
+        exit(1);
     }
-    log("memset", LOG_INFO);
-    memset(&serv_addr, '0', sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT);
-    // Convert IPv4 and IPv6 addresses from text to binary form
-    log("inet_pton", LOG_INFO);
-    if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
-        log("Invalid address or Address not supported ", LOG_ERROR);
-        return -1;
-    }
-
-    log("connect", LOG_INFO);
-    if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
-        log("\nConnection Failed ", LOG_ERROR);
-        return -1;
-    }
-    int shouldEnd = 0;
-    log("while", LOG_INFO);
-    while (shouldEnd != 1) {
-        send(sock, "Hello from client", strlen("Hello from client") , 0);
-        std::cout << "Continue? ";
-        std::cin >> shouldEnd;
-        std::cout << std::endl;
-    }
-
+    connectionManager->sendToServer("Hola");
+    connectionManager->sendToServer("Chau");
+    connectionManager->closeConnection();
+    delete(connectionManager);
     // Liberacion de memoria -------------------------------
-    delete(initializer);
+    //delete(initializer);
     logSessionFinished();
     LOG_FILE_POINTER.close();
     return 0;
