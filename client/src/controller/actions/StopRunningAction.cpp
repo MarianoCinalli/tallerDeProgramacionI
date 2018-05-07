@@ -14,5 +14,9 @@ bool StopRunningAction::valid(Player* player){
   return true;
 }
 
+std::string StopRunningAction::getCommand() {
+    return "stopRunningAction";
+}
+
 StopRunningAction::~StopRunningAction() {
 }

@@ -4,11 +4,11 @@ Action::Action() {
 }
 
 void Action::execute(Player* player) {
-    log("Llamando al execute de Action!", LOG_ERROR);
+    log("Action: Llamando al execute de Action!", LOG_ERROR);
 }
 
 void Action::execute(Pitch* pitch){
-  log("Llamando al execute de Action!", LOG_ERROR);
+  log("Action: Llamando al execute de Action!", LOG_ERROR);
 }
 
 bool Action::valid(Player* player) {
@@ -17,6 +17,15 @@ bool Action::valid(Player* player) {
 
 bool Action::valid(Pitch* pitch) {
   return false;
+}
+
+std::string Action::getCommand() {
+    log("Action: Llamando al getCommand de Action!", LOG_ERROR);
+    return "NotImplemented";
+}
+
+std::string Action::toString() {
+    return "{" + this->getCommand() + "} ";
 }
 
 Action::~Action() {

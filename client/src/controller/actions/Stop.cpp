@@ -12,6 +12,9 @@ bool Stop::valid(Player* player){
   return true;
 }
 
+std::string Stop::getCommand() {
+    return "stop";
+}
 
 Stop::~Stop() {
 }

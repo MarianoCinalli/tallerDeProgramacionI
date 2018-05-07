@@ -12,6 +12,7 @@ class RunningFastAction : public Action {
         RunningFastAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
         ~RunningFastAction();
 };
 #endif // RUNNINGFASTACTION_H

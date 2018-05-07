@@ -13,6 +13,10 @@ bool SlidingAction::valid(Player* player) {
     return true;
 }
 
+std::string SlidingAction::getCommand() {
+    return "slidingAction";
+}
+
 SlidingAction::~SlidingAction() {
 	//preguntar por esto!
 }

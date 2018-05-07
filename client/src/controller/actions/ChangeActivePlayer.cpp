@@ -12,5 +12,9 @@ bool ChangeActivePlayer::valid(Pitch* pitch){
   return true;
 }
 
+std::string ChangeActivePlayer::getCommand() {
+    return "changeActivePlayer";
+}
+
 ChangeActivePlayer::~ChangeActivePlayer() {
 }

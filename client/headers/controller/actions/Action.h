@@ -14,6 +14,8 @@ class Action {
         virtual void execute(Pitch* pitch);
         virtual bool valid(Player* player);
         virtual bool valid(Pitch* pitch);
+        virtual std::string getCommand();
+        virtual std::string toString();
         virtual ~Action();
 };
 #endif // ACTION_H

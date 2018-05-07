@@ -12,6 +12,7 @@ class KickingAction : public Action {
         KickingAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
         ~KickingAction();
 };
 #endif // KICKINGACTION_H

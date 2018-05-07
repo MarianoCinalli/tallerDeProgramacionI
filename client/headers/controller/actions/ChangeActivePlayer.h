@@ -10,6 +10,7 @@ class ChangeActivePlayer : public Action {
         ChangeActivePlayer();
         virtual void execute(Pitch* pitch);
         virtual bool valid(Pitch* pitch);
+        virtual std::string getCommand();
         ~ChangeActivePlayer();
 };
 #endif // CHANGEACTIVEPLAYER_H

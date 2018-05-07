@@ -13,6 +13,9 @@ bool Accelerate::valid(Player* player){
   return true;
 }
 
+std::string Accelerate::getCommand() {
+    return "accelerate";
+}
 
 Accelerate::~Accelerate() {
 }

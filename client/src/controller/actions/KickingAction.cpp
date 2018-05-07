@@ -13,6 +13,10 @@ bool KickingAction::valid(Player* player) {
     return true;
 }
 
+std::string KickingAction::getCommand() {
+    return "kickingAction";
+}
+
 KickingAction::~KickingAction() {
 	//preguntar por esto!
 }

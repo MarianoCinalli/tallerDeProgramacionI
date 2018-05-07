@@ -13,5 +13,9 @@ bool StopRunningFastAction::valid(Player* player) {
     return true;
 }
 
+std::string StopRunningFastAction::getCommand() {
+    return "stopRunningFastAction";
+}
+
 StopRunningFastAction::~StopRunningFastAction() {
 }

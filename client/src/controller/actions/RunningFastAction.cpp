@@ -13,6 +13,10 @@ bool RunningFastAction::valid(Player* player) {
     return true;
 }
 
+std::string RunningFastAction::getCommand() {
+    return "runningFastAction";
+}
+
 RunningFastAction::~RunningFastAction() {
 	//preguntar por esto!
 }

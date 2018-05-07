@@ -123,7 +123,6 @@ int main(int argc, char* argv[]) {
     LOG_FILE_POINTER.open(logFileName, std::ofstream::app);
     logSessionStarted();
     // Inicializacion -------------------------------------
-    /*
     log("Main: Cargando configuracion...", LOG_INFO);
     Conf* configuration = new Conf(defaultConfFileName, defaultSpritesFileName);
     configuration->loadConf(confFileName);
@@ -151,20 +150,40 @@ int main(int argc, char* argv[]) {
     float sleepTime = (float)200000/(float)frameRate;
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
-    log("Main: Juego inicializado correctamente.", LOG_INFO);
-    */
     ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
     if(!connectionManager->connectToServer()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
         delete(connectionManager);
         exit(1);
     }
-    connectionManager->sendToServer("Hola");
-    connectionManager->sendToServer("Chau");
+    log("Main: Juego inicializado correctamente.", LOG_INFO);
+
+    // Main loop ------------------------------------------
+    log("Main: Entrando en el main loop...", LOG_INFO);
+    // Este va a ser el thread que escucha el teclado.
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (actionsManager->shouldQuit(e)) {
+                quit = true;
+            } else {
+                // Devuelve acciones que modifican modelos.
+                // Se puede optimizar para que deje de hacer actions todo el tiempo.
+                Action* action = actionsManager->getAction(e);
+                if (action != NULL) {
+                    connectionManager->sendToServer(action->toString());
+                    delete(action);
+                }
+            }
+        }
+        // Pongo esto aca pero no va el framerate en este thread.
+        usleep(sleepTime);
+    }
+    log("Main: Main loop finalizado.", LOG_INFO);
+
+    // Liberacion de memoria -------------------------------
     connectionManager->closeConnection();
     delete(connectionManager);
-    // Liberacion de memoria -------------------------------
-    //delete(initializer);
+    delete(initializer);
     logSessionFinished();
     LOG_FILE_POINTER.close();
     return 0;

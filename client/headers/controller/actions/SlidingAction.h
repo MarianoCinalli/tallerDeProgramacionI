@@ -12,6 +12,7 @@ class SlidingAction : public Action {
         SlidingAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
         ~SlidingAction();
 };
 #endif // SLIDINGACTION_H
