@@ -13,13 +13,13 @@ bool ConnectionManager::openConnections() {
     log("ConnectionManager: Creando el socket...", LOG_INFO);
     this->my_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (this->my_socket == 0) {
-        log("ConnectionManager: Creacion del socket fallida.", LOG_ERROR);
+        log("ConnectionManager: Creacion del socket fallida: ", strerror(errno), LOG_ERROR);
         return false;
     }
 
     log("ConnectionManager: Configurando el socket...", LOG_INFO);
     if (setsockopt(this->my_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
-        log("ConnectionManager: Configuracion del socket fallida.", LOG_ERROR);
+        log("ConnectionManager: Configuracion del socket fallida: ", strerror(errno), LOG_ERROR);
         return false;
     }
     this->address.sin_family = AF_INET;
@@ -28,12 +28,12 @@ bool ConnectionManager::openConnections() {
 
     log("ConnectionManager: Binding al puerto: ", this->port, LOG_INFO);
     if (bind(this->my_socket, (struct sockaddr*)&this->address, sizeof(this->address)) < 0) {
-        log("ConnectionManager: Binding fallido.", LOG_ERROR);
+        log("ConnectionManager: Binding fallido: ", strerror(errno), LOG_ERROR);
         return false;
     }
     log("ConnectionManager: Escuchando al socket...", LOG_INFO);
     if (listen(this->my_socket, 3) < 0) {
-        log("ConnectionManager: Escucha fallida.", LOG_ERROR);
+        log("ConnectionManager: Escucha fallida: ", strerror(errno), LOG_ERROR);
         return false;
     }
     log("ConnectionManager: Escuchando conexiones. ", LOG_INFO);
@@ -58,7 +58,7 @@ void ConnectionManager::acceptConnectionsUntilMax() {
         if (new_socket > 0) {
             log("ConnectionManager: Conexion aceptada.", LOG_INFO);
             this->openedSockets.push_back(new_socket);
-            log("ConnectionManager: Creando thread para nueva conexion", LOG_INFO);
+            log("ConnectionManager: Creando thread para nueva conexion.", LOG_INFO);
             // Validar el resultado de la creacion del thread.
             pthread_t threadId;
             pthread_create(

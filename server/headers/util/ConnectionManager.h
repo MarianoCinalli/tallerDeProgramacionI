@@ -3,6 +3,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 // For threads
 #include <pthread.h>
 
