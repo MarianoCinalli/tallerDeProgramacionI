@@ -7,6 +7,8 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string>
+#include <string.h>
+#include <errno.h>
 #include "util/Constants.h"
 #include "util/logger.h"
 
