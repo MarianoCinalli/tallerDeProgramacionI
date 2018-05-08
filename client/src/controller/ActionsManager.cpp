@@ -89,7 +89,9 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 break;
         }
         if (!anyKeyPressed(keys)){
-          delete(action);
+          if( action != NULL){
+            delete(action);
+          }
           action = new Stop();
         }
       }
