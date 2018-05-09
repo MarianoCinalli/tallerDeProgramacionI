@@ -1,7 +1,6 @@
 #include "controller/actions/Stop.h"
 
 Stop::Stop() {
-  this->direction = 0;
 }
 
 void Stop::execute(Player* player) {
@@ -16,13 +15,6 @@ bool Stop::valid(Player* player){
 std::string Stop::getCommand() {
     return "stop";
 }
-
-std::vector<std::string> Stop::getParameters() {
-  std::vector<std::string> params;
-  params.push_back(std::to_string(this->direction));
-  return params;
-}
-
 
 Stop::~Stop() {
 }

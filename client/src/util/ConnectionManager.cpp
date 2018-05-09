@@ -36,9 +36,9 @@ bool ConnectionManager::connectToServer() {
 }
 
 void ConnectionManager::sendToServer(std::string message) {
-    log("ConnectionManager: Enviando: ", message, LOG_DEBUG);
-    const char * constantMessage = message.c_str();
-    send(this->my_socket, constantMessage, strlen(constantMessage), 0);
+    log("ConnectionManager: Enviando: \n", message, LOG_DEBUG);
+    const char * constantMessage = (message).c_str();
+    send(this->my_socket, constantMessage, strlen(constantMessage)+4, 0);
     log("ConnectionManager: Mensaje enviado.", LOG_DEBUG);
 }
 
