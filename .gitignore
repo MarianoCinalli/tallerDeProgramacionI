@@ -54,5 +54,5 @@ headers/.DS_Store
 
 #Atom
 *.gcc-flags.json
-.tags
+.tags*
 core

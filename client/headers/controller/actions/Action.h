@@ -2,6 +2,8 @@
 #include "model/Pitch.h"
 #include "util/Constants.h"
 #include "util/logger.h"
+#include <vector>
+#include <yaml-cpp/yaml.h>
 
 #ifndef ACTION_H
 #define ACTION_H
@@ -15,6 +17,7 @@ class Action {
         virtual bool valid(Player* player);
         virtual bool valid(Pitch* pitch);
         virtual std::string getCommand();
+        virtual std::vector<std::string> getParameters();
         virtual std::string toString();
         virtual ~Action();
 };

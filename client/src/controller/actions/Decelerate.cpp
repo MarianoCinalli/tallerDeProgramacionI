@@ -17,5 +17,11 @@ std::string Decelerate::getCommand() {
     return "decelerate";
 }
 
+std::vector<std::string> Decelerate::getParameters() {
+  std::vector<std::string> params;
+  params.push_back(std::to_string(this->direction));
+  return params;
+}
+
 Decelerate::~Decelerate() {
 }
