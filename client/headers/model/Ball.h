@@ -2,7 +2,9 @@
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
 #include "util/logger.h"
+#include "model/Player.h"
 #include <SDL2/SDL.h>
+#include <math.h>
 
 #ifndef BALL_H
 #define BALL_H
@@ -15,10 +17,11 @@ class Ball {
         int passPower;
         int height;
         int orientation;
-        bool isDominated;
-        Velocity* velocity;
+        bool dominated;
         bool isInAPass;
         int passDirection;
+        Coordinates* startingPassPosition;
+        int decelerateDistance;
         int decelerateLevel;
         Player* player;
 

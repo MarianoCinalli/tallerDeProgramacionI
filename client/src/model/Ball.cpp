@@ -1,5 +1,4 @@
-#include "Ball.h"
-#include <math.h>
+#include "model/Ball.h"
 
 Ball::Ball(Coordinates* position, Player* player) {
     log("Pelota: Creando pelota...", LOG_INFO);
@@ -7,11 +6,13 @@ Ball::Ball(Coordinates* position, Player* player) {
     this->passPower = 0;  //CTE DE 1 a 3
     this->height = 0;
     this->orientation = 0;
-    this->isDominated = true;
+    this->dominated = true;
     this->velocity = new Velocity(0, 0);
     this->isInAPass = false;
     this->passDirection = 0;  //CTE DE 1 a 12 tq 360/CTE = orientacion
     this->decelerateLevel = 0;
+    this->decelerateDistance = 0;
+    this->startingPassPosition = new Coordinates (800, 500);
     this->player = player;
     log("Pelota: Pelota creada...", LOG_INFO);
 }
@@ -25,20 +26,20 @@ Velocity* Ball::getVelocity() {
 }
 
 bool Ball::isDominated() {
-	return this->isDominated;
+	return this->dominated;
 }
 
 void Ball::isIntercepted(Player* player) {
 	this->stopRolling();
 	this->player = player;
-	this->isDominated = true;
+	this->dominated = true;
 	this->orientation = player->getOrientation();
 }
 
 void Ball::isPassed(int direction, int passPower) {
 	if (this->isDominated()) {
 		passDirection = direction;
-		isDominated = false;
+		dominated = false;
 		this->velocity->accelerate(direction, passPower);
 		this->isInAPass = true;
 		this->passPower = passPower;
@@ -63,7 +64,7 @@ void Ball::updatePosition() {
         abs_delta_y = abs(this->position->getY() - this->startingPassPosition->getY());
 		passDistance = (sqrt((abs_delta_x * abs_delta_x) + (abs_delta_y * abs_delta_y)));
 		if (passDistance > decelerateDistance) {
-			this->progresiveDecelerate(passDistance);
+			this->progressiveDecelerate(passDistance);
 		}
 	}
 	else {
@@ -80,16 +81,16 @@ Coordinates* Ball::calculateDominatedPosition() {
 	int y = this->player->getPosition()->getY();
 	switch(this->player->getOrientation()) {
 		case PLAYER_ORIENTATION_RIGHT:
-			x = (x + CUERPO_JUGAROR);
+			x = (x + CUERPO_JUGADOR);
 			break;
 		case PLAYER_ORIENTATION_LEFT:
-			x = (x - CUERPO_JUGAROR);
+			x = (x - CUERPO_JUGADOR);
 			break;
 		case PLAYER_ORIENTATION_DOWN:
-			y = (y + CUERPO_JUGAROR);
+			y = (y + CUERPO_JUGADOR);
 			break;
 		case PLAYER_ORIENTATION_UP:
-			y = (y - CUERPO_JUGAROR);
+			y = (y - CUERPO_JUGADOR);
 			break;
 	}
 	Coordinates* newPosition = new Coordinates(x, y);
@@ -97,27 +98,27 @@ Coordinates* Ball::calculateDominatedPosition() {
 }
 
 void Ball::progressiveDecelerate(float passDistance) {
-	if ((passDistance > decelerateDistance) && decelerateLevel = 0) {
+	if ((passDistance > decelerateDistance) && (this->decelerateLevel) == 0) {
 		float amount = (this->velocity->totalVelocity() / 4); 
-		this->velocity->decelerate(this->direction, amount);
+		this->velocity->decelerate(this->orientation, amount);
 		this->decelerateLevel = 1;
 	}
 	else {
-		if ((passDistance > (1.5*decelerateDistance)) && (decelerateLevel = 1)) {
+		if ((passDistance > (1.5*decelerateDistance)) && (decelerateLevel == 1)) {
 			float amount = (this->velocity->totalVelocity() / 4);
-			this->velocity->decelerate(this->direction, amount);
+			this->velocity->decelerate(this->orientation, amount);
 			this->decelerateLevel = 2; 	
 		}
 		else {
-			if ((passDistance > (1.75*decelerateDistance)) && (decelerateLevel = 2)) {
+			if ((passDistance > (1.75*decelerateDistance)) && (decelerateLevel == 2)) {
 			float amount = (this->velocity->totalVelocity() / 4);
-			this->velocity->decelerate(this->direction, amount);
+			this->velocity->decelerate(this->orientation, amount);
 			this->decelerateLevel = 3; 					
 			}
 			else { 
-				if ((passDistance > (2*decelerateDistance)) && (decelerateLevel = 3)) {
+				if ((passDistance > (2*decelerateDistance)) && (decelerateLevel == 3)) {
 				float amount = (this->velocity->totalVelocity() / 4);
-				this->velocity->decelerate(this->direction, amount);
+				this->velocity->decelerate(this->orientation, amount);
 				this->decelerateLevel = 4; 					
 				}
 			}
@@ -129,8 +130,8 @@ void Ball::stopRolling() {
 	this->velocity->stop();
 	this->isInAPass = false;
 	this->passPower = 0;
-	this->decelerateDistance = 0;
 	this->decelerateLevel = 0;
+	this->decelerateDistance = 0;
 	this->height = 0;
 }
 

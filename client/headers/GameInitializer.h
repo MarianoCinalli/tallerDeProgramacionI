@@ -16,6 +16,7 @@
 #include "view/Camera.h"
 #include "controller/GameController.h"
 #include "model/Pitch.h"
+#include "model/Ball.h"
 
 #ifndef GAMEINITIALIZER_H
 #define GAMEINITIALIZER_H
@@ -47,6 +48,7 @@ class GameInitializer {
         void initializeLocalTeam(Conf* conf);
         void initializeLocalTeamSprites(std::string path, Colour* shirt);
         void initializeGameController();
+        void initializeBall();
         void initializeActionsManager();
         void initializeCommonSdlResources();
         void cleanCommonSdlResources();

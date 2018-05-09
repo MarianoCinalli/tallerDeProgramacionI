@@ -1,4 +1,5 @@
 #include "util/Velocity.h"
+#include <math.h>
 
 Velocity::Velocity(int x, int y) {
     this->x = x;

@@ -61,7 +61,8 @@ void GameInitializer::initializePitchView(Conf* conf) {
 void GameInitializer::initializeBall(){
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
     Coordinates* coordinates = new Coordinates(400, 300);
-    Ball* ball = new Ball(coordinates);
+    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
+    Ball* ball = new Ball(coordinates, player);  //TODO: pasarle el jugador del medio
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }
 

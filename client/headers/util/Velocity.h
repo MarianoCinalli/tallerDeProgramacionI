@@ -16,6 +16,7 @@ class Velocity : public Loggable {
         void decelerate(int direction, int amount);
         int getComponentX();
         int getComponentY();
+        float totalVelocity();
         void set(Velocity* velocity);
         void setComponentX(int x);
         void setComponentY(int y);
