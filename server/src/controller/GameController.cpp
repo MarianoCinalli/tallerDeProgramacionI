@@ -13,7 +13,6 @@ void GameController::execute(Action* action) {
     } else if (action->valid(this->pitch)){
       action->execute(this->pitch);
     }
-
 }
 
 void GameController::updatePlayers() {

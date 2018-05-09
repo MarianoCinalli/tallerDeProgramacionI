@@ -45,6 +45,7 @@ class GameInitializer {
         void initializePitch(Conf* conf);
         void initializePitchView(Conf* conf);
         void initializeLocalTeam(Conf* conf);
+        void initializeBall();
         void initializeLocalTeamSprites(std::string path, Colour* shirt);
         void initializeGameController();
         void initializeActionsManager();

@@ -110,6 +110,10 @@ void Velocity::changeOnDirection(int direction) {
   }
 }
 
+float Velocity::totalVelocity() {
+  return (sqrt((this->x)*(this->x)) + ((this->y)*(this->y)));
+}
+
 Velocity::~Velocity() {
 }
 

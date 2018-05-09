@@ -22,6 +22,7 @@ class Player {
         bool wasKicking;
         bool canMove;
         bool runningFast;
+        bool dominatesTheBall;
 
     public:
         Player(int orientation, Coordinates* position);

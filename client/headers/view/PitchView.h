@@ -31,6 +31,7 @@ class PitchView {
     private:
         Texture* pitch;
         Camera* camera;
+        Ball* ball;
         std::list<PlayerSpriteManager*> playerViews;
     public:
         PitchView(Texture* pitch, Camera* camera);

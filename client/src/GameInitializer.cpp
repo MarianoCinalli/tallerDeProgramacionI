@@ -6,6 +6,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializePitch(configuration);
     this->initializePitchView(configuration);
     this->initializeLocalTeam(configuration);
+    this->initializeBall();
     this->initializeGameController();
     this->initializeActionsManager();
     log("GameInitializer: Juego inicializado...", LOG_INFO);
@@ -57,6 +58,13 @@ void GameInitializer::initializePitchView(Conf* conf) {
     log("GameInitializer: Vista de la cancha creada.", LOG_INFO);
 }
 
+void GameInitializer::initializeBall(){
+    log("GameInitializer: Inicializando pelota...", LOG_INFO);
+    Coordinates* coordinates = new Coordinates(400, 300);
+    Ball* ball = new Ball(coordinates);
+    log("GameInitializer: Pelota inicializada", LOG_INFO);
+}
+
 void GameInitializer::initializeLocalTeam(Conf* conf) {
     log("GameInitializer: Creando equipo local...", LOG_INFO);
     int shirtColour = 0;
@@ -86,7 +94,6 @@ void GameInitializer::initializeLocalTeam(Conf* conf) {
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
     this->pitch->setLocalTeam(this->localTeam);
 }
-
 
 void GameInitializer::initializeLocalTeamSprites(std::string shirtsPath, Colour* shirt) {
     Colour* transparency = new Colour(0, 0xa0, 0, 0);

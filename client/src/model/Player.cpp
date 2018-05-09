@@ -15,6 +15,7 @@ Player::Player(int orientation, Coordinates* position) {
     this->isSelected = false;
     this->isReturning = false;
     this->runningFast = false;
+    this->dominatesTheBall = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
