@@ -22,6 +22,10 @@ void Pitch::setAwayTeam(Team* team) {
     // changeActivePlayer();
 }
 
+void Pitch::setBall(Ball* ball){
+  this->ball = ball;
+}
+
 Team* Pitch::getLocalTeam() {
     return this->localTeam;
 }

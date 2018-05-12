@@ -164,6 +164,7 @@ int main(int argc, char* argv[]) {
             }
         }
         gameController->updatePlayers();
+        gameController->updateBall();
         gameController->updateCameraPosition(camera);
         pitchView->render(renderer);
         usleep(sleepTime); // Frame rate.

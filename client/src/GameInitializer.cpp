@@ -63,6 +63,7 @@ void GameInitializer::initializeBall(){
     Player* player = this->pitch->activePlayer;
     Coordinates* coords = new Coordinates(800,600);
     Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
+    this->pitch->setBall(ball);
     BallSpriteManager* ballSpriteManager = new BallSpriteManager(this->localTeamSprites, ball);
     this->pitchView->addBallView(ballSpriteManager);
     log("GameInitializer: Pelota inicializada", LOG_INFO);

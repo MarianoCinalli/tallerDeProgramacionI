@@ -4,6 +4,7 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: Creando gameController...", LOG_INFO);
     this->pitch = pitch;
     this->activePlayer = this->pitch->activePlayer;
+    this->ball = this->pitch->ball;
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
@@ -15,6 +16,7 @@ void GameController::execute(Action* action) {
     }
 
 }
+
 
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
@@ -28,6 +30,11 @@ void GameController::updatePlayers() {
         }
     }
     log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);
+}
+
+void GameController::updateBall() {
+  this->ball->updatePosition();
+
 }
 
 // Cuando el jugador pise el borde mueve la camara.
