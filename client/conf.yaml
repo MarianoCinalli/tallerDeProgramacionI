@@ -7,7 +7,7 @@ debug:
   level: 'debug' #'debug' o "info" o "error"
 assets:
   cancha: 'images/cancha.png'
-  sprites: 'images/spritesDefaults.png'
+  sprites: 'images/sprites.png'
 performance:
-  framerate: 1
+  framerate: 5
   margenes: 100 #250
