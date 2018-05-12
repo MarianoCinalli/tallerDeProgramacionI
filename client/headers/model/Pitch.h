@@ -13,12 +13,14 @@ Modelo de Cancha:
 class Pitch {
     private:
         Team* localTeam;
+        Team* awayTeam;
         Camera* camera;
     public:
         Pitch(Camera* camera);
         Player* activePlayer;
         void changeActivePlayer();
         void setLocalTeam(Team* team);
+        void setAwayTeam(Team* team);
         Team* getLocalTeam();
         ~Pitch();
 };

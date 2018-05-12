@@ -11,9 +11,17 @@ void PitchView::addPlayerView(PlayerSpriteManager* playerView) {
     this->playerViews.push_back(playerView);
 }
 
+void PitchView::addBallView(BallSpriteManager* ballView) {
+    this->ballView = ballView;
+}
+
 void PitchView::render(SDL_Renderer* screen) {
     // Dibujar cancha vista por camara.
     this->renderPitch(screen);
+    // Dibuja la pelota, asi los jugadores quedan arriba
+    Coordinates* coordinates = this->camera->getRelativeCoordinates(this->ballView->getBallCoordinates());
+    this->ballView->render(screen, coordinates);
+    delete(coordinates);
     // Obtener los jugadores vistos por la camara
     std::list<PlayerSpriteManager*> views = this->camera->getPlayersInside(this->playerViews);
     // Dibujar cada uno.

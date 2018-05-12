@@ -1,8 +1,9 @@
 #include "view/BallSpriteManager.h"
 
-BallSpriteManager::BallSpriteManager(Ball* Ball) {
+BallSpriteManager::BallSpriteManager(Texture* spriteSheet, Ball* ball) {
     log("BallSpriteManager: Creando vista...", LOG_INFO);
     this->ball = ball;
+    this->spriteSheet = spriteSheet;
     this->sprite = {
         0,
         21 * SPRITE_SIZE,
@@ -12,16 +13,27 @@ BallSpriteManager::BallSpriteManager(Ball* Ball) {
     log("BallSpriteManager: Vista creada.", LOG_INFO);
 }
 
+
+Coordinates* BallSpriteManager::getBallCoordinates() {
+    return this->ball->getPosition();
+}
+
 void BallSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
     Velocity* velocity = this->ball->getVelocity();
     if (!velocity->isZero()) {
         this->setMovingBallSprite(velocity);
     }
+    // Coordinates* coordinates = this->getBallCoordinates();
+    SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
+    SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
+    SDL_RenderCopy(
+        screen,
+        spriteSheet,
+        &this->sprite,
+        &positionOnScreen
+    );
 }
 
-Coordinates* BallSpriteManager::getBallCoordinates() {
-    return this->ball->getPosition();
-}
 
 
 BallSpriteManager::~BallSpriteManager() {

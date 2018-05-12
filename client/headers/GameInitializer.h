@@ -30,9 +30,11 @@ class GameInitializer {
         GameController* gameController;
         ActionsManager* actionsManager;
         Texture* localTeamSprites;
+        Texture* awayTeamSprites;
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
+        Team* awayTeam; // Liberado en Pitch.
         Pitch* pitch; // Liberado en game controller.
     public:
         GameInitializer(Conf* configuration);
@@ -45,8 +47,8 @@ class GameInitializer {
     private:
         void initializePitch(Conf* conf);
         void initializePitchView(Conf* conf);
-        void initializeLocalTeam(Conf* conf);
-        void initializeLocalTeamSprites(std::string path, Colour* shirt);
+        void initializeTeam(Conf* conf, int teamNumber);
+        void initializeTeamSprites(std::string path, Colour* shirt, int teamNumber);
         void initializeGameController();
         void initializeBall();
         void initializeActionsManager();

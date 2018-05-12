@@ -5,7 +5,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeCommonSdlResources();
     this->initializePitch(configuration);
     this->initializePitchView(configuration);
-    this->initializeLocalTeam(configuration);
+    this->initializeTeam(configuration, 0);
     this->initializeBall();
     this->initializeGameController();
     this->initializeActionsManager();
@@ -60,13 +60,15 @@ void GameInitializer::initializePitchView(Conf* conf) {
 
 void GameInitializer::initializeBall(){
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
-    Coordinates* coordinates = new Coordinates(400, 300);
-    Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
-    Ball* ball = new Ball(coordinates, player);  //TODO: pasarle el jugador del medio
+    Player* player = this->pitch->activePlayer;
+    Coordinates* coords = new Coordinates(800,600);
+    Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
+    BallSpriteManager* ballSpriteManager = new BallSpriteManager(this->localTeamSprites, ball);
+    this->pitchView->addBallView(ballSpriteManager);
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }
 
-void GameInitializer::initializeLocalTeam(Conf* conf) {
+void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Creando equipo local...", LOG_INFO);
     int shirtColour = 0;
     if (conf->getCasaca() == CASACA_PRINCIPAL) {
@@ -74,38 +76,54 @@ void GameInitializer::initializeLocalTeam(Conf* conf) {
     }
     Colour* shirt = new Colour(shirtColour, 0, 0, 0);
     log("GameInitializer: Creando sprites para el equipo local.", LOG_INFO);
-    this->initializeLocalTeamSprites(conf->getSpritesPath(),shirt);
+    this->initializeTeamSprites(conf->getSpritesPath(),shirt, teamNumber);
     delete(shirt);
     // Crear los jugadores.
     log("GameInitializer: Creando equipo.", LOG_INFO);
-    this->localTeam = new Team();
+    Team* team = new Team();
+    if (teamNumber == 0){
+      this->localTeam = team;
+    }
+    else if (teamNumber == 1){
+      this->awayTeam = team;
+    }
     log("GameInitializer: Seteando formacion.", LOG_INFO);
-    this->localTeam->setFormacion(conf->getFormacion());
+    team->setFormacion(conf->getFormacion());
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
         Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
-        this->localTeam->addPlayer(player);
+        team->addPlayer(player);
         log("GameInitializer: Creando vista de jugador numero: ", i, LOG_INFO);
         PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(this->localTeamSprites, player);
         this->pitchView->addPlayerView(playerSpriteManager);
     }
     log("GameInitializer: Ordenando equipo local.", LOG_INFO);
-    this->localTeam->order();
+    team->order();
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
-    this->pitch->setLocalTeam(this->localTeam);
+    if (teamNumber==0){
+      this->pitch->setLocalTeam(team);
+    } else if (teamNumber == 1){
+      this->pitch->setAwayTeam(team);
+    }
 }
 
-void GameInitializer::initializeLocalTeamSprites(std::string shirtsPath, Colour* shirt) {
+void GameInitializer::initializeTeamSprites(std::string shirtsPath, Colour* shirt, int teamNumber) {
     Colour* transparency = new Colour(0, 0xa0, 0, 0);
     // Supongo que el path de los sprites lo deberia sacar de conf, no?
-    this->localTeamSprites = new Texture(
+
+    Texture* texture = new Texture(
         shirtsPath,
         "images/spritesShirts.png",
         this->renderer,
         transparency,
         shirt
     );
+    if (teamNumber==0){
+      this->localTeamSprites = texture;
+    } else if (teamNumber == 1){
+      this->awayTeamSprites = texture;
+    }
     delete(transparency);
 }
 

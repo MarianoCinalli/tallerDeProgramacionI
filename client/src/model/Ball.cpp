@@ -99,7 +99,7 @@ Coordinates* Ball::calculateDominatedPosition() {
 
 void Ball::progressiveDecelerate(float passDistance) {
 	if ((passDistance > decelerateDistance) && (this->decelerateLevel) == 0) {
-		float amount = (this->velocity->totalVelocity() / 4); 
+		float amount = (this->velocity->totalVelocity() / 4);
 		this->velocity->decelerate(this->orientation, amount);
 		this->decelerateLevel = 1;
 	}
@@ -107,19 +107,19 @@ void Ball::progressiveDecelerate(float passDistance) {
 		if ((passDistance > (1.5*decelerateDistance)) && (decelerateLevel == 1)) {
 			float amount = (this->velocity->totalVelocity() / 4);
 			this->velocity->decelerate(this->orientation, amount);
-			this->decelerateLevel = 2; 	
+			this->decelerateLevel = 2;
 		}
 		else {
 			if ((passDistance > (1.75*decelerateDistance)) && (decelerateLevel == 2)) {
 			float amount = (this->velocity->totalVelocity() / 4);
 			this->velocity->decelerate(this->orientation, amount);
-			this->decelerateLevel = 3; 					
+			this->decelerateLevel = 3;
 			}
-			else { 
+			else {
 				if ((passDistance > (2*decelerateDistance)) && (decelerateLevel == 3)) {
 				float amount = (this->velocity->totalVelocity() / 4);
 				this->velocity->decelerate(this->orientation, amount);
-				this->decelerateLevel = 4; 					
+				this->decelerateLevel = 4;
 				}
 			}
 		}
@@ -137,6 +137,6 @@ void Ball::stopRolling() {
 
 Ball::~Ball() {
     delete(this->position);
-    delete(this->player);
+    // delete(this->player);
     delete(this->velocity);
 }
