@@ -55,9 +55,11 @@ void Ball::isIntercepted(Player* player) {
 void Ball::isPassed(int direction, int passPower) {
 	if (this->isDominated()) {
     this->interceptable =false;
-		passDirection = this->orientation;  //direction;
+		// passDirection = this->orientation;  //direction;
+    passDirection = this->player->getOrientation();  //direction;
+
 		dominated = false;
-		this->velocity->accelerate(direction, passPower);
+		this->velocity->accelerate(passDirection, passPower); //TODO se debe acelerar 2 veces si se apretan 2 teclas, acelerar en x y acelerar en y por separado
 		this->isInAPass = true;
 		this->passPower = passPower;
 		this->decelerateDistance = passPower * 50;  //TODO: ver valores y poner ctes
@@ -76,14 +78,14 @@ void Ball::updatePosition() {
 	}
   if(this->isInAPass){
     this->timePassing += 1;
-    if (!this->interceptable && timePassing > 6){ //TODO numero harcodeado tiempo de pase
+    if (!this->interceptable && timePassing > TIME_BALL_NO_INTERCEPT){ //TODO numero harcodeado tiempo de pase
       this->interceptable = true;
     }
     this->position->addX(this->velocity->getComponentX()*this->passPower);
     this->position->addY(this->velocity->getComponentY()*this->passPower);
   }
   if((this->isInAPass) && (!this->velocity->isZero())) {
-    if(this->timePassing % 8 == 0){
+    if(this->timePassing % BALL_DECELERATE_TIME == 0){
       this->velocity->decelerate(this->orientation, 1);
     }
   }

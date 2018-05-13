@@ -74,10 +74,10 @@ void Pitch::changeActivePlayer()
 }
 
 void Pitch::checkIntercepts(){
-	int value = 55;
+	int value = STEAL_VALUE;
 	std::list<Player*> players = this->localTeam->getPlayers();
 	if (!players.empty()) {
-		int nearestDistance = 100; //max distance harcodeadeo TODO
+		int nearestDistance = 500; //max distance harcodeadeo TODO
 		Player* nearestPlayer = NULL;
 		for (Player* p : players) {
 			if(p->isSliding()){
@@ -99,10 +99,10 @@ void Pitch::checkIntercepts(){
 void Pitch::changeBallOwnership()
 {
 	if (this->ball->isInterceptable()) {
-		int value = 35;
+		int value = INTERCEPT_VALUE;
 		std::list<Player*> players = this->localTeam->getPlayers();
 		if (!players.empty()) {
-			int nearestDistance = 100; //max distance harcodeadeo TODO
+			int nearestDistance = 300; //max distance harcodeadeo TODO
 			Player* nearestPlayer = NULL;
 			for (Player* p : players) {
 				int distance = p->getPosition()->distanceTo(this->ball->getPosition());
