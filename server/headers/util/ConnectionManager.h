@@ -5,13 +5,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-// For threads
-#include <pthread.h>
 
 #include <vector>
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/connection_functions.h"
+#include "util/ThreadSpawner.h"
 
 #ifndef CONNECTIONMANAGER_H
 #define CONNECTIONMANAGER_H
@@ -22,7 +21,7 @@ class ConnectionManager {
         int maxConnections;
         int my_socket;
         struct sockaddr_in address;
-        std::vector<pthread_t> clientsThreadIds;
+        ThreadSpawner* clients;
         std::vector<int> openedSockets;
     public:
         ConnectionManager(int port, int maxConnections);

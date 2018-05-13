@@ -4,7 +4,7 @@ ConnectionManager::ConnectionManager(int port, int maxConnections) {
     this->port = port;
     this->maxConnections = maxConnections;
     this->openedSockets = {};
-    this->clientsThreadIds = {};
+    this->clients = new ThreadSpawner();
 }
 
 bool ConnectionManager::openConnections() {
@@ -59,18 +59,10 @@ void ConnectionManager::acceptConnectionsUntilMax() {
             log("ConnectionManager: Conexion aceptada.", LOG_INFO);
             this->openedSockets.push_back(new_socket);
             log("ConnectionManager: Creando thread para nueva conexion.", LOG_INFO);
-            // Validar el resultado de la creacion del thread.
-            // Si falla la creacion puede pasar cualquier cosa.
-            // Ver si hacer una clase threadSpawner que se quede con los
-            // Thread ids que spawneo, y se encargue de validar y joinear...
-            pthread_t threadId;
-            pthread_create(
-                &threadId,
-                NULL,
+            this->clients->spawn(
                 read_client,
                 &(this->openedSockets.at(acceptedConnections))
             );
-            this->clientsThreadIds.push_back(threadId);
             ++acceptedConnections;
         } else {
             log("ConnectionManager: Conexion rechazada.", LOG_ERROR);
@@ -79,15 +71,9 @@ void ConnectionManager::acceptConnectionsUntilMax() {
 }
 
 void ConnectionManager::waitForAllConnectionsToFinish() {
-    log("ConnectionManager: Esperando a que los threads terminen...", LOG_INFO);
-    for(pthread_t threadId : this->clientsThreadIds) {
-        log("ConnectionManager: Esperando al thread de ID: ", threadId, LOG_INFO);
-        // Aca tambien falta validar que se haya ejecutado.
-        // Si se intenta liberar un thread id inexistente tira segfault.
-        pthread_join(threadId, NULL);
-        log("ConnectionManager: Termino el thread de ID: ", threadId, LOG_INFO);
-    }
-    log("ConnectionManager: Los threads terminaron.", LOG_INFO);
+    log("ConnectionManager: Esperando a que los clientes terminen...", LOG_INFO);
+    this->clients->joinSpawnedThreads();
+    log("ConnectionManager: Los clientes terminaron.", LOG_INFO);
 }
 
 void ConnectionManager::closeOpenedSockets() {
@@ -106,5 +92,5 @@ void ConnectionManager::closeOpenedSockets() {
 */
 
 ConnectionManager::~ConnectionManager() {
-
+    delete(this->clients);
 }
