@@ -14,6 +14,7 @@ Ball::Ball(Coordinates* position, Player* player) {
     this->decelerateDistance = 0;
     this->timePassing = 0; // corrector para frames TODO
     this->startingPassPosition = new Coordinates (800, 500);
+    this->interceptable = true;
     this->player = player;
     log("Pelota: Pelota creada...", LOG_INFO);
 }
@@ -30,12 +31,22 @@ Player* Ball::getPlayer() {
   return this->player;
 }
 
+void Ball::setPlayer(Player* player) {
+  this->player = player;
+  this->dominated= true;
+}
+
 bool Ball::isDominated() {
 	return this->dominated;
 }
 
+bool Ball::isInterceptable(){
+  return this->interceptable;
+}
+
 void Ball::isIntercepted(Player* player) {
 	this->stopRolling();
+  this->interceptable = false;
 	this->player = player;
 	this->dominated = true;
 	this->orientation = player->getOrientation();
@@ -43,6 +54,7 @@ void Ball::isIntercepted(Player* player) {
 
 void Ball::isPassed(int direction, int passPower) {
 	if (this->isDominated()) {
+    this->interceptable =false;
 		passDirection = this->orientation;  //direction;
 		dominated = false;
 		this->velocity->accelerate(direction, passPower);
@@ -64,6 +76,9 @@ void Ball::updatePosition() {
 	}
   if(this->isInAPass){
     this->timePassing += 1;
+    if (!this->interceptable && timePassing > 6){ //TODO numero harcodeado tiempo de pase
+      this->interceptable = true;
+    }
     this->position->addX(this->velocity->getComponentX()*this->passPower);
     this->position->addY(this->velocity->getComponentY()*this->passPower);
   }

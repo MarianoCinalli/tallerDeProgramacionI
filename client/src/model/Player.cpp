@@ -218,6 +218,7 @@ void Player::startsKicking() {
         this->kicking = true;
         this->canMove = false;
     }
+    
 }
 
 void Player::stopKicking() {
