@@ -6,17 +6,13 @@ extern GameInitializer* initializer;
 // Actualiza el "modelo".
 void* read_server(void* argument) {
     log("read_server: Creado.", LOG_INFO);
-    int socket;
-    int readBytes;
-    char buffer[1024] = {0};
-    socket = *((int*) argument);
+    std::string readMessage;
+    ConnectionManager* connectionManager = (ConnectionManager*) argument;
     int count = 0; // esto esta provisorio.
     log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
     while (count < 11) {
-        memset(buffer, 0x00, sizeof(char) * 1024);
-        readBytes = read(socket, buffer, 1024);
-        log("read_server: Recibido ", readBytes, LOG_DEBUG);
-        log("read_server: Recibido ", buffer, LOG_DEBUG);
+        readMessage = connectionManager->getMessage();
+        log("read_server: Recibido: ", readMessage, LOG_DEBUG);
         count++;
     }
     log("read_server: Finalizado.", LOG_INFO);

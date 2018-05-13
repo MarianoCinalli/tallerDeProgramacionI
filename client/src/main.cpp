@@ -163,15 +163,15 @@ int main(int argc, char* argv[]) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
         endProgram(1, connectionManager);
     }
-    // Lanzar thread que recibe mensajes.
+    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir y mandar estos mensajes al server.
+    // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
+    // Lanzar thread que recibe mensajes de estado de juego.
     ThreadSpawner* threadSpawner = new ThreadSpawner();
-    int socket = connectionManager->getSocket();
     threadSpawner->spawn(
         read_server,
-        &socket
+        connectionManager
     );
     log("Main: Juego inicializado correctamente.", LOG_INFO);
-    // Iniciar sesion. Elegir equipo y casaca... <- No va en el thread de abajo.
     // Lanzar thread que dibuja el juego.
     // threadSpawner->spawn(drawer, NULL);
     // Main loop ------------------------------------------

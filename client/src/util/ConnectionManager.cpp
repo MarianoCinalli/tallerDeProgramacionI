@@ -46,6 +46,21 @@ int ConnectionManager::getSocket() {
     return this->my_socket;
 }
 
+std::string ConnectionManager::getMessage() {
+    int readBytes;
+    int bufferLength = 1024;
+    int bufferSize = sizeof(char) * bufferLength;
+    char buffer[bufferLength] = {0};
+    memset(buffer, 0x00, bufferSize);
+    readBytes = read(this->my_socket, buffer, bufferSize);
+    if (readBytes < 0) {
+        log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
+        return "";
+    }
+    log("read_server: Recibidos ", readBytes, LOG_DEBUG);
+    return buffer;
+}
+
 void ConnectionManager::closeConnection() {
     close(this->my_socket);
 }
