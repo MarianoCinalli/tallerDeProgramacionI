@@ -19,7 +19,7 @@ bool ConnectionManager::connectToServer() {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(this->port);
     // Convert IPv4 and IPv6 addresses from text to binary form
-    log("ConnectionManager: Convitiendo direccion a binario " + this->ip + ":" , this->port, LOG_INFO);
+    log("ConnectionManager: Convirtiendo direccion a binario " + this->ip + ":" , this->port, LOG_INFO);
     if (inet_pton(AF_INET, this->ip.c_str(), &serv_addr.sin_addr) <= 0) {
         log("ConnectionManager: Invalid address/Address not supported: ", strerror(errno), LOG_ERROR);
         return false;
@@ -42,9 +42,8 @@ void ConnectionManager::sendToServer(std::string message) {
     log("ConnectionManager: Mensaje enviado.", LOG_DEBUG);
 }
 
-std::string ConnectionManager::recieveFromServer() {
-    // TODO.
-    return "";
+int ConnectionManager::getSocket() {
+    return this->my_socket;
 }
 
 void ConnectionManager::closeConnection() {

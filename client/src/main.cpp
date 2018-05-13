@@ -13,6 +13,8 @@
 #include "controller/GameController.h"
 #include "view/Camera.h"
 #include "util/ConnectionManager.h"
+#include "util/ThreadSpawner.h"
+#include "util/functions.h"
 
 #include <iostream>
 #include <mutex>
@@ -26,6 +28,7 @@ std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
+GameInitializer* initializer;
 // Global variables ---------------------------------------
 
 
@@ -113,6 +116,15 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
+void endProgram(int statusToExit, ConnectionManager* connectionManager) {
+    connectionManager->closeConnection();
+    delete(connectionManager);
+    delete(initializer);
+    logSessionFinished();
+    LOG_FILE_POINTER.close();
+    exit(statusToExit);
+}
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
@@ -138,12 +150,8 @@ int main(int argc, char* argv[]) {
         }
     }
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
-    GameInitializer* initializer = new GameInitializer(configuration);
-    GameController* gameController = initializer->getGameController();
+    initializer = new GameInitializer(configuration);
     ActionsManager* actionsManager = initializer->getActionsManager();
-    Camera* camera = initializer->getCamera();
-    SDL_Renderer* renderer = initializer->getRenderer();
-    PitchView* pitchView = initializer->getPitchView();
     bool quit = false;
     SDL_Event e;
     int frameRate = configuration->getFramerate();
@@ -153,11 +161,19 @@ int main(int argc, char* argv[]) {
     ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
     if(!connectionManager->connectToServer()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
-        delete(connectionManager);
-        exit(1);
+        endProgram(1, connectionManager);
     }
+    // Lanzar thread que recibe mensajes.
+    ThreadSpawner* threadSpawner = new ThreadSpawner();
+    int socket = connectionManager->getSocket();
+    threadSpawner->spawn(
+        read_server,
+        &socket
+    );
     log("Main: Juego inicializado correctamente.", LOG_INFO);
-
+    // Iniciar sesion. Elegir equipo y casaca... <- No va en el thread de abajo.
+    // Lanzar thread que dibuja el juego.
+    // threadSpawner->spawn(drawer, NULL);
     // Main loop ------------------------------------------
     log("Main: Entrando en el main loop...", LOG_INFO);
     // Este va a ser el thread que escucha el teclado.
@@ -181,36 +197,5 @@ int main(int argc, char* argv[]) {
     log("Main: Main loop finalizado.", LOG_INFO);
 
     // Liberacion de memoria -------------------------------
-    connectionManager->closeConnection();
-    delete(connectionManager);
-    delete(initializer);
-    logSessionFinished();
-    LOG_FILE_POINTER.close();
-    return 0;
+    endProgram(0, connectionManager);
 }
-
-/*
-    // Main loop ------------------------------------------
-    log("Main: Entrando en el main loop...", LOG_INFO);
-    while (!quit) {
-
-        while (SDL_PollEvent(&e) != 0) {
-            if (actionsManager->shouldQuit(e)) {
-                quit = true;
-            } else {
-                // Devuelve acciones que modifican modelos.
-                // Se puede optimizar para que deje de hacer actions todo el tiempo.
-                Action* action = actionsManager->getAction(e);
-                if (action != NULL) {
-                    gameController->execute(action);
-                    delete(action);
-                }
-            }
-        }
-        gameController->updatePlayers();
-        gameController->updateCameraPosition(camera);
-        pitchView->render(renderer);
-        usleep(sleepTime); // Frame rate.
-    }
-    log("Main: Main loop finalizado.", LOG_INFO);
-*/
