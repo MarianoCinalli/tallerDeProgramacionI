@@ -11,7 +11,8 @@ GameController::GameController(Pitch* pitch) {
 void GameController::execute(Action* action) {
     if(action->valid(this->activePlayer)){
       action->execute(this->activePlayer);
-    } else if (action->valid(this->pitch)){
+    }
+    if (action->valid(this->pitch)){
       action->execute(this->pitch);
     }
 

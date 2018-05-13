@@ -12,6 +12,8 @@ class SlidingAction : public Action {
         SlidingAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+				virtual void execute(Pitch* pitch);
+        virtual bool valid(Pitch* pitch);
         ~SlidingAction();
 };
 #endif // SLIDINGACTION_H

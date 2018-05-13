@@ -21,6 +21,7 @@ class Pitch {
         Pitch(Camera* camera);
         Player* activePlayer;
         Ball* ball;
+        void checkIntercepts();
         void changeActivePlayer();
         void changeBallOwnership();
         void setLocalTeam(Team* team);
