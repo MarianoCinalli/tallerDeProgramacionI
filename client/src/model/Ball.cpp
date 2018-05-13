@@ -12,6 +12,7 @@ Ball::Ball(Coordinates* position, Player* player) {
     this->passDirection = 0;  //CTE DE 1 a 12 tq 360/CTE = orientacion
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
+    this->timePassing = 0; // corrector para frames TODO
     this->startingPassPosition = new Coordinates (800, 500);
     this->player = player;
     log("Pelota: Pelota creada...", LOG_INFO);
@@ -23,6 +24,10 @@ Coordinates* Ball::getPosition() {
 
 Velocity* Ball::getVelocity() {
     return this->velocity;
+}
+
+Player* Ball::getPlayer() {
+  return this->player;
 }
 
 bool Ball::isDominated() {
@@ -38,7 +43,7 @@ void Ball::isIntercepted(Player* player) {
 
 void Ball::isPassed(int direction, int passPower) {
 	if (this->isDominated()) {
-		passDirection = direction;
+		passDirection = this->orientation;  //direction;
 		dominated = false;
 		this->velocity->accelerate(direction, passPower);
 		this->isInAPass = true;
@@ -52,23 +57,35 @@ void Ball::updatePosition() {
 	//if (((!this->isDominated) && this->velocity->totalVelocity()) < VELOCIDAD_MINIMA_BALON) {
 	//	this->stopRolling();
 	//}
+
 	if(this->isDominated()) {
 		this->position = this->calculateDominatedPosition();
 		this->orientation = player->getOrientation();
 	}
-	if((this->isInAPass) && (!this->velocity->isZero())) {
-		float passDistance = 0;
-		int abs_delta_x = 0;
-        int abs_delta_y = 0;
-        abs_delta_x = abs(this->position->getX() - this->startingPassPosition->getX());
-        abs_delta_y = abs(this->position->getY() - this->startingPassPosition->getY());
-		passDistance = (sqrt((abs_delta_x * abs_delta_x) + (abs_delta_y * abs_delta_y)));
-		if (passDistance > decelerateDistance) {
-			this->progressiveDecelerate(passDistance);
-		}
-	}
+  if(this->isInAPass){
+    this->timePassing += 1;
+    this->position->addX(this->velocity->getComponentX()*this->passPower);
+    this->position->addY(this->velocity->getComponentY()*this->passPower);
+  }
+  if((this->isInAPass) && (!this->velocity->isZero())) {
+    if(this->timePassing % 8 == 0){
+      this->velocity->decelerate(this->orientation, 1);
+    }
+  }
+	// if((this->isInAPass) && (!this->velocity->isZero())) {
+	// 	float passDistance = 0;
+	// 	int abs_delta_x = 0;
+  //       int abs_delta_y = 0;
+  //       abs_delta_x = abs(this->position->getX() - this->startingPassPosition->getX());
+  //       abs_delta_y = abs(this->position->getY() - this->startingPassPosition->getY());
+	// 	passDistance = (sqrt((abs_delta_x * abs_delta_x) + (abs_delta_y * abs_delta_y)));
+	// 	if (passDistance > decelerateDistance) {
+	// 		this->progressiveDecelerate(passDistance);
+	// 	}
+	// }
 	else {
 		if (this->velocity->isZero()) {
+      this->timePassing = 0;
 			this->stopRolling();
 		}
 	}

@@ -22,6 +22,7 @@ class Ball {
         int passDirection;
         Coordinates* startingPassPosition;
         int decelerateDistance;
+        int timePassing;
         int decelerateLevel;
         Player* player;
 
@@ -30,8 +31,9 @@ class Ball {
 
         Coordinates* getPosition();
         Velocity* getVelocity();
+        Player* getPlayer();
         bool isDominated();
-        
+
         void isIntercepted(Player* player);
         void isPassed(int direction, int passPower);
         void updatePosition();
