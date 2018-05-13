@@ -1,7 +1,9 @@
-#include "util/connection_functions.h"
-#include <yaml-cpp/yaml.h>
+#include "util/functions.h"
+
+extern GameInitializer* initializer;
 
 void* read_client(void* argument) {
+    log("read_client: Creado.", LOG_INFO);
     int socket;
     int readBytes;
     char buffer[1024] = {0};
@@ -16,7 +18,7 @@ void* read_client(void* argument) {
         // importante resetear el buffer a cero sino al sobreescribirse queda
         // lo anterior. hacer esto o copiar en un buffer aparte la cantidad
         //  de bytes recibidos
-        memset( buffer, 0x00, sizeof(char)*1024);
+        memset(buffer, 0x00, sizeof(char) * 1024);
         readBytes = read(socket, buffer, 1024);
 
         if (readBytes < 0) {
@@ -39,15 +41,31 @@ void* read_client(void* argument) {
             std::string name;
             std::string parameter1;
             if (node["command"]) {
-              name =  node["command"].as<std::string>();
-              log("leido mensaje con nombre: ", name, LOG_INFO);
+                name =  node["command"].as<std::string>();
+                log("leido mensaje con nombre: ", name, LOG_INFO);
             }
             if (node["parameters"]) {
-              parameter1 = node["parameters"][0].as<std::string>();
-              log("leido primer parametro con valor: ", parameter1, LOG_INFO);
+                parameter1 = node["parameters"][0].as<std::string>();
+                log("leido primer parametro con valor: ", parameter1, LOG_INFO);
             }
         }
     }
-    log("read_client: Termino el Thread.", LOG_DEBUG);
+    log("read_client: Finalizado.", LOG_INFO);
+    return NULL;
+}
+
+// Este es el que le envia el juego a los clientes.
+void* broadcast_to_clients(void* argument) {
+    log("broadcast_to_clients: Creado.", LOG_INFO);
+    std::vector<int> sockets = *((std::vector<int>*) argument);
+    Broadcaster* broadcaster = new Broadcaster(initializer->getCamera(), &sockets);
+    int count = 0; // esto esta provisorio.
+    while (count < 10) {
+        broadcaster->broadcast();
+        count++;
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
+    }
+    delete(broadcaster);
+    log("broadcast_to_clients: Finalizado.", LOG_INFO);
     return NULL;
 }

@@ -22,13 +22,8 @@
 
 class GameInitializer {
     private:
-        SDL_Window* window;
-        SDL_Renderer* renderer;
-
-        PitchView* pitchView;
-        GameController* gameController;
-        ActionsManager* actionsManager;
-        Texture* localTeamSprites;
+        GameController* gameController; // Liberado aca.
+        ActionsManager* actionsManager; // Liberado aca.
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
@@ -38,17 +33,11 @@ class GameInitializer {
         GameController* getGameController();
         ActionsManager* getActionsManager();
         Camera* getCamera();
-        SDL_Renderer* getRenderer();
-        PitchView* getPitchView();
         ~GameInitializer();
     private:
         void initializePitch(Conf* conf);
-        void initializePitchView(Conf* conf);
         void initializeLocalTeam(Conf* conf);
-        void initializeLocalTeamSprites(std::string path, Colour* shirt);
         void initializeGameController();
         void initializeActionsManager();
-        void initializeCommonSdlResources();
-        void cleanCommonSdlResources();
 };
 #endif // GAMEINITIALIZER_H

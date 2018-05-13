@@ -9,8 +9,9 @@
 #include <vector>
 #include "util/Constants.h"
 #include "util/logger.h"
-#include "util/connection_functions.h"
+#include "util/functions.h"
 #include "util/ThreadSpawner.h"
+#include "view/Camera.h"
 
 #ifndef CONNECTIONMANAGER_H
 #define CONNECTIONMANAGER_H
@@ -22,6 +23,7 @@ class ConnectionManager {
         int my_socket;
         struct sockaddr_in address;
         ThreadSpawner* clients;
+        ThreadSpawner* broadcaster;
         std::vector<int> openedSockets;
     public:
         ConnectionManager(int port, int maxConnections);
@@ -30,6 +32,7 @@ class ConnectionManager {
         void acceptConnections();
         // Acepta un numero finito de conecciones.
         void acceptConnectionsUntilMax();
+        void createBroadcaster();
         void waitForAllConnectionsToFinish();
         void closeOpenedSockets();
         ~ConnectionManager();

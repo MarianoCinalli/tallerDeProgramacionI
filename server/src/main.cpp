@@ -11,7 +11,6 @@
 #include "util/conf.h"
 #include "controller/ActionsManager.h"
 #include "controller/GameController.h"
-#include "view/Camera.h"
 #include "util/ConnectionManager.h"
 #include <mutex>
 
@@ -24,6 +23,7 @@ std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
+GameInitializer* initializer;
 // Global variables ---------------------------------------
 
 
@@ -109,6 +109,7 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
@@ -127,26 +128,29 @@ int main(int argc, char* argv[]) {
     LOG_MIN_LEVEL = configuration->getDebugLevel();
     if (CLI_LOG_LEVEL != "") {
         cliLogLevelInt = getLogLevelFromString(CLI_LOG_LEVEL);
-        if (cliLogLevelInt == LOG_WRONGLEVEL)
+        if (cliLogLevelInt == LOG_WRONGLEVEL) {
             log("Main: Nivel de logeo especificado erroneo " + CLI_LOG_LEVEL + " usando default valor de config.", LOG_ERROR);
-        else
+        } else {
             LOG_MIN_LEVEL = cliLogLevelInt;
+        }
     }
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
+    initializer = new GameInitializer(configuration);
     delete(configuration);
     log("Main: Juego inicializado correctamente.", LOG_INFO);
-    // Crear game manager.
-    // Crear broadcaster.
-    // Crear server.
+
     ConnectionManager* connectionManager = new ConnectionManager(8080, 1);
     if(!connectionManager->openConnections()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
         delete(connectionManager);
         exit(1);
     }
-    connectionManager->acceptConnectionsUntilMax();
+    connectionManager->acceptConnectionsUntilMax(); // Pasarle el gameControllerProxy.
+    connectionManager->createBroadcaster();
+    // Launch gameManager
     connectionManager->waitForAllConnectionsToFinish();
     connectionManager->closeOpenedSockets();
+    // End ------------------------------------------------
     delete(connectionManager);
     logSessionFinished();
     LOG_FILE_POINTER.close();

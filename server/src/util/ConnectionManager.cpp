@@ -5,6 +5,7 @@ ConnectionManager::ConnectionManager(int port, int maxConnections) {
     this->maxConnections = maxConnections;
     this->openedSockets = {};
     this->clients = new ThreadSpawner();
+    this->broadcaster = new ThreadSpawner();
 }
 
 bool ConnectionManager::openConnections() {
@@ -70,9 +71,17 @@ void ConnectionManager::acceptConnectionsUntilMax() {
     }
 }
 
+void ConnectionManager::createBroadcaster() {
+    this->broadcaster->spawn(
+        broadcast_to_clients,
+        &(this->openedSockets)
+    );
+}
+
 void ConnectionManager::waitForAllConnectionsToFinish() {
     log("ConnectionManager: Esperando a que los clientes terminen...", LOG_INFO);
     this->clients->joinSpawnedThreads();
+    this->broadcaster->joinSpawnedThreads();
     log("ConnectionManager: Los clientes terminaron.", LOG_INFO);
 }
 
@@ -93,4 +102,5 @@ void ConnectionManager::closeOpenedSockets() {
 
 ConnectionManager::~ConnectionManager() {
     delete(this->clients);
+    delete(this->broadcaster);
 }

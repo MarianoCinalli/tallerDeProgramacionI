@@ -20,15 +20,16 @@ enum casacas {
 
 class Conf : public Loggable {
   public:
-    Conf(string, string);
-    ~Conf();
+    int margenes;
     string defaultFile;
     string defaultSprites;
 
-
+    Conf(string, string);
+    ~Conf();
     int getDebugLevel();
     // string getUsuarios();
     int loadConf(string file);
+    int getMargen();
     string toString();
   private:
 
