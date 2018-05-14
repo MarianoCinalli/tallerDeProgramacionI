@@ -8,17 +8,17 @@ ActionsManager::~ActionsManager() {
     log("ActionsManager: Eliminando actionsManager.", LOG_INFO);
 }
 
-bool anyKeyPressed(bool* keys){
-  log("TECLAS", LOG_DEBUG);
-  // int i = 0;
-  // for (bool b : keys){
-  for(int i = 0; i < 4; i++){
-    if (keys[i]){
-      log("Tecla: ", i,LOG_DEBUG);
-      return true;
+bool anyKeyPressed(bool* keys) {
+    log("TECLAS", LOG_DEBUG);
+    // int i = 0;
+    // for (bool b : keys){
+    for (int i = 0; i < 4; i++) {
+        if (keys[i]) {
+            log("Tecla: ", i, LOG_DEBUG);
+            return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 // Devuelve la accion correspondiente a un evento.
@@ -67,36 +67,35 @@ Action* ActionsManager::getAction(SDL_Event event) {
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.
         log("ActionsManager: Se registro una tecla soltada.", LOG_DEBUG);
-        if (event.key.keysym.sym== SDLK_w){
-          return new StopRunningFastAction();
+        if (event.key.keysym.sym == SDLK_w) {
+            return new StopRunningFastAction();
         } else {
-        switch (event.key.keysym.sym) {
-            case SDLK_UP:
-                keys[KUP] = false;
-                action = new Accelerate(PLAYER_ORIENTATION_DOWN);
-                break;
-            case SDLK_DOWN:
-                keys[KDOWN] = false;
-                action = new Accelerate(PLAYER_ORIENTATION_UP);
-                break;
-            case SDLK_LEFT:
-                keys[KLEFT] = false;
-                action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
-                break;
-            case SDLK_RIGHT:
-                keys[KRIGHT] = false;
-                action = new Accelerate(PLAYER_ORIENTATION_LEFT);
-                break;
+            switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                    keys[KUP] = false;
+                    action = new Accelerate(PLAYER_ORIENTATION_DOWN);
+                    break;
+                case SDLK_DOWN:
+                    keys[KDOWN] = false;
+                    action = new Accelerate(PLAYER_ORIENTATION_UP);
+                    break;
+                case SDLK_LEFT:
+                    keys[KLEFT] = false;
+                    action = new Accelerate(PLAYER_ORIENTATION_RIGHT);
+                    break;
+                case SDLK_RIGHT:
+                    keys[KRIGHT] = false;
+                    action = new Accelerate(PLAYER_ORIENTATION_LEFT);
+                    break;
+            }
+            if (!anyKeyPressed(keys)) {
+                if (action != NULL) {
+                    delete(action);
+                }
+                action = new Stop();
+            }
         }
-        if (!anyKeyPressed(keys)){
-          if( action != NULL){
-            delete(action);
-          }
-          action = new Stop();
-        }
-      }
     }
-
     return action;
 }
 
@@ -105,7 +104,7 @@ bool ActionsManager::shouldQuit(SDL_Event event) {
     bool quit = false;
     bool quitByQ = ((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_q));
     bool quitByWindowExit = (event.type == SDL_QUIT);
-    if ( quitByWindowExit || quitByQ ) {
+    if (quitByWindowExit || quitByQ) {
         log("ActionsManager: Se registro la salida del programa.", LOG_INFO);
         quit = true;
     }

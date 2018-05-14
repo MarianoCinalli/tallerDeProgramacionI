@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
                     connectionManager->sendToServer(action->toString());
-                    delete(action);
+                    delete(action); // Este delete me da segfault.
                 }
             }
         }
