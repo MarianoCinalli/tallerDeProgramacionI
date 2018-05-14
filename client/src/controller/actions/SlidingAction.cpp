@@ -20,6 +20,9 @@ bool SlidingAction::valid(Player* player) {
 
 bool SlidingAction::valid(Pitch* pitch) {
     return true;
+
+}
+
 std::string SlidingAction::getCommand() {
     return "slidingAction";
 }
