@@ -52,8 +52,8 @@ const int SCROLL_SPEED = 13;
 
 const int VALOR_INVALIDO = 5;
 const int ARCHIVO_INVALIDO = 6;
-const int CASACA_PRINCIPAL = 2;
-const int CASACA_ALTERNATIVA = 3;
+const int CASACA_PRINCIPAL = 0;
+const int CASACA_ALTERNATIVA = 1;
 const int PLAYERS_PER_TEAM = 7;
 
 //Velocidad
@@ -61,7 +61,7 @@ const int NORMAL_VELOCITY = 15;
 const int BALL_DECELERATE_TIME = 8; //a numeros mas grandes, tarda mas
 
 //interceptar pases
-const int INTERCEPT_VALUE = 60;
+const int INTERCEPT_VALUE = 65;
 const int STEAL_VALUE = 60;
-const int TIME_BALL_NO_INTERCEPT = 5;
+const int TIME_BALL_NO_INTERCEPT = 4;
 #endif // CONSTANTS_H_

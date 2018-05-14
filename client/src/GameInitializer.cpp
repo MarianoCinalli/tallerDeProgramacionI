@@ -6,6 +6,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializePitch(configuration);
     this->initializePitchView(configuration);
     this->initializeTeam(configuration, 0);
+    this->initializeTeam(configuration, 1);
     this->initializeBall();
     this->initializeGameController();
     this->initializeActionsManager();
@@ -72,7 +73,7 @@ void GameInitializer::initializeBall(){
 void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Creando equipo local...", LOG_INFO);
     int shirtColour = 0;
-    if (conf->getCasaca() == CASACA_PRINCIPAL) {
+    if (teamNumber == CASACA_PRINCIPAL) {
         shirtColour = 255;
     }
     Colour* shirt = new Colour(shirtColour, 0, 0, 0);
@@ -81,13 +82,7 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     delete(shirt);
     // Crear los jugadores.
     log("GameInitializer: Creando equipo.", LOG_INFO);
-    Team* team = new Team();
-    if (teamNumber == 0){
-      this->localTeam = team;
-    }
-    else if (teamNumber == 1){
-      this->awayTeam = team;
-    }
+    Team* team = new Team(teamNumber);
     log("GameInitializer: Seteando formacion.", LOG_INFO);
     team->setFormacion(conf->getFormacion());
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
@@ -96,15 +91,23 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
         Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
         team->addPlayer(player);
         log("GameInitializer: Creando vista de jugador numero: ", i, LOG_INFO);
-        PlayerSpriteManager* playerSpriteManager = new PlayerSpriteManager(this->localTeamSprites, player);
+        PlayerSpriteManager* playerSpriteManager;
+        if(teamNumber == 0){
+          playerSpriteManager = new PlayerSpriteManager(this->localTeamSprites, player);
+        }
+        else {
+          playerSpriteManager = new PlayerSpriteManager(this->awayTeamSprites, player);
+        }
         this->pitchView->addPlayerView(playerSpriteManager);
     }
     log("GameInitializer: Ordenando equipo local.", LOG_INFO);
     team->order();
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
     if (teamNumber==0){
+      this->localTeam = team;
       this->pitch->setLocalTeam(team);
     } else if (teamNumber == 1){
+      this->awayTeam = team;
       this->pitch->setAwayTeam(team);
     }
 }
@@ -120,7 +123,7 @@ void GameInitializer::initializeTeamSprites(std::string shirtsPath, Colour* shir
         transparency,
         shirt
     );
-    if (teamNumber==0){
+    if (teamNumber == 0){
       this->localTeamSprites = texture;
     } else if (teamNumber == 1){
       this->awayTeamSprites = texture;

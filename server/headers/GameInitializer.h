@@ -29,6 +29,8 @@ class GameInitializer {
         GameController* gameController;
         ActionsManager* actionsManager;
         Texture* localTeamSprites;
+        Texture* awayTeamSprites;
+
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
