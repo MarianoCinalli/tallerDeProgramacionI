@@ -1,5 +1,6 @@
 #include "model/Team.h"
 #include "view/Camera.h"
+#include "model/Ball.h"
 
 /*
 Modelo de Cancha:
@@ -13,13 +14,16 @@ Modelo de Cancha:
 class Pitch {
     private:
         Team* localTeam;
+        Team* awayTeam;
         Camera* camera;
-        // Ball* ball;
+        Ball* ball;
     public:
         Pitch(Camera* camera);
         Player* activePlayer;
         void changeActivePlayer();
-        void setLocalTeam(Team* team);
+        void setTeam(Team* team, int teamNumber);
+        void setBall(Ball* ball);
+
         Team* getLocalTeam();
         ~Pitch();
 };

@@ -5,8 +5,8 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeCommonSdlResources();
     this->initializePitch(configuration);
     this->initializePitchView(configuration);
-    this->initializeTeam(configuration, 0);
-    this->initializeTeam(configuration, 1);
+    // this->initializeTeam(configuration, 0);
+    // this->initializeTeam(configuration, 1);
     this->initializeBall();
     this->initializeGameController();
     this->initializeActionsManager();

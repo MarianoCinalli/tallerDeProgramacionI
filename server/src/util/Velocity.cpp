@@ -40,6 +40,31 @@ void Velocity::decelerate(int direction, int amount) {
     }
 }
 
+
+int sign(int num){
+  if (num>0)
+  return 1;
+  else if (num<0)
+  return -1;
+  else return 0;
+}
+
+void Velocity::decelerate(int amount) {
+    if (!this->isZero()) {
+        if(this->x!=0){
+          this->x-= sign(this->x)*amount;
+        }
+        if(this->y!=0){
+          this->y-= sign(this->y)*amount;
+        }
+    }
+}
+
+void Velocity::scale(int num){
+  this->x *= num;
+  this->y *= num;
+}
+
 void Velocity::stop(){
   this->x = 0;
   this->y = 0;

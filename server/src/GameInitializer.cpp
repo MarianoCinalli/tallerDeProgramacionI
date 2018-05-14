@@ -3,7 +3,10 @@
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
     this->initializePitch(configuration);
-    this->initializeLocalTeam(configuration);
+    // this->initializeLocalTeam(configuration);
+    this->initializeTeam(configuration, 0);
+    this->initializeTeam(configuration, 1);
+    this->initializeBall();
     this->initializeGameController();
     //this->initializeActionsManager(); // Por ahora no
     log("GameInitializer: Juego inicializado...", LOG_INFO);
@@ -32,17 +35,36 @@ GameInitializer::~GameInitializer() {
 
 // Metodos privados. ---------------------------------------------
 
-void GameInitializer::initializeLocalTeam(Conf* conf) {
+void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Creando equipo.", LOG_INFO);
-    this->localTeam = new Team();
+    Team* team = new Team();
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
         Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
-        this->localTeam->addPlayer(player);
+        team->addPlayer(player);
     }
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
-    this->pitch->setLocalTeam(this->localTeam);
+    this->setTeam(team, 0);
+    this->pitch->setTeam(team, 0);
+}
+
+void GameInitializer::initializeBall(){
+    log("GameInitializer: Inicializando pelota...", LOG_INFO);
+    Player* player = this->pitch->activePlayer;
+    Coordinates* coords = new Coordinates(800,600);
+    Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
+    this->pitch->setBall(ball);
+    log("GameInitializer: Pelota inicializada", LOG_INFO);
+}
+
+void GameInitializer::setTeam(Team* team, int teamNumber){
+  if (teamNumber == 0){
+    this->localTeam = team;
+  }
+  else if (teamNumber == 1){
+    this->awayTeam = team;
+  }
 }
 
 void GameInitializer::initializePitch(Conf* conf) {

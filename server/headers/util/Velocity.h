@@ -19,6 +19,8 @@ class Velocity : public Loggable {
         void set(Velocity* velocity);
         void setComponentX(int x);
         void setComponentY(int y);
+        void scale(int num);
+        void decelerate(int amount);
         bool isZero();
         int getAsOrientation();
 

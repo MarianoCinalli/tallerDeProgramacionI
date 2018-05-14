@@ -16,6 +16,7 @@
 #include "view/Camera.h"
 #include "controller/GameController.h"
 #include "model/Pitch.h"
+#include "model/Ball.h"
 
 #ifndef GAMEINITIALIZER_H
 #define GAMEINITIALIZER_H
@@ -27,6 +28,7 @@ class GameInitializer {
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
+        Team* awayTeam;
         Pitch* pitch; // Liberado en game controller.
     public:
         GameInitializer(Conf* configuration);
@@ -36,8 +38,10 @@ class GameInitializer {
         ~GameInitializer();
     private:
         void initializePitch(Conf* conf);
-        void initializeLocalTeam(Conf* conf);
+        void initializeTeam(Conf* conf, int teamNumber);
+        void initializeBall();
         void initializeGameController();
         void initializeActionsManager();
+        void setTeam(Team* team, int teamNumber);
 };
 #endif // GAMEINITIALIZER_H
