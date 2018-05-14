@@ -37,7 +37,7 @@ void GameController::updateBall() {
 
   if(this->ball->isDominated() && this->ball->getPlayer()->isKicking()){
     log("La pelota fue pateada", LOG_INFO);
-    this->ball->isPassed(this->ball->getPlayer()->getOrientation(), 4); //TODO valor de pase?
+    this->ball->isPassed(this->ball->getPlayer()->getOrientation(), 15); //TODO valor de pase?
   }
   this->pitch->changeBallOwnership();
   this->ball->updatePosition();
