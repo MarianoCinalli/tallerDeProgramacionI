@@ -21,5 +21,3 @@ void Broadcaster::broadcast() {
 Broadcaster::~Broadcaster() {
     log("Broadcaster: Eliminando broadcaster...", LOG_INFO);
 }
-
-

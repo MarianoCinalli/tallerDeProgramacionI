@@ -37,21 +37,21 @@ void* read_client(void* argument) {
             continueReading = (buffer[0] != 'F');
             // Aca se parsea el buffer, problema con que se pisan cuando van muy rapid
             // quizas definir el tamaño de entrada y leer bien, o mandar un struct
-            try {
-                YAML::Node node = YAML::Load(buffer);
-                std::string name;
-                std::string parameter1;
-                if (node["command"]) {
-                    name =  node["command"].as<std::string>();
-                    log("read_client: Leido mensaje con nombre: ", name, LOG_INFO);
-                }
-                if (node["parameters"]) {
-                    parameter1 = node["parameters"][0].as<std::string>();
-                    log("read_client: Leido primer parametro con valor: ", parameter1, LOG_INFO);
-                }
-            } catch (const std::exception& e) {
-                log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
-            }
+            // try {
+            //     YAML::Node node = YAML::Load(buffer);
+            //     std::string name;
+            //     std::string parameter1;
+            //     if (node["command"]) {
+            //         name =  node["command"].as<std::string>();
+            //         log("read_client: Leido mensaje con nombre: ", name, LOG_INFO);
+            //     }
+            //     if (node["parameters"]) {
+            //         parameter1 = node["parameters"].as<std::string>();
+            //         log("read_client: Leido primer parametro con valor: ", parameter1, LOG_INFO);
+            //     }
+            // } catch (const std::exception& e) {
+            //     log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
+            // }
         }
     }
     log("read_client: Finalizado.", LOG_INFO);

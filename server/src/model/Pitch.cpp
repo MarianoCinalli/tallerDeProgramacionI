@@ -4,7 +4,7 @@
 
 Pitch::Pitch(Camera* camera) {
   this->localTeam = NULL;
-  this->awayTeam = NULL;
+  // this->awayTeam = NULL;
   this->camera = camera;
 }
 
@@ -15,12 +15,12 @@ void Pitch::setLocalTeam(Team* team) {
     changeActivePlayer();
 }
 
-void Pitch::setAwayTeam(Team* team) {
-    this->awayTeam = team;
-    // this->activePlayer = team->getPlayers().back();
-    // this->activePlayer->toggleIsSelected();
-    // changeActivePlayer();
-}
+// void Pitch::setAwayTeam(Team* team) {
+//     this->awayTeam = team;
+//     // this->activePlayer = team->getPlayers().back();
+//     // this->activePlayer->toggleIsSelected();
+//     // changeActivePlayer();
+// }
 
 Team* Pitch::getLocalTeam() {
     return this->localTeam;
@@ -29,8 +29,8 @@ Team* Pitch::getLocalTeam() {
 Pitch::~Pitch() {
     if(this->localTeam != NULL)
     delete(this->localTeam);
-    if(this->awayTeam != NULL)
-    delete(this->awayTeam);
+    // if(this->awayTeam != NULL)
+    // delete(this->awayTeam);
 }
 
 Coordinates* getCenter() {

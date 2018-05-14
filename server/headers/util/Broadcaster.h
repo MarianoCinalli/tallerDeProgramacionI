@@ -1,5 +1,6 @@
 #include <arpa/inet.h>
 #include <string.h>
+#include <vector>
 #include <errno.h>
 #include "view/Camera.h"
 #include "util/Constants.h"
