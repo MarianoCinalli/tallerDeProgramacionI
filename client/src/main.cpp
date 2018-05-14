@@ -186,8 +186,8 @@ int main(int argc, char* argv[]) {
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
-                    connectionManager->sendToServer(action->toString());
-                    delete(action); // Este delete me da segfault.
+                    connectionManager->sendToServer(action->getCommand());
+                    delete(action);
                 }
             }
         }

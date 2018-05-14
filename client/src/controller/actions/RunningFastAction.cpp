@@ -17,6 +17,11 @@ std::string RunningFastAction::getCommand() {
     return "runningFastAction";
 }
 
+std::vector<std::string> RunningFastAction::getParameters() {
+    std::vector<std::string> params;
+    return params;
+}
+
 RunningFastAction::~RunningFastAction() {
 	//preguntar por esto!
 }

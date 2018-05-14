@@ -17,6 +17,11 @@ std::string SlidingAction::getCommand() {
     return "slidingAction";
 }
 
+std::vector<std::string> SlidingAction::getParameters() {
+    std::vector<std::string> params;
+    return params;
+}
+
 SlidingAction::~SlidingAction() {
 	//preguntar por esto!
 }

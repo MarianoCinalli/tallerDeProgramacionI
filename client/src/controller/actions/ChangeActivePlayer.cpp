@@ -16,5 +16,10 @@ std::string ChangeActivePlayer::getCommand() {
     return "changeActivePlayer";
 }
 
+std::vector<std::string> ChangeActivePlayer::getParameters() {
+    std::vector<std::string> params;
+    return params;
+}
+
 ChangeActivePlayer::~ChangeActivePlayer() {
 }

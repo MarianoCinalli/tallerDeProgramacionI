@@ -17,6 +17,11 @@ std::string KickingAction::getCommand() {
     return "kickingAction";
 }
 
+std::vector<std::string> KickingAction::getParameters() {
+    std::vector<std::string> params;
+    return params;
+}
+
 KickingAction::~KickingAction() {
 	//preguntar por esto!
 }
