@@ -53,7 +53,9 @@ void Pitch::changeActivePlayer()
 	Coordinates* center = activePlayer->getPosition();
 
 	// Solo puede seleccionar de los jugadores dentro de los margenes
-	std::list<Player*> players = this->camera->getPlayersInsideMargin(localTeam->getPlayers());
+	Team* team = this->localTeam;
+
+	std::list<Player*> players = this->camera->getPlayersInsideMargin(team->getPlayers());
 	if (!players.empty()) {
 		int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
 		Player* nearestPlayer = players.back();
@@ -76,6 +78,8 @@ void Pitch::changeActivePlayer()
 void Pitch::checkIntercepts(){
 	int value = STEAL_VALUE;
 	std::list<Player*> players = this->localTeam->getPlayers();
+	std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
+	players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
 	if (!players.empty()) {
 		int nearestDistance = 500; //max distance harcodeadeo TODO
 		Player* nearestPlayer = NULL;
@@ -101,6 +105,8 @@ void Pitch::changeBallOwnership()
 	if (this->ball->isInterceptable()) {
 		int value = INTERCEPT_VALUE;
 		std::list<Player*> players = this->localTeam->getPlayers();
+		std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
+		players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
 		if (!players.empty()) {
 			int nearestDistance = 300; //max distance harcodeadeo TODO
 			Player* nearestPlayer = NULL;
