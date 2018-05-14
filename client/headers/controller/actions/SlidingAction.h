@@ -12,13 +12,10 @@ class SlidingAction : public Action {
         SlidingAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
-<<<<<<< HEAD
 				virtual void execute(Pitch* pitch);
         virtual bool valid(Pitch* pitch);
-=======
         virtual std::string getCommand();
         virtual std::vector<std::string> getParameters();
->>>>>>> tp2-server-client
         ~SlidingAction();
 };
 #endif // SLIDINGACTION_H

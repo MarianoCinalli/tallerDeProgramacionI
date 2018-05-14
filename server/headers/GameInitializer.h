@@ -22,20 +22,8 @@
 
 class GameInitializer {
     private:
-<<<<<<< HEAD
-        SDL_Window* window;
-        SDL_Renderer* renderer;
-
-        PitchView* pitchView;
-        GameController* gameController;
-        ActionsManager* actionsManager;
-        Texture* localTeamSprites;
-        Texture* awayTeamSprites;
-
-=======
         GameController* gameController; // Liberado aca.
         ActionsManager* actionsManager; // Liberado aca.
->>>>>>> tp2-server-client
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
@@ -49,11 +37,6 @@ class GameInitializer {
     private:
         void initializePitch(Conf* conf);
         void initializeLocalTeam(Conf* conf);
-<<<<<<< HEAD
-        void initializeBall();
-        void initializeLocalTeamSprites(std::string path, Colour* shirt);
-=======
->>>>>>> tp2-server-client
         void initializeGameController();
         void initializeActionsManager();
 };
