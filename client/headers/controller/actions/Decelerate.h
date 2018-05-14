@@ -13,6 +13,8 @@ class Decelerate : public Action {
         Decelerate(int direction);
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
+        virtual std::vector<std::string> getParameters();
         ~Decelerate();
 };
 #endif // DECELERATE_H

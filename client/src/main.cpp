@@ -12,6 +12,12 @@
 #include "controller/ActionsManager.h"
 #include "controller/GameController.h"
 #include "view/Camera.h"
+#include "util/ConnectionManager.h"
+#include "util/ThreadSpawner.h"
+#include "util/functions.h"
+
+#include <iostream>
+#include <mutex>
 
 // Global variables ---------------------------------------
 std::ofstream LOG_FILE_POINTER;
@@ -21,6 +27,8 @@ const std::string defaultSpritesFileName = "images/spritesDefaults.png";
 std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 std::string CLI_LOG_LEVEL = "";
+std::mutex log_mutex;
+GameInitializer* initializer;
 // Global variables ---------------------------------------
 
 
@@ -108,6 +116,15 @@ int chequearOpciones(int argc, char* argv[]) {
     return 0;
 }
 
+void endProgram(int statusToExit, ConnectionManager* connectionManager) {
+    connectionManager->closeConnection();
+    delete(connectionManager);
+    delete(initializer);
+    logSessionFinished();
+    LOG_FILE_POINTER.close();
+    exit(statusToExit);
+}
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
@@ -133,23 +150,34 @@ int main(int argc, char* argv[]) {
         }
     }
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
-    GameInitializer* initializer = new GameInitializer(configuration);
-    GameController* gameController = initializer->getGameController();
+    initializer = new GameInitializer(configuration);
     ActionsManager* actionsManager = initializer->getActionsManager();
-    Camera* camera = initializer->getCamera();
-    SDL_Renderer* renderer = initializer->getRenderer();
-    PitchView* pitchView = initializer->getPitchView();
     bool quit = false;
     SDL_Event e;
     int frameRate = configuration->getFramerate();
     float sleepTime = (float)200000/(float)frameRate;
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
+    ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
+    if(!connectionManager->connectToServer()) {
+        log("Main: No se pudo abrir la conexion.", LOG_ERROR);
+        endProgram(1, connectionManager);
+    }
+    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir y mandar estos mensajes al server.
+    // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
+    // Lanzar thread que recibe mensajes de estado de juego.
+    ThreadSpawner* threadSpawner = new ThreadSpawner();
+    threadSpawner->spawn(
+        read_server,
+        connectionManager
+    );
     log("Main: Juego inicializado correctamente.", LOG_INFO);
+    // Lanzar thread que dibuja el juego.
+    // threadSpawner->spawn(drawer, NULL);
     // Main loop ------------------------------------------
     log("Main: Entrando en el main loop...", LOG_INFO);
+    // Este va a ser el thread que escucha el teclado.
     while (!quit) {
-
         while (SDL_PollEvent(&e) != 0) {
             if (actionsManager->shouldQuit(e)) {
                 quit = true;
@@ -158,21 +186,21 @@ int main(int argc, char* argv[]) {
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
-                    gameController->execute(action);
+                    connectionManager->sendToServer(action->getCommand());
                     delete(action);
                 }
             }
         }
-        gameController->updatePlayers();
-        gameController->updateBall();
-        gameController->updateCameraPosition(camera);
-        pitchView->render(renderer);
-        usleep(sleepTime); // Frame rate.
+        // gameController->updatePlayers();
+        // gameController->updateBall();
+        // gameController->updateCameraPosition(camera);
+        // pitchView->render(renderer);
+        // usleep(sleepTime); // Frame rate.
+        // Pongo esto aca pero no va el framerate en este thread.
+        usleep(sleepTime);
     }
     log("Main: Main loop finalizado.", LOG_INFO);
+
     // Liberacion de memoria -------------------------------
-    delete(initializer);
-    logSessionFinished();
-    LOG_FILE_POINTER.close();
-    return 0;
+    endProgram(0, connectionManager);
 }

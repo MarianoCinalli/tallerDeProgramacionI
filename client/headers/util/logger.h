@@ -14,6 +14,8 @@
 #include <ctime>
 #include <unistd.h>
 
+#include <mutex>
+
 // Funciones de uso interno.
 std::string getFormatedDateTime(const char* format);
 std::string getDate();
@@ -32,6 +34,8 @@ int log(std::string messageToConcatenate, const char* charsToConcatenate, int me
 int log(std::string messageToConcatenate, char* charsToConcatenate, int messageLevel);
 int log(Loggable* classToConcatenate, int messageLevel);
 int log(std::string messageToConcatenate, Loggable* classToConcatenate, int messageLevel);
+
+void flushLog();
 
 // Funciones para el encabezado y pie de archivos.
 int logSessionStarted();

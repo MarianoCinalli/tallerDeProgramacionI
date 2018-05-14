@@ -61,7 +61,7 @@ const int NORMAL_VELOCITY = 15;
 const int BALL_DECELERATE_TIME = 15; //a numeros mas grandes, tarda mas
 
 //interceptar pases
-const int INTERCEPT_VALUE = 55;
+const int INTERCEPT_VALUE = 40;
 const int STEAL_VALUE = 60;
 const int TIME_BALL_NO_INTERCEPT = 4;
 #endif // CONSTANTS_H_

@@ -2,12 +2,13 @@
 
 extern int LOG_MIN_LEVEL;
 extern std::ofstream LOG_FILE_POINTER;
+extern std::mutex log_mutex;
 
 std::string getFormatedDateTime(const char* format) {
     std::time_t now = std::time(nullptr);
     char buf[40];
     struct tm tstruct = *localtime(&now); // UTC
-    tstruct.tm_hour -= 3; // UTC - 3
+    tstruct.tm_hour -= 0; // UTC - 3
     // Time might be out of range after fixing timezone. Re-converting it.
     std::mktime(&tstruct);
     strftime(buf, sizeof(buf), format, &tstruct);
@@ -63,7 +64,10 @@ int log(std::string message, int messageLevel) {
         return 1;
     }
     std::string toLog = getTime() + " - " + getPID() + " <" + getMessageLevelString(messageLevel) +"> " + message + "\n";
+    log_mutex.lock();
     LOG_FILE_POINTER << toLog;
+    flushLog();
+    log_mutex.unlock();
     return 0;
 }
 
@@ -74,6 +78,7 @@ int logSessionStarted() {
     LOG_FILE_POINTER << separator;
     LOG_FILE_POINTER << sessionStartHeader;
     LOG_FILE_POINTER << separator;
+    flushLog();
     return 0;
 }
 
@@ -83,6 +88,7 @@ int logSessionFinished() {
     std::string sessionFinishedHeader = "Program finished at " + getDate() + " by PID " + getPID() + "\n";
     LOG_FILE_POINTER << separator;
     LOG_FILE_POINTER << sessionFinishedHeader;
+    flushLog();
     return 0;
 }
 

@@ -18,8 +18,18 @@ bool SlidingAction::valid(Player* player) {
     return true;
 }
 
+<<<<<<< HEAD
 bool SlidingAction::valid(Pitch* pitch) {
     return true;
+=======
+std::string SlidingAction::getCommand() {
+    return "slidingAction";
+}
+
+std::vector<std::string> SlidingAction::getParameters() {
+    std::vector<std::string> params;
+    return params;
+>>>>>>> tp2-server-client
 }
 
 SlidingAction::~SlidingAction() {

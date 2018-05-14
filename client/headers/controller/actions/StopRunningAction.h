@@ -13,6 +13,7 @@ class StopRunningAction : public Action {
         StopRunningAction(int direction);
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
         ~StopRunningAction();
 };
 #endif // STOPRUNNINGACTION_H

@@ -52,8 +52,13 @@ cmake-build-debug
 .DS_Store
 headers/.DS_Store
 
+<<<<<<< HEAD
 
 #atom
 .tags*
+=======
+#Atom
+>>>>>>> tp2-server-client
 *.gcc-flags.json
+.tags*
 core

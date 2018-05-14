@@ -13,6 +13,15 @@ bool Accelerate::valid(Player* player){
   return true;
 }
 
+std::string Accelerate::getCommand() {
+    return "accelerate";
+}
+
+std::vector<std::string> Accelerate::getParameters() {
+  std::vector<std::string> params;
+  params.push_back(std::to_string(this->direction));
+  return params;
+}
 
 Accelerate::~Accelerate() {
 }

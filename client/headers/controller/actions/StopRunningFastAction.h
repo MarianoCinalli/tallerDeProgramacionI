@@ -12,6 +12,8 @@ class StopRunningFastAction : public Action {
         StopRunningFastAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
+        virtual std::vector<std::string> getParameters();
         ~StopRunningFastAction();
 };
 #endif // STOPRUNNINGFASTACTION_H

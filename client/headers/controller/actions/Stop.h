@@ -13,6 +13,8 @@ class Stop : public Action {
         Stop();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
+        virtual std::string getCommand();
+        virtual std::vector<std::string> getParameters();
         ~Stop();
 };
 #endif // STOP_H

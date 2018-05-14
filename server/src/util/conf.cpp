@@ -54,6 +54,24 @@ int chooseUsuarios(YAML::Node nod, map<string, string>* usr) {
     }
 }
 
+int chooseMargenes(YAML::Node nod) {
+    try {
+        if (!nod["performance"]["margenes"]) {
+            return VALOR_INVALIDO;
+        }
+        int str = nod["performance"]["margenes"].as<int>();
+        if (str > 0 && str < 300) {
+            return str;
+        } else {
+            return VALOR_INVALIDO;
+        }
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
 string parametroInvalido(string par) {
     return "Conf: parametro: " + par + " invalido, usando valor por default";
 }
@@ -120,6 +138,8 @@ int Conf::loadConf(string file) {
     defaultConfig = YAML::LoadFile(defaultFile);
     debugLevel = cargarParametro("Debug level", &chooseDebugLevel);
     log("Conf: Cargado debug Level con valor: ", getMessageLevelString(debugLevel), LOG_INFO);
+    margenes = cargarParametro("margenes", &chooseMargenes);
+    log("Conf: Cargado margenes con valor: ", margenes, LOG_INFO);
     cargarParametro("usuarios", &this->usuarios,&chooseUsuarios);
     return 0;
 }
@@ -128,6 +148,9 @@ int Conf::getDebugLevel() {
     return debugLevel;
 }
 
+int Conf::getMargen() {
+    return margenes;
+}
 
 Conf::Conf(string filename, string defaultSpritesFilename) {
     defaultFile = filename;
