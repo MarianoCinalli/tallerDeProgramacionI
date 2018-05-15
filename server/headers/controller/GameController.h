@@ -35,6 +35,7 @@ class GameController {
         void updateCameraPosition(Camera* camera);
         // Dependiendo del estado del juego devuelve si termino o no.
         bool shouldGameEnd();
+        Player* getActivePlayer(int user);
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

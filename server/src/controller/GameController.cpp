@@ -7,11 +7,19 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
+
+Player* GameController::getActivePlayer(int user){
+  // despues se va a poder elegir el active player por usuario
+  return this->activePlayer;
+}
+
 void GameController::execute(Action* action) {
-    if(action->valid(this->activePlayer)){
-      action->execute(this->activePlayer);
+    // Player* player = this->getActivePlayer(action->getUser());
+    Player* player = this->getActivePlayer(0);    //TODO en vez del 0 iria el usuario correcto
+    if(action->valid(player)){
+      action->execute(player);
     } else if (action->valid(this->pitch)){
-      action->execute(this->pitch);
+      action->execute(this->pitch, 0);
     }
 }
 
@@ -20,7 +28,7 @@ void GameController::updatePlayers() {
     // porque solo se mueve un jugador.
     this->activePlayer = this->pitch->activePlayer;
     // Actualizar la posicion de todos los jugadores
-    std::list<Player*> players = this->pitch->getLocalTeam()->getPlayers();
+    std::list<Player*> players = this->pitch->getTeam(0)->getPlayers(); //TODO usuario 0
     if (!players.empty()){
         for (Player* p : players) {
             p->updatePosition();

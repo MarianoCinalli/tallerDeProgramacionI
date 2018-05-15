@@ -3,9 +3,9 @@
 ChangeActivePlayer::ChangeActivePlayer() {
 }
 
-void ChangeActivePlayer::execute(Pitch* pitch) {
+void ChangeActivePlayer::execute(Pitch* pitch, int user) {
     log("ChangeActivePlayer: Cambiando el jugador activo.", LOG_DEBUG);
-    pitch->changeActivePlayer();
+    pitch->changeActivePlayer(user);
 }
 
 bool ChangeActivePlayer::valid(Pitch* pitch){

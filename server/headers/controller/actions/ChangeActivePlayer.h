@@ -8,7 +8,7 @@
 class ChangeActivePlayer : public Action {
     public:
         ChangeActivePlayer();
-        virtual void execute(Pitch* pitch);
+        virtual void execute(Pitch* pitch, int user);
         virtual bool valid(Pitch* pitch);
         ~ChangeActivePlayer();
 };

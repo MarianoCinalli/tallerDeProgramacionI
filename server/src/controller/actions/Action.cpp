@@ -1,13 +1,14 @@
 #include "controller/actions/Action.h"
 
 Action::Action() {
+  // deberia haber un constructor con el numero de jugador?
 }
 
 void Action::execute(Player* player) {
     log("Llamando al execute de Action!", LOG_ERROR);
 }
 
-void Action::execute(Pitch* pitch){
+void Action::execute(Pitch* pitch, int user){
   log("Llamando al execute de Action!", LOG_ERROR);
 }
 

@@ -20,13 +20,14 @@ class Pitch {
     public:
         Pitch(Camera* camera);
         Player* activePlayer;
-        void changeActivePlayer();
+        void changeActivePlayer(int user);
         void setTeam(Team* team, int teamNumber);
         void setBall(Ball* ball);
-
-        Team* getLocalTeam();
         std::list<Player*> getPlayersInsideCamera();
         Ball* getBall();
+        void checkIntercepts();
+        void changeBallOwnership();
+        Team* getTeam(int user);
         ~Pitch();
 };
 #endif // PITCH_H
