@@ -62,10 +62,10 @@ void GameInitializer::initializeBall() {
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }
 
-void GameInitializer::getTeamString(int teamNumber) {
+std::string GameInitializer::getTeamString(int teamNumber) {
     if (teamNumber == 0) {
         return "local";
-    } else if (teamNumber == 1) {
+    } else {
         return "visitante";
     }
 }

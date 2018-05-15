@@ -43,6 +43,7 @@ class GameInitializer {
         void initializeBall();
         void initializeGameController();
         void initializeActionsManager();
+        std::string getTeamString(int teamNumber);
         void setTeam(Team* team, int teamNumber);
         int getOrientation(int teamNumber);
 };
