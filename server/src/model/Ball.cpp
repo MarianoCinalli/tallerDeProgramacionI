@@ -186,6 +186,12 @@ std::string Ball::getAsYaml() {
     return message;
 }
 
+// Metodo para dar compatibilidad con lo anterior,
+// ver si la velocidad que devuelve es la correcta.
+int Ball::getCurrentSpeed() {
+    return this->velocity->getComponentX();
+}
+
 Ball::~Ball() {
     delete(this->position);
     // delete(this->player);

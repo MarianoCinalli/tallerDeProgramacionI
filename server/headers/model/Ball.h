@@ -32,6 +32,7 @@ class Ball {
 
         Coordinates* getPosition();
         Velocity* getVelocity();
+        int getCurrentSpeed();
         Player* getPlayer();
         void setPlayer(Player* player);
         bool isDominated();
