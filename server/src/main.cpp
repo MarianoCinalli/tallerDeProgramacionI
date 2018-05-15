@@ -113,7 +113,7 @@ int chequearOpciones(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
-        printf("Salida del programa por flags o argumento invalido\n");
+        printf("Salida del programa por flags o argumento invalido.\n");
         return SALIDA_LINEA_COMANDOS;
     }
     // Inicializacion -------------------------------------
@@ -137,20 +137,29 @@ int main(int argc, char* argv[]) {
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
     initializer = new GameInitializer(configuration);
     delete(configuration);
-    log("Main: Juego inicializado correctamente.", LOG_INFO);
-
     ConnectionManager* connectionManager = new ConnectionManager(8080, 1);
     if(!connectionManager->openConnections()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
         delete(connectionManager);
         exit(1);
     }
+    ThreadSpawner* threads = new ThreadSpawner();
+    log("Main: Juego inicializado correctamente.", LOG_INFO);
+
     connectionManager->acceptConnectionsUntilMax(); // Pasarle el gameControllerProxy.
+    // Launch game_updater thread.
+    threads->spawn(
+        game_updater,
+        NULL
+    );
     connectionManager->createBroadcaster();
-    // Launch gameManager
+    // Wait gameManager thread.
+    // Signal children threads.
+    // Wait children threads.
     connectionManager->waitForAllConnectionsToFinish();
     connectionManager->closeOpenedSockets();
     // End ------------------------------------------------
+    delete(threads);
     delete(connectionManager);
     logSessionFinished();
     LOG_FILE_POINTER.close();

@@ -1,9 +1,13 @@
 #include "model/Player.h"
 
-Player::Player(int orientation, Coordinates* position) {
+int Player::ID = 0;
+
+Player::Player(int orientation, Coordinates* position, int team) {
     log("Jugador: Creando jugador...", LOG_INFO);
+    this->id = ++ID;
     this->orientation = orientation;
     this->position = position;
+    this->team = team;
     this->basePosition = new Coordinates(800, 500);
     this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
@@ -271,4 +275,30 @@ void Player::copyStats(Player* copyTo) {
 
 void Player::setTrayectory(Velocity* trayectory) {
     this->velocity->set(trayectory);
+}
+
+
+/*
+Convierte a YAML las propiedades necesarias para dibujar.
+Esta asi, para ahorrar caracteres.
+this->id: 
+ te: this->team
+ cx: this->position->getX()
+ cy: this->position->getY()
+ se: this->isSelected
+ ki: this->kicking
+ sl: this->sliding
+ ru: this->runningFast
+*/
+std::string Player::getAsYaml() {
+    std::string message = "";
+    message += std::to_string(this->id) + ":\n";
+    message += " te: " + std::to_string(this->team) + "\n";
+    message += " cx: " + std::to_string(this->position->getX()) + "\n";
+    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " se: " + std::to_string(this->isSelected) + "\n";
+    message += " ki: " + std::to_string(this->kicking) + "\n";
+    message += " sl: " + std::to_string(this->sliding) + "\n";
+    message += " ru: " + std::to_string(this->runningFast) + "\n";
+    return message;
 }

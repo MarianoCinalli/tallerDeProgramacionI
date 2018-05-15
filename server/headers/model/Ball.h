@@ -45,6 +45,8 @@ class Ball {
         void progressiveDecelerate(float passDistance);
         void stopRolling();
 
+        std::string getAsYaml();
+
         ~Ball();
 };
 #endif // BALL_H

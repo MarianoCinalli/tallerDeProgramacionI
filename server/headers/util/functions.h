@@ -15,9 +15,12 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/Broadcaster.h"
+#include "view/Camera.h"
+#include "controller/GameController.h"
 
 static const int MICROSECONDS_BETWEEEN_BROADCAST = 100000;
 
 void* read_client(void* argument);
 void* broadcast_to_clients(void* clients);
+void* game_updater(void* argument);
 #endif

@@ -25,6 +25,8 @@ class Pitch {
         void setBall(Ball* ball);
 
         Team* getLocalTeam();
+        std::list<Player*> getPlayersInsideCamera();
+        Ball* getBall();
         ~Pitch();
 };
 #endif // PITCH_H

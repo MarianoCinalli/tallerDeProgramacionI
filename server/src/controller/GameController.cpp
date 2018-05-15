@@ -37,6 +37,13 @@ void GameController::updateCameraPosition(Camera* camera) {
     camera->calculateNewPostion(playerPosition, playerSpeed);
 }
 
+// Aca deberia haber una nocion del tiempo.
+// Un reloj que termine el juego luego del tiempo.
+// Tambien algo que lo haga finalizar si lo queremos terminar antes de tiempo.
+bool GameController::shouldGameEnd() {
+    return false;
+}
+
 GameController::~GameController() {
     log("ActionsManager: Liberando memoria. Borrando cancha...", LOG_INFO);
     delete(this->pitch);

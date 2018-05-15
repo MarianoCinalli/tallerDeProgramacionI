@@ -28,10 +28,11 @@ class GameInitializer {
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
-        Team* awayTeam;
+        Team* awayTeam; // Donde se libera?
         Pitch* pitch; // Liberado en game controller.
     public:
         GameInitializer(Conf* configuration);
+        Pitch* getPitch();
         GameController* getGameController();
         ActionsManager* getActionsManager();
         Camera* getCamera();
@@ -43,5 +44,6 @@ class GameInitializer {
         void initializeGameController();
         void initializeActionsManager();
         void setTeam(Team* team, int teamNumber);
+        int getOrientation(int teamNumber);
 };
 #endif // GAMEINITIALIZER_H

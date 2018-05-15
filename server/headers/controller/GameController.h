@@ -33,6 +33,8 @@ class GameController {
         void updatePlayers();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition(Camera* camera);
+        // Dependiendo del estado del juego devuelve si termino o no.
+        bool shouldGameEnd();
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

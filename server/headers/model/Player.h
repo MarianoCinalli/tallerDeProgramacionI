@@ -9,6 +9,8 @@
 
 class Player {
     private:
+        int id;
+        int team;
         int orientation;
         int maxVelocity;
         bool isSelected;
@@ -24,7 +26,8 @@ class Player {
         bool runningFast;
 
     public:
-        Player(int orientation, Coordinates* position);
+        static int ID;
+        Player(int orientation, Coordinates* position, int team);
 
         // Getters
         Coordinates* getPosition();
@@ -63,6 +66,8 @@ class Player {
         void startsKicking();
         void stopKicking();
         void isAlreadyKicking();
+
+        std::string getAsYaml();
 
         ~Player();
 };

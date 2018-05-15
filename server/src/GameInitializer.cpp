@@ -12,6 +12,10 @@ GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Juego inicializado...", LOG_INFO);
 }
 
+Pitch* GameInitializer::getPitch() {
+    return this->pitch;
+}
+
 GameController* GameInitializer::getGameController() {
     return this->gameController;
 }
@@ -41,7 +45,8 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
-        Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
+        int orientation = this->getOrientation(teamNumber);
+        Player* player = new Player(orientation, coordinates, teamNumber);
         team->addPlayer(player);
     }
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
@@ -49,22 +54,29 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     this->pitch->setTeam(team, 0);
 }
 
-void GameInitializer::initializeBall(){
+void GameInitializer::initializeBall() {
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
     Player* player = this->pitch->activePlayer;
-    Coordinates* coords = new Coordinates(800,600);
+    Coordinates* coords = new Coordinates(800, 600);
     Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }
 
-void GameInitializer::setTeam(Team* team, int teamNumber){
-  if (teamNumber == 0){
-    this->localTeam = team;
-  }
-  else if (teamNumber == 1){
-    this->awayTeam = team;
-  }
+void GameInitializer::setTeam(Team* team, int teamNumber) {
+    if (teamNumber == 0) {
+        this->localTeam = team;
+    } else if (teamNumber == 1) {
+        this->awayTeam = team;
+    }
+}
+
+int GameInitializer::getOrientation(int teamNumber) {
+    if (teamNumber == 0) {
+        return PLAYER_ORIENTATION_RIGHT;
+    } else {
+        return PLAYER_ORIENTATION_LEFT;
+    }
 }
 
 void GameInitializer::initializePitch(Conf* conf) {

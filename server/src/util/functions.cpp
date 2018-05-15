@@ -2,6 +2,7 @@
 
 extern GameInitializer* initializer;
 
+// Lee los mensajes de los clientes y actualiza el modelo.
 void* read_client(void* argument) {
     log("read_client: Creado.", LOG_INFO);
     int socket;
@@ -62,7 +63,8 @@ void* read_client(void* argument) {
 void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Creado.", LOG_INFO);
     std::vector<int> sockets = *((std::vector<int>*) argument);
-    Broadcaster* broadcaster = new Broadcaster(initializer->getCamera(), &sockets);
+    Broadcaster* broadcaster = new Broadcaster(initializer->getPitch(), &sockets);
+    // broadcaster->broadcastGameBegins();
     int count = 0; // esto esta provisorio.
     while (count < 10) {
         broadcaster->broadcast();
@@ -71,5 +73,20 @@ void* broadcast_to_clients(void* argument) {
     }
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
+    return NULL;
+}
+
+// Actualiza el modelo dependiendo de las propiedades.
+void* game_updater(void* argument) {
+    log("game_updater: Creado.", LOG_INFO);
+    Camera* camera = initializer->getCamera();
+    GameController* gameController = initializer->getGameController();
+    while (gameController->shouldGameEnd()) {
+        gameController->updatePlayers();
+        // gameController->updateBall();
+        gameController->updateCameraPosition(camera);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST/10);
+    }
+    log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
 }
