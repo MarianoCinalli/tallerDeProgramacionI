@@ -18,6 +18,19 @@ void Pitch::setTeam(Team* team, int teamNumber) {
     }
 }
 
+void Pitch::setUserTeam(int user, int team){
+  if (team == 0){
+    if (this->localTeam != NULL){
+      teams[user] = this->localTeam;
+    }
+  }
+  else if(team == 1){
+  if (this->awayTeam!= NULL){
+    teams[user] = this->awayTeam;
+  }
+  }
+}
+
 void Pitch::setBall(Ball* ball) {
     this->ball = ball;
 }
@@ -49,12 +62,12 @@ Coordinates* getCenter() {
 }
 
 Player* Pitch::getActivePlayer(int user){
-    return players[user];
+    return this->activePlayers[user];
 }
 
 void Pitch::changeActivePlayer(int user) {
     Team* team = teams[user];
-    Coordinates* center = this->players[user]->getPosition();
+    Coordinates* center = this->activePlayers[user]->getPosition();
     // Solo puede seleccionar de los jugadores dentro de los margenes
     std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers());
     if (!playersList.empty()) {
@@ -68,10 +81,10 @@ void Pitch::changeActivePlayer(int user) {
                 nearestPlayer = p;
             }
         }
-        Player* player = this->players[user];
+        Player* player = this->activePlayers[user];
         player->copyStats(nearestPlayer);
         player->toggleIsSelected();
-        this->players[user] = nearestPlayer;
+        this->activePlayers[user] = nearestPlayer;
         nearestPlayer->toggleIsSelected();
         log("Pitch: Se cambio el jugador activo.", LOG_INFO);
     }
