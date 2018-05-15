@@ -66,6 +66,7 @@ void* broadcast_to_clients(void* argument) {
     Broadcaster* broadcaster = new Broadcaster(initializer->getPitch(), &sockets);
     // broadcaster->broadcastGameBegins();
     int count = 0; // esto esta provisorio.
+    log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
     while (count < 10) {
         broadcaster->broadcast();
         count++;

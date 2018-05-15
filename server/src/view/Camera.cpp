@@ -82,14 +82,14 @@ std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteM
     std::list<PlayerSpriteManager*> resultado;
     int playerX = 0;
     int playerY = 0;
-    for (PlayerSpriteManager* p : views){
+    for (PlayerSpriteManager* p : views) {
         playerX = p->getPlayerCoordinates()->getX();
         playerY = p->getPlayerCoordinates()->getY();
 
-        if ( (playerX > 0 - SPRITE_SIZE) &&
-             (playerX < LEVEL_WIDTH) &&
-             (playerY > 0 - SPRITE_SIZE) &&
-             (playerY < LEVEL_HEIGHT) ) {
+        if ((playerX > 0 - SPRITE_SIZE) &&
+                (playerX < LEVEL_WIDTH) &&
+                (playerY > 0 - SPRITE_SIZE) &&
+                (playerY < LEVEL_HEIGHT)) {
             // Esta dentro de los limites
             resultado.push_back(p);
         }
@@ -98,29 +98,27 @@ std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteM
     return resultado;
 }
 
-bool isInsideMargin(Player* p,SDL_Rect* margin){
-  int playerX = p->getPosition()->getX();
-  int playerY = p->getPosition()->getY();
-  if ((playerX > margin->x) &&
-       (playerX < margin->x + margin->w) &&
-       (playerY > margin->y) &&
-       (playerY < margin->y + margin->h )) {
-         return true;
-       }
-  else {
-    return false;
-  }
+bool isInsideMargin(Player* p, SDL_Rect* margin) {
+    int playerX = p->getPosition()->getX();
+    int playerY = p->getPosition()->getY();
+    if ((playerX > margin->x) &&
+            (playerX < margin->x + margin->w) &&
+            (playerY > margin->y) &&
+            (playerY < margin->y + margin->h)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players) {
     // Solo los que estan dentro de los margenes
     std::list<Player*> resultado;
-    for (Player* p : players){
-        if (isInsideMargin(p,&margin)){
-          resultado.push_back(p);
+    for (Player* p : players) {
+        if (isInsideMargin(p, &margin)) {
+            resultado.push_back(p);
         }
     }
-
     return resultado;
 }
 

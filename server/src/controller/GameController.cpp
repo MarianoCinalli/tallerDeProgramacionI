@@ -38,10 +38,10 @@ void GameController::updateCameraPosition(Camera* camera) {
 }
 
 // Aca deberia haber una nocion del tiempo.
-// Un reloj que termine el juego luego del tiempo.
-// Tambien algo que lo haga finalizar si lo queremos terminar antes de tiempo.
+// Un reloj que termine el juego luego del tiempo. Proximo tp?
+// Tenemos que poner algo que nos permita controlar cuando teminar.
 bool GameController::shouldGameEnd() {
-    return false;
+    return true;
 }
 
 GameController::~GameController() {

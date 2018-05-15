@@ -8,6 +8,7 @@ Broadcaster::Broadcaster(Pitch* pitch, std::vector<int>* sockets) {
 }
 
 void Broadcaster::broadcast() {
+    log("Broadcaster: Broadcasteando...", LOG_INFO);
     std::string message = this->getMessage();
     if (message != "") {
         const char* constantMessage = (message).c_str();
@@ -16,6 +17,8 @@ void Broadcaster::broadcast() {
             // Convertirlas a string y enviarlas.
             send(client_socket, constantMessage, strlen(constantMessage), 0);
         }
+    } else {
+        log("Broadcaster: Mensaje vacio, no se broadcastea.", LOG_ERROR);
     }
 }
 

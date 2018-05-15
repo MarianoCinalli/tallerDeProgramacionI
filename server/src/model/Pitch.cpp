@@ -11,7 +11,7 @@ Pitch::Pitch(Camera* camera) {
 void Pitch::setTeam(Team* team, int teamNumber) {
     if (teamNumber == 0) {
         this->localTeam = team;
-    } else if (teamNumber == 1) {
+    } else {
         this->awayTeam = team;
     }
 }
@@ -67,7 +67,10 @@ void Pitch::changeActivePlayer() {
 std::list<Player*> Pitch::getPlayersInsideCamera() {
     std::list<Player*> localPlayers = this->camera->getPlayersInsideMargin(localTeam->getPlayers());
     std::list<Player*> awayPlayers = this->camera->getPlayersInsideMargin(awayTeam->getPlayers());
-    // Transfers elements from one list to another.
-    localPlayers.splice(localPlayers.end(), awayPlayers);
+    std::list<Player*>::iterator it;
+    it = localPlayers.begin();
+    ++it;
+    localPlayers.splice(it, awayPlayers);
+    // Luego de esto, los jugadores de awayPlayers se pasan a localPlayers.
     return localPlayers;
 }

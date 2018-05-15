@@ -157,6 +157,7 @@ int main(int argc, char* argv[]) {
     // Signal children threads.
     // Wait children threads.
     connectionManager->waitForAllConnectionsToFinish();
+    threads->joinSpawnedThreads();
     connectionManager->closeOpenedSockets();
     // End ------------------------------------------------
     delete(threads);

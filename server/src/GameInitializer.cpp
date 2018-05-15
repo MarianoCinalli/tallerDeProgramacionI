@@ -3,7 +3,6 @@
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
     this->initializePitch(configuration);
-    // this->initializeLocalTeam(configuration);
     this->initializeTeam(configuration, 0);
     this->initializeTeam(configuration, 1);
     this->initializeBall();
@@ -49,9 +48,9 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
         Player* player = new Player(orientation, coordinates, teamNumber);
         team->addPlayer(player);
     }
-    log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
-    this->setTeam(team, 0);
-    this->pitch->setTeam(team, 0);
+    log("GameInitializer: Agregando el equipo a la cancha: ", this->getTeamString(teamNumber), LOG_INFO);
+    this->setTeam(team, teamNumber); // aca se agrega cada equipo a la cancha.
+    this->pitch->setTeam(team, teamNumber); // Se usa para algo esto?
 }
 
 void GameInitializer::initializeBall() {
@@ -61,6 +60,14 @@ void GameInitializer::initializeBall() {
     Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
     log("GameInitializer: Pelota inicializada", LOG_INFO);
+}
+
+void GameInitializer::getTeamString(int teamNumber) {
+    if (teamNumber == 0) {
+        return "local";
+    } else if (teamNumber == 1) {
+        return "visitante";
+    }
 }
 
 void GameInitializer::setTeam(Team* team, int teamNumber) {
