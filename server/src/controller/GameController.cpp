@@ -37,6 +37,18 @@ void GameController::updatePlayers() {
     log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);
 }
 
+
+void GameController::updateBall() {
+
+  if(this->ball->isDominated() && this->ball->getPlayer()->isKicking()){
+    log("La pelota fue pateada", LOG_INFO);
+    this->ball->isPassed(this->ball->getPlayer()->getOrientation(), 15); //TODO valor de pase?
+  }
+  this->pitch->changeBallOwnership();
+  this->ball->updatePosition();
+}
+
+
 // Cuando el jugador pise el borde mueve la camara.
 // En este punto las coordenadas de el jugador son validas.
 void GameController::updateCameraPosition(Camera* camera) {
