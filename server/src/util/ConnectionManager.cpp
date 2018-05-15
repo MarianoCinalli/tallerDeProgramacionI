@@ -94,6 +94,34 @@ void ConnectionManager::closeOpenedSockets() {
     log("ConnectionManager: Socket cerrados.", LOG_INFO);
 }
 
+int ConnectionManager::getMessage(int socket, std::string& readMessage) {
+    int readBytes;
+    int bufferLength = 1024;
+    int bufferSize = sizeof(char) * bufferLength;
+    char buffer[bufferLength] = {0};
+    memset(buffer, 0x00, bufferSize);
+    readBytes = read(socket, buffer, bufferSize);
+    // Cuidado aca con strerror que no es thread safe:
+    // Otro thread puede setear el errno, y este escribirlo.
+    // Ver de usar strerror_r que es thread safe.
+    if (readBytes < 0) {
+        log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
+        readMessage = "";
+    } else if (readBytes == 0) {
+        log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
+        readMessage = "";
+    } else {
+        log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
+        readMessage = readBytes;
+    }
+    return readBytes;
+}
+
+void ConnectionManager::sendMessage(int socket, std::string message) {
+    const char* constantMessage = (message).c_str();
+    send(socket, constantMessage, strlen(constantMessage), 0);
+}
+
 /*
     TODO:
     Falta manejar la desconexion y reconexion.

@@ -35,6 +35,8 @@ class ConnectionManager {
         void createBroadcaster();
         void waitForAllConnectionsToFinish();
         void closeOpenedSockets();
+        int getMessage(int socket, std::string& readMessage);
+        void sendMessage(int socket, std::string message);
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H
