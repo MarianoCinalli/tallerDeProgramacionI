@@ -3,6 +3,7 @@
 
 #include <unistd.h> // para el usleep.
 #include <string>
+#include <yaml-cpp/yaml.h>
 #include "GameInitializer.h"
 #include "util/Constants.h"
 #include "util/logger.h"

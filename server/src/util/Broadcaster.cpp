@@ -24,7 +24,7 @@ void Broadcaster::broadcast() {
 
 // Pide la lista de cosas vistas (jugadores y pelota).
 std::string Broadcaster::getMessage() {
-    std::string message = "---\n";
+    std::string message = "";
     std::list<Player*> players = this->pitch->getPlayersInsideCamera();
     Ball* ball = this->pitch->getBall();
     if (ball == NULL) {

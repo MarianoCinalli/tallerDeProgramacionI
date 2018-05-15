@@ -80,6 +80,7 @@ void* broadcast_to_clients(void* argument) {
 // Actualiza el modelo dependiendo de las propiedades.
 void* game_updater(void* argument) {
     log("game_updater: Creado.", LOG_INFO);
+    /*
     Camera* camera = initializer->getCamera();
     GameController* gameController = initializer->getGameController();
     while (gameController->shouldGameEnd()) {
@@ -88,6 +89,7 @@ void* game_updater(void* argument) {
         gameController->updateCameraPosition(camera);
         usleep(MICROSECONDS_BETWEEEN_BROADCAST/10);
     }
+    */
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
 }
