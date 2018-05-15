@@ -7,6 +7,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeTeam(configuration, 1);
     this->initializeBall();
     this->initializeGameController();
+    this->initializeConnectionManager(configuration);
     //this->initializeActionsManager(); // Por ahora no
     log("GameInitializer: Juego inicializado...", LOG_INFO);
 }
@@ -27,12 +28,18 @@ Camera* GameInitializer::getCamera() {
     return this->camera;
 }
 
+ConnectionManager* GameInitializer::getConnectionManager() {
+    return this->connectionManager;
+}
+
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
     log("GameInitializer: Liberando gameController.", LOG_INFO);
     delete(this->gameController);
     log("GameInitializer: Liberando actionsManager.", LOG_INFO);
     delete(this->actionsManager);
+    log("GameInitializer: Liberando ConnectionManager.", LOG_INFO);
+    delete(this->connectionManager);
     log("GameInitializer: Liberando vista de la cancha.", LOG_INFO);
 }
 
@@ -101,4 +108,10 @@ void GameInitializer::initializeGameController() {
 void GameInitializer::initializeActionsManager() {
     log("GameInitializer: Creando ActionsManager...", LOG_INFO);
     this->actionsManager = new ActionsManager();
+}
+
+void GameInitializer::initializeConnectionManager(Conf* configuration) {
+    log("GameInitializer: Creando ConnectionManager...", LOG_INFO);
+    // Sacar el puerto y la cantidad de conecciones de la configuracion
+    this->connectionManager = new ConnectionManager(8080, 1);
 }

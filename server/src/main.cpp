@@ -9,6 +9,7 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/conf.h"
+#include "util/functions.h"
 #include "controller/ActionsManager.h"
 #include "controller/GameController.h"
 #include "util/ConnectionManager.h"
@@ -24,6 +25,7 @@ int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee tod
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
 GameInitializer* initializer;
+ConnectionManager* connectionManager;
 // Global variables ---------------------------------------
 
 
@@ -137,10 +139,10 @@ int main(int argc, char* argv[]) {
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
     initializer = new GameInitializer(configuration);
     delete(configuration);
-    ConnectionManager* connectionManager = new ConnectionManager(8080, 1);
+    connectionManager = initializer->getConnectionManager();
     if(!connectionManager->openConnections()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
-        delete(connectionManager);
+        delete(initializer);
         exit(1);
     }
     ThreadSpawner* threads = new ThreadSpawner();
@@ -161,7 +163,7 @@ int main(int argc, char* argv[]) {
     connectionManager->closeOpenedSockets();
     // End ------------------------------------------------
     delete(threads);
-    delete(connectionManager);
+    delete(initializer);
     logSessionFinished();
     LOG_FILE_POINTER.close();
     return 0;

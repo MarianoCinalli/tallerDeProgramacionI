@@ -17,6 +17,7 @@
 #include "controller/GameController.h"
 #include "model/Pitch.h"
 #include "model/Ball.h"
+#include "util/ConnectionManager.h"
 
 #ifndef GAMEINITIALIZER_H
 #define GAMEINITIALIZER_H
@@ -25,6 +26,7 @@ class GameInitializer {
     private:
         GameController* gameController; // Liberado aca.
         ActionsManager* actionsManager; // Liberado aca.
+        ConnectionManager* connectionManager; // Liberado aca.
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
@@ -36,6 +38,7 @@ class GameInitializer {
         GameController* getGameController();
         ActionsManager* getActionsManager();
         Camera* getCamera();
+        ConnectionManager* getConnectionManager();
         ~GameInitializer();
     private:
         void initializePitch(Conf* conf);
@@ -43,6 +46,7 @@ class GameInitializer {
         void initializeBall();
         void initializeGameController();
         void initializeActionsManager();
+        void initializeConnectionManager(Conf* configuration);
         std::string getTeamString(int teamNumber);
         void setTeam(Team* team, int teamNumber);
         int getOrientation(int teamNumber);
