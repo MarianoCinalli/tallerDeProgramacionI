@@ -1,6 +1,7 @@
 #include "model/Team.h"
 #include "view/Camera.h"
 #include "model/Ball.h"
+#include <map>
 
 /*
 Modelo de Cancha:
@@ -17,6 +18,7 @@ class Pitch {
         Team* awayTeam;
         Camera* camera;
         Ball* ball;
+        std::map<int, Team*> teams;
     public:
         Pitch(Camera* camera);
         Player* activePlayer;
