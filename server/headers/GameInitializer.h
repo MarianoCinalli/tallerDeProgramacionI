@@ -28,7 +28,7 @@ class GameInitializer {
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
-        Team* awayTeam; // Donde se libera?
+        Team* awayTeam; // Liberado en Pitch.
         Pitch* pitch; // Liberado en game controller.
     public:
         GameInitializer(Conf* configuration);
