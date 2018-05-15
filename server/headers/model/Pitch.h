@@ -19,10 +19,12 @@ class Pitch {
         Camera* camera;
         Ball* ball;
         std::map<int, Team*> teams;
+        std::map<int, Player*> players;
     public:
         Pitch(Camera* camera);
         Player* activePlayer;
         void changeActivePlayer(int user);
+        Player* getActivePlayer(int user);
         void setTeam(Team* team, int teamNumber);
         void setBall(Ball* ball);
         std::list<Player*> getPlayersInsideCamera();

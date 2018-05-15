@@ -6,7 +6,7 @@ Pitch::Pitch(Camera* camera) {
     this->localTeam = NULL;
     this->awayTeam = NULL;
     this->camera = camera;
-    teams[0] = this->localTeam; //TODO definir que jugadores tienen que equipo. por ejempl, 
+    teams[0] = this->localTeam; //TODO definir que jugadores tienen que equipo. por ejempl,
     teams[1] = this->awayTeam;
 }
 
@@ -48,15 +48,19 @@ Coordinates* getCenter() {
     return new Coordinates(LEVEL_WIDTH / 2, SCREEN_HEIGHT / 2);
 }
 
+Player* Pitch::getActivePlayer(int user){
+    return players[user];
+}
+
 void Pitch::changeActivePlayer(int user) {
     Team* team = teams[user];
-    Coordinates* center = activePlayer->getPosition();
+    Coordinates* center = this->players[user]->getPosition();
     // Solo puede seleccionar de los jugadores dentro de los margenes
-    std::list<Player*> players = this->camera->getPlayersInsideMargin(team->getPlayers());
-    if (!players.empty()) {
+    std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers());
+    if (!playersList.empty()) {
         int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
-        Player* nearestPlayer = players.back();
-        for (Player* p : players) {
+        Player* nearestPlayer = playersList.back();
+        for (Player* p : playersList) {
             int distance = p->getPosition()->distanceTo(center);
             log("Distancia: ", distance, LOG_DEBUG);
             if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
@@ -64,10 +68,11 @@ void Pitch::changeActivePlayer(int user) {
                 nearestPlayer = p;
             }
         }
-        this->activePlayer->copyStats(nearestPlayer);
-        this->activePlayer->toggleIsSelected();
-        this->activePlayer = nearestPlayer;
-        this->activePlayer->toggleIsSelected();
+        Player* player = this->players[user];
+        player->copyStats(nearestPlayer);
+        player->toggleIsSelected();
+        this->players[user] = nearestPlayer;
+        nearestPlayer->toggleIsSelected();
         log("Pitch: Se cambio el jugador activo.", LOG_INFO);
     }
 }
