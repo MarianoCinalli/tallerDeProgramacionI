@@ -85,7 +85,7 @@ void* game_updater(void* argument) {
     GameController* gameController = initializer->getGameController();
     while (gameController->shouldGameEnd()) {
         gameController->updatePlayers();
-        // gameController->updateBall();
+        gameController->updateBall();
         gameController->updateCameraPosition(camera);
         usleep(MICROSECONDS_BETWEEEN_BROADCAST/10);
     }

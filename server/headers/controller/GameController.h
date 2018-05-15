@@ -24,6 +24,7 @@ Controlador de juego:
 class GameController {
     private:
         Pitch* pitch;
+        Ball* ball;
         Player* activePlayer;
     public:
         GameController(Pitch* pitch);
@@ -34,6 +35,7 @@ class GameController {
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition(Camera* camera);
         // Dependiendo del estado del juego devuelve si termino o no.
+        void updateBall();
         bool shouldGameEnd();
         Player* getActivePlayer(int user);
         ~GameController();

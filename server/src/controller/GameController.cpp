@@ -4,6 +4,7 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: Creando gameController...", LOG_INFO);
     this->pitch = pitch;
     this->activePlayer = this->pitch->activePlayer;
+    this->ball = this->pitch->getBall();
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
