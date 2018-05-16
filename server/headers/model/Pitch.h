@@ -22,7 +22,7 @@ class Pitch {
         std::map<int, Player*> activePlayers;
     public:
         Pitch(Camera* camera);
-        Player* activePlayer;
+        // Player* activePlayer;
         void changeActivePlayer(int user);
         Player* getActivePlayer(int user);
         void setTeam(Team* team, int teamNumber);

@@ -13,7 +13,7 @@ Pitch::Pitch(Camera* camera) {
 void Pitch::setTeam(Team* team, int teamNumber) {
     if (teamNumber == 0) {
         this->localTeam = team;
-    } else {
+    } else if (teamNumber == 1) {
         this->awayTeam = team;
     }
 }
@@ -29,6 +29,7 @@ void Pitch::setUserTeam(int user, int team){
     teams[user] = this->awayTeam;
   }
   }
+  this->activePlayer[user] = teams[user]->getPlayers().back() //TODO por usuario
 }
 
 void Pitch::setBall(Ball* ball) {

@@ -5,8 +5,11 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializePitch(configuration);
     this->initializeTeam(configuration, 0);
     this->initializeTeam(configuration, 1);
+    this->pitch->setUserTeam(0,0);  //inicializacion de usuarios
+    this->pitch->setUserTeam(0,1);
     this->initializeBall();
     this->initializeGameController();
+    this->initializeGameControllerProxy();
     this->initializeConnectionManager(configuration);
     log("GameInitializer: Juego inicializado...", LOG_INFO);
 }
@@ -56,12 +59,12 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     }
     log("GameInitializer: Agregando el equipo a la cancha: ", this->getTeamString(teamNumber), LOG_INFO);
     this->setTeam(team, teamNumber); // aca se agrega cada equipo a la cancha.
-    this->pitch->setTeam(team, teamNumber); // Se usa para algo esto?
+    this->pitch->setTeam(team, teamNumber); // Se usa para algo esto? Si, para despues elegir jugador activo
 }
 
 void GameInitializer::initializeBall() {
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
-    Player* player = this->pitch->activePlayer;
+    Player* player = this->pitch->getActivePlayer(0); //TODO user 0 es el dueño del balon al ppio
     Coordinates* coords = new Coordinates(800, 600);
     Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
