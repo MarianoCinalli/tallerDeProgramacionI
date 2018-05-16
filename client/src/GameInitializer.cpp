@@ -162,9 +162,12 @@ void GameInitializer::initializeCommonSdlResources() {
     //Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+        log("SDL could not initialize! SDL Error: %s\n", SDL_GetError(), LOG_ERROR);
     } else {
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
             printf("Warning: Linear texture filtering not enabled!");
+            log("Warning: Linear texture filtering not enabled!", LOG_ERROR);
+
         }
         this->window = SDL_CreateWindow("ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (this->window == NULL) {
@@ -173,11 +176,13 @@ void GameInitializer::initializeCommonSdlResources() {
             this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
             if (this->renderer == NULL) {
                 printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+                log("Renderer could not be created! SDL Error: %s\n", SDL_GetError(), LOG_ERROR);
             } else {
                 SDL_SetRenderDrawColor(this->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
                 int imgFlags = IMG_INIT_PNG;
                 if (!(IMG_Init(imgFlags) & imgFlags)) {
                     printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+                    log("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError(), LOG_ERROR);
                 }
             }
         }

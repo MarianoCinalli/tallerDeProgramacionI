@@ -75,7 +75,7 @@ void* drawer(void* argument) {
         PitchView* pitchView = initializer->getPitchView();
         bool quit =false;
         while (!quit) {
-             quit = initializer->quit;
+            quit = initializer->quit;
             pitchView->render(renderer);
             usleep(200000); // Frame rate.
         }
