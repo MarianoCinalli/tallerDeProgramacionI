@@ -7,10 +7,11 @@
 class Team {
     private:
         std::list<Player*> players;
+        int local; // 0 si es local, 1 si es visitante
         int formacion;
 
     public:
-        Team();
+        Team(int);
         ~Team();
         void order();
         void addPlayer(Player* player);

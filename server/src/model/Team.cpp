@@ -1,9 +1,10 @@
 #include "model/Team.h"
 #include "util/Formaciones.h"
 
-Team::Team() {
+Team::Team(int local) {
     log("Team: Creando equipo.", LOG_INFO);
     this->players = {};
+    this->local = local;
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -39,9 +40,9 @@ void Team::setFormacion(int formacion){
 void Team::order(){
     int i = 0;
     for (Player* p : players){
-        p->setPosition(formaciones[this->formacion][i]);  
+        p->setPosition(getFormation(this->local,this->formacion)[i]);
         // Coloca la posicion base de regreso
-        p->setBasePosition(formaciones[this->formacion][i]);  
+        p->setBasePosition(getFormation(this->local,this->formacion)[i]);
         i++;
     }
 }

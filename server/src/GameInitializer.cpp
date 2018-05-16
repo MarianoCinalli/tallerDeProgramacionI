@@ -49,7 +49,9 @@ GameInitializer::~GameInitializer() {
 
 void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Creando equipo.", LOG_INFO);
-    Team* team = new Team();
+    Team* team = new Team(teamNumber);
+    log("GameInitializer: Seteando formacion.", LOG_INFO);
+    team->setFormacion(33); //TODO formacion default, despues le pregunta al usuario
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
@@ -57,6 +59,8 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
         Player* player = new Player(orientation, coordinates, teamNumber);
         team->addPlayer(player);
     }
+    log("GameInitializer: Ordenando equipo local.", LOG_INFO);
+    team->order();
     log("GameInitializer: Agregando el equipo a la cancha: ", this->getTeamString(teamNumber), LOG_INFO);
     this->setTeam(team, teamNumber); // aca se agrega cada equipo a la cancha.
     this->pitch->setTeam(team, teamNumber); // Se usa para algo esto? Si, para despues elegir jugador activo
