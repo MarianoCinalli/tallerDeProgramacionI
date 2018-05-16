@@ -30,7 +30,7 @@ void Pitch::setUserTeam(int user, int team){
   }
   }
   this->activePlayers[user] = teams[user]->getPlayers().back();
-  this->activePlayers[user]->toggleIsSelected(); 
+  this->activePlayers[user]->toggleIsSelected();
 }
 
 void Pitch::setBall(Ball* ball) {
