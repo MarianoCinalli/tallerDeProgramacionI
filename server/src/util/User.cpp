@@ -43,7 +43,41 @@ void User::processTeamAndFormationMessage(std::string message) {
 
         
 Action* User::getAsAction(std::string message) {
-    return NULL;
+    Action* action = NULL;
+    std::string messageAction = this->getMessageAction(message);
+    std::string messageValue = this->getMessageValue(message);
+    if (messageAction == "StopRunningFast") {
+        action = new StopRunningFastAction();
+    } else if (messageAction == "RunningFast") {
+        action = new RunningFastAction();
+    } else if (messageAction == "Sliding") {
+        action = new SlidingAction();
+    } else if (messageAction == "Kicking") {
+        action = new KickingAction();
+    } else if (messageAction == "ChangeActivePlayer") {
+        action = new ChangeActivePlayer();
+    } else if (messageAction == "Stop") {
+        action = new Stop();
+    } else if (messageAction == "Accelerate") {
+        action = new Accelerate(std::stoi(messageValue, nullptr));
+    } else {
+        log(
+            "User: No se pudo transformar el mensaje a accion: ",
+            message,
+            LOG_INFO
+        );
+    }
+    return action;
+}
+
+// Separan key:value en key value
+
+std::string User::getMessageAction(std::string message) {
+    return message.substr(0, message.find(":"));
+}
+
+std::string User::getMessageValue(std::string message) {
+    return message.substr(message.find(":"), message.length());
 }
 
 int User::getTeam() {
