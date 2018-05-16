@@ -29,7 +29,7 @@ class GameController {
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
-        void execute(Action* action);
+        void execute(Action* action, int user);
         // Para actualizar los modelos.
         void updatePlayers();
         // Dependiendo de la posicion del active player, mueve la camara.

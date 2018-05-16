@@ -24,6 +24,7 @@ std::string confFileName = "conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
+std::mutex update_model_mutex;
 GameInitializer* initializer;
 ConnectionManager* connectionManager;
 // Global variables ---------------------------------------

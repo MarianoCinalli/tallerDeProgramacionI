@@ -12,13 +12,12 @@ Player* GameController::getActivePlayer(int user) {
     return this->pitch->getActivePlayer(user);
 }
 
-void GameController::execute(Action* action) {
-    // Player* player = this->getActivePlayer(action->getUser());
-    Player* player = this->getActivePlayer(0);    //TODO en vez del 0 iria el usuario correcto
+void GameController::execute(Action* action, int user) {
+    Player* player = this->getActivePlayer(user);
     if (action->valid(player)) {
         action->execute(player);
     } else if (action->valid(this->pitch)) {
-        action->execute(this->pitch, 0);
+        action->execute(this->pitch, user);
     }
 }
 
