@@ -7,7 +7,7 @@ void* read_client(void* argument) {
     log("read_client: Creado.", LOG_INFO);
     int socket;
     int readBytes;
-    std::string message;
+    // std::string message;
     bool continueReading = true;
     socket = *((int*) argument);
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
@@ -16,6 +16,7 @@ void* read_client(void* argument) {
     log("read_client: Socket: ", socket, LOG_DEBUG);
     log("read_client: Thread spawneado.", LOG_DEBUG);
     while (continueReading) {
+        std::string message = "";
         readBytes = connectionManager->getMessage(socket, message);
         if (readBytes < 0) {
             log("read_client: Error en la lectura del mensaje. ", LOG_ERROR);

@@ -94,7 +94,7 @@ void ConnectionManager::closeOpenedSockets() {
     log("ConnectionManager: Socket cerrados.", LOG_INFO);
 }
 
-int ConnectionManager::getMessage(int socket, std::string& readMessage) {
+int ConnectionManager::getMessage(int socket, std::string & readMessage) {
     int readBytes;
     int bufferLength = 1024;
     int bufferSize = sizeof(char) * bufferLength;
@@ -112,7 +112,9 @@ int ConnectionManager::getMessage(int socket, std::string& readMessage) {
         readMessage = "";
     } else {
         log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
-        readMessage = readBytes;
+        // readMessage = buffer;
+        // std::string s(buffer, readBytes/sizeof(char));
+        readMessage = buffer;
     }
     return readBytes;
 }

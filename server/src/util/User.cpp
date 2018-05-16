@@ -18,7 +18,7 @@ bool User::hasLogedIn() {
 
 void User::processLogInMessage(std::string message) {
     // Parsea el mensaje para obtener el user y pass.
-    // Guardar el nombre del usuario, en una variable 
+    // Guardar el nombre del usuario, en una variable
     // de clase, para agregarlo a los mensajes?
     // Lo valida contra la lista.
     // Le manda el resultado al cliente.
@@ -41,7 +41,7 @@ void User::processTeamAndFormationMessage(std::string message) {
     this->hasPicked = true;
 }
 
-        
+
 Action* User::getAsAction(std::string message) {
     Action* action = NULL;
     std::string messageAction = this->getMessageAction(message);
@@ -77,7 +77,7 @@ std::string User::getMessageAction(std::string message) {
 }
 
 std::string User::getMessageValue(std::string message) {
-    return message.substr(message.find(":"), message.length());
+    return message.substr(message.find(":")+1, message.length());   //iba un +1 LPM
 }
 
 int User::getTeam() {
