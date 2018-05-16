@@ -11,6 +11,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeGameController();
     this->initializeActionsManager();
     log("GameInitializer: Juego inicializado...", LOG_INFO);
+    this->quit = false;
 }
 
 GameController* GameInitializer::getGameController() {

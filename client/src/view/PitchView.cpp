@@ -34,6 +34,7 @@ void PitchView::render(SDL_Renderer* screen) {
         (*viewIter)->render(screen, coordinates);
         delete(coordinates);
     }
+    log("rendereado", LOG_DEBUG);
     SDL_RenderPresent(screen);
 }
 
