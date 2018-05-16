@@ -123,9 +123,9 @@ void Player::updatePosition() {
     }
     int maxSpeed = this->maxVelocity;
     if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX()*speed*maxSpeed);
-        this->position->addY(this->velocity->getComponentY()*speed*maxSpeed);
-        log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
+        // this->position->addX(this->velocity->getComponentX()*speed*maxSpeed);
+        // this->position->addY(this->velocity->getComponentY()*speed*maxSpeed);
+        // log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
     }
 
     // Si selecciona un jugador que estaba regresando lo detengo
@@ -146,7 +146,7 @@ void Player::updatePosition() {
             log("Player: jugador llega a la posicion.", LOG_INFO);
 
         } else {
-            this->returnToBasePosition();
+            // this->returnToBasePosition();
         }
     }
 }
