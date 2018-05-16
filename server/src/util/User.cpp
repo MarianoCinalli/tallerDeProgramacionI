@@ -18,8 +18,11 @@ bool User::hasLogedIn() {
 
 void User::processLogInMessage(std::string message) {
     // Parsea el mensaje para obtener el user y pass.
+    // Guardar el nombre del usuario, en una variable 
+    // de clase, para agregarlo a los mensajes?
     // Lo valida contra la lista.
     // Le manda el resultado al cliente.
+    log("User: El usuario se logeo.", LOG_INFO);
     this->hasLoged = true;
 }
 
@@ -34,7 +37,7 @@ void User::processTeamAndFormationMessage(std::string message) {
     log("User: El usuario se unio al equipo: ", team, LOG_INFO);
     this->teamNumber = team;
     // Le manda el resultado al cliente.
-    log("User: El usuario ", LOG_INFO);
+    log("User: El usuario termino de elegir.", LOG_INFO);
     this->hasPicked = true;
 }
 
