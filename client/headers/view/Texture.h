@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 #include "util/Colour.h"
 #include "util/Constants.h"
@@ -22,6 +23,16 @@ class Texture {
         ~Texture();
         SDL_Texture* loadSheet(std::string path, SDL_Renderer* renderer, Colour* transparency, Colour* shirt);
         SDL_Texture* loadSheet(std::string path, std::string shirtPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt);
+
+        //Creates image from font string
+        Texture(std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont);
+        Texture();
+        SDL_Texture* loadFromRenderedText( std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont );
+        //void render( int x, int y );
+
+    		//Gets image dimensions
+    		int getWidth();
+    		int getHeight();
 
         void free();
 };

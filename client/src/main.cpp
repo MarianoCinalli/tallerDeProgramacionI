@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 #include <fstream>
 #include <unistd.h>
@@ -125,6 +127,121 @@ void endProgram(int statusToExit, ConnectionManager* connectionManager) {
     exit(statusToExit);
 }
 
+void openLogin(SDL_Renderer* gRenderer) {
+  log("Entra al openLogin", LOG_INFO);
+
+  bool quit = false;
+  SDL_Event e;
+  SDL_Color textColor = { 0, 0, 0, 0xFF };
+
+  TTF_Font *gFont = NULL;
+  gFont = TTF_OpenFont( "lazy.ttf", 30 );
+  if( gFont == NULL ) {
+    log( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+  }
+
+  Texture servidorPromptTexture;
+  servidorPromptTexture.loadFromRenderedText( "Servidor:", gRenderer, textColor, gFont );
+  Texture usuarioPromptTexture;
+  usuarioPromptTexture.loadFromRenderedText( "Usuario:", gRenderer, textColor, gFont );
+  Texture clavePromptTexture;
+  clavePromptTexture.loadFromRenderedText( "Clave:", gRenderer, textColor, gFont );
+
+  std::string inputs [3] = { "127.0.0.1:8080", "zidane", "*****" };
+
+  Texture servidorInputTexture;
+  servidorInputTexture.loadFromRenderedText( inputs[0], gRenderer, textColor, gFont );
+
+  Texture usuarioInputTexture;
+  usuarioInputTexture.loadFromRenderedText( inputs[1], gRenderer, textColor, gFont );
+
+  Texture claveInputTexture;
+  claveInputTexture.loadFromRenderedText( inputs[2], gRenderer, textColor, gFont );
+
+  int inputsIndex = 0;
+  std::string hidden = "*****";
+
+  //Enable text input
+  SDL_StartTextInput();
+
+  //While application is running
+  while( !quit ) {
+    bool renderText = false;
+    while( SDL_PollEvent( &e ) != 0 ) {
+      if ( e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE ) {
+        quit = true;
+      } else if( e.type == SDL_KEYDOWN ) {
+        //Handle backspace
+        if( e.key.keysym.sym == SDLK_BACKSPACE && inputs[inputsIndex].length() > 0 ) {
+          //lop off character
+          inputs[inputsIndex].pop_back();
+          renderText = true;
+        }
+        if( e.key.keysym.sym == SDLK_TAB ) {
+          //cambiar posicion
+          inputsIndex++;
+          if (inputsIndex >= 3) { inputsIndex = 0; }
+        }
+        if( e.key.keysym.sym == SDLK_RETURN ) {
+          //TODO: enviar la configuracion al servidor
+          quit = true;
+        }
+      } else if( e.type == SDL_TEXTINPUT ) {
+        //Append character
+        inputs[inputsIndex] += e.text.text;
+        renderText = true;
+      }
+    }
+
+    if( renderText ) {
+      hidden = "";
+      for(int i=0; (unsigned)i< inputs[2].size();i++) {
+        hidden += "*";
+      }
+      if ( hidden == "" ) { hidden = " "; }
+      if ( inputs[0] == "" ) { inputs[inputsIndex] = " "; }
+      if ( inputs[1] == "" ) { inputs[inputsIndex] = " "; }
+      if ( inputs[2] == "" ) { inputs[inputsIndex] = " "; }
+      servidorInputTexture.loadFromRenderedText( inputs[0].c_str(), gRenderer, textColor, gFont );
+      usuarioInputTexture.loadFromRenderedText( inputs[1].c_str(), gRenderer, textColor, gFont );
+      claveInputTexture.loadFromRenderedText( hidden.c_str(), gRenderer, textColor, gFont );
+    }
+
+    //Clear screen
+    SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_RenderClear( gRenderer );
+
+    //Render text textures
+    SDL_Rect renderQuad1 = { ( SCREEN_WIDTH - servidorPromptTexture.getWidth() ) / 2, 150, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, servidorPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad11 = { ( SCREEN_WIDTH - servidorInputTexture.getWidth() ) / 2, 200, servidorInputTexture.getWidth(), servidorInputTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, servidorInputTexture.getSpriteSheetTexture(), NULL, &renderQuad11, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad2 = { ( SCREEN_WIDTH - usuarioPromptTexture.getWidth() ) / 2, 250, usuarioPromptTexture.getWidth(), usuarioPromptTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, usuarioPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad22 = { ( SCREEN_WIDTH - usuarioInputTexture.getWidth() ) / 2, 300, usuarioInputTexture.getWidth(), usuarioInputTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, usuarioInputTexture.getSpriteSheetTexture(), NULL, &renderQuad22, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad3 = { ( SCREEN_WIDTH - clavePromptTexture.getWidth() ) / 2, 350, clavePromptTexture.getWidth(), clavePromptTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, clavePromptTexture.getSpriteSheetTexture(), NULL, &renderQuad3, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad33 = { ( SCREEN_WIDTH - claveInputTexture.getWidth() ) / 2, 400, claveInputTexture.getWidth(), claveInputTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, claveInputTexture.getSpriteSheetTexture(), NULL, &renderQuad33, 0.0, NULL, SDL_FLIP_NONE );
+
+    //gPromptTextTexture.render( ( SCREEN_WIDTH - gPromptTextTexture.getWidth() ) / 2, 0 );
+    //SDL_Rect renderQuad2 = { ( SCREEN_WIDTH - gInputTextTexture.getWidth() ) / 2, 0, 100, 100 };
+    //SDL_RenderCopyEx( gRenderer, gInputTextTexture.getSpriteSheetTexture(), NULL, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE );
+    //gInputTextTexture.render( ( SCREEN_WIDTH - gInputTextTexture.getWidth() ) / 2, gPromptTextTexture.getHeight() );
+
+    //Update screen
+    SDL_RenderPresent( gRenderer );
+  }
+  //Disable text input
+  SDL_StopTextInput();
+}
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
@@ -158,6 +275,12 @@ int main(int argc, char* argv[]) {
     float sleepTime = (float)200000/(float)frameRate;
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
+
+    // Login - determinar IP, Port, Usuario y Clave
+    SDL_Renderer* renderer = initializer->getRenderer();
+    openLogin(renderer);
+    log("SALIO DEL LOGIN", LOG_INFO);
+
     ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
     if(!connectionManager->connectToServer()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
