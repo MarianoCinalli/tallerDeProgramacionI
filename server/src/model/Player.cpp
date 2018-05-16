@@ -106,11 +106,11 @@ void Player::updatePosition() {
       speed = 1.8; //TODO hardcode
     }
     int maxSpeed = this->maxVelocity;
-    if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX()*speed*maxSpeed);
-        this->position->addY(this->velocity->getComponentY()*speed*maxSpeed);
-        log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
-    }
+    // if (this->canMove) {
+    //     this->position->addX(this->velocity->getComponentX()*speed*maxSpeed);
+    //     this->position->addY(this->velocity->getComponentY()*speed*maxSpeed);
+    //     log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
+    // }
 
     // Si selecciona un jugador que estaba regresando lo detengo
     if (this->isSelected && this->isReturning) {
@@ -130,7 +130,7 @@ void Player::updatePosition() {
             log("Player: jugador llega a la posicion.", LOG_INFO);
 
         } else {
-            this->returnToBasePosition();
+            // this->returnToBasePosition();
         }
     }
 }
@@ -281,7 +281,7 @@ void Player::setTrayectory(Velocity* trayectory) {
 /*
 Convierte a YAML las propiedades necesarias para dibujar.
 Esta asi, para ahorrar caracteres.
-this->id: 
+this->id:
  te: this->team
  cx: this->position->getX()
  cy: this->position->getY()
