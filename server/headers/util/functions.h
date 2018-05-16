@@ -13,7 +13,7 @@
 #include "controller/GameControllerProxy.h"
 #include <map>
 
-static const int MICROSECONDS_BETWEEEN_BROADCAST = 100000;
+static const int MICROSECONDS_BETWEEEN_BROADCAST = 10000;
 
 void* read_client(void* argument);
 void* broadcast_to_clients(void* clients);

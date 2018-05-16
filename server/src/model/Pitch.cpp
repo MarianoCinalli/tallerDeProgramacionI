@@ -29,7 +29,8 @@ void Pitch::setUserTeam(int user, int team){
     teams[user] = this->awayTeam;
   }
   }
-  this->activePlayers[user] = teams[user]->getPlayers().back(); //TODO por usuario
+  this->activePlayers[user] = teams[user]->getPlayers().back();
+  this->activePlayers[user]->toggleIsSelected(); 
 }
 
 void Pitch::setBall(Ball* ball) {

@@ -6,7 +6,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeTeam(configuration, 0);
     this->initializeTeam(configuration, 1);
     this->pitch->setUserTeam(0,0);  //inicializacion de usuarios
-    this->pitch->setUserTeam(0,1);
+    // this->pitch->setUserTeam(1,1);
     this->initializeBall();
     this->initializeGameController();
     this->initializeGameControllerProxy();

@@ -28,7 +28,9 @@ void* read_server(void* argument) {
     ConnectionManager* connectionManager = (ConnectionManager*) argument;
     int count = 0; // esto esta provisorio.
     log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
-    while (count < 1) {
+    bool quit = false;
+    while (count < 10000 && !quit) {
+        quit = initializer->quit;
         readMessage = connectionManager->getMessage();
         try {
             Player* player;
@@ -77,7 +79,7 @@ void* drawer(void* argument) {
         while (!quit) {
             quit = initializer->quit;
             pitchView->render(renderer);
-            usleep(200000); // Frame rate.
+            usleep(50000); // Frame rate.
         }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;
