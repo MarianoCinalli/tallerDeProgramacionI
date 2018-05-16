@@ -70,11 +70,9 @@ void* broadcast_to_clients(void* argument) {
 void* game_updater(void* argument) {
     log("game_updater: Creado.", LOG_INFO);
     Camera* camera = initializer->getCamera();
-    GameController* gameController = initializer->getGameController();
-    while (gameController->shouldGameEnd()) {
-        gameController->updatePlayers();
-        gameController->updateBall();
-        gameController->updateCameraPosition(camera);
+    GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
+    while (gameControllerProxy->shouldGameEnd()) {
+        gameControllerProxy->updateModel(camera);
         usleep(MICROSECONDS_BETWEEEN_BROADCAST/10);
     }
     log("game_updater: Finalizado.", LOG_INFO);

@@ -3,7 +3,6 @@
 
 #include <unistd.h> // para el usleep.
 #include <string>
-#include <vector>
 #include "GameInitializer.h"
 #include "util/Constants.h"
 #include "util/logger.h"
@@ -11,7 +10,6 @@
 #include "util/ConnectionManager.h"
 #include "util/User.h"
 #include "view/Camera.h"
-#include "controller/GameController.h"
 #include "controller/GameControllerProxy.h"
 
 static const int MICROSECONDS_BETWEEEN_BROADCAST = 100000;
