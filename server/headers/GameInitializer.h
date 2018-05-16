@@ -18,7 +18,6 @@
 #include "controller/GameController.h"
 #include "controller/GameControllerProxy.h"
 #include "controller/actions/Action.h"
-#include "controller/ActionsManager.h"
 
 #ifndef GAMEINITIALIZER_H
 #define GAMEINITIALIZER_H
@@ -26,7 +25,6 @@
 class GameInitializer {
     private:
         GameController* gameController; // Liberado aca.
-        ActionsManager* actionsManager; // Liberado aca.
         ConnectionManager* connectionManager; // Liberado aca.
         GameControllerProxy* gameControllerProxy; // Liberado aca.
 
@@ -38,7 +36,6 @@ class GameInitializer {
         GameInitializer(Conf* configuration);
         Pitch* getPitch();
         GameController* getGameController();
-        ActionsManager* getActionsManager();
         Camera* getCamera();
         ConnectionManager* getConnectionManager();
         GameControllerProxy* getGameControllerProxy();
@@ -48,7 +45,6 @@ class GameInitializer {
         void initializeTeam(Conf* conf, int teamNumber);
         void initializeBall();
         void initializeGameController();
-        void initializeActionsManager();
         void initializeConnectionManager(Conf* configuration);
         void initializeGameControllerProxy();
         std::string getTeamString(int teamNumber);
