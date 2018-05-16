@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
         endProgram(1, connectionManager);
     }
-    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir 
+    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir
     // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
     // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
     // Abajo se Lanza thread que recibe mensajes de estado de juego.
@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
         usleep(sleepTime);
     }
     // threads->terminateSpawnedThreads(); // signalea a los threads para que terminen.
-    threads->joinSpawnedThreads();
+    threadSpawner->joinSpawnedThreads();
     log("Main: Main loop finalizado.", LOG_INFO);
     delete(threadSpawner);
     // Liberacion de memoria -------------------------------
