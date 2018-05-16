@@ -15,7 +15,7 @@ class SlidingAction : public Action {
 				virtual void execute(Pitch* pitch);
         virtual bool valid(Pitch* pitch);
         virtual std::string getCommand();
-        virtual std::vector<std::string> getParameters();
+        virtual std::string getParameters();
         ~SlidingAction();
 };
 #endif // SLIDINGACTION_H

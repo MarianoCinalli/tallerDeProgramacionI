@@ -13,12 +13,11 @@ bool ChangeActivePlayer::valid(Pitch* pitch){
 }
 
 std::string ChangeActivePlayer::getCommand() {
-    return "changeActivePlayer";
+    return "ChangeActivePlayer";
 }
 
-std::vector<std::string> ChangeActivePlayer::getParameters() {
-    std::vector<std::string> params;
-    return params;
+std::string ChangeActivePlayer::getParameters() {
+    return "";
 }
 
 ChangeActivePlayer::~ChangeActivePlayer() {

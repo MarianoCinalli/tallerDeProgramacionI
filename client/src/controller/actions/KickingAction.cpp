@@ -14,12 +14,11 @@ bool KickingAction::valid(Player* player) {
 }
 
 std::string KickingAction::getCommand() {
-    return "kickingAction";
+    return "Kicking";
 }
 
-std::vector<std::string> KickingAction::getParameters() {
-    std::vector<std::string> params;
-    return params;
+std::string KickingAction::getParameters() {
+    return "";
 }
 
 KickingAction::~KickingAction() {

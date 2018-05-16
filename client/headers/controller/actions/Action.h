@@ -17,7 +17,7 @@ class Action {
         virtual bool valid(Player* player);
         virtual bool valid(Pitch* pitch);
         virtual std::string getCommand();
-        virtual std::vector<std::string> getParameters();
+        virtual std::string getParameters();
         virtual std::string toString();
         virtual ~Action();
 };

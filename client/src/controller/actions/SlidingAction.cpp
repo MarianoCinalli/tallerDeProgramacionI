@@ -24,12 +24,11 @@ bool SlidingAction::valid(Pitch* pitch) {
 }
 
 std::string SlidingAction::getCommand() {
-    return "slidingAction";
+    return "Sliding";
 }
 
-std::vector<std::string> SlidingAction::getParameters() {
-    std::vector<std::string> params;
-    return params;
+std::string SlidingAction::getParameters() {
+    return "";
 }
 
 SlidingAction::~SlidingAction() {

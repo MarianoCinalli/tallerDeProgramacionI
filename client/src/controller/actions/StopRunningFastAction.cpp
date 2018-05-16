@@ -14,12 +14,11 @@ bool StopRunningFastAction::valid(Player* player) {
 }
 
 std::string StopRunningFastAction::getCommand() {
-    return "stopRunningFastAction";
+    return "StopRunningFast";
 }
 
-std::vector<std::string> StopRunningFastAction::getParameters() {
-    std::vector<std::string> params;
-    return params;
+std::string StopRunningFastAction::getParameters() {
+    return "";
 }
 
 StopRunningFastAction::~StopRunningFastAction() {

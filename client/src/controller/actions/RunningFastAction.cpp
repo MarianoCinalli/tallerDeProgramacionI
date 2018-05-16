@@ -14,12 +14,11 @@ bool RunningFastAction::valid(Player* player) {
 }
 
 std::string RunningFastAction::getCommand() {
-    return "runningFastAction";
+    return "RunningFast";
 }
 
-std::vector<std::string> RunningFastAction::getParameters() {
-    std::vector<std::string> params;
-    return params;
+std::string RunningFastAction::getParameters() {
+    return "";
 }
 
 RunningFastAction::~RunningFastAction() {

@@ -13,13 +13,11 @@ bool Stop::valid(Player* player){
 }
 
 std::string Stop::getCommand() {
-    return "stop";
+    return "Stop";
 }
 
-std::vector<std::string> Stop::getParameters() {
-    std::vector<std::string> params;
-    return params;
+std::string Stop::getParameters() {
+    return "";
 }
-
 Stop::~Stop() {
 }
