@@ -127,7 +127,7 @@ void endProgram(int statusToExit, ConnectionManager* connectionManager) {
     exit(statusToExit);
 }
 
-void openLogin(SDL_Renderer* gRenderer) {
+string openLogin(SDL_Renderer* gRenderer) {
   log("Entra al openLogin", LOG_INFO);
 
   bool quit = false;
@@ -240,6 +240,8 @@ void openLogin(SDL_Renderer* gRenderer) {
   }
   //Disable text input
   SDL_StopTextInput();
+
+  return inputs[0];
 }
 
 int main(int argc, char* argv[]) {
@@ -278,8 +280,18 @@ int main(int argc, char* argv[]) {
 
     // Login - determinar IP, Port, Usuario y Clave
     SDL_Renderer* renderer = initializer->getRenderer();
-    openLogin(renderer);
-    log("SALIO DEL LOGIN", LOG_INFO);
+
+    //bool quit = false;
+    //SDL_Event e;
+    //while (!quit) {
+      std::string config = openLogin(renderer);
+      log("SALIO DEL LOGIN", LOG_INFO);
+      log(config, LOG_INFO);
+
+      //validarServidor(config);
+
+      //validarCredenciales();
+    //}
 
     ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
     if(!connectionManager->connectToServer()) {
