@@ -147,10 +147,6 @@ void openLogin(SDL_Renderer* gRenderer) {
   Texture clavePromptTexture;
   clavePromptTexture.loadFromRenderedText( "Clave:", gRenderer, textColor, gFont );
 
-  //Texture servidorPromptTexture = Texture( "Servidor:", gRenderer, textColor, gFont );
-  //Texture usuarioPromptTexture = Texture( "Usuario:", gRenderer, textColor, gFont );
-  //Texture clavePromptTexture = Texture( "Clave:", gRenderer, textColor, gFont );
-
   std::string inputs [3] = { "127.0.0.1:8080", "zidane", "*****" };
 
   Texture servidorInputTexture;
@@ -163,6 +159,7 @@ void openLogin(SDL_Renderer* gRenderer) {
   claveInputTexture.loadFromRenderedText( inputs[2], gRenderer, textColor, gFont );
 
   int inputsIndex = 0;
+  std::string hidden = "*****";
 
   //Enable text input
   SDL_StartTextInput();
@@ -185,6 +182,10 @@ void openLogin(SDL_Renderer* gRenderer) {
           inputsIndex++;
           if (inputsIndex >= 3) { inputsIndex = 0; }
         }
+        if( e.key.keysym.sym == SDLK_RETURN ) {
+          //TODO: enviar la configuracion al servidor
+          quit = true;
+        }
       } else if( e.type == SDL_TEXTINPUT ) {
         //Append character
         inputs[inputsIndex] += e.text.text;
@@ -193,12 +194,17 @@ void openLogin(SDL_Renderer* gRenderer) {
     }
 
     if( renderText ) {
-      if( inputs[inputsIndex] == "" ) {
-        inputs[inputsIndex] = " ";
+      hidden = "";
+      for(int i=0; (unsigned)i< inputs[2].size();i++) {
+        hidden += "*";
       }
+      if ( hidden == "" ) { hidden = " "; }
+      if ( inputs[0] == "" ) { inputs[inputsIndex] = " "; }
+      if ( inputs[1] == "" ) { inputs[inputsIndex] = " "; }
+      if ( inputs[2] == "" ) { inputs[inputsIndex] = " "; }
       servidorInputTexture.loadFromRenderedText( inputs[0].c_str(), gRenderer, textColor, gFont );
       usuarioInputTexture.loadFromRenderedText( inputs[1].c_str(), gRenderer, textColor, gFont );
-      claveInputTexture.loadFromRenderedText( inputs[2].c_str(), gRenderer, textColor, gFont );
+      claveInputTexture.loadFromRenderedText( hidden.c_str(), gRenderer, textColor, gFont );
     }
 
     //Clear screen
