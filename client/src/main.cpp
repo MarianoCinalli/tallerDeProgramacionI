@@ -163,9 +163,10 @@ int main(int argc, char* argv[]) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
         endProgram(1, connectionManager);
     }
-    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir y mandar estos mensajes al server.
+    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir 
+    // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
     // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
-    // Lanzar thread que recibe mensajes de estado de juego.
+    // Abajo se Lanza thread que recibe mensajes de estado de juego.
     ThreadSpawner* threadSpawner = new ThreadSpawner();
     threadSpawner->spawn(
         read_server,
@@ -176,7 +177,7 @@ int main(int argc, char* argv[]) {
     // threadSpawner->spawn(drawer, NULL);
     // Main loop ------------------------------------------
     log("Main: Entrando en el main loop...", LOG_INFO);
-    // Este va a ser el thread que escucha el teclado.
+    // Este thread escucha los eventos de teclado y se los manda al server.
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (actionsManager->shouldQuit(e)) {
@@ -191,16 +192,12 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-        // gameController->updatePlayers();
-        // gameController->updateBall();
-        // gameController->updateCameraPosition(camera);
-        // pitchView->render(renderer);
-        // usleep(sleepTime); // Frame rate.
-        // Pongo esto aca pero no va el framerate en este thread.
         usleep(sleepTime);
     }
+    // threads->terminateSpawnedThreads(); // signalea a los threads para que terminen.
+    threads->joinSpawnedThreads();
     log("Main: Main loop finalizado.", LOG_INFO);
-
+    delete(threadSpawner);
     // Liberacion de memoria -------------------------------
     endProgram(0, connectionManager);
 }

@@ -4,6 +4,24 @@ extern GameInitializer* initializer;
 
 // Recibe los mensajes del servidor.
 // Actualiza el "modelo".
+// Se tiene un modelo minimo solo con las propiedades que se usan para dibujar.
+// Las vistas ven todo el modelo.
+// Se inicializan ambos equipos, en cualquier parte.
+// Despues en los mensajes que se reciben, ir actualizando los modelos con la informacion.
+// Para los mensajes que llegan del server:
+// Los jugadores tienen numeros (this->id en la clase jugador del server) del 1 al 7 
+// para el equipo local y del 8 al 14 para el visitante. El cliente lo parsea en * (ver abajo).
+// Las propiedades son un diccionario que esta luego del tipo.
+// Cada propiedad esta como:
+// this->id: 
+//  te: this->team
+//  cx: this->position->getX()
+//  cy: this->position->getY()
+//  se: this->isSelected
+//  ki: this->kicking <- Cuidado: Al querer pisar el valor del player con esto, 
+//      creo que hay que guardar el valor a pisar en wasKicking porque se usa para dibujar.
+//  sl: this->sliding <- idem kicking
+//  ru: this->runningFast
 void* read_server(void* argument) {
     log("read_server: Creado.", LOG_INFO);
     std::string readMessage;
@@ -17,7 +35,7 @@ void* read_server(void* argument) {
             for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                 YAML::Node key = it->first;
                 YAML::Node value = it->second;
-                // Aca se sabe que tipo es.
+                // * Aca se sabe que tipo es.
                 if (key.Type() == YAML::NodeType::Scalar) {
                     if (key.as<std::string>() == "ba") {
                         log("read_server: pelota", LOG_INFO);
@@ -45,6 +63,8 @@ void* read_server(void* argument) {
 }
 
 // Dibuja las vistas.
+// Este metodo esta dentro de todo completo.
+// Hay que ver si le falta algo.
 void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
     /*

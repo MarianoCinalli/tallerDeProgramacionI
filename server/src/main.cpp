@@ -148,6 +148,12 @@ int main(int argc, char* argv[]) {
     ThreadSpawner* threads = new ThreadSpawner();
     log("Main: Juego inicializado correctamente.", LOG_INFO);
 
+    // Falta la reconeccion de jugadores.
+    // Esto como esta no sirve.
+    // Hay que spawnear a lo de abajo para que siempre este escuchando connecciones.
+    // Y las acepte cuando falten jugadores.
+    // Para el broadcaster y game_updater, tienen que esperar a que una barrier se haga 0 para empezar.
+    // Esa barrier se hace 0 cuando todos los usuarios se conectaron, logearon y eligieron equipo.
     connectionManager->acceptConnectionsUntilMax(); // Pasarle el gameControllerProxy.
     // Launch game_updater thread.
     threads->spawn(
