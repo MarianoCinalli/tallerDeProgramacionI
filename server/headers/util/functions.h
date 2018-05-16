@@ -11,6 +11,7 @@
 #include "util/User.h"
 #include "view/Camera.h"
 #include "controller/GameControllerProxy.h"
+#include <map>
 
 static const int MICROSECONDS_BETWEEEN_BROADCAST = 100000;
 

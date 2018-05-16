@@ -43,6 +43,7 @@ class GameInitializer {
         Camera* getCamera();
         SDL_Renderer* getRenderer();
         PitchView* getPitchView();
+        Team* getTeam(int teamNumber);
         ~GameInitializer();
     private:
         void initializePitch(Conf* conf);

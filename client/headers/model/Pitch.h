@@ -26,6 +26,8 @@ class Pitch {
         void changeBallOwnership();
         void setLocalTeam(Team* team);
         void setAwayTeam(Team* team);
+        void setTeam(Team* team, int teamNumber);
+        Team* getTeam(int teamNumber);
         void setBall(Ball* ball);
         Team* getLocalTeam();
         ~Pitch();

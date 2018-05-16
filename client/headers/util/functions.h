@@ -8,6 +8,7 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/ConnectionManager.h"
+#include <map>
 
 void* read_server(void* argument);
 void* drawer(void* clients);

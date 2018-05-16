@@ -18,6 +18,7 @@ Pitch* GameInitializer::getPitch() {
     return this->pitch;
 }
 
+
 GameController* GameInitializer::getGameController() {
     return this->gameController;
 }

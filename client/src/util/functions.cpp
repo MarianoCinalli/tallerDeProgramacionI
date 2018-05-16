@@ -9,16 +9,16 @@ extern GameInitializer* initializer;
 // Se inicializan ambos equipos, en cualquier parte.
 // Despues en los mensajes que se reciben, ir actualizando los modelos con la informacion.
 // Para los mensajes que llegan del server:
-// Los jugadores tienen numeros (this->id en la clase jugador del server) del 1 al 7 
+// Los jugadores tienen numeros (this->id en la clase jugador del server) del 1 al 7
 // para el equipo local y del 8 al 14 para el visitante. El cliente lo parsea en * (ver abajo).
 // Las propiedades son un diccionario que esta luego del tipo.
 // Cada propiedad esta como:
-// this->id: 
+// this->id:
 //  te: this->team
 //  cx: this->position->getX()
 //  cy: this->position->getY()
 //  se: this->isSelected
-//  ki: this->kicking <- Cuidado: Al querer pisar el valor del player con esto, 
+//  ki: this->kicking <- Cuidado: Al querer pisar el valor del player con esto,
 //      creo que hay que guardar el valor a pisar en wasKicking porque se usa para dibujar.
 //  sl: this->sliding <- idem kicking
 //  ru: this->runningFast
@@ -31,6 +31,7 @@ void* read_server(void* argument) {
     while (count < 1) {
         readMessage = connectionManager->getMessage();
         try {
+            Player* player;
             YAML::Node node = YAML::Load(readMessage);
             for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                 YAML::Node key = it->first;
@@ -38,11 +39,14 @@ void* read_server(void* argument) {
                 // * Aca se sabe que tipo es.
                 if (key.Type() == YAML::NodeType::Scalar) {
                     if (key.as<std::string>() == "ba") {
-                        log("read_server: pelota", LOG_INFO);
+                        log("read_server: pelota",key.as<std::string>(), LOG_INFO);
                     } else {
-                        log("read_server: jugador", LOG_INFO);
+                        log("read_server: jugador",key.as<std::string>(), LOG_INFO);
+                         player =  initializer->getGameController()->getPlayer(key.as<int>());
+                         player->parseYaml(value);
                     }
                 }
+
                 // Valores para objeto del tipo parseado arriba.
                 if (value.Type() == YAML::NodeType::Map) {
                     // Este for iria en el constructor para el objeto del tipo de arriba.

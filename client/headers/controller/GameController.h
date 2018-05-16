@@ -18,6 +18,8 @@ Controlador de juego:
     de la cancha validando las posiciones de los jugadores.
 */
 
+using namespace std;
+
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
@@ -26,6 +28,7 @@ class GameController {
         Pitch* pitch;
         Player* activePlayer;
         Ball* ball;
+        map<int, Player*> players;
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
@@ -33,6 +36,7 @@ class GameController {
         // Para actualizar los modelos.
         void updatePlayers();
         void updateBall();
+        Player* getPlayer(int num);
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition(Camera* camera);
         ~GameController();

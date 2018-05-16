@@ -1,12 +1,13 @@
 #include "model/Player.h"
 
-Player::Player(int orientation, Coordinates* position) {
+Player::Player(int orientation, Coordinates* position, int teamNumber) {
     log("Jugador: Creando jugador...", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
     this->basePosition = new Coordinates(800, 500);
     this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
+    this->team = team;
     this->sliding = false;
     this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
     this->kicking = false;
@@ -38,6 +39,24 @@ int Player::getCurrentSpeed() {
     else {
       return this->maxVelocity;
     }
+}
+
+void Player::parseYaml(YAML::Node node){
+  if (node["te"]){
+    this->team = node["te"].as<int>();
+  }
+  if (node["se"]){
+    this->isSelected = node["se"].as<int>();
+  }
+  if (node["ru"]){
+    this->runningFast = node["ru"].as<int>();
+  }
+  if (node["cx"]){
+    this->position->setX(node["cx"].as<int>());
+  }
+  if (node["cy"]){
+    this->position->setY(node["cy"].as<int>());
+  }
 }
 
 // Setea la orientacion del jugador (a donde mira).
@@ -218,7 +237,7 @@ void Player::startsKicking() {
         this->kicking = true;
         this->canMove = false;
     }
-    
+
 }
 
 void Player::stopKicking() {

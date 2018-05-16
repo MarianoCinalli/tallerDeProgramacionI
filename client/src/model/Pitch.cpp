@@ -9,6 +9,7 @@ Pitch::Pitch(Camera* camera)
 	this->camera = camera;
 }
 
+
 void Pitch::setLocalTeam(Team* team)
 {
 	this->localTeam = team;
@@ -17,12 +18,22 @@ void Pitch::setLocalTeam(Team* team)
 	changeActivePlayer();
 }
 
-void Pitch::setAwayTeam(Team* team)
-{
-	this->awayTeam = team;
-	// this->activePlayer = team->getPlayers().back();
-	// this->activePlayer->toggleIsSelected();
-	// changeActivePlayer();
+
+void Pitch::setTeam(Team* team, int teamNumber) {
+    if (teamNumber == 0) {
+        this->localTeam = team;
+    } else if (teamNumber == 1) {
+        this->awayTeam = team;
+    }
+}
+
+Team* Pitch::getTeam(int teamNumber) {
+  if (teamNumber == 0) {
+      return this->localTeam;
+    }
+  else {
+      return this->awayTeam;
+    }
 }
 
 void Pitch::setBall(Ball* ball)

@@ -5,8 +5,17 @@ GameController::GameController(Pitch* pitch) {
     this->pitch = pitch;
     this->activePlayer = this->pitch->activePlayer;
     this->ball = this->pitch->ball;
+    list<Player*> teamPlayers = this->pitch->getTeam(0)->getPlayers();
+    list<Player*> awayPlayers = this->pitch->getTeam(1)->getPlayers();
+    teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
+    int i = 1;
+    for (Player* p : teamPlayers) {
+      players[i] = p;
+      i++;
+    }
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
+
 
 void GameController::execute(Action* action) {
     if(action->valid(this->activePlayer)){
@@ -15,7 +24,10 @@ void GameController::execute(Action* action) {
     if (action->valid(this->pitch)){
       action->execute(this->pitch);
     }
+}
 
+Player* GameController::getPlayer(int num){
+  return this->players[num];
 }
 
 
@@ -42,6 +54,7 @@ void GameController::updateBall() {
   this->pitch->changeBallOwnership();
   this->ball->updatePosition();
 }
+
 
 
 // Cuando el jugador pise el borde mueve la camara.

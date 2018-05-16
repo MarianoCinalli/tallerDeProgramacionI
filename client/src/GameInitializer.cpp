@@ -33,6 +33,16 @@ PitchView* GameInitializer::getPitchView() {
     return this->pitchView;
 }
 
+Team* GameInitializer::getTeam(int teamNumber) {
+  if (teamNumber == 0) {
+      return this->localTeam;
+    }
+  else {
+      return this->awayTeam;
+    }
+}
+
+
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
     log("GameInitializer: Liberando gameController.", LOG_INFO);
@@ -88,7 +98,7 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
-        Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates);
+        Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates, teamNumber);
         team->addPlayer(player);
         log("GameInitializer: Creando vista de jugador numero: ", i, LOG_INFO);
         PlayerSpriteManager* playerSpriteManager;
@@ -105,11 +115,10 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
     if (teamNumber==0){
       this->localTeam = team;
-      this->pitch->setLocalTeam(team);
     } else if (teamNumber == 1){
       this->awayTeam = team;
-      this->pitch->setAwayTeam(team);
     }
+    this->pitch->setTeam(team, teamNumber);
 }
 
 void GameInitializer::initializeTeamSprites(std::string shirtsPath, Colour* shirt, int teamNumber) {

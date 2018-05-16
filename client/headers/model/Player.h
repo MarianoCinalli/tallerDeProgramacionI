@@ -3,6 +3,7 @@
 #include "util/Velocity.h"
 #include "util/logger.h"
 #include <SDL2/SDL.h>
+#include <yaml-cpp/yaml.h>
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -11,6 +12,7 @@ class Player {
     private:
         int orientation;
         int maxVelocity;
+        int team;
         bool isSelected;
         bool isReturning;
         Velocity* velocity;
@@ -25,7 +27,7 @@ class Player {
         bool dominatesTheBall;
 
     public:
-        Player(int orientation, Coordinates* position);
+        Player(int orientation, Coordinates* position, int teamNumber);
 
         // Getters
         Coordinates* getPosition();
@@ -41,6 +43,7 @@ class Player {
         bool isRunningFast();
 
         // Modifiers
+        void parseYaml(YAML::Node node);
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
         void decelerate(int direction);
