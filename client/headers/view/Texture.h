@@ -26,6 +26,7 @@ class Texture {
 
         //Creates image from font string
         Texture(std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont);
+        Texture();
         SDL_Texture* loadFromRenderedText( std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont );
         //void render( int x, int y );
 

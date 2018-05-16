@@ -140,15 +140,29 @@ void openLogin(SDL_Renderer* gRenderer) {
     log( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
   }
 
-  Texture servidorPromptTexture = Texture( "Servidor:", gRenderer, textColor, gFont );
-  Texture usuarioPromptTexture = Texture( "Usuario:", gRenderer, textColor, gFont );
-  Texture clavePromptTexture = Texture( "Clave:", gRenderer, textColor, gFont );
+  Texture servidorPromptTexture;
+  servidorPromptTexture.loadFromRenderedText( "Servidor:", gRenderer, textColor, gFont );
+  Texture usuarioPromptTexture;
+  usuarioPromptTexture.loadFromRenderedText( "Usuario:", gRenderer, textColor, gFont );
+  Texture clavePromptTexture;
+  clavePromptTexture.loadFromRenderedText( "Clave:", gRenderer, textColor, gFont );
 
-  log("P1", LOG_INFO);
-  std::string inputText = "127.0.0.1:8080";
-  log("P2", LOG_INFO);
-  Texture servidorInputTexture = Texture( inputText.c_str(), gRenderer, textColor, gFont );
-  log("P3", LOG_INFO);
+  //Texture servidorPromptTexture = Texture( "Servidor:", gRenderer, textColor, gFont );
+  //Texture usuarioPromptTexture = Texture( "Usuario:", gRenderer, textColor, gFont );
+  //Texture clavePromptTexture = Texture( "Clave:", gRenderer, textColor, gFont );
+
+  std::string inputs [3] = { "127.0.0.1:8080", "zidane", "*****" };
+
+  Texture servidorInputTexture;
+  servidorInputTexture.loadFromRenderedText( inputs[0], gRenderer, textColor, gFont );
+
+  Texture usuarioInputTexture;
+  usuarioInputTexture.loadFromRenderedText( inputs[1], gRenderer, textColor, gFont );
+
+  Texture claveInputTexture;
+  claveInputTexture.loadFromRenderedText( inputs[2], gRenderer, textColor, gFont );
+
+  int inputsIndex = 0;
 
   //Enable text input
   SDL_StartTextInput();
@@ -161,42 +175,54 @@ void openLogin(SDL_Renderer* gRenderer) {
         quit = true;
       } else if( e.type == SDL_KEYDOWN ) {
         //Handle backspace
-        if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 ) {
+        if( e.key.keysym.sym == SDLK_BACKSPACE && inputs[inputsIndex].length() > 0 ) {
           //lop off character
-          inputText.pop_back();
+          inputs[inputsIndex].pop_back();
           renderText = true;
+        }
+        if( e.key.keysym.sym == SDLK_TAB ) {
+          //cambiar posicion
+          inputsIndex++;
+          if (inputsIndex >= 3) { inputsIndex = 0; }
         }
       } else if( e.type == SDL_TEXTINPUT ) {
         //Append character
-        inputText += e.text.text;
+        inputs[inputsIndex] += e.text.text;
         renderText = true;
       }
     }
 
-    // if( renderText ) {
-    //   if( inputText != "" ) {
-    //     gInputTextTexture.loadFromRenderedText( inputText.c_str(), textColor );
-    //   }	else {
-    //     gInputTextTexture.loadFromRenderedText( " ", textColor );
-    //   }
-    // }
+    if( renderText ) {
+      if( inputs[inputsIndex] == "" ) {
+        inputs[inputsIndex] = " ";
+      }
+      servidorInputTexture.loadFromRenderedText( inputs[0].c_str(), gRenderer, textColor, gFont );
+      usuarioInputTexture.loadFromRenderedText( inputs[1].c_str(), gRenderer, textColor, gFont );
+      claveInputTexture.loadFromRenderedText( inputs[2].c_str(), gRenderer, textColor, gFont );
+    }
 
     //Clear screen
     SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( gRenderer );
 
     //Render text textures
-    SDL_Rect renderQuad1 = { ( SCREEN_WIDTH - servidorPromptTexture.getWidth() ) / 2, 50, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
+    SDL_Rect renderQuad1 = { ( SCREEN_WIDTH - servidorPromptTexture.getWidth() ) / 2, 150, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
     SDL_RenderCopyEx( gRenderer, servidorPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE );
 
-    SDL_Rect renderQuad11 = { ( SCREEN_WIDTH - servidorInputTexture.getWidth() ) / 2, 100, servidorInputTexture.getWidth(), servidorInputTexture.getHeight() };
+    SDL_Rect renderQuad11 = { ( SCREEN_WIDTH - servidorInputTexture.getWidth() ) / 2, 200, servidorInputTexture.getWidth(), servidorInputTexture.getHeight() };
     SDL_RenderCopyEx( gRenderer, servidorInputTexture.getSpriteSheetTexture(), NULL, &renderQuad11, 0.0, NULL, SDL_FLIP_NONE );
 
-    SDL_Rect renderQuad2 = { ( SCREEN_WIDTH - usuarioPromptTexture.getWidth() ) / 2, 150, usuarioPromptTexture.getWidth(), usuarioPromptTexture.getHeight() };
+    SDL_Rect renderQuad2 = { ( SCREEN_WIDTH - usuarioPromptTexture.getWidth() ) / 2, 250, usuarioPromptTexture.getWidth(), usuarioPromptTexture.getHeight() };
     SDL_RenderCopyEx( gRenderer, usuarioPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE );
 
-    SDL_Rect renderQuad3 = { ( SCREEN_WIDTH - clavePromptTexture.getWidth() ) / 2, 250, clavePromptTexture.getWidth(), clavePromptTexture.getHeight() };
+    SDL_Rect renderQuad22 = { ( SCREEN_WIDTH - usuarioInputTexture.getWidth() ) / 2, 300, usuarioInputTexture.getWidth(), usuarioInputTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, usuarioInputTexture.getSpriteSheetTexture(), NULL, &renderQuad22, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad3 = { ( SCREEN_WIDTH - clavePromptTexture.getWidth() ) / 2, 350, clavePromptTexture.getWidth(), clavePromptTexture.getHeight() };
     SDL_RenderCopyEx( gRenderer, clavePromptTexture.getSpriteSheetTexture(), NULL, &renderQuad3, 0.0, NULL, SDL_FLIP_NONE );
+
+    SDL_Rect renderQuad33 = { ( SCREEN_WIDTH - claveInputTexture.getWidth() ) / 2, 400, claveInputTexture.getWidth(), claveInputTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, claveInputTexture.getSpriteSheetTexture(), NULL, &renderQuad33, 0.0, NULL, SDL_FLIP_NONE );
 
     //gPromptTextTexture.render( ( SCREEN_WIDTH - gPromptTextTexture.getWidth() ) / 2, 0 );
     //SDL_Rect renderQuad2 = { ( SCREEN_WIDTH - gInputTextTexture.getWidth() ) / 2, 0, 100, 100 };

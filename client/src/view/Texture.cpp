@@ -166,6 +166,10 @@ Texture::Texture(std::string textureText, SDL_Renderer* renderer, SDL_Color text
     this->sdlTexture = this->loadFromRenderedText(textureText, renderer, textColor, gFont);
 }
 
+Texture::Texture() {
+    
+}
+
 SDL_Texture* Texture::loadFromRenderedText( std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont )
 {
 	//Get rid of preexisting texture
