@@ -71,15 +71,14 @@ void* read_server(void* argument) {
 // Hay que ver si le falta algo.
 void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
-    /*
         SDL_Renderer* renderer = initializer->getRenderer();
         PitchView* pitchView = initializer->getPitchView();
-        bool quit = false;
+        bool quit =false;
         while (!quit) {
+            quit = initializer->quit;
             pitchView->render(renderer);
-            usleep(sleepTime); // Frame rate.
+            usleep(200000); // Frame rate.
         }
-    */
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;
 }
