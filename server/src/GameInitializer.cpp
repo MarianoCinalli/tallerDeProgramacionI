@@ -32,8 +32,14 @@ ConnectionManager* GameInitializer::getConnectionManager() {
     return this->connectionManager;
 }
 
+GameControllerProxy* GameInitializer::getGameControllerProxy() {
+    return this->gameControllerProxy;
+}
+
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
+    log("GameInitializer: Liberando gameControllerProxy.", LOG_INFO);
+    delete(this->gameControllerProxy);
     log("GameInitializer: Liberando gameController.", LOG_INFO);
     delete(this->gameController);
     log("GameInitializer: Liberando actionsManager.", LOG_INFO);
@@ -114,4 +120,9 @@ void GameInitializer::initializeConnectionManager(Conf* configuration) {
     log("GameInitializer: Creando ConnectionManager...", LOG_INFO);
     // Sacar el puerto y la cantidad de conecciones de la configuracion
     this->connectionManager = new ConnectionManager(8080, 1);
+}
+
+void GameInitializer::initializeGameControllerProxy() {
+    log("GameInitializer: Creando ConnectionManager...", LOG_INFO);
+    this->gameControllerProxy = new GameControllerProxy(this->gameController);
 }
