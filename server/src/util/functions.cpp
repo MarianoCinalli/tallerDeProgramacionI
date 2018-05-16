@@ -57,7 +57,7 @@ void* broadcast_to_clients(void* argument) {
     // broadcaster->broadcastGameBegins();
     int count = 0; // esto esta provisorio.
     log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
-    while (count < 1) {
+    while (count < 10000) {
         broadcaster->broadcast();
         count++;
         usleep(MICROSECONDS_BETWEEEN_BROADCAST);

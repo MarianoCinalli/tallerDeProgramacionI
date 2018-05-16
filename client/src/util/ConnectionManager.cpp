@@ -48,7 +48,7 @@ int ConnectionManager::getSocket() {
 
 std::string ConnectionManager::getMessage() {
     int readBytes;
-    int bufferLength = 1024;
+    int bufferLength = 4096;
     int bufferSize = sizeof(char) * bufferLength;
     char buffer[bufferLength] = {0};
     memset(buffer, 0x00, bufferSize);

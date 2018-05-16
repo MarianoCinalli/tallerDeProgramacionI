@@ -26,6 +26,7 @@ class GameController {
         Pitch* pitch;
         Ball* ball;
         Player* activePlayer;
+        int end;
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
