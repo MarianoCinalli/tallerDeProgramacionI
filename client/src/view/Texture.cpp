@@ -1,3 +1,4 @@
+#include <SDL2/SDL_ttf.h>
 #include "view/Texture.h"
 
 Texture::Texture(std::string sheetPath, SDL_Renderer* renderer, Colour* transparency, Colour* shirt) {
@@ -159,6 +160,61 @@ SDL_Texture* Texture::loadSheet(std::string path, SDL_Renderer* renderer, Colour
     }
     log("Texture: Textura cargada.", LOG_INFO);
     return newTexture;
+}
+
+Texture::Texture(std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont) {
+    this->sdlTexture = this->loadFromRenderedText(textureText, renderer, textColor, gFont);
+}
+
+SDL_Texture* Texture::loadFromRenderedText( std::string textureText, SDL_Renderer* renderer, SDL_Color textColor, TTF_Font* gFont )
+{
+	//Get rid of preexisting texture
+	//free();
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
+	if( textSurface != NULL )
+	{
+		//Create texture from surface pixels
+    this->sdlTexture = SDL_CreateTextureFromSurface( renderer, textSurface );
+		if( this->sdlTexture == NULL )
+		{
+      log( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError(), LOG_INFO);
+		}
+		else
+		{
+			//Get image dimensions
+			this->width = textSurface->w;
+			this->height = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+	else
+	{
+    log( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+	}
+
+	//Return success
+	return this->sdlTexture;
+}
+
+// void Texture::render( int x, int y )
+// {
+// 	//Set rendering space and render to screen
+// 	SDL_Rect renderQuad = { x, y, this->width, this->height };
+//
+// 	//Render to screen
+// 	SDL_RenderCopyEx( this->renderer, this->sdlTexture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE );
+// }
+
+int Texture::getWidth() {
+	return this->width;
+}
+
+int Texture::getHeight() {
+	return this->height;
 }
 
 void Texture::free() {

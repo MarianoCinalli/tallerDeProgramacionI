@@ -1,4 +1,5 @@
 #include "GameInitializer.h"
+#include <SDL2/SDL_ttf.h>
 
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
@@ -179,6 +180,9 @@ void GameInitializer::initializeCommonSdlResources() {
                     printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
                 }
             }
+            if( TTF_Init() == -1 ) {
+    					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+    				}
         }
     }
 }
