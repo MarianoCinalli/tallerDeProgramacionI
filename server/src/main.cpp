@@ -138,7 +138,6 @@ int main(int argc, char* argv[]) {
     }
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
     initializer = new GameInitializer(configuration);
-    delete(configuration);
     connectionManager = initializer->getConnectionManager();
     if(!connectionManager->openConnections()) {
         log("Main: No se pudo abrir la conexion.", LOG_ERROR);
@@ -162,6 +161,7 @@ int main(int argc, char* argv[]) {
     threads->joinSpawnedThreads();
     connectionManager->closeOpenedSockets();
     // End ------------------------------------------------
+    delete(configuration);
     delete(threads);
     delete(initializer);
     logSessionFinished();
