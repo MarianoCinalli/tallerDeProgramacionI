@@ -115,7 +115,7 @@ void GameInitializer::initializeGameController() {
 void GameInitializer::initializeConnectionManager(Conf* configuration) {
     log("GameInitializer: Creando ConnectionManager...", LOG_INFO);
     // Sacar el puerto y la cantidad de conecciones de la configuracion
-    this->connectionManager = new ConnectionManager(8080, 1);
+    this->connectionManager = new ConnectionManager(configuration->getPort(), configuration->getMaxClients());
 }
 
 void GameInitializer::initializeGameControllerProxy() {

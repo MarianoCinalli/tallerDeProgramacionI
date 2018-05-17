@@ -24,6 +24,7 @@ class Conf : public Loggable {
     string defaultFile;
     string defaultSprites;
     int maxClients;
+    int port;
 
     Conf(string, string);
     ~Conf();
@@ -32,6 +33,7 @@ class Conf : public Loggable {
     int loadConf(string file);
     int getMargen();
     int getMaxClients();
+    int getPort();
     string toString();
   private:
 

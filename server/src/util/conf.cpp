@@ -10,7 +10,8 @@ string Conf::toString() {
     for (auto& x : usuarios) {
         str << x.first << " , " << x.second << "\n";
     }
-    str << this->maxClients << "\n";
+    str << "Cantidad maxima de clientes: " << this->maxClients << "\n";
+    str << "Puerto a escuchar: " << this->port << "\n";
     return str.str();
 }
 
@@ -74,15 +75,29 @@ int chooseMargenes(YAML::Node nod) {
 
 int chooseMaxClients(YAML::Node nod) {
     try {
-        if (!nod["clients"]["max"]) {
+        if (!nod["server"]["maxClients"]) {
             return VALOR_INVALIDO;
         }
-        int str = nod["clients"]["max"].as<int>();
+        int str = nod["server"]["maxClients"].as<int>();
         if (str > 0 && str < 5) {
             return str;
         } else {
             return VALOR_INVALIDO;
         }
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
+int choosePort(YAML::Node nod) {
+    try {
+        if (!nod["server"]["port"]) {
+            return VALOR_INVALIDO;
+        }
+        int str = nod["server"]["port"].as<int>();
+        return str;
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<int> e) {
@@ -160,6 +175,8 @@ int Conf::loadConf(string file) {
     log("Conf: Cargado margenes con valor: ", margenes, LOG_INFO);
     this->maxClients = cargarParametro("maxClients", &chooseMaxClients);
     log("Conf: Cargado la cantidad maxima de jugadores con valor: ", this->maxClients, LOG_INFO);
+    this->port = cargarParametro("puerto", &choosePort);
+    log("Conf: Cargado el puerto con valor: ", this->port, LOG_INFO);
     cargarParametro("usuarios", &this->usuarios, &chooseUsuarios);
     return 0;
 }
@@ -174,6 +191,10 @@ int Conf::getMargen() {
 
 int Conf::getMaxClients() {
     return this->maxClients;
+}
+
+int Conf::getPort() {
+    return this->port;
 }
 
 Conf::Conf(string filename, string defaultSpritesFilename) {

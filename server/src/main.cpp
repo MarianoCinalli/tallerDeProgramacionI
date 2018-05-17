@@ -143,7 +143,8 @@ int main(int argc, char* argv[]) {
     initializer = new GameInitializer(configuration);
     connectionManager = initializer->getConnectionManager();
 
-    int status = pthread_barrier_init(&players_ready_barrier, NULL, 3);
+    // El + 2 es por la cantidad extra de threads.
+    int status = pthread_barrier_init(&players_ready_barrier, NULL, configuration->getMaxClients() + 2);
     if (status != 0) {
         log("Main: No se pudo inicializar la barrera.", strerror(status), LOG_ERROR);
         delete(initializer);
