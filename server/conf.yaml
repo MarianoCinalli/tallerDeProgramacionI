@@ -2,8 +2,11 @@
 debug:
   level: 'debug' #'debug' o "info" o "error"
 usuarios:
+  - {name: mariano, password: mariano}
   - {name: juan, password: juan}
   - {name: nicolas, password: nicolas}
   - {name: joaquin, password: joaquin}
   - {name: claudio, password: claudio}
   - {name: zidane, password: zidane}
+clients:
+  max: 1
