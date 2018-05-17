@@ -41,11 +41,11 @@ void* read_server(void* argument) {
                 // * Aca se sabe que tipo es.
                 if (key.Type() == YAML::NodeType::Scalar) {
                     if (key.as<std::string>() == "ba") {
-                        log("read_server: pelota",key.as<std::string>(), LOG_INFO);
+                        log("read_server: pelota", key.as<std::string>(), LOG_INFO);
                     } else {
-                        log("read_server: jugador",key.as<std::string>(), LOG_INFO);
-                         player =  initializer->getGameController()->getPlayer(key.as<int>());
-                         player->parseYaml(value);
+                        log("read_server: jugador", key.as<std::string>(), LOG_INFO);
+                        player =  initializer->getGameController()->getPlayer(key.as<int>());
+                        player->parseYaml(value);
                     }
                 }
 
@@ -73,14 +73,14 @@ void* read_server(void* argument) {
 // Hay que ver si le falta algo.
 void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
-        SDL_Renderer* renderer = initializer->getRenderer();
-        PitchView* pitchView = initializer->getPitchView();
-        bool quit =false;
-        while (!quit) {
-            quit = initializer->quit;
-            pitchView->render(renderer);
-            usleep(50000); // Frame rate.
-        }
+    SDL_Renderer* renderer = initializer->getRenderer();
+    PitchView* pitchView = initializer->getPitchView();
+    bool quit = false;
+    while (!quit) {
+        quit = initializer->quit;
+        pitchView->render(renderer);
+        usleep(50000); // Frame rate.
+    }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;
 }

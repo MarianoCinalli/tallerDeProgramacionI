@@ -4,11 +4,11 @@ ThreadSpawner::ThreadSpawner() {
     this->ids = {};
 }
 
-bool ThreadSpawner::spawn(void* (*routine) (void*), void* arg) {
+bool ThreadSpawner::spawn(void* (*routine)(void*), void* arg) {
     pthread_t threadId;
     int status = pthread_create(&threadId, NULL, routine, arg);
     // De man pthread_create:
-    // On success, pthread_create() returns 0; on error, it 
+    // On success, pthread_create() returns 0; on error, it
     // returns an error number, and the contents of *thread are undefined.
     if (status != 0) {
         log("ThreadSpawner: No se pudo crear el thread! Codigo de error: ", status, LOG_ERROR);
@@ -22,7 +22,7 @@ bool ThreadSpawner::spawn(void* (*routine) (void*), void* arg) {
 
 void ThreadSpawner::joinSpawnedThreads() {
     log("ThreadSpawner: Esperando a que los threads terminen...", LOG_INFO);
-    for(pthread_t threadId : this->ids) {
+    for (pthread_t threadId : this->ids) {
         log("ThreadSpawner: Esperando al thread de ID: ", threadId, LOG_INFO);
         int status = pthread_join(threadId, NULL);
         if (status != 0) {
