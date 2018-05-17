@@ -31,6 +31,8 @@ int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee tod
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
 GameInitializer* initializer;
+std::mutex quit_mutex;
+bool quit = false;
 // Global variables ---------------------------------------
 
 
@@ -269,6 +271,7 @@ void openLogin(SDL_Renderer* gRenderer, std::string& servidor, std::string& puer
     clave = inputs[3];
 }
 
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
@@ -296,7 +299,6 @@ int main(int argc, char* argv[]) {
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
     initializer = new GameInitializer(configuration);
     ActionsManager* actionsManager = initializer->getActionsManager();
-    bool quit = false;
     SDL_Event e;
     int frameRate = configuration->getFramerate();
     float sleepTime = (float)200000 / (float)frameRate;
@@ -357,14 +359,13 @@ int main(int argc, char* argv[]) {
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (actionsManager->shouldQuit(e)) {
-                quit = true;
-                initializer->quit = true;
+                setQuit(true);
             } else {
                 // Devuelve acciones que modifican modelos.
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
-                    connectionManager->sendToServer(action->toString());
+                    connectionManager->sendMessage(action->toString());
                     delete(action);
                 }
             }
