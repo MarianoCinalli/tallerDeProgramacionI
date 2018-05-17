@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+#include <SDL2/SDL_image.h>
+
 // No tocar que revienta una validacion
 enum logLevels {
     LOG_DEBUG = 1,
@@ -64,4 +66,12 @@ const int BALL_DECELERATE_TIME = 15; //a numeros mas grandes, tarda mas
 const int INTERCEPT_VALUE = 40;
 const int STEAL_VALUE = 60;
 const int TIME_BALL_NO_INTERCEPT = 4;
+
+// Colores
+SDL_Color SDL_BLACK = { 0, 0, 0, 0xFF };
+SDL_Color SDL_RED = { 0xFF, 0, 0, 0xFF };
+SDL_Color SDL_GREEN = { 0, 0xFF, 0, 0xFF };
+SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
+SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
+
 #endif // CONSTANTS_H_

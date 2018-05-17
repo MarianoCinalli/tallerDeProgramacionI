@@ -127,12 +127,11 @@ void endProgram(int statusToExit, ConnectionManager* connectionManager) {
     exit(statusToExit);
 }
 
-void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puerto, std::string &usuario, std::string &clave) {
+void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puerto, std::string &usuario, std::string &clave, std::string mensaje) {
   log("Entra al openLogin", LOG_INFO);
 
   bool quit = false;
   SDL_Event e;
-  SDL_Color textColor = { 0, 0, 0, 0xFF };
 
   TTF_Font *gFont = NULL;
   gFont = TTF_OpenFont( "lazy.ttf", 30 );
@@ -140,25 +139,28 @@ void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puer
     log( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
   }
 
+  Texture mensajeTexture;
+  mensajeTexture.loadFromRenderedText( mensaje, gRenderer, SDL_RED, gFont );
+
   Texture servidorPromptTexture;
-  servidorPromptTexture.loadFromRenderedText( "Servidor:", gRenderer, textColor, gFont );
+  servidorPromptTexture.loadFromRenderedText( "Servidor:", gRenderer, SDL_BLACK, gFont );
   Texture puertoPromptTexture;
-  puertoPromptTexture.loadFromRenderedText( "Puerto:", gRenderer, textColor, gFont );
+  puertoPromptTexture.loadFromRenderedText( "Puerto:", gRenderer, SDL_BLACK, gFont );
   Texture usuarioPromptTexture;
-  usuarioPromptTexture.loadFromRenderedText( "Usuario:", gRenderer, textColor, gFont );
+  usuarioPromptTexture.loadFromRenderedText( "Usuario:", gRenderer, SDL_BLACK, gFont );
   Texture clavePromptTexture;
-  clavePromptTexture.loadFromRenderedText( "Clave:", gRenderer, textColor, gFont );
+  clavePromptTexture.loadFromRenderedText( "Clave:", gRenderer, SDL_BLACK, gFont );
 
   std::string inputs [4] = { "127.0.0.1", "8080", "zidane", "*****" };
 
   Texture servidorInputTexture;
-  servidorInputTexture.loadFromRenderedText( inputs[0], gRenderer, textColor, gFont );
+  servidorInputTexture.loadFromRenderedText( inputs[0], gRenderer, SDL_BLUE, gFont );
   Texture puertoInputTexture;
-  puertoInputTexture.loadFromRenderedText( inputs[1], gRenderer, textColor, gFont );
+  puertoInputTexture.loadFromRenderedText( inputs[1], gRenderer, SDL_BLUE, gFont );
   Texture usuarioInputTexture;
-  usuarioInputTexture.loadFromRenderedText( inputs[2], gRenderer, textColor, gFont );
+  usuarioInputTexture.loadFromRenderedText( inputs[2], gRenderer, SDL_BLUE, gFont );
   Texture claveInputTexture;
-  claveInputTexture.loadFromRenderedText( inputs[3], gRenderer, textColor, gFont );
+  claveInputTexture.loadFromRenderedText( inputs[3], gRenderer, SDL_BLUE, gFont );
 
   int inputsIndex = 0;
   std::string hidden = "*****";
@@ -205,10 +207,10 @@ void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puer
       if ( inputs[1] == "" ) { inputs[inputsIndex] = " "; }
       if ( inputs[2] == "" ) { inputs[inputsIndex] = " "; }
       if ( inputs[3] == "" ) { inputs[inputsIndex] = " "; }
-      servidorInputTexture.loadFromRenderedText( inputs[0].c_str(), gRenderer, textColor, gFont );
-      puertoInputTexture.loadFromRenderedText( inputs[1].c_str(), gRenderer, textColor, gFont );
-      usuarioInputTexture.loadFromRenderedText( inputs[2].c_str(), gRenderer, textColor, gFont );
-      claveInputTexture.loadFromRenderedText( hidden.c_str(), gRenderer, textColor, gFont );
+      servidorInputTexture.loadFromRenderedText( inputs[0].c_str(), gRenderer, SDL_BLUE, gFont );
+      puertoInputTexture.loadFromRenderedText( inputs[1].c_str(), gRenderer, SDL_BLUE, gFont );
+      usuarioInputTexture.loadFromRenderedText( inputs[2].c_str(), gRenderer, SDL_BLUE, gFont );
+      claveInputTexture.loadFromRenderedText( hidden.c_str(), gRenderer, SDL_BLUE, gFont );
     }
 
     //Clear screen
@@ -216,6 +218,9 @@ void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puer
     SDL_RenderClear( gRenderer );
 
     //Render text textures
+    SDL_Rect renderQuad0 = { ( SCREEN_WIDTH - mensajeTexture.getWidth() ) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
+    SDL_RenderCopyEx( gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE );
+
     SDL_Rect renderQuad1 = { ( SCREEN_WIDTH - servidorPromptTexture.getWidth() ) / 2, 100, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
     SDL_RenderCopyEx( gRenderer, servidorPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE );
 
@@ -252,7 +257,7 @@ void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puer
   SDL_StopTextInput();
 
   servidor = inputs[0];
-  puerto = stoi(inputs[1]);
+  puerto = inputs[1];
   usuario = inputs[2];
   clave = inputs[3];
 }
@@ -291,6 +296,8 @@ int main(int argc, char* argv[]) {
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
 
+    ConnectionManager* connectionManager = new ConnectionManager();
+
     // Login - determinar IP, Port, Usuario y Clave
     SDL_Renderer* renderer = initializer->getRenderer();
 
@@ -298,26 +305,33 @@ int main(int argc, char* argv[]) {
     std::string puerto;
     std::string usuario;
     std::string clave;
-    //bool quit = false;
-    //SDL_Event e;
-    //while (!quit) {
-      openLogin(renderer, servidor, puerto, usuario, clave);
+    std::string mensaje = "";
+    bool quitLogin = false;
+    while (!quitLogin) {
+      openLogin(renderer, servidor, puerto, usuario, clave, mensaje);
       log("SALIO DEL LOGIN", LOG_INFO);
-      log(servidor, LOG_INFO);
-      log(puerto, LOG_INFO);
-      log(usuario, LOG_INFO);
-      log(clave, LOG_INFO);
+      log("Login: Servidor ", servidor, LOG_INFO);
+      log("Login: Puerto ", puerto, LOG_INFO);
+      log("Login: Usuario ", usuario, LOG_INFO);
+      log("Login: Clave", clave, LOG_INFO);
+      connectionManager->setIp(servidor);
+      connectionManager->setPort(stoi(puerto));
 
       //validarServidor(config);
+      if(!connectionManager->connectToServer()) {
+        log("Main: No se pudo abrir la conexion.", LOG_INFO);
+        mensaje = "No se pudo conectar con el servidor.";
+        //endProgram(1, connectionManager);
+      } else {
+        log("Main: Conectado con el servidor.", LOG_INFO);
+        //log("Main: Validando credenciales.", LOG_INFO);
+        //validarCredenciales();
+        //mensaje = "Usuario y/o clave incorrectos.";
+        quitLogin = true;
+      }
 
-      //validarCredenciales();
-    //}
-
-    ConnectionManager* connectionManager = new ConnectionManager("127.0.0.1", 8080);
-    if(!connectionManager->connectToServer()) {
-        log("Main: No se pudo abrir la conexion.", LOG_ERROR);
-        endProgram(1, connectionManager);
     }
+
     // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir
     // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
     // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?

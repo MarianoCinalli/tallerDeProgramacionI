@@ -1,5 +1,9 @@
 #include "util/ConnectionManager.h"
 
+ConnectionManager::ConnectionManager() {
+    this->my_socket = 0;
+}
+
 ConnectionManager::ConnectionManager(std::string ip, int port) {
     this->ip = ip;
     this->port = port;
@@ -44,6 +48,14 @@ void ConnectionManager::sendToServer(std::string message) {
 
 int ConnectionManager::getSocket() {
     return this->my_socket;
+}
+
+void ConnectionManager::setIp(std::string ip) {
+  this->ip = ip;
+}
+
+void ConnectionManager::setPort(int port) {
+  this->port = port;
 }
 
 std::string ConnectionManager::getMessage() {

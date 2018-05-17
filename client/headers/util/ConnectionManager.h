@@ -17,12 +17,15 @@ class ConnectionManager {
         int port;
         int my_socket;
     public:
+        ConnectionManager();
         ConnectionManager(std::string ip, int port);
         bool connectToServer();
         void sendToServer(std::string message);
         std::string getMessage();
         void closeConnection();
         int getSocket();
+        void setIp(std::string ip);
+        void setPort(int port);
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H
