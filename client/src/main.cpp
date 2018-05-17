@@ -133,6 +133,13 @@ void openLogin(SDL_Renderer* gRenderer, std::string &servidor, std::string &puer
   bool quit = false;
   SDL_Event e;
 
+  // Colores
+  SDL_Color SDL_BLACK = { 0, 0, 0, 0xFF };
+  SDL_Color SDL_RED = { 0xFF, 0, 0, 0xFF };
+  SDL_Color SDL_GREEN = { 0, 0xFF, 0, 0xFF };
+  SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
+  SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
+
   TTF_Font *gFont = NULL;
   gFont = TTF_OpenFont( "lazy.ttf", 30 );
   if( gFont == NULL ) {
