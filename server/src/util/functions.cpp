@@ -6,19 +6,24 @@ extern pthread_barrier_t players_ready_barrier;
 // Lee los mensajes de los clientes y actualiza el modelo.
 void* read_client(void* argument) {
     log("read_client: Creado.", LOG_INFO);
-    log("read_client: Esperando para sincronizacion...", LOG_INFO);
-    pthread_barrier_wait(&players_ready_barrier);
-    log("read_client: Sincronizacion terminada.", LOG_INFO);
     int socket;
     int readBytes;
     // std::string message;
     bool continueReading = true;
+    bool firstBroadcastRead = true;
     socket = *((int*) argument);
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
     log("read_client: Socket: ", socket, LOG_DEBUG);
     while (continueReading) {
+        log("read_client: Reading...", LOG_INFO);
+        if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
+            log("read_client: Esperando para sincronizar...", LOG_INFO);
+            pthread_barrier_wait(&players_ready_barrier);
+            firstBroadcastRead = false;
+            log("read_client: Sincronizacion terminada.", LOG_INFO);
+        }
         std::string message = "";
         readBytes = connectionManager->getMessage(socket, message);
         if (readBytes < 0) {
@@ -55,7 +60,7 @@ void* read_client(void* argument) {
 // Este es el que le envia el juego a los clientes.
 void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Creado.", LOG_INFO);
-    log("broadcast_to_clients: Esperando para sincronizacion...", LOG_INFO);
+    log("broadcast_to_clients: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("broadcast_to_clients: Sincronizacion terminada.", LOG_INFO);
     std::vector<int> sockets = *((std::vector<int>*) argument);
@@ -76,7 +81,7 @@ void* broadcast_to_clients(void* argument) {
 // Actualiza el modelo dependiendo de las propiedades.
 void* game_updater(void* argument) {
     log("game_updater: Creado.", LOG_INFO);
-    log("game_updater: Esperando para sincronizacion...", LOG_INFO);
+    log("game_updater: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
