@@ -305,6 +305,10 @@ int main(int argc, char* argv[]) {
 
     ConnectionManager* connectionManager = new ConnectionManager();
 
+    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir
+    // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
+    // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
+
     // Login - determinar IP, Port, Usuario y Clave
     SDL_Renderer* renderer = initializer->getRenderer();
 
@@ -339,9 +343,6 @@ int main(int argc, char* argv[]) {
 
     }
 
-    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir
-    // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
-    // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
     // Abajo se Lanza thread que recibe mensajes de estado de juego.
     ThreadSpawner* threadSpawner = new ThreadSpawner();
     threadSpawner->spawn(
