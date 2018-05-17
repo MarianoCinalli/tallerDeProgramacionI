@@ -16,6 +16,9 @@
 
 #include <mutex>
 
+#include <pthread.h>
+
+
 // Funciones de uso interno.
 std::string getFormatedDateTime(const char* format);
 std::string getDate();
