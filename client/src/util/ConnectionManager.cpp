@@ -39,13 +39,6 @@ bool ConnectionManager::connectToServer() {
     return true;
 }
 
-void ConnectionManager::sendToServer(std::string message) {
-    log("ConnectionManager: Enviando: \n", message, LOG_DEBUG);
-    const char * constantMessage = message.c_str();
-    send(this->my_socket, constantMessage, strlen(constantMessage), 0);
-    log("ConnectionManager: Mensaje enviado.", LOG_DEBUG);
-}
-
 int ConnectionManager::getSocket() {
     return this->my_socket;
 }
@@ -58,19 +51,36 @@ void ConnectionManager::setPort(int port) {
   this->port = port;
 }
 
-std::string ConnectionManager::getMessage() {
+int ConnectionManager::getMessage(std::string & readMessage) {
     int readBytes;
-    int bufferLength = 4096;
+    int bufferLength = 1024;
     int bufferSize = sizeof(char) * bufferLength;
     char buffer[bufferLength] = {0};
     memset(buffer, 0x00, bufferSize);
     readBytes = read(this->my_socket, buffer, bufferSize);
+    // Cuidado aca con strerror que no es thread safe:
+    // Otro thread puede setear el errno, y este escribirlo.
+    // Ver de usar strerror_r que es thread safe.
     if (readBytes < 0) {
         log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
-        return "";
+        readMessage = "";
+    } else if (readBytes == 0) {
+        log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
+        readMessage = "";
+    } else {
+        log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
+        // readMessage = buffer;
+        // std::string s(buffer, readBytes/sizeof(char));
+        readMessage = buffer;
     }
-    log("read_server: Recibidos ", readBytes, LOG_DEBUG);
-    return buffer;
+    return readBytes;
+}
+
+void ConnectionManager::sendMessage(std::string message) {
+    log("ConnectionManager: Enviando: \n", message, LOG_DEBUG);
+    const char * constantMessage = message.c_str();
+    send(this->my_socket, constantMessage, strlen(constantMessage), 0);
+    log("ConnectionManager: Mensaje enviado.", LOG_DEBUG);
 }
 
 void ConnectionManager::closeConnection() {

@@ -44,7 +44,6 @@ class GameInitializer {
         SDL_Renderer* getRenderer();
         PitchView* getPitchView();
         Team* getTeam(int teamNumber);
-        bool quit;
         ~GameInitializer();
     private:
         void initializePitch(Conf* conf);

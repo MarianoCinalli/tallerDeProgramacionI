@@ -20,8 +20,8 @@ class ConnectionManager {
         ConnectionManager();
         ConnectionManager(std::string ip, int port);
         bool connectToServer();
-        void sendToServer(std::string message);
-        std::string getMessage();
+        int getMessage(std::string& readMessage);
+        void sendMessage(std::string message);
         void closeConnection();
         int getSocket();
         void setIp(std::string ip);

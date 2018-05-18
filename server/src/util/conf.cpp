@@ -7,10 +7,11 @@ string Conf::toString() {
 
     str << "\nConfiguracion\n";
     str << "Usuarios" << "\n";
-    for(auto& x : usuarios)
-    {
+    for (auto& x : usuarios) {
         str << x.first << " , " << x.second << "\n";
     }
+    str << "Cantidad maxima de clientes: " << this->maxClients << "\n";
+    str << "Puerto a escuchar: " << this->port << "\n";
     return str.str();
 }
 
@@ -42,9 +43,9 @@ int chooseUsuarios(YAML::Node nod, map<string, string>* usr) {
         if (!nodoParametro) {
             return VALOR_INVALIDO;
         }
-        for (YAML::Node n : nodoParametro){
-          // log("user",n["name"].as<string>()+ " " + n["password"].as<string>(), LOG_DEBUG);
-          (*usr)[n["name"].as<string>()] = n["password"].as<string>();
+        for (YAML::Node n : nodoParametro) {
+            // log("user",n["name"].as<string>()+ " " + n["password"].as<string>(), LOG_DEBUG);
+            (*usr)[n["name"].as<string>()] = n["password"].as<string>();
         }
         return VALOR_OK;
     } catch (YAML::BadSubscript e) {
@@ -72,6 +73,38 @@ int chooseMargenes(YAML::Node nod) {
     }
 }
 
+int chooseMaxClients(YAML::Node nod) {
+    try {
+        if (!nod["server"]["maxClients"]) {
+            return VALOR_INVALIDO;
+        }
+        int str = nod["server"]["maxClients"].as<int>();
+        if (str > 0 && str < 5) {
+            return str;
+        } else {
+            return VALOR_INVALIDO;
+        }
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
+int choosePort(YAML::Node nod) {
+    try {
+        if (!nod["server"]["port"]) {
+            return VALOR_INVALIDO;
+        }
+        int str = nod["server"]["port"].as<int>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
 string parametroInvalido(string par) {
     return "Conf: parametro: " + par + " invalido, usando valor por default";
 }
@@ -87,15 +120,15 @@ int Conf::cargarParametro(string parametro, int (*fn)(YAML::Node)) {
     return valor;
 }
 
-int Conf::cargarParametro(string parametro, map<string, string>* usr, int (*fn)(YAML::Node, map<string,string>*)) {
+int Conf::cargarParametro(string parametro, map<string, string>* usr, int (*fn)(YAML::Node, map<string, string>*)) {
     int valor = fn(config, usr);
 
     if (valor == VALOR_INVALIDO) {
         log(parametroInvalido(parametro), LOG_ERROR);
         valor = fn(defaultConfig, usr);
     }
-    if(valor == 0){
-      log("Conf: Cargado " + parametro + " Ok", LOG_INFO);
+    if (valor == 0) {
+        log("Conf: Cargado " + parametro + " Ok", LOG_INFO);
     }
     return valor;
 }
@@ -140,7 +173,11 @@ int Conf::loadConf(string file) {
     log("Conf: Cargado debug Level con valor: ", getMessageLevelString(debugLevel), LOG_INFO);
     margenes = cargarParametro("margenes", &chooseMargenes);
     log("Conf: Cargado margenes con valor: ", margenes, LOG_INFO);
-    cargarParametro("usuarios", &this->usuarios,&chooseUsuarios);
+    this->maxClients = cargarParametro("maxClients", &chooseMaxClients);
+    log("Conf: Cargado la cantidad maxima de jugadores con valor: ", this->maxClients, LOG_INFO);
+    this->port = cargarParametro("puerto", &choosePort);
+    log("Conf: Cargado el puerto con valor: ", this->port, LOG_INFO);
+    cargarParametro("usuarios", &this->usuarios, &chooseUsuarios);
     return 0;
 }
 
@@ -150,6 +187,14 @@ int Conf::getDebugLevel() {
 
 int Conf::getMargen() {
     return margenes;
+}
+
+int Conf::getMaxClients() {
+    return this->maxClients;
+}
+
+int Conf::getPort() {
+    return this->port;
 }
 
 Conf::Conf(string filename, string defaultSpritesFilename) {

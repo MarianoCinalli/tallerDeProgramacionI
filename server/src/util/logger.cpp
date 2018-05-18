@@ -24,7 +24,7 @@ std::string getTime() {
 }
 
 std::string getPID() {
-    return std::to_string(getpid());
+    return std::to_string(pthread_self());
 }
 
 std::string getMessageLevelString(int messageLevel) {

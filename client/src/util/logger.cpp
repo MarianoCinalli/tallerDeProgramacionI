@@ -8,7 +8,7 @@ std::string getFormatedDateTime(const char* format) {
     std::time_t now = std::time(nullptr);
     char buf[40];
     struct tm tstruct = *localtime(&now); // UTC
-    tstruct.tm_hour -= 0; // UTC - 3
+    tstruct.tm_hour -= 3; // UTC - 3
     // Time might be out of range after fixing timezone. Re-converting it.
     std::mktime(&tstruct);
     strftime(buf, sizeof(buf), format, &tstruct);
@@ -24,7 +24,7 @@ std::string getTime() {
 }
 
 std::string getPID() {
-    return std::to_string(getpid());
+    return std::to_string(pthread_self());
 }
 
 std::string getMessageLevelString(int messageLevel) {

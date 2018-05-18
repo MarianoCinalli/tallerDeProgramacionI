@@ -14,6 +14,7 @@
 #include "controller/GameController.h"
 #include "util/ConnectionManager.h"
 #include <mutex>
+#include <pthread.h>
 
 // Global variables ---------------------------------------
 std::ofstream LOG_FILE_POINTER;
@@ -25,6 +26,7 @@ int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee tod
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
 std::mutex update_model_mutex;
+pthread_barrier_t players_ready_barrier;
 GameInitializer* initializer;
 ConnectionManager* connectionManager;
 // Global variables ---------------------------------------
@@ -140,12 +142,22 @@ int main(int argc, char* argv[]) {
     log("Main: Nivel de log cambiado a: ", getMessageLevelString(LOG_MIN_LEVEL), LOG_ERROR);
     initializer = new GameInitializer(configuration);
     connectionManager = initializer->getConnectionManager();
-    if(!connectionManager->openConnections()) {
-        log("Main: No se pudo abrir la conexion.", LOG_ERROR);
+
+    // El + 2 es por la cantidad extra de threads.
+    int status = pthread_barrier_init(&players_ready_barrier, NULL, configuration->getMaxClients() + 2);
+    if (status != 0) {
+        log("Main: No se pudo inicializar la barrera.", strerror(status), LOG_ERROR);
         delete(initializer);
         exit(1);
     }
-    ThreadSpawner* threads = new ThreadSpawner();
+
+    if(!connectionManager->openConnections()) {
+        log("Main: No se pudo abrir la conexion.", LOG_ERROR);
+        pthread_barrier_destroy(&players_ready_barrier);
+        delete(initializer);
+        exit(1);
+    }
+    ThreadSpawner* threads = new ThreadSpawner();    
     log("Main: Juego inicializado correctamente.", LOG_INFO);
 
     // Falta la reconeccion de jugadores.
@@ -168,6 +180,7 @@ int main(int argc, char* argv[]) {
     threads->joinSpawnedThreads();
     connectionManager->closeOpenedSockets();
     // End ------------------------------------------------
+    pthread_barrier_destroy(&players_ready_barrier);
     delete(configuration);
     delete(threads);
     delete(initializer);

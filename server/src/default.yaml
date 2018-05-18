@@ -2,8 +2,12 @@
 debug:
   level: 'debug' #'debug' o "info" o "error"
 usuarios:
+  - {name: mariano, password: mariano}
   - {name: juan, password: juan}
   - {name: nicolas, password: nicolas}
   - {name: joaquin, password: joaquin}
   - {name: claudio, password: claudio}
   - {name: zidane, password: zidane}
+server:
+  maxClients: 1
+  port: 8080
