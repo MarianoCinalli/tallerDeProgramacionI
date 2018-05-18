@@ -21,32 +21,35 @@ Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
 
 void Camera::calculateNewPostion(Coordinates* playerPosition, int playerSpeed) {
     // Margen derecho
-    if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
-        log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
-        this->position->addX(playerSpeed);
-        margin.x = this->position->getX() + margin_size;
-    }
+    // if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
+    //     log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
+    //     this->position->addX(playerSpeed);
+    //     margin.x = this->position->getX() + margin_size;
+    // }
 
     // Margen izquierdo
-    if (playerPosition->getX() < margin.x) {
-        log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
-        this->position->subtractX(playerSpeed);
-        margin.x = this->position->getX() + margin_size;
-    }
+    // if (playerPosition->getX() < margin.x) {
+    //     log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
+    //     this->position->subtractX(playerSpeed);
+    //     margin.x = this->position->getX() + margin_size;
+    // }
 
     // Margen inferior
-    if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
-        log("Jugador activo debajo del margen inferior", LOG_DEBUG);
-        this->position->addY(playerSpeed);
-        margin.y = this->position->getY() + margin_size;
-    }
+    // if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
+    //     log("Jugador activo debajo del margen inferior", LOG_DEBUG);
+    //     this->position->addY(playerSpeed);
+    //     margin.y = this->position->getY() + margin_size;
+    // }
 
     // Margen superior
-    if (playerPosition->getY() < margin.y) {
-        log("Jugador activo sobre el margen superior", LOG_DEBUG);
-        this->position->subtractY(playerSpeed);
-        margin.y = this->position->getY() + margin_size;
-    }
+    // if (playerPosition->getY() < margin.y) {
+    //     log("Jugador activo sobre el margen superior", LOG_DEBUG);
+    //     this->position->subtractY(playerSpeed);
+    //     margin.y = this->position->getY() + margin_size;
+    // }
+
+    this->position->setX(playerPosition->getX());
+    this->position->setY(playerPosition->getY());
 
     //Keep the camera in bounds
     if (this->position->getX() < 0) {
@@ -63,18 +66,18 @@ void Camera::calculateNewPostion(Coordinates* playerPosition, int playerSpeed) {
     }
 
     //Keep the margin in bounds
-    if (margin.x < 0) {
-        margin.x = 0;
-    }
-    if (margin.y < 0) {
-        margin.y = 0;
-    }
-    if (margin.x > LEVEL_WIDTH - margin.w) {
-        margin.x = LEVEL_WIDTH - margin.w;
-    }
-    if (margin.y > LEVEL_HEIGHT - margin.h) {
-        margin.y = LEVEL_HEIGHT - margin.h;
-    }
+    // if (margin.x < 0) {
+    //     margin.x = 0;
+    // }
+    // if (margin.y < 0) {
+    //     margin.y = 0;
+    // }
+    // if (margin.x > LEVEL_WIDTH - margin.w) {
+    //     margin.x = LEVEL_WIDTH - margin.w;
+    // }
+    // if (margin.y > LEVEL_HEIGHT - margin.h) {
+    //     margin.y = LEVEL_HEIGHT - margin.h;
+    // }
 }
 
 std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteManager*>& views) {
