@@ -35,6 +35,7 @@ class Conf : public Loggable {
     int getMaxClients();
     int getPort();
     string toString();
+    map<string, string> getUsuarios();
   private:
 
     YAML::Node config;

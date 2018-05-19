@@ -160,7 +160,7 @@ void openLogin(SDL_Renderer* gRenderer, std::string& servidor, std::string& puer
     Texture clavePromptTexture;
     clavePromptTexture.loadFromRenderedText("Clave:", gRenderer, SDL_BLACK, gFont);
 
-    std::string inputs [4] = { "127.0.0.1", "8080", "zidane", "*****" };
+    std::string inputs [4] = { servidor, puerto, usuario, clave};
 
     Texture servidorInputTexture;
     servidorInputTexture.loadFromRenderedText(inputs[0], gRenderer, SDL_BLUE, gFont);
@@ -211,11 +211,11 @@ void openLogin(SDL_Renderer* gRenderer, std::string& servidor, std::string& puer
             for (int i = 0; (unsigned)i < inputs[3].size(); i++) {
                 hidden += "*";
             }
-            if (hidden == "") { hidden = " "; }
-            if (inputs[0] == "") { inputs[inputsIndex] = " "; }
-            if (inputs[1] == "") { inputs[inputsIndex] = " "; }
-            if (inputs[2] == "") { inputs[inputsIndex] = " "; }
-            if (inputs[3] == "") { inputs[inputsIndex] = " "; }
+            // if (hidden == "") { hidden = " "; }
+            // if (inputs[0] == "") { inputs[inputsIndex] = " "; }
+            // if (inputs[1] == "") { inputs[inputsIndex] = " "; }
+            // if (inputs[2] == "") { inputs[inputsIndex] = " "; }
+            // if (inputs[3] == "") { inputs[inputsIndex] = " "; }
             servidorInputTexture.loadFromRenderedText(inputs[0].c_str(), gRenderer, SDL_BLUE, gFont);
             puertoInputTexture.loadFromRenderedText(inputs[1].c_str(), gRenderer, SDL_BLUE, gFont);
             usuarioInputTexture.loadFromRenderedText(inputs[2].c_str(), gRenderer, SDL_BLUE, gFont);
@@ -314,11 +314,11 @@ int main(int argc, char* argv[]) {
     // Login - determinar IP, Port, Usuario y Clave
     SDL_Renderer* renderer = initializer->getRenderer();
 
-    std::string servidor;
-    std::string puerto;
-    std::string usuario;
-    std::string clave;
-    std::string mensaje = "";
+    std::string servidor="127.0.0.1";
+    std::string puerto="8080";
+    std::string usuario="zidane";
+    std::string clave="****";
+    std::string mensaje = " ";
     bool quitLogin = false;
     while (!quitLogin) {
         openLogin(renderer, servidor, puerto, usuario, clave, mensaje);
@@ -337,10 +337,25 @@ int main(int argc, char* argv[]) {
             //endProgram(1, connectionManager);
         } else {
             log("Main: Conectado con el servidor.", LOG_INFO);
+            connectionManager->sendMessage(usuario+":"+clave);
+            std::string message;
+            int result = connectionManager->getMessage(message);
+            log("VARIABLE RESULT:",result, LOG_INFO);
+            std::string logged = message.substr(message.find(":")+1, message.length());
+            log("VARIABLE LOGGED:",logged, LOG_INFO);
+            if ( logged == "true" ){
+              mensaje ="usuario logueado";
+              quitLogin = true;
+            } else if ( logged == "false" ) {
+              mensaje ="clave incorrecta";
+              //connectionManager->closeConnection();
+              quitLogin = false;
+            }
+
             //log("Main: Validando credenciales.", LOG_INFO);
             //validarCredenciales();
             //mensaje = "Usuario y/o clave incorrectos.";
-            quitLogin = true;
+
         }
 
     }

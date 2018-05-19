@@ -24,6 +24,7 @@ class User {
         ConnectionManager* connectionManager;
         int userSocket;
         int teamNumber;
+        Conf* configuration;
     public:
         User(GameInitializer* initializer, int socket);
         bool hasLogedIn();

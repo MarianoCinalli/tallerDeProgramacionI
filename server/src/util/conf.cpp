@@ -197,6 +197,10 @@ int Conf::getPort() {
     return this->port;
 }
 
+map<string, string> Conf::getUsuarios(){
+  return this->usuarios;
+}
+
 Conf::Conf(string filename, string defaultSpritesFilename) {
     defaultFile = filename;
     defaultSprites = defaultSpritesFilename;

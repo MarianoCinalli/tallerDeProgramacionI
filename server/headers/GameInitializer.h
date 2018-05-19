@@ -32,6 +32,7 @@ class GameInitializer {
         Team* localTeam; // Liberado en Pitch.
         Team* awayTeam; // Liberado en Pitch.
         Pitch* pitch; // Liberado en game controller.
+        Conf* configuration;
     public:
         GameInitializer(Conf* configuration);
         Pitch* getPitch();
@@ -40,6 +41,7 @@ class GameInitializer {
         ConnectionManager* getConnectionManager();
         GameControllerProxy* getGameControllerProxy();
         ~GameInitializer();
+        Conf* getConfiguration();
     private:
         void initializePitch(Conf* conf);
         void initializeTeam(Conf* conf, int teamNumber);

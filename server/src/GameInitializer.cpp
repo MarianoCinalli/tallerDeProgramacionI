@@ -11,6 +11,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeGameController();
     this->initializeGameControllerProxy();
     this->initializeConnectionManager(configuration);
+    this->configuration = configuration;
     log("GameInitializer: Juego inicializado...", LOG_INFO);
 }
 
@@ -98,6 +99,10 @@ int GameInitializer::getOrientation(int teamNumber) {
     } else {
         return PLAYER_ORIENTATION_LEFT;
     }
+}
+
+Conf*  GameInitializer::getConfiguration() {
+  return configuration;
 }
 
 void GameInitializer::initializePitch(Conf* conf) {
