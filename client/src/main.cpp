@@ -320,6 +320,20 @@ int main(int argc, char* argv[]) {
     std::string clave="****";
     std::string mensaje = " ";
     bool quitLogin = false;
+    /*
+    bool connected = false;
+    bool hasLoggedIn = false;
+    bool hasPickedTeam = false;
+    while (!connected && !hasLoggedIn && !hasPickedTeam) {
+        if (!connected) {
+            connect
+        } else if (!hasLoggedIn) {
+            login
+        } else if (!hasPickedTeam) {
+            pickTeam
+        }
+    }
+    */
     while (!quitLogin) {
         openLogin(renderer, servidor, puerto, usuario, clave, mensaje);
         log("SALIO DEL LOGIN", LOG_INFO);
