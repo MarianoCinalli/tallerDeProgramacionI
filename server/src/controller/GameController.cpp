@@ -5,6 +5,7 @@ GameController::GameController(Pitch* pitch) {
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
     this->end = false;
+    this->time = 0;    //ventana de tiempo de 1024 frames
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
@@ -23,6 +24,19 @@ void GameController::execute(Action* action, int user) {
     }
 }
 
+void GameController::update(Camera* camera){
+  this->updatePlayers();
+  this->updateBall();
+  this->updateCameraPosition(camera);
+  this->count();
+}
+
+void GameController::count(){
+  this->time++;
+  if (this->time==1024){
+    this->time= 0;
+  }
+}
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
@@ -34,7 +48,6 @@ void GameController::updatePlayers() {
     // std::list<Player*> players = this->pitch->getTeam(0)->getPlayers(); //TODO usuario 0
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
-  
             p->updateState();
         }
     }

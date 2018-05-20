@@ -65,4 +65,11 @@ const int INTERCEPT_VALUE = 40;
 const int STEAL_VALUE = 60;
 const int TIME_BALL_NO_INTERCEPT = 4;
 
+
+//counts
+const int KICK_COUNT = 15;
+const int SLIDE_COUNT = 15;
+
+//
+// const int FRAME_WINDOW=1024;
 #endif // CONSTANTS_H_

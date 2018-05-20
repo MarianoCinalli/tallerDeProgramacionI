@@ -24,6 +24,8 @@ class Player {
         bool wasKicking;
         bool canMove;
         bool runningFast;
+        int kickCount;
+        int slideCount;
 
     public:
         static int ID;
@@ -54,6 +56,8 @@ class Player {
         void setTrayectory(Velocity* trayectory);
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
+        void updateKicking();
+        void updateSliding();
         void updateState();
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
