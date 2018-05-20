@@ -192,13 +192,10 @@ void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string
         }
 
         if (renderText) {
-            // if (hidden == "") { hidden = " "; }
-            // if (inputs[0] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[1] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[2] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[3] == "") { inputs[inputsIndex] = " "; }
+            if (inputs[inputsIndex] == "") { inputs[inputsIndex] = " "; }
             servidorInputTexture.loadFromRenderedText(inputs[0].c_str(), gRenderer, SDL_BLUE, gFont);
             puertoInputTexture.loadFromRenderedText(inputs[1].c_str(), gRenderer, SDL_BLUE, gFont);
+            if (inputs[inputsIndex] == " ") { inputs[inputsIndex] = ""; }
         }
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -241,18 +238,22 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     usuarioPromptTexture.loadFromRenderedText("Usuario:", gRenderer, SDL_BLACK, gFont);
     Texture clavePromptTexture;
     clavePromptTexture.loadFromRenderedText("Clave:", gRenderer, SDL_BLACK, gFont);
-    std::string inputs [2] = { usuario, clave};
+    std::string inputs [2] = { usuario, clave };
     Texture servidorInputTexture;
     servidorInputTexture.loadFromRenderedText(servidor, gRenderer, SDL_GREEN, gFont);
     Texture puertoInputTexture;
     puertoInputTexture.loadFromRenderedText(puerto, gRenderer, SDL_GREEN, gFont);
+
+    std::string hidden = "";
+    for (int i = 0; (unsigned)i < clave.size(); i++) {
+        hidden += "*";
+    }
     Texture usuarioInputTexture;
     usuarioInputTexture.loadFromRenderedText(inputs[0], gRenderer, SDL_BLUE, gFont);
     Texture claveInputTexture;
-    claveInputTexture.loadFromRenderedText(inputs[1], gRenderer, SDL_BLUE, gFont);
+    claveInputTexture.loadFromRenderedText(hidden, gRenderer, SDL_BLUE, gFont);
 
     int inputsIndex = 0;
-    std::string hidden = "*****";
     //Enable text input
     SDL_StartTextInput();
     //While application is running
@@ -289,13 +290,12 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
             for (int i = 0; (unsigned)i < inputs[1].size(); i++) {
                 hidden += "*";
             }
-            // if (hidden == "") { hidden = " "; }
-            // if (inputs[0] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[1] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[2] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[3] == "") { inputs[inputsIndex] = " "; }
+            if (hidden == "") { hidden = " "; }
+            if (inputs[inputsIndex] == "") { inputs[inputsIndex] = " "; }
             usuarioInputTexture.loadFromRenderedText(inputs[0].c_str(), gRenderer, SDL_BLUE, gFont);
             claveInputTexture.loadFromRenderedText(hidden.c_str(), gRenderer, SDL_BLUE, gFont);
+            if (hidden == " ") { hidden = ""; }
+            if (inputs[inputsIndex] == " ") { inputs[inputsIndex] = ""; }
         }
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -478,10 +478,10 @@ int main(int argc, char* argv[]) {
     // Login - determinar IP, Port, Usuario y Clave
     SDL_Renderer* renderer = initializer->getRenderer();
 
-    std::string servidor="127.0.0.1";
-    std::string puerto="8080";
-    std::string usuario="zidane";
-    std::string clave="****";
+    std::string servidor = "127.0.0.1";
+    std::string puerto = "8080";
+    std::string usuario = "zidane";
+    std::string clave = "zidane";
     std::string mensaje = " ";
 
     bool connected = false;
@@ -526,10 +526,14 @@ int main(int argc, char* argv[]) {
                 log("Main: Joya, esta logueado.", logged, LOG_INFO);
               } else if ( logged == "false" ) {
                 log("Main: Mal, usuario o clave incorrecto.", logged, LOG_INFO);
-                mensaje = "Clave incorrecta";
+                mensaje = "Credenciales incorrectas.";
                 hasLoggedIn = false;
               }
             }
+          } else {
+            // Aca, esta conectado al server, y esta bien logueado
+            // Tiene que elegir el equipo con el cual va a jugador
+            //openLoginEquipo(renderer, player, equipo, mensaje);
           }
         } else {
           mensaje = "No se pudo conectar con el servidor.";
