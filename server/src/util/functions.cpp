@@ -2,6 +2,8 @@
 
 extern GameInitializer* initializer;
 extern pthread_barrier_t players_ready_barrier;
+extern bool quit;
+extern std::mutex quit_mutex;
 
 // Lee los mensajes de los clientes y actualiza el modelo.
 void* read_client(void* argument) {
@@ -16,7 +18,7 @@ void* read_client(void* argument) {
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
     log("read_client: Socket: ", socket, LOG_DEBUG);
-    while (continueReading) {
+    while (continueReading && !quit) {
         log("read_client: Reading...", LOG_INFO);
         if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
             log("read_client: Esperando para sincronizar...", LOG_INFO);
@@ -54,6 +56,7 @@ void* read_client(void* argument) {
             }
         }
     }
+    connectionManager->processDisconection(pthread_self());
     delete(user);
     log("read_client: Finalizado.", LOG_INFO);
     return NULL;
@@ -65,17 +68,16 @@ void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("broadcast_to_clients: Sincronizacion terminada.", LOG_INFO);
-    std::vector<int> sockets = *((std::vector<int>*) argument);
-    Broadcaster* broadcaster = new Broadcaster(initializer->getPitch(), &sockets);
+    ConnectionManager* connectionManager = initializer->getConnectionManager();
+    Broadcaster* broadcaster = new Broadcaster(initializer->getPitch());
     // broadcaster->broadcastGameBegins();
-    // int count = 0; // esto esta provisorio.
     log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    while (!gameControllerProxy->shouldGameEnd()) {
+    while (!gameControllerProxy->shouldGameEnd() && !quit) {
         broadcaster->broadcast();
-        // count++;
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
+    // broadcaster->broadcastGameEnded();
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
     return NULL;
@@ -89,10 +91,50 @@ void* game_updater(void* argument) {
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    while (!gameControllerProxy->shouldGameEnd()) {
+    while (gameControllerProxy->shouldGameEnd() && !quit) {
         gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
+}
+
+// Espera y acepta conecciones.
+void* connection_listener(void* argument) {
+    log("connection_listener: Creado.", LOG_INFO);
+    ConnectionManager* connectionManager = initializer->getConnectionManager();
+    while (!quit) {
+        log("connection_listener: Esperando por una conexion...", LOG_INFO);
+        connectionManager->acceptConnection();
+    }
+    log("connection_listener: Finalizado.", LOG_INFO);
+    return NULL;
+}
+
+// Signal handling ---------------------------------------------------------------------------
+void handleSignal(int sig) {
+    log("handleSignal: Seteando salida. Signal recibida.", LOG_INFO);
+    setQuit();
+    log("handleSignal: Fin procesar signal.", LOG_INFO);
+}
+
+void registerSignalHandler(int signal) {
+    log("registerSignalHandler: Seteando un handler para la signal.", LOG_INFO);
+    struct sigaction new_action;
+
+    new_action.sa_handler = handleSignal;
+    sigemptyset(&new_action.sa_mask);
+    new_action.sa_flags = 0;
+
+    if (sigaction(signal, &new_action, NULL) < 0) {
+        log("registerSignalHandler: Error seteando  el handler.", strerror(errno), LOG_INFO);
+    } else {
+        log("registerSignalHandler: Handler seteado.", LOG_INFO);
+    }
+}
+
+void setQuit() {
+    quit_mutex.lock();
+    quit = true;
+    quit_mutex.unlock();
 }

@@ -93,7 +93,6 @@ SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* 
 // Devuelve el cuadrado que encierra al sprite actual.
 // Por ahora solo mira para arriba.
 void PlayerSpriteManager::setStandingSprite(int orientation) {
-    // log("PlayerSpriteManager: Creando el sprite parado.", LOG_DEBUG);
     switch (orientation) {
         case PLAYER_ORIENTATION_UP:
             this->setStandingSpriteViewUp();

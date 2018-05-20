@@ -12,10 +12,9 @@
 class Broadcaster {
     private:
         Pitch* pitch;
-        std::vector<int> sockets;
     public:
-        Broadcaster(Pitch* pitch, std::vector<int>* sockets);
-        void broadcast();
+        Broadcaster(Pitch* pitch);
+        void broadcast(std::vector<int> sockets);
         std::string getMessage();
         ~Broadcaster();
 };

@@ -1,13 +1,12 @@
 #include "util/Broadcaster.h"
 
 
-Broadcaster::Broadcaster(Pitch* pitch, std::vector<int>* sockets) {
+Broadcaster::Broadcaster(Pitch* pitch) {
     log("Broadcaster: Creando broadcaster...", LOG_INFO);
     this->pitch = pitch;
-    this->sockets = *sockets;
 }
 
-void Broadcaster::broadcast() {
+void Broadcaster::broadcast(std::vector<int> sockets) {
     log("Broadcaster: Broadcasteando...", LOG_INFO);
     std::string message = this->getMessage();
     if (message != "") {

@@ -26,9 +26,11 @@ int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee tod
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
 std::mutex update_model_mutex;
+std::mutex quit_mutex;
 pthread_barrier_t players_ready_barrier;
 GameInitializer* initializer;
 ConnectionManager* connectionManager;
+bool quit = false;
 // Global variables ---------------------------------------
 
 
@@ -160,26 +162,27 @@ int main(int argc, char* argv[]) {
     ThreadSpawner* threads = new ThreadSpawner();    
     log("Main: Juego inicializado correctamente.", LOG_INFO);
 
-    // Falta la reconeccion de jugadores.
-    // Esto como esta no sirve.
-    // Hay que spawnear a lo de abajo para que siempre este escuchando connecciones.
-    // Y las acepte cuando falten jugadores.
-    // Para el broadcaster y game_updater, tienen que esperar a que una barrier se haga 0 para empezar.
-    // Esa barrier se hace 0 cuando todos los usuarios se conectaron, logearon y eligieron equipo.
-    connectionManager->acceptConnectionsUntilMax(); // Pasarle el gameControllerProxy.
-    // Launch game_updater thread.
+    // Se queda esperando por conexiones.
+    threads->spawn(
+        connection_listener,
+        NULL
+    );
+    // Cuando todos se conecten, actualiza el modelo.
     threads->spawn(
         game_updater,
         NULL
     );
-    connectionManager->createBroadcaster();
-    // Wait gameManager thread.
-    // Signal children threads.
-    // Wait children threads.
-    connectionManager->waitForAllConnectionsToFinish();
-    threads->joinSpawnedThreads();
-    connectionManager->closeOpenedSockets();
+    // Cuando todos se conecten, envia el modelo a los players.
+    threads->spawn(
+        broadcast_to_clients,
+        NULL
+    );
     // End ------------------------------------------------
+    // Espero a que terminen los threads de arriba.
+    threads->joinSpawnedThreads();
+    // Espero a que terminen todos los threads de clientes.
+    connectionManager->waitForAllConnectionsToFinish();
+    connectionManager->closeOpenedSockets();
     pthread_barrier_destroy(&players_ready_barrier);
     delete(configuration);
     delete(threads);
