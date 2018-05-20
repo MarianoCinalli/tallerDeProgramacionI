@@ -14,7 +14,7 @@
 #include <map>
 #include <pthread.h>
 
-static const int MICROSECONDS_BETWEEEN_BROADCAST = 10000;
+static const int MICROSECONDS_BETWEEEN_BROADCAST = 1000000/60;
 
 void* read_client(void* argument);
 void* broadcast_to_clients(void* clients);
