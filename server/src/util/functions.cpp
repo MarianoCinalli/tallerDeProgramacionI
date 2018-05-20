@@ -74,7 +74,7 @@ void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
-        broadcaster->broadcast();
+        broadcaster->broadcast(connectionManager->getSockets());
         usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
     // broadcaster->broadcastGameEnded();
