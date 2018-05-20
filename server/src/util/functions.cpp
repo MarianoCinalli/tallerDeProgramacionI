@@ -19,7 +19,7 @@ void* read_client(void* argument) {
     User* user = new User(initializer, socket);
     log("read_client: Socket: ", socket, LOG_DEBUG);
     while (continueReading && !quit) {
-        log("read_client: Reading...", LOG_INFO);
+        log("read_client: Reading...", LOG_DEBUG);
         if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
             log("read_client: Esperando para sincronizar...", LOG_INFO);
             pthread_barrier_wait(&players_ready_barrier);
