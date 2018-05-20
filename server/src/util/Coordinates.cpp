@@ -58,10 +58,10 @@ int Coordinates::distanceTo(Coordinates* other){
 }
 
 void Coordinates::validatePositionInBounds() {
-    log("Coordinates: Validate in bounds", LOG_DEBUG);
+    // log("Coordinates: Validate in bounds", LOG_DEBUG);
     //Keep in bounds
-    if (this->x < 0) { 
-        this->x = 0; 
+    if (this->x < 0) {
+        this->x = 0;
     }
     if (this->x + SPRITE_SIZE > LEVEL_WIDTH) {
         this->x = LEVEL_WIDTH - SPRITE_SIZE;
