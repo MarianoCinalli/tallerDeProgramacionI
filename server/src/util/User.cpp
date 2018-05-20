@@ -37,7 +37,7 @@ void User::processLogInMessage(std::string message) {
            log("USUARIO LOGGEADO ", LOG_INFO);
          }
        }
-log("FIN VALIDANDO USUARIO ", LOG_INFO);
+    log("FIN VALIDANDO USUARIO ", LOG_INFO);
 }
 
 bool User::hasPickedTeamAndFormation() {

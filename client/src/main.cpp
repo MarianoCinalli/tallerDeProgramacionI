@@ -182,7 +182,7 @@ void openLogin(SDL_Renderer* gRenderer, std::string& servidor, std::string& puer
         bool renderText = false;
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
-                quit = true;
+                exit(1);
             } else if (e.type == SDL_KEYDOWN) {
                 //Handle backspace
                 if (e.key.keysym.sym == SDLK_BACKSPACE && inputs[inputsIndex].length() > 0) {
@@ -324,7 +324,7 @@ int main(int argc, char* argv[]) {
     bool hasLoggedIn = false;
     bool hasPickedTeam = false;
 
-    while (!connected || !hasLoggedIn || !hasPickedTeam) {
+    while (!connected || !hasLoggedIn) {
         openLogin(renderer, servidor, puerto, usuario, clave, mensaje);
         log("SALIO DEL LOGIN", LOG_INFO);
         log("Login: Servidor: ", servidor, LOG_INFO);
@@ -334,35 +334,42 @@ int main(int argc, char* argv[]) {
         connectionManager->setIp(servidor);
         connectionManager->setPort(stoi(puerto));
 
+        // Si no esta conectado, intenta:
         if (!connected) {
             connected = connectionManager->connectToServer();
-        } else if (!hasLoggedIn) {
+        }
+        // Estoy conectado?
+        if (connected) {
           log("Main: Conectado con el servidor.", LOG_INFO);
-          connectionManager->sendMessage(usuario+":"+clave);
-          std::string message = "";
-          int result = connectionManager->getMessage(message);
-
-          if (result < 0) {
+          if (!hasLoggedIn) {
+            // Esta bien mi clave?
+            connectionManager->sendMessage(usuario+":"+clave);
+            std::string message = "";
+            int result = connectionManager->getMessage(message);
+            if (result < 0) {
               log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
-
-          } else if (result == 0) {
+              // Reintenta
+            } else if (result == 0) {
               // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
               // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
-              log("Main: Se desconecto el usuario?. Saliendo...", LOG_INFO);
-          } else {
+              log("Main: El server contesta cualquiera!", LOG_INFO);
+            } else {
               std::string logged = message.substr(message.find(":")+1, message.length());
-              log("Main: variable logged ", logged, LOG_INFO);
+              log("Main: Resultado del login: ", logged, LOG_INFO);
               if ( logged == "true" ){
                 hasLoggedIn = true;
+                log("Main: Joya, esta logueado.", logged, LOG_INFO);
               } else if ( logged == "false" ) {
-                mensaje = "clave incorrecta";
+                log("Main: Mal, usuario o clave incorrecto.", logged, LOG_INFO);
+                mensaje = "Clave incorrecta";
                 hasLoggedIn = false;
               }
-           }
-        } else if (!hasPickedTeam) {
-            hasPickedTeam = true;
+            }
+          }
+        } else {
+          mensaje = "No se pudo conectar con el servidor.";
+          log("Main: No se pudo conectar con el servidor", LOG_INFO);
         }
-
     }
 
     // Abajo se Lanza thread que recibe mensajes de estado de juego.
