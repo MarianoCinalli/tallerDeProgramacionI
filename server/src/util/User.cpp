@@ -27,8 +27,8 @@ void User::processLogInMessage(std::string message) {
     std::string usuario = this->getMessageAction(message);
     std::string clave = this->getMessageValue(message);
     this->hasLoged = false;
-     log("VALIDANDO USUARIO ",usuario, LOG_INFO);
-     log("VALIDANDO USUARIO ",clave, LOG_INFO);
+     log("VALIDANDO USUARIO: ",usuario, LOG_INFO);
+     log("VALIDANDO CLAVE: ",clave, LOG_INFO);
     map<string, string>::iterator it;
        for (it = configuration->getUsuarios().begin(); it != configuration->getUsuarios().end(); it++)
        {
@@ -46,7 +46,12 @@ bool User::hasPickedTeamAndFormation() {
 
 void User::processTeamAndFormationMessage(std::string message) {
     // Parsea el mensaje para obtener el equipo y formacion.
-    int team = 0; // Guardar el que eligio el user.
+    std::string action = this->getMessageAction(message);
+    std::string value = this->getMessageValue(message);
+    int team = 0;
+    if (action == "use") {
+      team = stoi(value); // Guardar el que eligio el user.
+    }
     // Si puede unirse a ese equipo, setea la formacion al equipo luego se ordena.
     log("User: El usuario se unio al equipo: ", team, LOG_INFO);
     this->teamNumber = team;
@@ -85,7 +90,6 @@ Action* User::getAsAction(std::string message) {
 }
 
 // Separan key:value en key value
-
 std::string User::getMessageAction(std::string message) {
     return message.substr(0, message.find(":"));
 }

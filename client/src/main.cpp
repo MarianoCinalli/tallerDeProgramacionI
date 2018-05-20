@@ -145,6 +145,9 @@ void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string
     if (gFont == NULL) {
         log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
     }
+    Texture opc1Texture;
+    opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
+
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
     Texture servidorPromptTexture;
@@ -201,6 +204,9 @@ void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
         //Render text textures
+        SDL_Rect renderQuadOpc1 = { 250, 150 + (inputsIndex * 100), opc1Texture.getWidth(), opc1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, opc1Texture.getSpriteSheetTexture(), NULL, &renderQuadOpc1, 0.0, NULL, SDL_FLIP_NONE);
+
         SDL_Rect renderQuad0 = { (SCREEN_WIDTH - mensajeTexture.getWidth()) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
         SDL_RenderCopyEx(gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
         SDL_Rect renderQuad1 = { (SCREEN_WIDTH - servidorPromptTexture.getWidth()) / 2, 100, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
@@ -227,6 +233,8 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     if (gFont == NULL) {
         log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
     }
+    Texture opc1Texture;
+    opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
 
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
@@ -301,6 +309,9 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
         //Render text textures
+        SDL_Rect renderQuadOpc1 = { 250, 350 + (inputsIndex * 100), opc1Texture.getWidth(), opc1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, opc1Texture.getSpriteSheetTexture(), NULL, &renderQuadOpc1, 0.0, NULL, SDL_FLIP_NONE);
+
         SDL_Rect renderQuad0 = { (SCREEN_WIDTH - mensajeTexture.getWidth()) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
         SDL_RenderCopyEx(gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
         SDL_Rect renderQuad1 = { (SCREEN_WIDTH - servidorPromptTexture.getWidth()) / 2, 100, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
@@ -327,7 +338,7 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     clave = inputs[1];
 }
 
-void openLoginEquipo(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string& usuario, std::string& clave, std::string mensaje) {
+void openLoginEquipo(SDL_Renderer* gRenderer, std::string& player, std::string& equipo1, std::string& equipo2, int& seleccion, std::string mensaje) {
     log("Entra al openLogin Equipo", LOG_INFO);
     bool quit = false;
     SDL_Event e;
@@ -336,28 +347,23 @@ void openLoginEquipo(SDL_Renderer* gRenderer, std::string& servidor, std::string
     if (gFont == NULL) {
         log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
     }
+    Texture opc1Texture;
+    opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
+
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
     Texture servidorPromptTexture;
-    servidorPromptTexture.loadFromRenderedText("Servidor:", gRenderer, SDL_BLACK, gFont);
+    servidorPromptTexture.loadFromRenderedText("Equipo 1:", gRenderer, SDL_BLACK, gFont);
     Texture puertoPromptTexture;
-    puertoPromptTexture.loadFromRenderedText("Puerto:", gRenderer, SDL_BLACK, gFont);
-    Texture usuarioPromptTexture;
-    usuarioPromptTexture.loadFromRenderedText("Usuario:", gRenderer, SDL_BLACK, gFont);
-    Texture clavePromptTexture;
-    clavePromptTexture.loadFromRenderedText("Clave:", gRenderer, SDL_BLACK, gFont);
-    std::string inputs [4] = { servidor, puerto, usuario, clave};
+    puertoPromptTexture.loadFromRenderedText("Equipo 2:", gRenderer, SDL_BLACK, gFont);
+
+    std::string inputs [2] = { equipo1, equipo2};
     Texture servidorInputTexture;
     servidorInputTexture.loadFromRenderedText(inputs[0], gRenderer, SDL_BLUE, gFont);
     Texture puertoInputTexture;
     puertoInputTexture.loadFromRenderedText(inputs[1], gRenderer, SDL_BLUE, gFont);
-    Texture usuarioInputTexture;
-    usuarioInputTexture.loadFromRenderedText(inputs[2], gRenderer, SDL_BLUE, gFont);
-    Texture claveInputTexture;
-    claveInputTexture.loadFromRenderedText(inputs[3], gRenderer, SDL_BLUE, gFont);
 
     int inputsIndex = 0;
-    std::string hidden = "*****";
     //Enable text input
     SDL_StartTextInput();
     //While application is running
@@ -370,13 +376,13 @@ void openLoginEquipo(SDL_Renderer* gRenderer, std::string& servidor, std::string
                 //Handle backspace
                 if (e.key.keysym.sym == SDLK_BACKSPACE && inputs[inputsIndex].length() > 0) {
                     //lop off character
-                    inputs[inputsIndex].pop_back();
-                    renderText = true;
+                    //inputs[inputsIndex].pop_back();
+                    //renderText = true;
                 }
                 if (e.key.keysym.sym == SDLK_TAB) {
                     //cambiar posicion
                     inputsIndex++;
-                    if (inputsIndex >= 4) { inputsIndex = 0; }
+                    if (inputsIndex >= 2) { inputsIndex = 0; }
                 }
                 if (e.key.keysym.sym == SDLK_RETURN) {
                     //TODO: enviar la configuracion al servidor
@@ -384,30 +390,22 @@ void openLoginEquipo(SDL_Renderer* gRenderer, std::string& servidor, std::string
                 }
             } else if (e.type == SDL_TEXTINPUT) {
                 //Append character
-                inputs[inputsIndex] += e.text.text;
-                renderText = true;
+                //inputs[inputsIndex] += e.text.text;
+                //renderText = true;
             }
         }
 
         if (renderText) {
-            hidden = "";
-            for (int i = 0; (unsigned)i < inputs[3].size(); i++) {
-                hidden += "*";
-            }
-            // if (hidden == "") { hidden = " "; }
-            // if (inputs[0] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[1] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[2] == "") { inputs[inputsIndex] = " "; }
-            // if (inputs[3] == "") { inputs[inputsIndex] = " "; }
             servidorInputTexture.loadFromRenderedText(inputs[0].c_str(), gRenderer, SDL_BLUE, gFont);
             puertoInputTexture.loadFromRenderedText(inputs[1].c_str(), gRenderer, SDL_BLUE, gFont);
-            usuarioInputTexture.loadFromRenderedText(inputs[2].c_str(), gRenderer, SDL_BLUE, gFont);
-            claveInputTexture.loadFromRenderedText(hidden.c_str(), gRenderer, SDL_BLUE, gFont);
         }
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
         //Render text textures
+        SDL_Rect renderQuadOpc1 = { 250, 150 + (inputsIndex * 100), opc1Texture.getWidth(), opc1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, opc1Texture.getSpriteSheetTexture(), NULL, &renderQuadOpc1, 0.0, NULL, SDL_FLIP_NONE);
+
         SDL_Rect renderQuad0 = { (SCREEN_WIDTH - mensajeTexture.getWidth()) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
         SDL_RenderCopyEx(gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
         SDL_Rect renderQuad1 = { (SCREEN_WIDTH - servidorPromptTexture.getWidth()) / 2, 100, servidorPromptTexture.getWidth(), servidorPromptTexture.getHeight() };
@@ -418,21 +416,10 @@ void openLoginEquipo(SDL_Renderer* gRenderer, std::string& servidor, std::string
         SDL_RenderCopyEx(gRenderer, puertoPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
         SDL_Rect renderQuad22 = { (SCREEN_WIDTH - puertoInputTexture.getWidth()) / 2, 250, puertoInputTexture.getWidth(), puertoInputTexture.getHeight() };
         SDL_RenderCopyEx(gRenderer, puertoInputTexture.getSpriteSheetTexture(), NULL, &renderQuad22, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad3 = { (SCREEN_WIDTH - usuarioPromptTexture.getWidth()) / 2, 300, usuarioPromptTexture.getWidth(), usuarioPromptTexture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, usuarioPromptTexture.getSpriteSheetTexture(), NULL, &renderQuad3, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad33 = { (SCREEN_WIDTH - usuarioInputTexture.getWidth()) / 2, 350, usuarioInputTexture.getWidth(), usuarioInputTexture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, usuarioInputTexture.getSpriteSheetTexture(), NULL, &renderQuad33, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad4 = { (SCREEN_WIDTH - clavePromptTexture.getWidth()) / 2, 400, clavePromptTexture.getWidth(), clavePromptTexture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, clavePromptTexture.getSpriteSheetTexture(), NULL, &renderQuad4, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad44 = { (SCREEN_WIDTH - claveInputTexture.getWidth()) / 2, 450, claveInputTexture.getWidth(), claveInputTexture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, claveInputTexture.getSpriteSheetTexture(), NULL, &renderQuad44, 0.0, NULL, SDL_FLIP_NONE);
         SDL_RenderPresent(gRenderer);
     }
     SDL_StopTextInput();
-    servidor = inputs[0];
-    puerto = inputs[1];
-    usuario = inputs[2];
-    clave = inputs[3];
+    seleccion = inputsIndex;
 }
 
 
@@ -482,13 +469,15 @@ int main(int argc, char* argv[]) {
     std::string puerto = "8080";
     std::string usuario = "zidane";
     std::string clave = "zidane";
+    std::string player = " ";
+    std::string equipo = " ";
     std::string mensaje = " ";
 
     bool connected = false;
     bool hasLoggedIn = false;
     bool hasPickedTeam = false;
 
-    while (!connected || !hasLoggedIn) {
+    while (!connected || !hasLoggedIn || !hasPickedTeam) {
         // Si no esta conectado, intenta:
         if (!connected) {
             openLoginServer(renderer, servidor, puerto, mensaje);
@@ -502,7 +491,7 @@ int main(int argc, char* argv[]) {
         // Estoy conectado?
         if (connected) {
           openLoginUsuario(renderer, servidor, puerto, usuario, clave, mensaje);
-          log("SALIO DEL LOGIN SERVER", LOG_INFO);
+          log("SALIO DEL LOGIN USUARIO", LOG_INFO);
           log("Login: Usuario: ", usuario, LOG_INFO);
           log("Login: Clave: ", clave, LOG_INFO);
           log("Main: Conectado con el servidor.", LOG_INFO);
@@ -530,10 +519,35 @@ int main(int argc, char* argv[]) {
                 hasLoggedIn = false;
               }
             }
-          } else {
+          }
+          if (hasLoggedIn && !hasPickedTeam) {
             // Aca, esta conectado al server, y esta bien logueado
-            // Tiene que elegir el equipo con el cual va a jugador
-            //openLoginEquipo(renderer, player, equipo, mensaje);
+            // Tiene que elegir el equipo con el cual va a jugar
+            // Cuales son los equipos posibles?
+            connectionManager->sendMessage("get:equipos");
+            std::string message = "";
+            int result = connectionManager->getMessage(message);
+            if (result < 0) {
+              log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
+              // Reintenta
+            } else if (result == 0) {
+              // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
+              // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
+              log("Main: El server contesta cualquiera!", LOG_INFO);
+            } else {
+              std::string equipo1 = message.substr(0, message.find(":"));
+              std::string equipo2 = message.substr(message.find(":")+1, message.length());
+              int seleccion = 0;
+              log("Main: Equipo1: ", equipo1, LOG_INFO);
+              log("Main: Equipo2: ", equipo2, LOG_INFO);
+              mensaje = "Elegir el equipo:";
+              openLoginEquipo(renderer, player, equipo1, equipo2, seleccion, mensaje);
+              log("Main: Elige el equipo: ", seleccion, LOG_INFO);
+              // Le aviso al servidor cual fue el equipo elegido
+              connectionManager->sendMessage("use:"+std::to_string(seleccion));
+              hasPickedTeam = true;
+            }
+
           }
         } else {
           mensaje = "No se pudo conectar con el servidor.";

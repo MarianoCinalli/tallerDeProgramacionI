@@ -19,4 +19,7 @@ static const int MICROSECONDS_BETWEEEN_BROADCAST = 10000;
 void* read_client(void* argument);
 void* broadcast_to_clients(void* clients);
 void* game_updater(void* argument);
+
+std::string getMessageKey(std::string message);
+std::string getMessageValue(std::string message);
 #endif

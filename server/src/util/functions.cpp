@@ -46,7 +46,17 @@ void* read_client(void* argument) {
                 }
             } else if (!user->hasPickedTeamAndFormation()) {
                 // Se logeo, pero no eligio equipo y formacion.
-                user->processTeamAndFormationMessage(message);
+                log("ELIGE EL EQUIPO ", LOG_INFO);
+                std::string key = getMessageKey(message);
+                std::string value = getMessageValue(message);
+                if (key == "get" && value == "equipos") {
+                  connectionManager->sendMessage(socket,"Argentina:Brasil");
+                }
+                if (key == "use") {
+                  user->processTeamAndFormationMessage(message);
+                }
+                //connectionManager->sendMessage(socket,"Argentina:Brasil");
+
             } else {
                 // El usuario se inicializo. Vienen acciones sobre los jugadores.
                 Action* action = user->getAsAction(message);
@@ -97,4 +107,13 @@ void* game_updater(void* argument) {
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
+}
+
+// Separan key:value en key value
+std::string getMessageKey(std::string message) {
+    return message.substr(0, message.find(":"));
+}
+
+std::string getMessageValue(std::string message) {
+    return message.substr(message.find(":")+1, message.length());   //iba un +1 LPM
 }
