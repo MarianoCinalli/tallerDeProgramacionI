@@ -7,7 +7,6 @@ Broadcaster::Broadcaster(Pitch* pitch) {
 }
 
 void Broadcaster::broadcast(std::vector<int> sockets) {
-    log("Broadcaster: Broadcasteando...", LOG_INFO);
     std::string message = this->getMessage();
     if (message != "") {
         const char* constantMessage = (message).c_str();
