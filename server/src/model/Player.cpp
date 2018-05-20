@@ -19,6 +19,8 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->isSelected = false;
     this->isReturning = false;
     this->runningFast = false;
+    this->kickCount = 0;
+    this->slideCount = 0;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -100,6 +102,41 @@ void Player::stop() {
 }
 
 
+void Player::updateState(){
+  this->updatePosition();
+  this->updateKicking();
+  this->updateSliding();
+}
+//
+// int frameDiference(int current, int last){
+//   int frameDelta = current -last;
+//   if (frameDelta < 0){
+//     frameDelta += FRAME_WINDOW;
+//   }
+//   return frameDelta;
+// }
+
+void Player::updateKicking(){
+  if (this->kicking){
+    kickCount++;
+  }
+  if (kickCount>KICK_COUNT){
+    this->stopKicking();
+    kickCount = 0;
+  }
+
+}
+
+void Player::updateSliding(){
+  if (this->sliding){
+    slideCount++;
+  }
+  if (slideCount>SLIDE_COUNT){
+    this->stopSliding();
+    slideCount = 0;
+  }
+
+}
 void Player::updatePosition() {
     float speed = 1;
     if (this->runningFast) {
@@ -276,6 +313,14 @@ void Player::copyStats(Player* copyTo) {
 void Player::setTrayectory(Velocity* trayectory) {
     this->velocity->set(trayectory);
 }
+bool Player::isStill(){
+  if (this->velocity->isZero()){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
 
 /*
@@ -289,6 +334,7 @@ this->id:
  ki: this->kicking
  sl: this->sliding
  ru: this->runningFast
+ st: isStill()
 */
 std::string Player::getAsYaml() {
     std::string message = "";
@@ -300,5 +346,6 @@ std::string Player::getAsYaml() {
     message += " ki: " + std::to_string(this->kicking) + "\n";
     message += " sl: " + std::to_string(this->sliding) + "\n";
     message += " ru: " + std::to_string(this->runningFast) + "\n";
+    message += " st: " + std::to_string(isStill()) + "\n" ;
     return message;
 }

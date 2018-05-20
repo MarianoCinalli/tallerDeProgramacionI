@@ -29,9 +29,11 @@ void* read_server(void* argument) {
     std::string readMessage;
     int readBytes;
     ConnectionManager* connectionManager = (ConnectionManager*) argument;
-    int count = 0; // esto esta provisorio.
+    // int count = 0; // esto esta provisorio.
     log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
-    while (count < 10000 && !quit) {
+    while (!quit) {
+        log("msg", LOG_DEBUG);
+        // usleep(1000000/240);
         readMessage = "";
         readBytes = connectionManager->getMessage(readMessage);
         if (readBytes < 0) {
@@ -45,6 +47,7 @@ void* read_server(void* argument) {
         } else {
             try {
                 Player* player;
+                Ball* ball;
                 YAML::Node node = YAML::Load(readMessage);
                 for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                     YAML::Node key = it->first;
@@ -53,6 +56,8 @@ void* read_server(void* argument) {
                     if (key.Type() == YAML::NodeType::Scalar) {
                         if (key.as<std::string>() == "ba") {
                             log("read_server: pelota", key.as<std::string>(), LOG_INFO);
+                            ball = initializer->getGameController()->getBall();
+                            ball->parseYaml(value);
                         } else {
                             log("read_server: jugador", key.as<std::string>(), LOG_INFO);
                             player =  initializer->getGameController()->getPlayer(key.as<int>());
@@ -74,7 +79,7 @@ void* read_server(void* argument) {
                 log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
             }
         }
-        count++;
+        // count++;
     }
     log("read_server: Finalizado.", LOG_INFO);
     return NULL;
@@ -89,7 +94,7 @@ void* drawer(void* argument) {
     PitchView* pitchView = initializer->getPitchView();
     while (!quit) {
         pitchView->render(renderer);
-        usleep(50000); // Frame rate.
+        usleep(1000000/30); // Frame rate.
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;

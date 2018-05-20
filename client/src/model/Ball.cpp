@@ -110,6 +110,17 @@ void Ball::updatePosition() {
 	}
 }
 
+
+void Ball::parseYaml(YAML::Node node){
+  if (node["cx"]){
+    this->position->setX(node["cx"].as<int>());
+  }
+  if (node["cy"]){
+    this->position->setY(node["cy"].as<int>());
+  }
+}
+
+
 //--------------------------PRIVATE----------------------------------
 
 Coordinates* Ball::calculateDominatedPosition() {

@@ -29,11 +29,13 @@ void* read_client(void* argument) {
         if (readBytes < 0) {
             log("read_client: Error en la lectura del mensaje. ", LOG_ERROR);
             continueReading = false;
+            gameControllerProxy->end();
         } else if (readBytes == 0) {
             // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
             continueReading = false;
+            gameControllerProxy->end();
         } else {
             log("read_client: Bytes Recibidos " + std::to_string(readBytes) + " - Mensaje: ", message, LOG_DEBUG);
             if (!user->hasLogedIn()) {
@@ -81,12 +83,13 @@ void* broadcast_to_clients(void* argument) {
     std::vector<int> sockets = *((std::vector<int>*) argument);
     Broadcaster* broadcaster = new Broadcaster(initializer->getPitch(), &sockets);
     // broadcaster->broadcastGameBegins();
-    int count = 0; // esto esta provisorio.
+    // int count = 0; // esto esta provisorio.
     log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
-    while (count < 10000) {
+    GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
+    while (!gameControllerProxy->shouldGameEnd()) {
         broadcaster->broadcast();
-        count++;
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
+        // count++;
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
     }
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
@@ -101,9 +104,9 @@ void* game_updater(void* argument) {
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    while (gameControllerProxy->shouldGameEnd()) {
+    while (!gameControllerProxy->shouldGameEnd()) {
         gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST/10);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;

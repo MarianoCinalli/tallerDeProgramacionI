@@ -15,15 +15,17 @@ void GameControllerProxy::execute(Action* action, int team) {
 
 void GameControllerProxy::updateModel(Camera* camera) {
     update_model_mutex.lock();
-    this->gameController->updatePlayers();
-    this->gameController->updateBall();
-    this->gameController->updateCameraPosition(camera);
+    this->gameController->update(camera);
     update_model_mutex.unlock();
 }
 
 bool GameControllerProxy::shouldGameEnd() {
     // Esto no es necesario bloquearlo.
     return this->gameController->shouldGameEnd();
+}
+
+void GameControllerProxy::end(){
+  this->gameController->setEnd();
 }
 
 GameControllerProxy::~GameControllerProxy() {

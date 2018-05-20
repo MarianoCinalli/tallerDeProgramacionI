@@ -25,8 +25,9 @@ class Camera {
         // calcular la nueva posicion de la camara basado en el jugador activo
         void calculateNewPostion(Coordinates* playerPosition, int playerSpeed);
         // devuelve los jugadores dentro del margen.
-        std::list<Player*> getPlayersInsideMargin(std::list<Player*> players);
+        std::list<Player*> getPlayersInsideMargin(std::list<Player*> players, int outerMargin);
         // devuelve los jugadores dentro de la camara.
+        bool isInsideMargin(Player* p, SDL_Rect* margin, int outerMargin);
         std::list<PlayerSpriteManager*> getPlayersInside(std::list<PlayerSpriteManager*>& views);
         // devuelve el SDL_Rect para dibujar la parte de la cancha.
         SDL_Rect getRectToDraw();

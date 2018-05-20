@@ -37,6 +37,7 @@ class GameController {
         void updatePlayers();
         void updateBall();
         Player* getPlayer(int num);
+        Ball* getBall();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition(Camera* camera);
         ~GameController();

@@ -26,18 +26,22 @@ class GameController {
         Pitch* pitch;
         Ball* ball;
         Player* activePlayer;
-        int end;
+        bool end;
+        int time;
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
         void execute(Action* action, int user);
         // Para actualizar los modelos.
         void updatePlayers();
+        void update(Camera* camera);
+        void count();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition(Camera* camera);
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
         bool shouldGameEnd();
+        void setEnd();
         Player* getActivePlayer(int user);
         ~GameController();
 };

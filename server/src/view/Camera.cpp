@@ -101,24 +101,37 @@ std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteM
     return resultado;
 }
 
-bool isInsideMargin(Player* p, SDL_Rect* margin) {
+bool Camera::isInsideMargin(Player* p, SDL_Rect* margin, int outerMargin) {
     int playerX = p->getPosition()->getX();
     int playerY = p->getPosition()->getY();
-    if ((playerX > margin->x) &&
-            (playerX < margin->x + margin->w) &&
-            (playerY > margin->y) &&
-            (playerY < margin->y + margin->h)) {
-        return true;
-    } else {
-        return false;
+    int offset = 80;
+    if (!outerMargin){
+      if ((playerX > margin->x) &&
+              (playerX < margin->x + margin->w) &&
+              (playerY > margin->y) &&
+              (playerY < margin->y + margin->h)) {
+          return true;
+      } else {
+          return false;
+      }
     }
+    else{
+      if ((playerX > this->position->getX()-offset) &&
+              (playerX < this->position->getX() + this->width + offset) &&
+              (playerY > this->position->getY()-offset) &&
+              (playerY <this->position->getY() + this->height+offset)) {
+          return true;
+      } else {
+          return false;
+      }
+  }
 }
 
-std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players) {
+std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players, int outerMargin) {
     // Solo los que estan dentro de los margenes
     std::list<Player*> resultado;
     for (Player* p : players) {
-        if (isInsideMargin(p, &margin)) {
+        if (isInsideMargin(p, &margin, outerMargin)) {
             resultado.push_back(p);
         }
     }

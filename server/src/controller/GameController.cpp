@@ -4,7 +4,8 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: Creando gameController...", LOG_INFO);
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
-    this->end = 0;
+    this->end = false;
+    this->time = 0;    //ventana de tiempo de 1024 frames
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
@@ -23,6 +24,19 @@ void GameController::execute(Action* action, int user) {
     }
 }
 
+void GameController::update(Camera* camera){
+  this->updatePlayers();
+  this->updateBall();
+  this->updateCameraPosition(camera);
+  this->count();
+}
+
+void GameController::count(){
+  this->time++;
+  if (this->time==1024){
+    this->time= 0;
+  }
+}
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
@@ -34,7 +48,7 @@ void GameController::updatePlayers() {
     // std::list<Player*> players = this->pitch->getTeam(0)->getPlayers(); //TODO usuario 0
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
-            p->updatePosition();
+            p->updateState();
         }
     }
     log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);
@@ -64,10 +78,14 @@ void GameController::updateCameraPosition(Camera* camera) {
 // Un reloj que termine el juego luego del tiempo. Proximo tp?
 // Tenemos que poner algo que nos permita controlar cuando teminar.
 bool GameController::shouldGameEnd() {
-    this->end++;
-    if (this->end>10000){
-    return true;
-  }
+    // this->end++;
+    // if (this->end>100000){
+      // return true;
+    // }
+    return this->end;
+}
+void GameController::setEnd(){
+  this->end = true;
 }
 
 GameController::~GameController() {
