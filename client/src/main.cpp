@@ -319,22 +319,12 @@ int main(int argc, char* argv[]) {
     std::string usuario="zidane";
     std::string clave="****";
     std::string mensaje = " ";
-    bool quitLogin = false;
-    /*
+
     bool connected = false;
     bool hasLoggedIn = false;
     bool hasPickedTeam = false;
-    while (!connected && !hasLoggedIn && !hasPickedTeam) {
-        if (!connected) {
-            connect
-        } else if (!hasLoggedIn) {
-            login
-        } else if (!hasPickedTeam) {
-            pickTeam
-        }
-    }
-    */
-    while (!quitLogin) {
+
+    while (!connected || !hasLoggedIn || !hasPickedTeam) {
         openLogin(renderer, servidor, puerto, usuario, clave, mensaje);
         log("SALIO DEL LOGIN", LOG_INFO);
         log("Login: Servidor: ", servidor, LOG_INFO);
@@ -344,32 +334,33 @@ int main(int argc, char* argv[]) {
         connectionManager->setIp(servidor);
         connectionManager->setPort(stoi(puerto));
 
-        //validarServidor(config);
-        if (!connectionManager->connectToServer()) {
-            log("Main: No se pudo abrir la conexion.", LOG_INFO);
-            mensaje = "No se pudo conectar con el servidor.";
-            //endProgram(1, connectionManager);
-        } else {
-            log("Main: Conectado con el servidor.", LOG_INFO);
-            connectionManager->sendMessage(usuario+":"+clave);
-            std::string message;
-            int result = connectionManager->getMessage(message);
-            log("VARIABLE RESULT:",result, LOG_INFO);
-            std::string logged = message.substr(message.find(":")+1, message.length());
-            log("VARIABLE LOGGED:",logged, LOG_INFO);
-            if ( logged == "true" ){
-              mensaje ="usuario logueado";
-              quitLogin = true;
-            } else if ( logged == "false" ) {
-              mensaje ="clave incorrecta";
-              //connectionManager->closeConnection();
-              quitLogin = false;
-            }
+        if (!connected) {
+            connected = connectionManager->connectToServer();
+        } else if (!hasLoggedIn) {
+          log("Main: Conectado con el servidor.", LOG_INFO);
+          connectionManager->sendMessage(usuario+":"+clave);
+          std::string message = "";
+          int result = connectionManager->getMessage(message);
 
-            //log("Main: Validando credenciales.", LOG_INFO);
-            //validarCredenciales();
-            //mensaje = "Usuario y/o clave incorrectos.";
+          if (result < 0) {
+              log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
 
+          } else if (result == 0) {
+              // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
+              // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
+              log("Main: Se desconecto el usuario?. Saliendo...", LOG_INFO);
+          } else {
+              std::string logged = message.substr(message.find(":")+1, message.length());
+              log("Main: variable logged ", logged, LOG_INFO);
+              if ( logged == "true" ){
+                hasLoggedIn = true;
+              } else if ( logged == "false" ) {
+                mensaje = "clave incorrecta";
+                hasLoggedIn = false;
+              }
+           }
+        } else if (!hasPickedTeam) {
+            hasPickedTeam = true;
         }
 
     }

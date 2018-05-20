@@ -39,11 +39,11 @@ void* read_client(void* argument) {
             if (!user->hasLogedIn()) {
                 // No se logeo.
                 user->processLogInMessage(message);
-                if(!user->hasLogedIn()){
-                  connectionManager->sendMessage(socket,"logged:false");
-                } else {
-                  connectionManager->sendMessage(socket,"logged:true");
-                }
+                // if(!user->hasLogedIn()){
+                //   connectionManager->sendMessage(socket,"logged:false");
+                // } else {
+                //   connectionManager->sendMessage(socket,"logged:true");
+                // }
             } else if (!user->hasPickedTeamAndFormation()) {
                 // Se logeo, pero no eligio equipo y formacion.
                 user->processTeamAndFormationMessage(message);

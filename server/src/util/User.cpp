@@ -23,24 +23,21 @@ void User::processLogInMessage(std::string message) {
     // de clase, para agregarlo a los mensajes?
     // Lo valida contra la lista.
     // Le manda el resultado al cliente.
+    log("VALIDANDO USUARIO ", LOG_INFO);
     std::string usuario = this->getMessageAction(message);
     std::string clave = this->getMessageValue(message);
-
-    // map<string, string>::iterator it;
-    //    for (it = configuration->getUsuarios().begin(); it != configuration->getUsuarios().end(); it++)
-    //    {
-    //      if ( it->first == "claudio" && it->second  == "1234" ){
-    //        this->hasLoged = true;
-    //        log("USUARIO LOGGEADO ", LOG_INFO);
-    //
-    //      } else {
-    //        this->hasLoged = false;
-    //        log("USUARIO NO LOGGEADO ", LOG_INFO);
-    //
-    //      }
-    //    }
-    this->hasLoged = true;
-
+    this->hasLoged = false;
+     log("VALIDANDO USUARIO ",usuario, LOG_INFO);
+     log("VALIDANDO USUARIO ",clave, LOG_INFO);
+    map<string, string>::iterator it;
+       for (it = configuration->getUsuarios().begin(); it != configuration->getUsuarios().end(); it++)
+       {
+         if ( it->first == usuario && it->second  == clave ){
+           this->hasLoged = true;
+           log("USUARIO LOGGEADO ", LOG_INFO);
+         }
+       }
+log("FIN VALIDANDO USUARIO ", LOG_INFO);
 }
 
 bool User::hasPickedTeamAndFormation() {
