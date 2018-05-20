@@ -26,7 +26,7 @@ class GameController {
         Pitch* pitch;
         Ball* ball;
         Player* activePlayer;
-        int end;
+        bool end;
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
@@ -38,6 +38,7 @@ class GameController {
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
         bool shouldGameEnd();
+        void setEnd();
         Player* getActivePlayer(int user);
         ~GameController();
 };

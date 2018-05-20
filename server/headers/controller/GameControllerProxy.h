@@ -15,8 +15,7 @@ class GameControllerProxy {
         void execute(Action* action, int team);
         void updateModel(Camera* camera);
         bool shouldGameEnd();
+        void end();
         ~GameControllerProxy();
 };
 #endif // GAMECONTROLLERPROXY_H
-
-

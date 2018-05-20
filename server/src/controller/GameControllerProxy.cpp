@@ -26,6 +26,10 @@ bool GameControllerProxy::shouldGameEnd() {
     return this->gameController->shouldGameEnd();
 }
 
+void GameControllerProxy::end(){
+  this->gameController->setEnd();
+}
+
 GameControllerProxy::~GameControllerProxy() {
     log("GameControllerProxy: Eliminando gameControllerProxy...", LOG_INFO);
 }

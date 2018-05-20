@@ -4,7 +4,7 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: Creando gameController...", LOG_INFO);
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
-    this->end = 0;
+    this->end = false;
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
@@ -64,10 +64,14 @@ void GameController::updateCameraPosition(Camera* camera) {
 // Un reloj que termine el juego luego del tiempo. Proximo tp?
 // Tenemos que poner algo que nos permita controlar cuando teminar.
 bool GameController::shouldGameEnd() {
-    this->end++;
-    if (this->end>10000){
-    return true;
-  }
+    // this->end++;
+    // if (this->end>100000){
+      // return true;
+    // }
+    return this->end;
+}
+void GameController::setEnd(){
+  this->end = true;
 }
 
 GameController::~GameController() {
