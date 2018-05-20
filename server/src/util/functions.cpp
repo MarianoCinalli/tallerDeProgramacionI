@@ -51,8 +51,16 @@ void* read_client(void* argument) {
                 log("ELIGE EL EQUIPO ", LOG_INFO);
                 std::string key = getMessageKey(message);
                 std::string value = getMessageValue(message);
-                if (key == "get" && value == "equipos") {
-                  connectionManager->sendMessage(socket,"Argentina:Brasil");
+                if (key == "get" && value == "max") {
+                  // Mostrarle cuantos jugadores maximos tiene la partida
+                  connectionManager->sendMessage(socket,"max:4");
+                }
+                // y mostrar cuantos jugadores hay en cada equipo
+                if (key == "get" && value == "equipo1") {
+                  connectionManager->sendMessage(socket,"Argentina:2");
+                }
+                if (key == "get" && value == "equipo2") {
+                  connectionManager->sendMessage(socket,"Brasil:0");
                 }
                 if (key == "use") {
                   user->processTeamAndFormationMessage(message);

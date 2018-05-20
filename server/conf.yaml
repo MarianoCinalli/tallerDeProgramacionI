@@ -9,5 +9,5 @@ usuarios:
   - {name: claudio, password: claudio}
   - {name: zidane, password: zidane}
 server:
-  maxClients: 1
+  maxClients: 4
   port: 8080

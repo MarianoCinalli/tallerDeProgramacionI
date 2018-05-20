@@ -53,6 +53,24 @@ void User::processTeamAndFormationMessage(std::string message) {
       team = stoi(value); // Guardar el que eligio el user.
     }
     // Si puede unirse a ese equipo, setea la formacion al equipo luego se ordena.
+
+    // Dependiendo de la cantidad de jugadores
+    // Hay que llevar la cuenta de cuantos usuarios hay en cada equipo
+    // maxClients == 1
+    // Puede elegir cualquiera de los dos
+    // maxClients == 2
+    // ninguno conectado-> elige cualquiera
+    // uno ya conectado-> tiene que usar el otro equipo
+    // maxClients == 3
+    // ninguno conectado-> elige cualquiera
+    // uno ya conectado-> elige cualquiera
+    // dos ya conectado-> tiene que usar el otro equipo
+    // maxClients == 4
+    // ninguno conectado-> elige cualquiera
+    // uno ya conectado-> elige cualquiera
+    // dos ya conectado-> elige cualquiera
+    // tres ya conectado-> tiene que usar el otro equipo
+
     log("User: El usuario se unio al equipo: ", team, LOG_INFO);
     this->teamNumber = team;
     // Le manda el resultado al cliente.
