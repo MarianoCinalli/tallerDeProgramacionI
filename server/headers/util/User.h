@@ -33,6 +33,7 @@ class User {
         void processTeamAndFormationMessage(std::string message);
         Action* getAsAction(std::string message);
         int getTeam();
+        int getMaxClients();
         ~User();
     private:
         std::string getMessageAction(std::string message);

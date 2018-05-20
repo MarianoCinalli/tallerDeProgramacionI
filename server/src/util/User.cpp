@@ -92,7 +92,7 @@ Action* User::getAsAction(std::string message) {
     } else if (messageAction == "Kicking") {
         action = new KickingAction();
     } else if (messageAction == "ChangeActivePlayer") {
-        action = new ChangeActivePlayer();
+        action = new ChangeActivePlayer();getMaxClients();
     } else if (messageAction == "Stop") {
         action = new Stop();
     } else if (messageAction == "Accelerate") {
@@ -118,6 +118,10 @@ std::string User::getMessageValue(std::string message) {
 
 int User::getTeam() {
     return this->teamNumber;
+}
+
+int User::getMaxClients(){
+    return this->configuration->getMaxClients();
 }
 
 User::~User() {
