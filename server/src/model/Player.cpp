@@ -100,6 +100,12 @@ void Player::stop() {
 }
 
 
+void Player::updateState(){
+  this->updatePosition();
+  //updateKicking
+  //updateSliding
+}
+
 void Player::updatePosition() {
     float speed = 1;
     if (this->runningFast) {

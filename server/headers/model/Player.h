@@ -54,6 +54,7 @@ class Player {
         void setTrayectory(Velocity* trayectory);
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
+        void updateState();
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);

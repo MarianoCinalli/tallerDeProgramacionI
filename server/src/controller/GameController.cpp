@@ -34,7 +34,8 @@ void GameController::updatePlayers() {
     // std::list<Player*> players = this->pitch->getTeam(0)->getPlayers(); //TODO usuario 0
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
-            p->updatePosition();
+  
+            p->updateState();
         }
     }
     log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);

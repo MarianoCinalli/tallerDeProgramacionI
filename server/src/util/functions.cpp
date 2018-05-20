@@ -68,12 +68,12 @@ void* broadcast_to_clients(void* argument) {
     std::vector<int> sockets = *((std::vector<int>*) argument);
     Broadcaster* broadcaster = new Broadcaster(initializer->getPitch(), &sockets);
     // broadcaster->broadcastGameBegins();
-    int count = 0; // esto esta provisorio.
+    // int count = 0; // esto esta provisorio.
     log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     while (!gameControllerProxy->shouldGameEnd()) {
         broadcaster->broadcast();
-        count++;
+        // count++;
         usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
     }
     delete(broadcaster);
