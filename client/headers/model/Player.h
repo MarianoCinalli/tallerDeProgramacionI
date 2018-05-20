@@ -25,6 +25,7 @@ class Player {
         bool canMove;
         bool runningFast;
         bool dominatesTheBall;
+        bool still;
 
     public:
         Player(int orientation, Coordinates* position, int teamNumber);

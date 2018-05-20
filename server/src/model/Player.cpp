@@ -276,6 +276,14 @@ void Player::copyStats(Player* copyTo) {
 void Player::setTrayectory(Velocity* trayectory) {
     this->velocity->set(trayectory);
 }
+bool Player::isStill(){
+  if (this->velocity->isZero()){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
 
 /*
@@ -289,6 +297,7 @@ this->id:
  ki: this->kicking
  sl: this->sliding
  ru: this->runningFast
+ st: isStill()
 */
 std::string Player::getAsYaml() {
     std::string message = "";
@@ -300,5 +309,6 @@ std::string Player::getAsYaml() {
     message += " ki: " + std::to_string(this->kicking) + "\n";
     message += " sl: " + std::to_string(this->sliding) + "\n";
     message += " ru: " + std::to_string(this->runningFast) + "\n";
+    message += " st: " + std::to_string(isStill()) + "\n" ;
     return message;
 }

@@ -15,6 +15,7 @@ Player::Player(int orientation, Coordinates* position, int teamNumber) {
     this->canMove = true;
     this->isSelected = false;
     this->isReturning = false;
+    this->still = true;
     this->runningFast = false;
     this->dominatesTheBall = false;
     log("Jugador: Jugador creado.", LOG_INFO);
@@ -50,6 +51,15 @@ void Player::parseYaml(YAML::Node node){
   }
   if (node["ru"]){
     this->runningFast = node["ru"].as<int>();
+  }
+  if (node["ki"]){
+    this->kicking = node["ki"].as<int>();
+  }
+  if (node["sl"]){
+    this->sliding = node["sl"].as<int>();
+  }
+  if (node["st"]){
+    this->still = node["st"].as<int>();
   }
   if (node["cx"]){
     this->position->setX(node["cx"].as<int>());

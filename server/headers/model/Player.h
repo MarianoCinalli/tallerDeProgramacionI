@@ -41,6 +41,7 @@ class Player {
         bool getIsSelected();
         bool isRunningDiagonaly();
         bool isRunningFast();
+        bool isStill();
 
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
