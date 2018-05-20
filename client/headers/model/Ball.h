@@ -5,6 +5,7 @@
 #include "model/Player.h"
 #include <SDL2/SDL.h>
 #include <math.h>
+#include <yaml-cpp/yaml.h>
 
 #ifndef BALL_H
 #define BALL_H
@@ -30,6 +31,7 @@ class Ball {
     public:
         Ball(Coordinates* position, Player* player);
 
+        void parseYaml(YAML::Node node);
         Coordinates* getPosition();
         Velocity* getVelocity();
         Player* getPlayer();

@@ -30,6 +30,9 @@ Player* GameController::getPlayer(int num){
   return this->players[num];
 }
 
+Ball* GameController::getBall(){
+  return this->ball;
+}
 
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos

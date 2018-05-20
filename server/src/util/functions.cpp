@@ -88,7 +88,7 @@ void* game_updater(void* argument) {
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     while (gameControllerProxy->shouldGameEnd()) {
         gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST/10);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
