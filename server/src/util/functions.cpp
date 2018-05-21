@@ -70,16 +70,17 @@ void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("broadcast_to_clients: Sincronizacion terminada.", LOG_INFO);
-    ConnectionManager* connectionManager = initializer->getConnectionManager();
-    Broadcaster* broadcaster = new Broadcaster(initializer->getPitch());
-    // broadcaster->broadcastGameBegins();
-    log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
+    Broadcaster* broadcaster = new Broadcaster(
+        initializer->getPitch(),
+        initializer->getConnectionManager()
+    );
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
+    broadcaster->broadcastGameBegins();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
-        broadcaster->broadcast(connectionManager->getSockets());
+        broadcaster->broadcast();
         usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
-    // broadcaster->broadcastGameEnded();
+    broadcaster->broadcastGameEnded();
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
     return NULL;

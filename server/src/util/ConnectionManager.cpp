@@ -57,7 +57,6 @@ void ConnectionManager::acceptConnection() {
                 &(this->socketCache.back())
             );
             if (threadId != 0) {
-                log("ConnectionManager: Guardando valores...", LOG_INFO);
                 this->threadIdsAndSockets[threadId] = new_socket;
                 ++this->acceptedConnections;
             } else {
@@ -128,8 +127,6 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
         readMessage = "";
     } else {
         log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
-        // readMessage = buffer;
-        // std::string s(buffer, readBytes/sizeof(char));
         readMessage = buffer;
     }
     return readBytes;
@@ -138,6 +135,12 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
 void ConnectionManager::sendMessage(int socket, std::string message) {
     const char* constantMessage = (message).c_str();
     send(socket, constantMessage, strlen(constantMessage), 0);
+}
+
+void ConnectionManager::sendToAll(std::string message) {
+    for (auto const& threadAndSocket : this->threadIdsAndSockets) {
+        this->sendMessage(threadAndSocket.second, message);
+    }
 }
 
 ConnectionManager::~ConnectionManager() {

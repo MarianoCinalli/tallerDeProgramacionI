@@ -46,6 +46,7 @@ class ConnectionManager {
         bool hasRoom();
         std::vector<int> getSockets();
         void processDisconection(pthread_t connectionHandlerId);
+        void sendToAll(std::string message);
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H
