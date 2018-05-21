@@ -379,7 +379,7 @@ void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::stri
     seleccion = inputsIndex;
 }
 
-void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, ConnectionManager* connectionManager) {
+void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string servidor, std::string puerto, std::string usuario, std::string equipo, ConnectionManager* connectionManager) {
     log("Entra al openLogin Esperar", LOG_INFO);
     SDL_Event e;
     TTF_Font* gFont = NULL;
@@ -393,6 +393,12 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, ConnectionMa
     line1Texture.loadFromRenderedText("Esperando al resto de los jugadores", gRenderer, SDL_BLUE, gFont);
     Texture line2Texture;
     line2Texture.loadFromRenderedText("para comenzar la partida...", gRenderer, SDL_BLUE, gFont);
+    Texture line3Texture;
+    line3Texture.loadFromRenderedText("Servidor: "+servidor+":"+puerto, gRenderer, SDL_GREEN, gFont);
+    Texture line4Texture;
+    line4Texture.loadFromRenderedText("Usuario: "+usuario, gRenderer, SDL_GREEN, gFont);
+    Texture line5Texture;
+    line5Texture.loadFromRenderedText("Equipo: "+equipo, gRenderer, SDL_GREEN, gFont);
     // Espera a que el server mande el mensaje de que todos los jugadores estan listos.
     std::string beginMessage;
     int readBytes;
@@ -407,17 +413,27 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, ConnectionMa
         if (mensaje == "...........................") {
           mensaje = ".";
         }
+        Texture mensajeTexture;
+        mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
         //Clear screen
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
         //Render text textures
         SDL_Rect renderQuad0 = { (SCREEN_WIDTH - mensajeTexture.getWidth()) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
         SDL_RenderCopyEx(gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 250, line1Texture.getWidth(), line1Texture.getHeight() };
+        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 150, line1Texture.getWidth(), line1Texture.getHeight() };
         SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad11 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 300, line2Texture.getWidth(), line2Texture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad11, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad2 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 200, line2Texture.getWidth(), line2Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad3 = { (SCREEN_WIDTH - line3Texture.getWidth()) / 2, 350, line3Texture.getWidth(), line3Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line3Texture.getSpriteSheetTexture(), NULL, &renderQuad3, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad4 = { (SCREEN_WIDTH - line4Texture.getWidth()) / 2, 400, line4Texture.getWidth(), line4Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line4Texture.getSpriteSheetTexture(), NULL, &renderQuad4, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad5 = { (SCREEN_WIDTH - line5Texture.getWidth()) / 2, 450, line5Texture.getWidth(), line5Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line5Texture.getSpriteSheetTexture(), NULL, &renderQuad5, 0.0, NULL, SDL_FLIP_NONE);
         SDL_RenderPresent(gRenderer);
+
+        sleep(2); // HACK
 
         log("Main: Esperando el mensaje de comienzo del partido...", LOG_INFO);
         readBytes = connectionManager->getMessage(beginMessage);
@@ -436,8 +452,6 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, ConnectionMa
             gameBegins = false;
           }
         }
-
-        sleep(2);
     }
 }
 
@@ -487,7 +501,6 @@ int main(int argc, char* argv[]) {
     std::string puerto = "8080";
     std::string usuario = "zidane";
     std::string clave = "zidane";
-    std::string player = " ";
     std::string equipo = " ";
     std::string mensaje = " ";
     // Respuesta del server
@@ -500,6 +513,7 @@ int main(int argc, char* argv[]) {
     int cantidad1 = 0;
     std::string cantidad2str = "0";
     int cantidad2 = 0;
+    int seleccion = 0;
 
     bool connected = false;
     bool hasLoggedIn = false;
@@ -599,10 +613,14 @@ int main(int argc, char* argv[]) {
               log("Main: Cant usuarios: ", cantidad2str, LOG_INFO);
             }
             if (cantidad1 + cantidad2 < max) {
-              int seleccion = 0;
               mensaje = "Elegir el equipo:";
               openLoginEquipo(renderer, seleccion, max, equipo1, cantidad1str, equipo2, cantidad2str, mensaje);
-              log("Main: Elige el equipo: ", seleccion, LOG_INFO);
+              if (seleccion == 0) {
+                equipo = equipo1;
+              } else {
+                equipo = equipo2;
+              }
+              log("Main: Elige el equipo: "+equipo+" ->", seleccion, LOG_INFO);
               // Le aviso al servidor cual fue el equipo elegido
               connectionManager->sendMessage("use:"+std::to_string(seleccion));
               // Espero la validacion
@@ -619,8 +637,8 @@ int main(int argc, char* argv[]) {
           }
           if (hasLoggedIn && hasPickedTeam) {
             // optimus! esta conectado, logueado y con equipo ya seleccionado
-            mensaje = " ";
-            openLoginEsperar(renderer, mensaje, connectionManager);
+            mensaje = "...";
+            openLoginEsperar(renderer, mensaje, servidor, puerto, usuario, equipo, connectionManager);
           }
         } else {
           mensaje = "No se pudo conectar con el servidor.";
