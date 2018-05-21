@@ -1,22 +1,16 @@
 #include "util/Broadcaster.h"
 
 
-Broadcaster::Broadcaster(Pitch* pitch, std::vector<int>* sockets) {
+Broadcaster::Broadcaster(Pitch* pitch, ConnectionManager* connectionManager) {
     log("Broadcaster: Creando broadcaster...", LOG_INFO);
     this->pitch = pitch;
-    this->sockets = *sockets;
+    this->connectionManager = connectionManager;
 }
 
 void Broadcaster::broadcast() {
-    log("Broadcaster: Broadcasteando...", LOG_INFO);
     std::string message = this->getMessage();
     if (message != "") {
-        const char* constantMessage = (message).c_str();
-        for(int client_socket : sockets) {
-            log("Broadcaster: Broadcasteando a: ", client_socket, LOG_DEBUG);
-            // Convertirlas a string y enviarlas.
-            send(client_socket, constantMessage, strlen(constantMessage), 0);
-        }
+        connectionManager->sendToAll(message);
     } else {
         log("Broadcaster: Mensaje vacio, no se broadcastea.", LOG_ERROR);
     }
@@ -40,4 +34,16 @@ std::string Broadcaster::getMessage() {
 
 Broadcaster::~Broadcaster() {
     log("Broadcaster: Eliminando broadcaster...", LOG_INFO);
+}
+
+void Broadcaster::broadcastGameBegins() {
+    log("broadcast_to_clients: Broadcasteando inicio de partido...", LOG_INFO);
+    std::string message = "gameBegins:";
+    connectionManager->sendToAll(message);
+}
+
+void Broadcaster::broadcastGameEnded() {
+    log("broadcast_to_clients: Broadcasteando fin de partido...", LOG_INFO);
+    std::string message = "gameEnds:";
+    connectionManager->sendToAll(message);
 }

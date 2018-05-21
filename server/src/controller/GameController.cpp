@@ -24,19 +24,20 @@ void GameController::execute(Action* action, int user) {
     }
 }
 
-void GameController::update(Camera* camera){
-  this->updatePlayers();
-  this->updateBall();
-  this->updateCameraPosition(camera);
-  this->count();
+void GameController::update(Camera* camera) {
+    this->updatePlayers();
+    this->updateBall();
+    this->updateCameraPosition(camera);
+    this->count();
 }
 
-void GameController::count(){
-  this->time++;
-  if (this->time==1024){
-    this->time= 0;
-  }
+void GameController::count() {
+    this->time++;
+    if (this->time == 1024) {
+        this->time = 0;
+    }
 }
+
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
@@ -80,12 +81,12 @@ void GameController::updateCameraPosition(Camera* camera) {
 bool GameController::shouldGameEnd() {
     // this->end++;
     // if (this->end>100000){
-      // return true;
+    // return true;
     // }
     return this->end;
 }
-void GameController::setEnd(){
-  this->end = true;
+void GameController::setEnd() {
+    this->end = true;
 }
 
 GameController::~GameController() {

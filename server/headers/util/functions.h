@@ -13,6 +13,7 @@
 #include "controller/GameControllerProxy.h"
 #include <map>
 #include <pthread.h>
+#include <signal.h>
 
 static const int MICROSECONDS_BETWEEEN_BROADCAST = 1000000/120;
 
@@ -22,4 +23,12 @@ void* game_updater(void* argument);
 
 std::string getMessageKey(std::string message);
 std::string getMessageValue(std::string message);
+
+void* connection_listener(void* argument);
+
+// Signal handling ---------------------------------------------------------------------------
+void handleSignal(int sig);
+void registerSignalHandler(int signal);
+void setQuit();
+
 #endif

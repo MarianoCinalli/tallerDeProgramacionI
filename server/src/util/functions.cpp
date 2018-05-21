@@ -2,6 +2,8 @@
 
 extern GameInitializer* initializer;
 extern pthread_barrier_t players_ready_barrier;
+extern bool quit;
+extern std::mutex quit_mutex;
 
 // Lee los mensajes de los clientes y actualiza el modelo.
 void* read_client(void* argument) {
@@ -16,8 +18,8 @@ void* read_client(void* argument) {
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
     log("read_client: Socket: ", socket, LOG_DEBUG);
-    while (continueReading) {
-        log("read_client: Reading...", LOG_INFO);
+    while (continueReading && !quit) {
+        log("read_client: Reading...", LOG_DEBUG);
         if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
             log("read_client: Esperando para sincronizar...", LOG_INFO);
             pthread_barrier_wait(&players_ready_barrier);
@@ -57,7 +59,7 @@ void* read_client(void* argument) {
                 }
                 // y mostrar cuantos jugadores hay en cada equipo
                 if (key == "get" && value == "equipo1") {
-                  connectionManager->sendMessage(socket,"Argentina:2");
+                  connectionManager->sendMessage(socket,"Argentina:0");
                 }
                 if (key == "get" && value == "equipo2") {
                   connectionManager->sendMessage(socket,"Brasil:0");
@@ -77,6 +79,9 @@ void* read_client(void* argument) {
             }
         }
     }
+    // Para que el active player del jugador que se va pase a ser seleccionable.
+    //gameControllerProxy->processDisconection();
+    connectionManager->processDisconection(pthread_self());
     delete(user);
     log("read_client: Finalizado.", LOG_INFO);
     return NULL;
@@ -88,17 +93,19 @@ void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("broadcast_to_clients: Sincronizacion terminada.", LOG_INFO);
-    std::vector<int> sockets = *((std::vector<int>*) argument);
-    Broadcaster* broadcaster = new Broadcaster(initializer->getPitch(), &sockets);
-    // broadcaster->broadcastGameBegins();
-    // int count = 0; // esto esta provisorio.
-    log("broadcast_to_clients: Se comienza a broadcastear...", LOG_INFO);
+    Broadcaster* broadcaster = new Broadcaster(
+        initializer->getPitch(),
+        initializer->getConnectionManager()
+    );
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    while (!gameControllerProxy->shouldGameEnd()) {
+    // Termino la espera
+    broadcaster->broadcastGameBegins();
+    while (!gameControllerProxy->shouldGameEnd() && !quit) {
         broadcaster->broadcast();
-        // count++;
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
+    // Termino el juego
+    broadcaster->broadcastGameEnded();
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
     return NULL;
@@ -112,13 +119,14 @@ void* game_updater(void* argument) {
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    while (!gameControllerProxy->shouldGameEnd()) {
+    while (gameControllerProxy->shouldGameEnd() && !quit) {
         gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST*2);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
 }
+
 
 // Separan key:value en key value
 std::string getMessageKey(std::string message) {
@@ -127,4 +135,45 @@ std::string getMessageKey(std::string message) {
 
 std::string getMessageValue(std::string message) {
     return message.substr(message.find(":")+1, message.length());   //iba un +1 LPM
+}
+
+// Espera y acepta conecciones.
+void* connection_listener(void* argument) {
+    log("connection_listener: Creado.", LOG_INFO);
+    ConnectionManager* connectionManager = initializer->getConnectionManager();
+    while (!quit) {
+        log("connection_listener: Esperando por una conexion...", LOG_INFO);
+        connectionManager->acceptConnection();
+    }
+    log("connection_listener: Finalizado.", LOG_INFO);
+    return NULL;
+}
+
+// Signal handling ---------------------------------------------------------------------------
+void handleSignal(int sig) {
+    log("handleSignal: Seteando salida. Signal recibida.", LOG_INFO);
+    setQuit();
+    log("handleSignal: Fin procesar signal.", LOG_INFO);
+}
+
+void registerSignalHandler(int signal) {
+    log("registerSignalHandler: Seteando un handler para la signal.", LOG_INFO);
+    struct sigaction new_action;
+
+    new_action.sa_handler = handleSignal;
+    sigemptyset(&new_action.sa_mask);
+    new_action.sa_flags = 0;
+
+    if (sigaction(signal, &new_action, NULL) < 0) {
+        log("registerSignalHandler: Error seteando  el handler.", strerror(errno), LOG_INFO);
+    } else {
+        log("registerSignalHandler: Handler seteado.", LOG_INFO);
+    }
+}
+
+void setQuit() {
+    quit_mutex.lock();
+    quit = true;
+    quit_mutex.unlock();
+
 }

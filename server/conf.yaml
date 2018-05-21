@@ -1,6 +1,6 @@
 # configuracion
 debug:
-  level: 'debug' #'debug' o "info" o "error"
+  level: 'info' #'debug' o "info" o "error"
 usuarios:
   - {name: mariano, password: mariano}
   - {name: juan, password: juan}
@@ -9,5 +9,5 @@ usuarios:
   - {name: claudio, password: claudio}
   - {name: zidane, password: zidane}
 server:
-  maxClients: 4
+  maxClients: 1
   port: 8080

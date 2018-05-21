@@ -379,6 +379,67 @@ void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::stri
     seleccion = inputsIndex;
 }
 
+void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, ConnectionManager* connectionManager) {
+    log("Entra al openLogin Esperar", LOG_INFO);
+    SDL_Event e;
+    TTF_Font* gFont = NULL;
+    gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (gFont == NULL) {
+        log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+    }
+    Texture mensajeTexture;
+    mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
+    Texture line1Texture;
+    line1Texture.loadFromRenderedText("Esperando al resto de los jugadores", gRenderer, SDL_BLUE, gFont);
+    Texture line2Texture;
+    line2Texture.loadFromRenderedText("para comenzar la partida...", gRenderer, SDL_BLUE, gFont);
+    // Espera a que el server mande el mensaje de que todos los jugadores estan listos.
+    std::string beginMessage;
+    int readBytes;
+    bool gameBegins = false;
+    while (!gameBegins) {
+        if (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
+              exit(1);
+            }
+        }
+        mensaje += ".";
+        if (mensaje == "...........................") {
+          mensaje = ".";
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        //Render text textures
+        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - mensajeTexture.getWidth()) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 250, line1Texture.getWidth(), line1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad11 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 300, line2Texture.getWidth(), line2Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad11, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderPresent(gRenderer);
+
+        log("Main: Esperando el mensaje de comienzo del partido...", LOG_INFO);
+        readBytes = connectionManager->getMessage(beginMessage);
+        if (readBytes < 0) {
+          log("Main: Error esperando el mensaje de comienzo del partido. Saliendo...", LOG_ERROR);
+          endProgram(1, connectionManager);
+        } else if (readBytes == 0) {
+          log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
+          endProgram(1, connectionManager);
+        } else {
+          if (beginMessage == "gameBegins:") {
+            log("Main: Se recibio el mensaje de comienzo del partido.", LOG_INFO);
+            gameBegins = true;
+          } else {
+            log("Main: Esperando el mensaje de comienzo de partido, se recibio otra cosa: ", beginMessage, LOG_INFO);
+            gameBegins = false;
+          }
+        }
+
+        sleep(2);
+    }
+}
 
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
@@ -550,11 +611,16 @@ int main(int argc, char* argv[]) {
                 hasPickedTeam = true;
               //} else {
               //  mensaje = "La partida ya esta llena.";
+              //  mensaje = "No puede seleccionar ese equipo.";
               //}
             } else {
-              mensaje = "La partida ya está llena.";
+              mensaje = "La partida ya esta llena.";
             }
-
+          }
+          if (hasLoggedIn && hasPickedTeam) {
+            // optimus! esta conectado, logueado y con equipo ya seleccionado
+            mensaje = " ";
+            openLoginEsperar(renderer, mensaje, connectionManager);
           }
         } else {
           mensaje = "No se pudo conectar con el servidor.";

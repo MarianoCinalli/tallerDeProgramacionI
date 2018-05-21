@@ -4,9 +4,12 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
+#include <string>
 #include <errno.h>
 
 #include <vector>
+#include <map>
+#include <pthread.h>
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/functions.h"
@@ -21,22 +24,29 @@ class ConnectionManager {
         int port;
         int maxConnections;
         int my_socket;
+        int acceptedConnections;
         struct sockaddr_in address;
         ThreadSpawner* clients;
-        ThreadSpawner* broadcaster;
-        std::vector<int> openedSockets;
+        std::map<pthread_t, int> threadIdsAndSockets;
+        std::vector<int> socketCache;
     public:
         ConnectionManager(int port, int maxConnections);
+        // Prepara el socket para escucha.
         bool openConnections();
-        // Acepta un numero infinito de conecciones.
-        void acceptConnections();
-        // Acepta un numero finito de conecciones.
-        void acceptConnectionsUntilMax();
-        void createBroadcaster();
+        // Acepta una conexion si hay lugar disponible.
+        void acceptConnection();
+        // Espera a que todos los threads de los clientes terminen.
         void waitForAllConnectionsToFinish();
+        // Cierra los file descriptors para cada socket.
         void closeOpenedSockets();
+        // Devuelve el mensaje, en readMessage, leido a un socket y los bytes leidos (para validar)
         int getMessage(int socket, std::string& readMessage);
+        // Envia un mensaje a un socket.
         void sendMessage(int socket, std::string message);
+        bool hasRoom();
+        std::vector<int> getSockets();
+        void processDisconection(pthread_t connectionHandlerId);
+        void sendToAll(std::string message);
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H

@@ -45,41 +45,45 @@ void* read_server(void* argument) {
             log("read_server: No se pudo establecer coneccion con el server. Saliendo...", LOG_INFO);
             setQuit(true);
         } else {
-            try {
-                Player* player;
-                Ball* ball;
-                YAML::Node node = YAML::Load(readMessage);
-                for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
-                    YAML::Node key = it->first;
-                    YAML::Node value = it->second;
-                    // * Aca se sabe que tipo es.
-                    if (key.Type() == YAML::NodeType::Scalar) {
-                        if (key.as<std::string>() == "ba") {
-                            log("read_server: pelota", key.as<std::string>(), LOG_INFO);
-                            ball = initializer->getGameController()->getBall();
-                            ball->parseYaml(value);
-                        } else {
-                            log("read_server: jugador", key.as<std::string>(), LOG_INFO);
-                            player =  initializer->getGameController()->getPlayer(key.as<int>());
-                            player->parseYaml(value);
+            if (readMessage == "gameEnds:") {
+                log("read_server: Se recibio el mensaje de fin de juego. Saliendo...", LOG_INFO);
+                setQuit(true);
+            } else {
+                try {
+                    Player* player;
+                    Ball* ball;
+                    YAML::Node node = YAML::Load(readMessage);
+                    for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
+                        YAML::Node key = it->first;
+                        YAML::Node value = it->second;
+                        // * Aca se sabe que tipo es.
+                        if (key.Type() == YAML::NodeType::Scalar) {
+                            if (key.as<std::string>() == "ba") {
+                                log("read_server: pelota", key.as<std::string>(), LOG_INFO);
+                                ball = initializer->getGameController()->getBall();
+                                ball->parseYaml(value);
+                            } else {
+                                log("read_server: jugador", key.as<std::string>(), LOG_INFO);
+                                player =  initializer->getGameController()->getPlayer(key.as<int>());
+                                player->parseYaml(value);
+                            }
                         }
-                    }
 
-                    // Valores para objeto del tipo parseado arriba.
-                    if (value.Type() == YAML::NodeType::Map) {
-                        // Este for iria en el constructor para el objeto del tipo de arriba.
-                        for (YAML::const_iterator secondNode = value.begin(); secondNode != value.end(); ++secondNode) {
-                            std::string secondkey = secondNode->first.as<std::string>();
-                            std::string secondvalue = secondNode->second.as<std::string>();
-                            log("read_server: " + secondkey + " = " + secondvalue, LOG_INFO);
+                        // Valores para objeto del tipo parseado arriba.
+                        if (value.Type() == YAML::NodeType::Map) {
+                            // Este for iria en el constructor para el objeto del tipo de arriba.
+                            for (YAML::const_iterator secondNode = value.begin(); secondNode != value.end(); ++secondNode) {
+                                std::string secondkey = secondNode->first.as<std::string>();
+                                std::string secondvalue = secondNode->second.as<std::string>();
+                                log("read_server: " + secondkey + " = " + secondvalue, LOG_INFO);
+                            }
                         }
                     }
+                } catch (const std::exception& e) {
+                    log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
                 }
-            } catch (const std::exception& e) {
-                log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
             }
         }
-        // count++;
     }
     log("read_server: Finalizado.", LOG_INFO);
     return NULL;

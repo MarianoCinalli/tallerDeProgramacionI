@@ -3,9 +3,9 @@
 ConnectionManager::ConnectionManager(int port, int maxConnections) {
     this->port = port;
     this->maxConnections = maxConnections;
-    this->openedSockets = {};
+    this->acceptedConnections = 0;
     this->clients = new ThreadSpawner();
-    this->broadcaster = new ThreadSpawner();
+    this->socketCache = {};
 }
 
 bool ConnectionManager::openConnections() {
@@ -41,55 +41,70 @@ bool ConnectionManager::openConnections() {
     return true;
 }
 
-// Este es para la reconexion.
-// Se va a quedar aceptando las connecciones entrantes. Cuando las actuales,
-// size del vector, son menores que el maximo aceptar.
-void ConnectionManager::acceptConnections() {
-    // TODO.
-}
-
-void ConnectionManager::acceptConnectionsUntilMax() {
+void ConnectionManager::acceptConnection() {
     int new_socket;
     int addrlen = sizeof(this->address);
-    int acceptedConnections = 0;
-    log("ConnectionManager: Aceptando conexiones...", LOG_INFO);
-    while (acceptedConnections < this->maxConnections) {
-        // Esto se bloquea hasta que haya una conexion entrante.
-        new_socket = accept(this->my_socket, (struct sockaddr*)&address, (socklen_t*)&addrlen);
-        if (new_socket > 0) {
+    // Esto se bloquea hasta que haya una conexion entrante.
+    new_socket = accept(this->my_socket, (struct sockaddr*)&this->address, (socklen_t*)&addrlen);
+    log("ConnectionManager: Aceptando conexion...", LOG_INFO);
+    if (new_socket > 0) {
+        if (this->hasRoom()) {
             log("ConnectionManager: Conexion aceptada.", LOG_INFO);
-            this->openedSockets.push_back(new_socket);
-            log("ConnectionManager: Creando thread para nueva conexion.", LOG_INFO);
-            this->clients->spawn(
+            log("ConnectionManager: Creando thread para nueva conexion.", new_socket, LOG_INFO);
+            this->socketCache.push_back(new_socket);
+            pthread_t threadId = this->clients->spawn(
                 read_client,
-                &(this->openedSockets.at(acceptedConnections))
+                &(this->socketCache.back())
             );
-            ++acceptedConnections;
+            if (threadId != 0) {
+                this->threadIdsAndSockets[threadId] = new_socket;
+                ++this->acceptedConnections;
+            } else {
+                log("ConnectionManager: Error creando lector de cliente.", LOG_ERROR);
+                close(new_socket);
+            }
         } else {
-            log("ConnectionManager: Conexion rechazada.", LOG_ERROR);
+            log("ConnectionManager: Conexion rechazada por falta de espacio, numero de clientes: ", this->acceptedConnections, LOG_INFO);
+            std::string message = "noRoom:" + std::to_string(this->acceptedConnections);
+            this->sendMessage(new_socket, message);
+            close(new_socket);
         }
+    } else {
+        log("ConnectionManager: Conexion rechazada.", LOG_ERROR);
     }
 }
 
-void ConnectionManager::createBroadcaster() {
-    this->broadcaster->spawn(
-        broadcast_to_clients,
-        &(this->openedSockets)
-    );
+bool ConnectionManager::hasRoom() {
+    return this->acceptedConnections < this->maxConnections;
+}
+
+std::vector<int> ConnectionManager::getSockets() {
+    std::vector<int> sockets;
+    for (auto const& threadAndSocket : this->threadIdsAndSockets) {
+        sockets.push_back(threadAndSocket.second);
+    }
+    return sockets;
+}
+
+void ConnectionManager::processDisconection(pthread_t connectionHandlerId) {
+    log("ConnectionManager: Liberando recursos de: ", connectionHandlerId, LOG_INFO);
+    close(this->threadIdsAndSockets[connectionHandlerId]);
+    this->threadIdsAndSockets.erase(connectionHandlerId);
+    --this->acceptedConnections;
+    log("ConnectionManager: Recursos liberados.", LOG_INFO);
 }
 
 void ConnectionManager::waitForAllConnectionsToFinish() {
     log("ConnectionManager: Esperando a que los clientes terminen...", LOG_INFO);
     this->clients->joinSpawnedThreads();
-    this->broadcaster->joinSpawnedThreads();
     log("ConnectionManager: Los clientes terminaron.", LOG_INFO);
 }
 
 void ConnectionManager::closeOpenedSockets() {
     log("ConnectionManager: Cerrando sockets abiertos...", LOG_INFO);
-    for(int openedSocket : this->openedSockets) {
-        close(openedSocket);
-        log("ConnectionManager: Se cerro el socket ", openedSocket, LOG_INFO);
+    for (auto const& threadAndSocket : this->threadIdsAndSockets) {
+        log("ConnectionManager: Cerrando socket de: ", threadAndSocket.first, LOG_INFO);
+        close(threadAndSocket.second);
     }
     log("ConnectionManager: Socket cerrados.", LOG_INFO);
 }
@@ -112,8 +127,6 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
         readMessage = "";
     } else {
         log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
-        // readMessage = buffer;
-        // std::string s(buffer, readBytes/sizeof(char));
         readMessage = buffer;
     }
     return readBytes;
@@ -124,13 +137,12 @@ void ConnectionManager::sendMessage(int socket, std::string message) {
     send(socket, constantMessage, strlen(constantMessage), 0);
 }
 
-/*
-    TODO:
-    Falta manejar la desconexion y reconexion.
-    Sacar el thread ID de la lista luego de cerrar el socket de la connexion que finaliza.
-*/
+void ConnectionManager::sendToAll(std::string message) {
+    for (auto const& threadAndSocket : this->threadIdsAndSockets) {
+        this->sendMessage(threadAndSocket.second, message);
+    }
+}
 
 ConnectionManager::~ConnectionManager() {
     delete(this->clients);
-    delete(this->broadcaster);
 }
