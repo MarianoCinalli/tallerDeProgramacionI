@@ -56,6 +56,8 @@ void* read_client(void* argument) {
             }
         }
     }
+    // Para que el active player del jugador que se va pase a ser seleccionable.
+    //gameControllerProxy->processDisconection();
     connectionManager->processDisconection(pthread_self());
     delete(user);
     log("read_client: Finalizado.", LOG_INFO);
