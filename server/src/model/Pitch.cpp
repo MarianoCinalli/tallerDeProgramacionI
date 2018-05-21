@@ -68,6 +68,7 @@ Player* Pitch::getActivePlayer(int user) {
 }
 
 void Pitch::changeActivePlayer(int user) {
+    log("cambiando jugador activo", LOG_INFO);
     Team* team = teams[user];
     Coordinates* center = this->activePlayers[user]->getPosition();
     // Solo puede seleccionar de los jugadores dentro de los margenes
@@ -110,6 +111,7 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 
 
 void Pitch::checkIntercepts() {
+    log("chequeando intercept", LOG_INFO);
     int value = STEAL_VALUE;
     std::list<Player*> players = this->localTeam->getPlayers();
     std::list<Player*> awayPlayers = this->awayTeam->getPlayers();

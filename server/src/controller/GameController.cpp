@@ -19,8 +19,9 @@ void GameController::execute(Action* action, int user) {
     log("user: ", user, LOG_INFO);
     if (action->valid(player)) {
         action->execute(player);
-    } else if (action->valid(this->pitch)) {
-        action->execute(this->pitch, user);
+    }
+    if (action->valid(this->pitch)) {
+        action->execute(this->pitch);
     }
 }
 
@@ -60,7 +61,7 @@ void GameController::updateBall() {
 
     if (this->ball->isDominated() && this->ball->getPlayer()->isKicking()) {
         log("La pelota fue pateada", LOG_INFO);
-        this->ball->isPassed(this->ball->getPlayer()->getOrientation(), 15); //TODO valor de pase?
+        this->ball->isPassed(this->ball->getPlayer()->getOrientation(), PASS_SPEED); //TODO valor de pase?
     }
     this->pitch->changeBallOwnership();
     this->ball->updatePosition();

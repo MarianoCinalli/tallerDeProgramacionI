@@ -83,14 +83,14 @@ void Ball::updatePosition() {
     if (!this->interceptable && timePassing > TIME_BALL_NO_INTERCEPT){ //TODO numero harcodeado tiempo de pase
       this->interceptable = true;
     }
-    this->position->addX(this->velocity->getComponentX()*this->passPower);
-    this->position->addY(this->velocity->getComponentY()*this->passPower);
+    // this->position->addX(this->velocity->getComponentX()*this->passPower);
+    // this->position->addY(this->velocity->getComponentY()*this->passPower);
   }
-  if((this->isInAPass) && (!this->velocity->isZero())) {
-    if(this->timePassing % BALL_DECELERATE_TIME == 0){
-      this->velocity->decelerate(1);
-    }
-  }
+  // if((this->isInAPass) && (!this->velocity->isZero())) {
+  //   if(this->timePassing % BALL_DECELERATE_TIME == 0){
+  //     this->velocity->decelerate(1);
+  //   }
+  // }
 	// if((this->isInAPass) && (!this->velocity->isZero())) {
 	// 	float passDistance = 0;
 	// 	int abs_delta_x = 0;
