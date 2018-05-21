@@ -71,8 +71,9 @@ void GameController::updateBall() {
 // Cuando el jugador pise el borde mueve la camara.
 // En este punto las coordenadas de el jugador son validas.
 void GameController::updateCameraPosition(Camera* camera) {
-    Coordinates* position = this->ball->getPosition();
-    int speed = this->ball->getCurrentSpeed();
+    // Coordinates* position = this->ball->getPosition();
+    Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
+    int speed = this->pitch->getActivePlayer(0)->getCurrentSpeed();
     camera->calculateNewPostion(position, speed);
 }
 
