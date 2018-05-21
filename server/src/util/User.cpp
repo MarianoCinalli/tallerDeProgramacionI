@@ -27,16 +27,20 @@ void User::processLogInMessage(std::string message) {
     std::string usuario = this->getMessageAction(message);
     std::string clave = this->getMessageValue(message);
     this->hasLoged = false;
-     log("VALIDANDO USUARIO: ",usuario, LOG_INFO);
-     log("VALIDANDO CLAVE: ",clave, LOG_INFO);
+    log("VALIDANDO USUARIO: ",usuario, LOG_INFO);
+    log("VALIDANDO CLAVE: ",clave, LOG_INFO);
     map<string, string>::iterator it;
-       for (it = configuration->getUsuarios().begin(); it != configuration->getUsuarios().end(); it++)
-       {
-         if ( it->first == usuario && it->second  == clave ){
-           this->hasLoged = true;
-           log("USUARIO LOGGEADO ", LOG_INFO);
-         }
-       }
+    for (it = configuration->getUsuarios().begin(); it != configuration->getUsuarios().end(); it++) {
+
+      //BUG: No recorre todos los usuarios
+      log(it->first, LOG_INFO);
+      log(it->second, LOG_INFO);
+
+      if ( it->first == usuario && it->second == clave ){
+        this->hasLoged = true;
+        log("USUARIO LOGGEADO ", LOG_INFO);
+      }
+    }
     log("FIN VALIDANDO USUARIO ", LOG_INFO);
 }
 

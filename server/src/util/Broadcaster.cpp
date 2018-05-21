@@ -39,7 +39,9 @@ Broadcaster::~Broadcaster() {
 void Broadcaster::broadcastGameBegins() {
     log("broadcast_to_clients: Broadcasteando inicio de partido...", LOG_INFO);
     std::string message = "gameBegins:";
+    sleep(3); //HACK time to get your shit together
     connectionManager->sendToAll(message);
+    //sleep(2); //HACK time to get your shit together
 }
 
 void Broadcaster::broadcastGameEnded() {

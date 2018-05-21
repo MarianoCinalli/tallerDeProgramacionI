@@ -136,7 +136,7 @@ SDL_Color SDL_GREEN = { 0, 0xFF, 0, 0xFF };
 SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
 SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
-void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string mensaje) {
+void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string mensaje, ConnectionManager* connectionManager) {
     log("Entra al openLogin Server", LOG_INFO);
     bool quit = false;
     SDL_Event e;
@@ -165,7 +165,7 @@ void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string
         bool renderText = false;
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
-                exit(1);
+                endProgram(1, connectionManager);
             } else if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_BACKSPACE && inputs[inputsIndex].length() > 0) {
                     inputs[inputsIndex].pop_back();
@@ -213,7 +213,7 @@ void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string
     puerto = inputs[1];
 }
 
-void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string& usuario, std::string& clave, std::string mensaje) {
+void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string& usuario, std::string& clave, std::string mensaje, ConnectionManager* connectionManager) {
     log("Entra al openLogin Usuario", LOG_INFO);
     bool quit = false;
     SDL_Event e;
@@ -254,7 +254,7 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
         bool renderText = false;
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
-                exit(1);
+                endProgram(1, connectionManager);
             } else if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_BACKSPACE && inputs[inputsIndex].length() > 0) {
                     inputs[inputsIndex].pop_back();
@@ -316,7 +316,7 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     clave = inputs[1];
 }
 
-void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::string equipo1, std::string cantidad1, std::string equipo2, std::string cantidad2, std::string mensaje) {
+void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::string equipo1, std::string cantidad1, std::string equipo2, std::string cantidad2, std::string mensaje, ConnectionManager* connectionManager) {
     log("Entra al openLogin Equipo", LOG_INFO);
     bool quit = false;
     SDL_Event e;
@@ -344,7 +344,7 @@ void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::stri
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
-                exit(1);
+                endProgram(1, connectionManager);
             } else if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_TAB) {
                     inputsIndex++;
@@ -406,11 +406,11 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
     while (!gameBegins) {
         if (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
-              exit(1);
+              endProgram(1, connectionManager);
             }
         }
         mensaje += ".";
-        if (mensaje == "...........................") {
+        if (mensaje == "...........................................") {
           mensaje = ".";
         }
         Texture mensajeTexture;
@@ -432,8 +432,6 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
         SDL_Rect renderQuad5 = { (SCREEN_WIDTH - line5Texture.getWidth()) / 2, 450, line5Texture.getWidth(), line5Texture.getHeight() };
         SDL_RenderCopyEx(gRenderer, line5Texture.getSpriteSheetTexture(), NULL, &renderQuad5, 0.0, NULL, SDL_FLIP_NONE);
         SDL_RenderPresent(gRenderer);
-
-        sleep(2); // HACK
 
         log("Main: Esperando el mensaje de comienzo del partido...", LOG_INFO);
         readBytes = connectionManager->getMessage(beginMessage);
@@ -522,7 +520,7 @@ int main(int argc, char* argv[]) {
     while (!connected || !hasLoggedIn || !hasPickedTeam) {
         // Si no esta conectado, intenta:
         if (!connected) {
-            openLoginServer(renderer, servidor, puerto, mensaje);
+            openLoginServer(renderer, servidor, puerto, mensaje, connectionManager);
             log("SALIO DEL LOGIN SERVER", LOG_INFO);
             log("Login: Servidor: ", servidor, LOG_INFO);
             log("Login: Puerto: ", puerto, LOG_INFO);
@@ -532,7 +530,7 @@ int main(int argc, char* argv[]) {
         }
         // Estoy conectado?
         if (connected) {
-          openLoginUsuario(renderer, servidor, puerto, usuario, clave, mensaje);
+          openLoginUsuario(renderer, servidor, puerto, usuario, clave, mensaje, connectionManager);
           log("SALIO DEL LOGIN USUARIO", LOG_INFO);
           log("Login: Usuario: ", usuario, LOG_INFO);
           log("Login: Clave: ", clave, LOG_INFO);
@@ -614,7 +612,7 @@ int main(int argc, char* argv[]) {
             }
             if (cantidad1 + cantidad2 < max) {
               mensaje = "Elegir el equipo:";
-              openLoginEquipo(renderer, seleccion, max, equipo1, cantidad1str, equipo2, cantidad2str, mensaje);
+              openLoginEquipo(renderer, seleccion, max, equipo1, cantidad1str, equipo2, cantidad2str, mensaje, connectionManager);
               if (seleccion == 0) {
                 equipo = equipo1;
               } else {
