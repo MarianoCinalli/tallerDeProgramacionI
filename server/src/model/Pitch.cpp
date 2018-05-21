@@ -75,7 +75,9 @@ Player* Pitch::getActivePlayer(int user) {
 void Pitch::changeActivePlayer(int user) {
     log("cambiando jugador activo", LOG_INFO);
     Team* team = teams[user];
-    Coordinates* center = this->activePlayers[user]->getPosition();
+    // Coordinates* center = this->activePlayers[user]->getPosition();
+    Coordinates* center = this->ball->getPosition();
+
     // Solo puede seleccionar de los jugadores dentro de los margenes
     std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 0);
     if (!playersList.empty()) {
@@ -84,7 +86,8 @@ void Pitch::changeActivePlayer(int user) {
         for (Player* p : playersList) {
             int distance = p->getPosition()->distanceTo(center);
             log("Distancia: ", distance, LOG_DEBUG);
-            if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
+            // if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
+            if (distance < nearestDistance  && !p->getIsSelected()) {
                 nearestDistance = distance;
                 nearestPlayer = p;
             }
