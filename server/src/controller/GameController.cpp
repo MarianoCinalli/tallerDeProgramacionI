@@ -21,7 +21,7 @@ void GameController::execute(Action* action, int user) {
         action->execute(player);
     }
     if (action->valid(this->pitch)) {
-        action->execute(this->pitch);
+        action->execute(this->pitch, user);
     }
 }
 

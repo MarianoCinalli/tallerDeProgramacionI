@@ -286,47 +286,55 @@ void PlayerSpriteManager::setRunningLeftSprite(int cteVelocidad) {
 // Kicking --------------------------------------------------------------------------
 
 void PlayerSpriteManager::setKickingSprite() {
-  if (kickingCount==1024) { //TODO hardcode value
-          kickingCount = 0;
-  }
-  if (kickingCount<30){
-    if ((kickingCount % KICKING_DIVISOR) == 0) {
-        int orientation = this->player->getOrientation();
-        if (!this->player->wasKickingYet()) {
-                log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
-                this->sprite.x = 0;
-                this->sprite.y = (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
-                this->player->isAlreadyKicking();
-        } else {
-                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
-                        this->setStandingSprite(orientation);
-                        this->player->stopKicking();
-                } else {
-                        this->sprite.x += SPRITE_SIZE;
+        if (kickingCount==1024) { //TODO hardcode value
+                kickingCount = 0;
+        }
+        if (kickingCount<30) {
+                if ((kickingCount % KICKING_DIVISOR) == 0) {
+                        int orientation = this->player->getOrientation();
+                        if (!this->player->wasKickingYet()) {
+                                log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
+                                this->sprite.x = 0;
+                                this->sprite.y = (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
+                                this->player->isAlreadyKicking();
+                        } else {
+                                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
+                                        this->setStandingSprite(orientation);
+                                        this->player->stopKicking();
+                                } else {
+                                        this->sprite.x += SPRITE_SIZE;
+                                }
+                        }
                 }
         }
-      }
-    }
-      kickingCount +=1;
+        kickingCount +=1;
 }
 
 // Sliding --------------------------------------------------------------------------
 
 void PlayerSpriteManager::setSlidingSprite() {
-        int orientation = this->player->getOrientation();
-        if (!this->player->wasSlidingYet()) {
-                log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
-                this->sprite.x = 0;
-                this->sprite.y = (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
-                this->player->isAlreadySliding();
-        } else {
-                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
-                        this->setStandingSprite(orientation);
-                        this->player->stopSliding();
-                } else {
-                        this->sprite.x += SPRITE_SIZE;
+        if (slidingCount==1024) { //TODO hardcode value
+                kickingCount = 0;
+        }
+        if (slidingCount<30) {
+                if ((slidingCount % SLIDING_DIVISOR) == 0) {
+                        int orientation = this->player->getOrientation();
+                        if (!this->player->wasSlidingYet()) {
+                                log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
+                                this->sprite.x = 0;
+                                this->sprite.y = (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
+                                this->player->isAlreadySliding();
+                        } else {
+                                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
+                                        this->setStandingSprite(orientation);
+                                        this->player->stopSliding();
+                                } else {
+                                        this->sprite.x += SPRITE_SIZE;
+                                }
+                        }
                 }
         }
+        kickingCount +=1;
 }
 // Active player marker ----------------------------
 

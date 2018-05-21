@@ -42,6 +42,11 @@ Ball* Pitch::getBall() {
     return this->ball;
 }
 
+Camera* Pitch::getCamera() {
+    return this->camera;
+}
+
+
 Team* Pitch::getTeam(int teamNumber) {
     if (teamNumber == 0) {
         return this->localTeam;

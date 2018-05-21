@@ -11,6 +11,14 @@ Camera::Camera(Coordinates* position, int width, int height, int margen) {
     log("Camera: Camara creada.", LOG_INFO);
 }
 
+std::string Camera::getAsYaml() {
+    std::string message = "";
+    message += "cam:\n";
+    message += " cx: " + std::to_string(this->position->getX()) + "\n";
+    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    return message;
+}
+
 Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     Coordinates* relativePosition = new Coordinates(
         absolutePosition->getX() - position->getX(),

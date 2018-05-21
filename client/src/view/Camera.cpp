@@ -11,6 +11,17 @@ Camera::Camera(Coordinates* position, int width, int height, int margen) {
     log("Camera: Camara creada.", LOG_INFO);
 }
 
+
+
+void Camera::parseYaml(YAML::Node node){
+  if (node["cx"]){
+    this->position->setX(node["cx"].as<int>());
+  }
+  if (node["cy"]){
+    this->position->setY(node["cy"].as<int>());
+  }
+}
+
 Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     Coordinates* relativePosition = new Coordinates(
         absolutePosition->getX() - position->getX(),
@@ -19,32 +30,32 @@ Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     return relativePosition;
 }
 
-void Camera::calculateNewPostion(Coordinates* playerPosition, int playerSpeed) {
+void Camera::calculateNewPostion(Coordinates* centerPosition, int scrollSpeed) {
     // Margen derecho
-    if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
+    if ((centerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
         log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
-        this->position->addX(playerSpeed);
+        this->position->addX(scrollSpeed);
         margin.x = this->position->getX() + margin_size;
     }
 
     // Margen izquierdo
-    if (playerPosition->getX() < margin.x) {
+    if (centerPosition->getX() < margin.x) {
         log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
-        this->position->subtractX(playerSpeed);
+        this->position->subtractX(scrollSpeed);
         margin.x = this->position->getX() + margin_size;
     }
 
     // Margen inferior
-    if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
+    if ((centerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
         log("Jugador activo debajo del margen inferior", LOG_DEBUG);
-        this->position->addY(playerSpeed);
+        this->position->addY(scrollSpeed);
         margin.y = this->position->getY() + margin_size;
     }
 
     // Margen superior
-    if (playerPosition->getY() < margin.y) {
+    if (centerPosition->getY() < margin.y) {
         log("Jugador activo sobre el margen superior", LOG_DEBUG);
-        this->position->subtractY(playerSpeed);
+        this->position->subtractY(scrollSpeed);
         margin.y = this->position->getY() + margin_size;
     }
 

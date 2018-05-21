@@ -21,6 +21,7 @@ std::string Broadcaster::getMessage() {
     std::string message = "";
     std::list<Player*> players = this->pitch->getPlayersInsideCamera();
     Ball* ball = this->pitch->getBall();
+    Camera* camera = this->pitch->getCamera();
     if (ball == NULL) {
         log("Broadcaster: La pelota es null!", LOG_ERROR);
         return "";
@@ -29,6 +30,7 @@ std::string Broadcaster::getMessage() {
         message += player->getAsYaml();
     }
     message += ball->getAsYaml();
+    message += camera->getAsYaml();
     return message;
 }
 
