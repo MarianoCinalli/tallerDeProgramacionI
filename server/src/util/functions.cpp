@@ -75,12 +75,14 @@ void* broadcast_to_clients(void* argument) {
         initializer->getConnectionManager()
     );
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    broadcaster->broadcastGameBegins();
+    // TODO: Descomentar cuando este listo el login!.
+    //broadcaster->broadcastGameBegins();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
         broadcaster->broadcast();
         usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
     }
-    broadcaster->broadcastGameEnded();
+    // TODO: Descomentar cuando este listo el login!.
+    //broadcaster->broadcastGameEnded();
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
     return NULL;
