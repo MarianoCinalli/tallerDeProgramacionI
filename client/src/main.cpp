@@ -310,6 +310,8 @@ int main(int argc, char* argv[]) {
     // Login - determinar IP, Port, Usuario y Clave
     SDL_Renderer* renderer = initializer->getRenderer();
 
+    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir
+    // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
     std::string servidor;
     std::string puerto;
     std::string usuario;
@@ -341,9 +343,45 @@ int main(int argc, char* argv[]) {
 
     }
 
-    // Iniciar sesion. Elegir equipo y casaca. Usar el connectionManager para recibir
-    // y mandar estos mensajes al server, y initializer tiene la pantalla de sdl para dibujar.
-    // Esperar a que el server mande el mensaje de que todos los jugadores estan listos?
+    // HACK! Eliminar cuando nico y claudio terminen el login y la seleccion de equipo.
+    // Por las dudas lo dejo comentado, por si a alguien le sirve.
+    /*
+    connectionManager->sendMessage("Mensaje de logeo");
+    sleep(2);
+    connectionManager->sendMessage("Mensaje de seleccion de equipo");
+    */
+
+    // TODO: Aca mostrar en pantalla que se esta esperando que se
+    // conecten todos para iniciar el partido.
+
+    // Espera a que el server mande el mensaje de que todos los jugadores estan listos.
+    // Lo dejo comentado porque hasta que este hecho el login y seleccion de equipo,
+    // esto se bloquea porque el server esperaba esos dos mensajes, y nunca se enviaron...
+    /*
+    std::string beginMessage;
+    int readBytes;
+    bool gameBegins = false;
+    while (!gameBegins) {
+        log("Main: Esperando el mensaje de comienzo del partido...", LOG_INFO);
+        readBytes = connectionManager->getMessage(beginMessage);
+        if (readBytes < 0) {
+            log("Main: Error esperando el mensaje de comienzo del partido. Saliendo...", LOG_ERROR);
+            endProgram(1, connectionManager);
+        } else if (readBytes == 0) {
+            log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
+            endProgram(1, connectionManager);
+        } else {
+            if (beginMessage == "gameBegins:") {
+                log("Main: Se recibio el mensaje de comienzo del partido.", LOG_INFO);
+                gameBegins = true;
+            } else {
+                log("Main: Esperando el mensaje de comienzo de partido, se recibio otra cosa: ", beginMessage, LOG_INFO);
+                gameBegins = false;
+            }
+        }
+    }
+    */
+
     // Abajo se Lanza thread que recibe mensajes de estado de juego.
     ThreadSpawner* threadSpawner = new ThreadSpawner();
     threadSpawner->spawn(
