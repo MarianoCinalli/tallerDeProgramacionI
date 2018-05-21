@@ -47,7 +47,7 @@ void imprimir_ayuda() {
 }
 
 void imprimir_version() {
-    cout << "Version = tp1\n";
+    cout << "Version = tp2\n";
 }
 
 int chequearOpciones(int argc, char* argv[]) {
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
         delete(initializer);
         exit(1);
     }
-    ThreadSpawner* threads = new ThreadSpawner();    
+    ThreadSpawner* threads = new ThreadSpawner();
     log("Main: Juego inicializado correctamente.", LOG_INFO);
 
     // Falta la reconeccion de jugadores.

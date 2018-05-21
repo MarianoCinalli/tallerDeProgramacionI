@@ -51,7 +51,7 @@ void imprimir_ayuda() {
 }
 
 void imprimir_version() {
-    cout << "Version = tp1\n";
+    cout << "Version = tp2\n";
 }
 
 int chequearOpciones(int argc, char* argv[]) {
