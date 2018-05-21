@@ -158,15 +158,30 @@ void PlayerSpriteManager::setRunningSprite(Velocity* velocity, bool runningFast)
     if (runningFast) {
         cteVelocidad = 17;
     }
-    if (this->isRunningUp(xComponent, yComponent)) {
-        this->setRunningUpSprite(cteVelocidad);
-    } else if (this->isRunningDown(xComponent, yComponent)) {
-        this->setRunningDownSprite(cteVelocidad);
-    } else if (this->isRunningLeft(xComponent, yComponent)) {
-        this->setRunningLeftSprite(cteVelocidad);
-    } else if (this->isRunningRight(xComponent, yComponent)) {
-        this->setRunningRightSprite(cteVelocidad);
+    int orientation = this->player->getOrientation();
+    switch (orientation) {
+        case PLAYER_ORIENTATION_UP:
+            this->setRunningUpSprite(cteVelocidad);
+            break;
+        case PLAYER_ORIENTATION_RIGHT:
+            this->setRunningRightSprite(cteVelocidad);
+            break;
+        case PLAYER_ORIENTATION_DOWN:
+            this->setRunningDownSprite(cteVelocidad);
+            break;
+        case PLAYER_ORIENTATION_LEFT:
+            this->setRunningLeftSprite(cteVelocidad);
+            break;
     }
+    // if (this->isRunningUp(xComponent, yComponent)) {
+    //     this->setRunningUpSprite(cteVelocidad);
+    // } else if (this->isRunningDown(xComponent, yComponent)) {
+    //     this->setRunningDownSprite(cteVelocidad);
+    // } else if (this->isRunningLeft(xComponent, yComponent)) {
+    //     this->setRunningLeftSprite(cteVelocidad);
+    // } else if (this->isRunningRight(xComponent, yComponent)) {
+    //     this->setRunningRightSprite(cteVelocidad);
+    // }
 }
 
 bool PlayerSpriteManager::isRunningUp(int xComponent, int yComponent) {

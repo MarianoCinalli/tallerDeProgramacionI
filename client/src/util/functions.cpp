@@ -98,7 +98,7 @@ void* drawer(void* argument) {
     PitchView* pitchView = initializer->getPitchView();
     while (!quit) {
         pitchView->render(renderer);
-        usleep(1000000/40); // Frame rate.
+        usleep(1000000/DRAW_FRAME_RATE); // Frame rate.
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;

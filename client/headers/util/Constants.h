@@ -65,4 +65,13 @@ const int INTERCEPT_VALUE = 40;
 const int STEAL_VALUE = 60;
 const int TIME_BALL_NO_INTERCEPT = 4;
 
+//render
+const int DRAW_FRAME_RATE = 50;
+const int STANDING_DIVISOR = 4;
+const int RUNNING_DIVISOR = 4;
+const int SLIDING_DIVISOR = 4;
+const int KICKING_DIVISOR = 4;
+
+
+
 #endif // CONSTANTS_H_
