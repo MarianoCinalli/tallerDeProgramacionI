@@ -61,6 +61,9 @@ void Player::parseYaml(YAML::Node node){
   if (node["st"]){
     this->still = node["st"].as<int>();
   }
+  if (node["or"]){
+    this->orientation = node["or"].as<int>();
+  }
   if (node["cx"]){
     this->position->setX(node["cx"].as<int>());
   }

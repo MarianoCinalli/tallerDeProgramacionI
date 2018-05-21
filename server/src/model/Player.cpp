@@ -140,7 +140,7 @@ void Player::updateSliding(){
 void Player::updatePosition() {
     float speed = 1;
     if (this->runningFast) {
-      speed = 1.8; //TODO hardcode
+      speed = FAST_SPEED_COEF; //TODO hardcode
     }
     int maxSpeed = this->maxVelocity;
     if (this->canMove) {
@@ -346,6 +346,7 @@ std::string Player::getAsYaml() {
     message += " ki: " + std::to_string(this->kicking) + "\n";
     message += " sl: " + std::to_string(this->sliding) + "\n";
     message += " ru: " + std::to_string(this->runningFast) + "\n";
+    message += " or: " + std::to_string(this->orientation) + "\n";
     message += " st: " + std::to_string(isStill()) + "\n" ;
     return message;
 }
