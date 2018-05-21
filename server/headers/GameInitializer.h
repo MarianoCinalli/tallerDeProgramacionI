@@ -11,9 +11,6 @@
 #include "model/Pitch.h"
 #include "model/Ball.h"
 #include "model/Team.h"
-#include "view/PlayerSpriteManager.h" // Esto se deberia borrar.
-#include "view/Texture.h" // Esto se deberia borrar.
-#include "view/PitchView.h"
 #include "view/Camera.h"
 #include "controller/GameController.h"
 #include "controller/GameControllerProxy.h"
