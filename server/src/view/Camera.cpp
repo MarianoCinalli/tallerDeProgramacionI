@@ -27,33 +27,38 @@ Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     return relativePosition;
 }
 
-void Camera::calculateNewPostion(Coordinates* playerPosition, int playerSpeed) {
+void Camera::calculateNewPostion(Coordinates* objPosition) {
     // Margen derecho
-    if ((playerPosition->getX() + SPRITE_SIZE) > (margin.x + margin.w)) {
-        log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
-        this->position->addX(playerSpeed);
-        margin.x = this->position->getX() + margin_size;
+    int x = objPosition->getX();
+    int y = objPosition->getY();
+    log(std::to_string(x)+std::to_string(y),LOG_DEBUG);
+    int difference;
+    difference = x + SPRITE_SIZE - (margin.x + margin.w);
+    if (difference> 0){
+      log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
+      this->position->addX(difference);
+      margin.x = this->position->getX() + margin_size;
     }
-
     // Margen izquierdo
-    if (playerPosition->getX() < margin.x) {
-        log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
-        this->position->subtractX(playerSpeed);
-        margin.x = this->position->getX() + margin_size;
+    difference = x - margin.x;
+    if (difference< 0){
+      log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
+      this->position->addX(difference);
+      margin.x = this->position->getX() + margin_size;
     }
-
     // Margen inferior
-    if ((playerPosition->getY() + SPRITE_SIZE) > (margin.y + margin.h)) {
-        log("Jugador activo debajo del margen inferior", LOG_DEBUG);
-        this->position->addY(playerSpeed);
-        margin.y = this->position->getY() + margin_size;
+    difference = (y + SPRITE_SIZE) - (margin.y + margin.h);
+    if (difference> 0){
+      log("Jugador activo debajo del margen inferior", LOG_DEBUG);
+      this->position->addY(difference);
+      margin.y = this->position->getY() + margin_size;
     }
-
     // Margen superior
-    if (playerPosition->getY() < margin.y) {
-        log("Jugador activo sobre el margen superior", LOG_DEBUG);
-        this->position->subtractY(playerSpeed);
-        margin.y = this->position->getY() + margin_size;
+    difference = y- margin.y;
+    if (difference< 0){
+      log("Jugador activo sobre el margen superior", LOG_DEBUG);
+      this->position->addY(difference);
+      margin.y = this->position->getY() + margin_size;
     }
 
     //Keep the camera in bounds
