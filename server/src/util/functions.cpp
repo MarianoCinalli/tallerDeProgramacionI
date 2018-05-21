@@ -102,7 +102,7 @@ void* broadcast_to_clients(void* argument) {
     broadcaster->broadcastGameBegins();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
         broadcaster->broadcast();
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
     }
     // Termino el juego
     broadcaster->broadcastGameEnded();
@@ -119,9 +119,9 @@ void* game_updater(void* argument) {
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
-    while (gameControllerProxy->shouldGameEnd() && !quit) {
+    while (!gameControllerProxy->shouldGameEnd() && !quit) {
         gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST * 2);
+        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;

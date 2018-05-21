@@ -9,7 +9,7 @@ void SlidingAction::execute(Player* player) {
     player->startsSliding();
 }
 
-void SlidingAction::execute(Pitch* pitch) {
+void SlidingAction::execute(Pitch* pitch, int user) {
     log("SlidingAction: Tecla deslizar detectada.", LOG_DEBUG);
     pitch->checkIntercepts();
 }

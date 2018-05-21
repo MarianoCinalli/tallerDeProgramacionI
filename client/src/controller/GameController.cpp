@@ -34,6 +34,10 @@ Ball* GameController::getBall(){
   return this->ball;
 }
 
+Camera* GameController::getCamera() {
+  return this->pitch->camera;
+}
+
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.

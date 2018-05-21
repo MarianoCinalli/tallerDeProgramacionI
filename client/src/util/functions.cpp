@@ -51,7 +51,8 @@ void* read_server(void* argument) {
             } else {
                 try {
                     Player* player;
-                    Ball* ball;
+                    Ball* ball = initializer->getGameController()->getBall();
+                    Camera* camera = initializer->getGameController()->getCamera();;
                     YAML::Node node = YAML::Load(readMessage);
                     for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                         YAML::Node key = it->first;
@@ -60,8 +61,10 @@ void* read_server(void* argument) {
                         if (key.Type() == YAML::NodeType::Scalar) {
                             if (key.as<std::string>() == "ba") {
                                 log("read_server: pelota", key.as<std::string>(), LOG_INFO);
-                                ball = initializer->getGameController()->getBall();
                                 ball->parseYaml(value);
+                            } else  if((key.as<std::string>() == "cam")){
+                                log("read_server: camara",key.as<std::string>(), LOG_INFO);
+                                camera->parseYaml(value);
                             } else {
                                 log("read_server: jugador", key.as<std::string>(), LOG_INFO);
                                 player =  initializer->getGameController()->getPlayer(key.as<int>());
@@ -98,7 +101,7 @@ void* drawer(void* argument) {
     PitchView* pitchView = initializer->getPitchView();
     while (!quit) {
         pitchView->render(renderer);
-        usleep(1000000/30); // Frame rate.
+        usleep(1000000/DRAW_FRAME_RATE); // Frame rate.
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;

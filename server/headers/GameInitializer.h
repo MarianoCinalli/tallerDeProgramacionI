@@ -1,5 +1,3 @@
-//#include <SDL2/SDL.h> // Esto se deberia borrar.
-//#include <SDL2/SDL_image.h> // Esto se deberia borrar.
 #include <string>
 #include "util/Constants.h"
 #include "util/logger.h"
@@ -11,9 +9,6 @@
 #include "model/Pitch.h"
 #include "model/Ball.h"
 #include "model/Team.h"
-//#include "view/PlayerSpriteManager.h" // Esto se deberia borrar.
-//#include "view/Texture.h" // Esto se deberia borrar.
-#include "view/PitchView.h"
 #include "view/Camera.h"
 #include "controller/GameController.h"
 #include "controller/GameControllerProxy.h"

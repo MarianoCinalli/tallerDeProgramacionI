@@ -12,7 +12,7 @@ class SlidingAction : public Action {
         SlidingAction();
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
-				virtual void execute(Pitch* pitch);
+				virtual void execute(Pitch* pitch, int user);
 				virtual bool valid(Pitch* pitch);
         ~SlidingAction();
 };

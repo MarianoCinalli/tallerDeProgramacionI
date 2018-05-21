@@ -16,8 +16,9 @@ class Pitch {
         Team* localTeam;
         Team* awayTeam;
 
-        Camera* camera;
+
     public:
+        Camera* camera;
         Pitch(Camera* camera);
         Player* activePlayer;
         Ball* ball;

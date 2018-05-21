@@ -19,7 +19,8 @@ void GameController::execute(Action* action, int user) {
     log("user: ", user, LOG_INFO);
     if (action->valid(player)) {
         action->execute(player);
-    } else if (action->valid(this->pitch)) {
+    }
+    if (action->valid(this->pitch)) {
         action->execute(this->pitch, user);
     }
 }
@@ -60,7 +61,7 @@ void GameController::updateBall() {
 
     if (this->ball->isDominated() && this->ball->getPlayer()->isKicking()) {
         log("La pelota fue pateada", LOG_INFO);
-        this->ball->isPassed(this->ball->getPlayer()->getOrientation(), 15); //TODO valor de pase?
+        this->ball->isPassed(this->ball->getPlayer()->getOrientation(), PASS_SPEED); //TODO valor de pase?
     }
     this->pitch->changeBallOwnership();
     this->ball->updatePosition();
@@ -71,8 +72,9 @@ void GameController::updateBall() {
 // En este punto las coordenadas de el jugador son validas.
 void GameController::updateCameraPosition(Camera* camera) {
     Coordinates* position = this->ball->getPosition();
-    int speed = this->ball->getCurrentSpeed();
-    camera->calculateNewPostion(position, speed);
+    // Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
+    // int speed = this->pitch->getActivePlayer(0)->getCurrentSpeed();
+    camera->calculateNewPostion(position);
 }
 
 // Aca deberia haber una nocion del tiempo.

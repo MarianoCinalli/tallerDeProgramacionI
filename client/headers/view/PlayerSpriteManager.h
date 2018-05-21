@@ -5,6 +5,7 @@
 #include "view/Texture.h"
 #include "model/Player.h"
 #include <SDL2/SDL.h>
+#include <functional>
 
 #ifndef PLAYERSPRITEMANAGER_H
 #define PLAYERSPRITEMANAGER_H
@@ -25,6 +26,12 @@ class PlayerSpriteManager {
         ~PlayerSpriteManager();
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
+
+        //contadores
+        int standingCount;
+        int kickingCount;
+        int slidingCount;
+        int runningCount;
 
         // Para los sprites de jugador parado.
         void setStandingSprite(int orientation);

@@ -30,6 +30,7 @@ class Pitch {
         void setBall(Ball* ball);
         std::list<Player*> getPlayersInsideCamera();
         Ball* getBall();
+        Camera* getCamera();
         void checkIntercepts();
         void changeBallOwnership();
         Team* getTeam(int user);

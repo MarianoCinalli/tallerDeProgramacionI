@@ -4,6 +4,7 @@
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "view/PlayerSpriteManager.h"
+#include <yaml-cpp/yaml.h>
 
 
 #ifndef CAMERA_H
@@ -20,6 +21,8 @@ class Camera {
         SDL_Rect margin;
     public:
         Camera(Coordinates* position, int width, int height, int margin);
+        // parsea YAML
+        void parseYaml(YAML::Node node);
         // transforma las coordenadas para que queden relativas a la camara.
         Coordinates* getRelativeCoordinates(Coordinates* coordinates);
         // calcular la nueva posicion de la camara basado en el jugador activo
