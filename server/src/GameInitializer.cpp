@@ -11,6 +11,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeGameController();
     this->initializeGameControllerProxy();
     this->initializeConnectionManager(configuration);
+    this->initializeUsersManager(configuration);
     this->configuration = configuration;
     log("GameInitializer: Juego inicializado...", LOG_INFO);
 }
@@ -36,6 +37,10 @@ GameControllerProxy* GameInitializer::getGameControllerProxy() {
     return this->gameControllerProxy;
 }
 
+UsersManager* GameInitializer::getUsersManager() {
+    return this->usersManager;
+}
+
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
     log("GameInitializer: Liberando gameControllerProxy.", LOG_INFO);
@@ -45,6 +50,8 @@ GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando ConnectionManager.", LOG_INFO);
     delete(this->connectionManager);
     log("GameInitializer: Liberando vista de la cancha.", LOG_INFO);
+    delete(this->usersManager);
+    log("GameInitializer: Liberando usersManager.", LOG_INFO);
 }
 
 // Metodos privados. ---------------------------------------------
@@ -125,4 +132,9 @@ void GameInitializer::initializeConnectionManager(Conf* configuration) {
 void GameInitializer::initializeGameControllerProxy() {
     log("GameInitializer: Creando GameControllerProxy...", LOG_INFO);
     this->gameControllerProxy = new GameControllerProxy(this->gameController);
+}
+
+void GameInitializer::initializeUsersManager(Conf* configuration) {
+    log("GameInitializer: Creando UsersManager...", LOG_INFO);
+    this->usersManager = new UsersManager(configuration->getUsuarios());
 }

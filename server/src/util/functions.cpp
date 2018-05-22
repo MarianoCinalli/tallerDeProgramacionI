@@ -55,7 +55,7 @@ void* read_client(void* argument) {
                 std::string value = getMessageValue(message);
                 if (key == "get" && value == "max") {
                   // Mostrarle cuantos jugadores maximos tiene la partida
-                  connectionManager->sendMessage(socket,"max:"+std::to_string(user->getMaxClients()));
+                  connectionManager->sendMessage(socket,"max:"+std::to_string(connectionManager->getMaxClients()));
                 }
                 // y mostrar cuantos jugadores hay en cada equipo
                 if (key == "get" && value == "equipo1") {

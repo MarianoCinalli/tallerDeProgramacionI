@@ -10,7 +10,7 @@ User::User(GameInitializer* initializer, int userSocket) {
     this->teamNumber = 0;
     this->connectionManager = initializer->getConnectionManager();
     this->userSocket = userSocket;
-    this->configuration = initializer->getConfiguration();
+    this->manager = initializer->getUsersManager();
 }
 
 bool User::hasLogedIn() {
@@ -24,22 +24,14 @@ void User::processLogInMessage(std::string message) {
     // Lo valida contra la lista.
     // Le manda el resultado al cliente.
     log("VALIDANDO USUARIO ", LOG_INFO);
-    std::string usuario = this->getMessageAction(message);
-    std::string clave = this->getMessageValue(message);
-    this->hasLoged = false;
-    log("VALIDANDO USUARIO: ",usuario, LOG_INFO);
-    log("VALIDANDO CLAVE: ",clave, LOG_INFO);
-    map<string, string>::iterator it;
-    for (it = configuration->getUsuarios().begin(); it != configuration->getUsuarios().end(); it++) {
-
-      //BUG: No recorre todos los usuarios
-      log(it->first, LOG_INFO);
-      log(it->second, LOG_INFO);
-
-      if ( it->first == usuario && it->second == clave ){
-        this->hasLoged = true;
-        log("USUARIO LOGGEADO ", LOG_INFO);
-      }
+    this->hasLoged = this->manager->logIn(
+        this->getMessageAction(message),
+        this->getMessageValue(message)
+    );
+    if (this->hasLoged) {
+        log("User: Usuario logeado.", LOG_INFO);
+    } else {
+        log("User: No se pudo logear el usuario.", LOG_INFO);
     }
     log("FIN VALIDANDO USUARIO ", LOG_INFO);
 }
@@ -96,7 +88,7 @@ Action* User::getAsAction(std::string message) {
     } else if (messageAction == "Kicking") {
         action = new KickingAction();
     } else if (messageAction == "ChangeActivePlayer") {
-        action = new ChangeActivePlayer();getMaxClients();
+        action = new ChangeActivePlayer();
     } else if (messageAction == "Stop") {
         action = new Stop();
     } else if (messageAction == "Accelerate") {
@@ -117,15 +109,11 @@ std::string User::getMessageAction(std::string message) {
 }
 
 std::string User::getMessageValue(std::string message) {
-    return message.substr(message.find(":")+1, message.length());   //iba un +1 LPM
+    return message.substr(message.find(":")+1, message.length());
 }
 
 int User::getTeam() {
     return this->teamNumber;
-}
-
-int User::getMaxClients(){
-    return this->configuration->getMaxClients();
 }
 
 User::~User() {

@@ -27,6 +27,7 @@ std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
 std::mutex update_model_mutex;
 std::mutex quit_mutex;
+std::mutex users_mutex;
 pthread_barrier_t players_ready_barrier;
 GameInitializer* initializer;
 ConnectionManager* connectionManager;

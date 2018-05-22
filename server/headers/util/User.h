@@ -13,6 +13,7 @@
 #include "util/logger.h"
 #include "util/Broadcaster.h"
 #include "util/ConnectionManager.h"
+#include "util/UsersManager.h"
 
 #ifndef USER_H
 #define USER_H
@@ -24,7 +25,7 @@ class User {
         ConnectionManager* connectionManager;
         int userSocket;
         int teamNumber;
-        Conf* configuration;
+        UsersManager* manager;
     public:
         User(GameInitializer* initializer, int socket);
         bool hasLogedIn();
@@ -33,7 +34,6 @@ class User {
         void processTeamAndFormationMessage(std::string message);
         Action* getAsAction(std::string message);
         int getTeam();
-        int getMaxClients();
         ~User();
     private:
         std::string getMessageAction(std::string message);
