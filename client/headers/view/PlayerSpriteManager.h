@@ -41,8 +41,8 @@ class PlayerSpriteManager {
         void setStandingSpriteViewLeft();
 
         // Para los sprites del jugador corriendo.
-        void setSprite(Velocity* velocity, bool sliding, bool kicking, bool runningFast);
-        void setRunningSprite(Velocity* velocity, bool runningFast);
+        void setSprite(bool sliding, bool kicking, bool runningFast);
+        void setRunningSprite(bool runningFast);
         bool isRunningUp(int xComponent, int yComponent);
         void setRunningUpSprite(int cteVelocidad);
         bool isRunningDown(int xComponent, int yComponent);

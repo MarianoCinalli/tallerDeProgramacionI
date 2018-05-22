@@ -128,6 +128,9 @@ void Player::stop() {
     log("Jugador: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_DEBUG);
 }
 
+bool Player::isStill(){
+  return this->still;
+}
 
 void Player::updatePosition() {
     float speed = 1;

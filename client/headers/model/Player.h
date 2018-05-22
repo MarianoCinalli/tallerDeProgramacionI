@@ -68,6 +68,7 @@ class Player {
         void startsKicking();
         void stopKicking();
         void isAlreadyKicking();
+        bool isStill();
 
         ~Player();
 };

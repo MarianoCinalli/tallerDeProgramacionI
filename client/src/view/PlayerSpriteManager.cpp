@@ -29,15 +29,15 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
 // Tambien arma otro cuadrado que representa el lugar de la pantalla (renderer)
 // en el que se dibuja el sprite.
 void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
-        Velocity* velocity = this->player->getVelocity();
+        bool still = this->player->isStill();
         bool sliding = this->player->isSliding();
         bool kicking = this->player->isKicking();
         bool runningFast = this->player->isRunningFast();
-        if (velocity->isZero() && (!sliding) && (!kicking)) {
+        if (still && (!sliding) && (!kicking)) {
                 // Esta quieto, se dibuja parado.
                 this->setStandingSprite(this->player->getOrientation());
         } else {
-                this->setSprite(velocity, sliding, kicking, runningFast);
+                this->setSprite(sliding, kicking, runningFast);
         }
         SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
         SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
@@ -60,14 +60,14 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         }
 }
 
-void PlayerSpriteManager::setSprite(Velocity* velocity, bool sliding, bool kicking, bool runningFast) {
+void PlayerSpriteManager::setSprite(bool sliding, bool kicking, bool runningFast) {
         if (sliding || kicking) {
                 if (sliding)
                         this->setSlidingSprite();
                 else
                         this->setKickingSprite();
         } else {
-                setRunningSprite(velocity, runningFast);
+                setRunningSprite(runningFast);
         }
 }
 
@@ -161,7 +161,7 @@ void PlayerSpriteManager::setStandingSpriteViewLeft() {
 // Devuelve el cuadrado que encierra al sprite actual.
 // Cada sprite tiene SPRITE_SIZE x SPRITE_SIZE.
 // Cuatro sprites por secuencia de corrida.
-void PlayerSpriteManager::setRunningSprite(Velocity* velocity, bool runningFast) {
+void PlayerSpriteManager::setRunningSprite(bool runningFast) {
         if (runningCount==1024) { //TODO hardcode value
                 runningCount = 0;
         }
