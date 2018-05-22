@@ -119,6 +119,10 @@ int User::getTeam() {
     return this->teamNumber;
 }
 
+std::string User::getName(){
+  return this->user;
+}
+
 void User::logOff() {
     if (this->hasLogedIn()) {
         log("User: Deslogeando: ", this->user, LOG_INFO);

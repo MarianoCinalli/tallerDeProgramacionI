@@ -10,7 +10,11 @@ GameControllerProxy::GameControllerProxy(GameController* gameController) {
     this->hasStarted = false;
 }
 
-void GameControllerProxy::execute(Action* action, int team) {
+void GameControllerProxy::addUser(std::string user, int teamNum){
+  this->gameController->addUser(user, teamNum);
+}
+
+void GameControllerProxy::execute(Action* action, std::string team) {
     update_model_mutex.lock();
     this->gameController->execute(action, team);
     update_model_mutex.unlock();

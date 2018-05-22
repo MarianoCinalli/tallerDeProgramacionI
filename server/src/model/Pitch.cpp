@@ -8,8 +8,8 @@ Pitch::Pitch(Camera* camera) {
     this->localTeam = NULL;
     this->awayTeam = NULL;
     this->camera = camera;
-    teams[0] = this->localTeam; //TODO definir que jugadores tienen que equipo. por ejempl,
-    teams[1] = this->awayTeam;
+    // teams[0] = this->localTeam; //TODO definir que jugadores tienen que equipo. por ejempl,
+    // teams[1] = this->awayTeam;
 }
 
 void Pitch::setTeam(Team* team, int teamNumber) {
@@ -20,7 +20,7 @@ void Pitch::setTeam(Team* team, int teamNumber) {
     }
 }
 
-void Pitch::setUserTeam(int user, int team) {
+void Pitch::setUserTeam(std::string user, int team) {
     if (team == 0) {
         if (this->localTeam != NULL) {
             teams[user] = this->localTeam;
@@ -68,17 +68,17 @@ Coordinates* getCenter() {
     return new Coordinates(LEVEL_WIDTH / 2, SCREEN_HEIGHT / 2);
 }
 
-Player* Pitch::getActivePlayer(int user) {
+Player* Pitch::getActivePlayer(std::string user) {
     return this->activePlayers[user];
 }
 
-void Pitch::changeActivePlayer(int user) {
+void Pitch::changeActivePlayer(std::string user) {
     log("cambiando jugador activo", LOG_INFO);
     Team* team = teams[user];
     // Coordinates* center = this->activePlayers[user]->getPosition();
     Coordinates* center = this->ball->getPosition();
 
-    // Solo puede seleccionar de los jugadores dentro de los margenes
+    // Solo puede seleccionar de los jugadores dentro de los margenes,
     std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 0);
     if (!playersList.empty()) {
         int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO

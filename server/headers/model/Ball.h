@@ -28,7 +28,7 @@ class Ball {
         Player* player;
 
     public:
-        Ball(Coordinates* position, Player* player);
+        Ball(Coordinates* position);
 
         Coordinates* getPosition();
         Velocity* getVelocity();

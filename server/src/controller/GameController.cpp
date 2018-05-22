@@ -9,12 +9,15 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
+void GameController::addUser(std::string user, int teamNum){
+  this->pitch->setUserTeam(user,teamNum);
+}
 
-Player* GameController::getActivePlayer(int user) {
+Player* GameController::getActivePlayer(std::string user) {
     return this->pitch->getActivePlayer(user);
 }
 
-void GameController::execute(Action* action, int user) {
+void GameController::execute(Action* action, std::string user) {
     Player* player = this->getActivePlayer(user);
     log("user: ", user, LOG_INFO);
     if (action->valid(player)) {

@@ -9,7 +9,7 @@
 #include "controller/actions/RunningFastAction.h"
 #include "controller/actions/StopRunningFastAction.h"
 
-#include "util/Constants.h"
+// #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/Broadcaster.h"
 #include "util/ConnectionManager.h"
@@ -36,6 +36,7 @@ class User {
         Action* getAsAction(std::string message);
         void logOff();
         int getTeam();
+        std::string getName();
         ~User();
     private:
         std::string getMessageAction(std::string message);

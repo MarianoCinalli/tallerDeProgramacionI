@@ -8,7 +8,7 @@
 class ChangeActivePlayer : public Action {
     public:
         ChangeActivePlayer();
-        virtual void execute(Pitch* pitch, int user);
+        virtual void execute(Pitch* pitch, std::string user);
         virtual bool valid(Pitch* pitch);
         ~ChangeActivePlayer();
 };

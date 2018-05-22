@@ -66,14 +66,16 @@ void* read_client(void* argument) {
                 }
                 if (key == "use") {
                   user->processTeamAndFormationMessage(message);
+                  gameControllerProxy->addUser(user->getName(), user->getTeam());
                 }
                 //connectionManager->sendMessage(socket,"Argentina:Brasil");
 
             } else {
                 // El usuario se inicializo. Vienen acciones sobre los jugadores.
+
                 Action* action = user->getAsAction(message);
                 if (action != NULL) {
-                    gameControllerProxy->execute(action, user->getTeam());
+                    gameControllerProxy->execute(action, user->getName());
                     delete(action);
                 }
             }

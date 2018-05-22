@@ -3,7 +3,7 @@
 ChangeActivePlayer::ChangeActivePlayer() {
 }
 
-void ChangeActivePlayer::execute(Pitch* pitch, int user) {
+void ChangeActivePlayer::execute(Pitch* pitch, std::string user) {
     log("ChangeActivePlayer: Cambiando el jugador activo.", LOG_DEBUG);
     pitch->changeActivePlayer(user);
 }

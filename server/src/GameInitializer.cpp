@@ -5,7 +5,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializePitch(configuration);
     this->initializeTeam(configuration, 0);
     this->initializeTeam(configuration, 1);
-    this->pitch->setUserTeam(0,0);  //inicializacion de usuarios
+    // this->pitch->setUserTeam(0,0);  //inicializacion de usuarios
     // this->pitch->setUserTeam(1,1);
     this->initializeBall();
     this->initializeGameController();
@@ -77,9 +77,9 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
 
 void GameInitializer::initializeBall() {
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
-    Player* player = this->pitch->getActivePlayer(0); //TODO user 0 es el dueño del balon al ppio
+    // Player* player = this->pitch->getActivePlayer(0); //TODO user 0 es el dueño del balon al ppio
     Coordinates* coords = new Coordinates(800, 600);
-    Ball* ball = new Ball(coords, player);  //TODO: pasarle el jugador del medio
+    Ball* ball = new Ball(coords);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }

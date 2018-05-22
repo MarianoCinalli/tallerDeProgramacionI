@@ -1,6 +1,6 @@
 #include "model/Ball.h"
 
-Ball::Ball(Coordinates* position, Player* player) {
+Ball::Ball(Coordinates* position) {
     log("Pelota: Creando pelota...", LOG_INFO);
     this->position = position;
     this->passPower = 0;  //CTE DE 1 a 3
@@ -15,7 +15,7 @@ Ball::Ball(Coordinates* position, Player* player) {
     this->timePassing = 0; // corrector para frames TODO
     this->startingPassPosition = new Coordinates(800, 500); // Esto esta perdiendo memoria?
     this->interceptable = true;
-    this->player = player;
+    // this->player = player;
     log("Pelota: Pelota creada...", LOG_INFO);
 }
 
@@ -174,7 +174,7 @@ void Ball::stopRolling() {
 /*
 Convierte a YAML las propiedades necesarias para dibujar.
 Esta asi, para ahorrar caracteres.
-ba: 
+ba:
  cx: this->velocity->getComponentX()
  cy: this->velocity->getComponentY()
 */

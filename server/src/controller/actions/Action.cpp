@@ -8,7 +8,7 @@ void Action::execute(Player* player) {
     log("Llamando al execute de Action!", LOG_ERROR);
 }
 
-void Action::execute(Pitch* pitch, int user){
+void Action::execute(Pitch* pitch, std::string user){
   log("Llamando al execute de Action!", LOG_ERROR);
 }
 

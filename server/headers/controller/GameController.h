@@ -31,7 +31,7 @@ class GameController {
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
-        void execute(Action* action, int user);
+        void execute(Action* action, std::string user);
         // Para actualizar los modelos.
         void updatePlayers();
         void update(Camera* camera);
@@ -40,9 +40,10 @@ class GameController {
         void updateCameraPosition(Camera* camera);
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
+        void addUser(std::string user, int teamNum);
         bool shouldGameEnd();
         void setEnd();
-        Player* getActivePlayer(int user);
+        Player* getActivePlayer(std::string user);
         ~GameController();
 };
 #endif // GAMECONTROLLER_H
