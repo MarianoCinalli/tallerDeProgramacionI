@@ -26,6 +26,7 @@ class User {
         int userSocket;
         int teamNumber;
         UsersManager* manager;
+        std::string user;
     public:
         User(GameInitializer* initializer, int socket);
         bool hasLogedIn();
@@ -33,6 +34,7 @@ class User {
         bool hasPickedTeamAndFormation();
         void processTeamAndFormationMessage(std::string message);
         Action* getAsAction(std::string message);
+        void logOff();
         int getTeam();
         ~User();
     private:

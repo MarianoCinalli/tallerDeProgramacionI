@@ -23,13 +23,16 @@ void User::processLogInMessage(std::string message) {
     // de clase, para agregarlo a los mensajes?
     // Lo valida contra la lista.
     // Le manda el resultado al cliente.
+    std::string parsedUser = this->getMessageAction(message);
+    std::string parsedPassword = this->getMessageValue(message);
     log("VALIDANDO USUARIO ", LOG_INFO);
     this->hasLoged = this->manager->logIn(
-        this->getMessageAction(message),
-        this->getMessageValue(message)
+        parsedUser,
+        parsedPassword
     );
     if (this->hasLoged) {
-        log("User: Usuario logeado.", LOG_INFO);
+        log("User: Usuario logeado: ", parsedUser, LOG_INFO);
+        this->user = parsedUser;
     } else {
         log("User: No se pudo logear el usuario.", LOG_INFO);
     }
@@ -114,6 +117,15 @@ std::string User::getMessageValue(std::string message) {
 
 int User::getTeam() {
     return this->teamNumber;
+}
+
+void User::logOff() {
+    if (this->hasLogedIn()) {
+        log("User: Deslogeando: ", this->user, LOG_INFO);
+        this->manager->logOff(this->user);
+    } else {
+        log("User: No se logeo, no lo deslogeo.", LOG_INFO);
+    }
 }
 
 User::~User() {
