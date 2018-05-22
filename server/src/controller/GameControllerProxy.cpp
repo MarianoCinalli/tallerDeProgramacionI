@@ -5,6 +5,9 @@ extern std::mutex update_model_mutex;
 GameControllerProxy::GameControllerProxy(GameController* gameController) {
     log("GameControllerProxy: Creando gameControllerProxy...", LOG_INFO);
     this->gameController = gameController;
+    // ESTO ES PROVISORIO!
+    // Cuando manejemos tiempo borrar.
+    this->hasStarted = false;
 }
 
 void GameControllerProxy::execute(Action* action, int team) {
@@ -26,6 +29,18 @@ bool GameControllerProxy::shouldGameEnd() {
 
 void GameControllerProxy::end(){
   this->gameController->setEnd();
+}
+
+void GameControllerProxy::startGame() {
+    // ESTO ES PROVISORIO!
+    // Cuando manejemos tiempo borrar, y decirle al controller que comienze a contar el reloj.
+    this->hasStarted = true;
+}
+
+bool GameControllerProxy::hasGameStarted() {
+    // ESTO ES PROVISORIO!
+    // Cuando manejemos tiempo borrar, y preguntarle al controller.
+    return this->hasStarted;
 }
 
 GameControllerProxy::~GameControllerProxy() {

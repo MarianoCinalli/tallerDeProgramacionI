@@ -120,6 +120,7 @@ void* game_updater(void* argument) {
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
+    gameControllerProxy->startGame();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
         gameControllerProxy->updateModel(camera);
         usleep(MICROSECONDS_BETWEEEN_BROADCAST);

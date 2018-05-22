@@ -9,9 +9,9 @@ GameInitializer::GameInitializer(Conf* configuration) {
     // this->pitch->setUserTeam(1,1);
     this->initializeBall();
     this->initializeGameController();
-    this->initializeGameControllerProxy();
+    this->initializeGameControllerProxy(); // abajo de initializeGameController
     this->initializeConnectionManager(configuration);
-    this->initializeUsersManager(configuration);
+    this->initializeUsersManager(configuration); // abajo de initializeGameControllerProxy
     this->configuration = configuration;
     log("GameInitializer: Juego inicializado...", LOG_INFO);
 }
@@ -136,5 +136,5 @@ void GameInitializer::initializeGameControllerProxy() {
 
 void GameInitializer::initializeUsersManager(Conf* configuration) {
     log("GameInitializer: Creando UsersManager...", LOG_INFO);
-    this->usersManager = new UsersManager(configuration->getUsuarios());
+    this->usersManager = new UsersManager(configuration->getUsuarios(), this->getGameControllerProxy());
 }

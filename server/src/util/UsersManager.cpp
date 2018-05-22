@@ -2,12 +2,13 @@
 
 extern std::mutex users_mutex;
 
-UsersManager::UsersManager(std::map<std::string, std::string> usersAndPasswords) {
+UsersManager::UsersManager(std::map<std::string, std::string> usersAndPasswords, GameControllerProxy* gameControllerProxy) {
     log("UsersManager: Creando UsersManager...", LOG_INFO);
     for (auto const& userAndPassword : usersAndPasswords) {
         log("UsersManager: Cargando usuario: " + userAndPassword.first + " con password: " + userAndPassword.second, LOG_DEBUG);
         this->usersAndPasswords[userAndPassword.first] = userAndPassword.second;
     }
+    this->gameControllerProxy = gameControllerProxy;
     log("UsersManager: UsersManager creado.", LOG_INFO);
 }
 
@@ -17,7 +18,7 @@ bool UsersManager::logIn(std::string user, std::string password) {
     for (auto const& userAndPassword : this->usersAndPasswords) {
         if ((userAndPassword.first == user) && (userAndPassword.second == password)) {
             if (this->canLogIn(user)) {
-                this->loggedInUsers.insert(user);
+                this->processLogIn(user);
                 log("UsersManager: Se loggeo el usuario: ", user, LOG_INFO);
                 result = true;
             } else {
@@ -32,8 +33,29 @@ bool UsersManager::logIn(std::string user, std::string password) {
     return result;
 }
 
+void UsersManager::processLogIn(std::string user) {
+    loggedInUsers.insert(user);
+    if (this->gameControllerProxy->hasGameStarted()) {
+        auto loggedOffSearch = loggedOffUsers.find(user);
+        if(loggedOffSearch != loggedOffUsers.end()) {
+            std::cout << "UsersManager: Removiendo al usuario de la lista de desloggeados" << std::endl;
+            loggedOffUsers.erase(loggedOffSearch);
+        } else {
+            std::cout << "UsersManager: No estaba deslogeado. Que paso?" << std::endl;
+        }
+    }
+}
+
 bool UsersManager::canLogIn(std::string user) {
-    return !this->isLoggedIn(user);
+    if (this->gameControllerProxy->hasGameStarted()) {
+        // Si el juego ya empezo solo se pueden logear los que se habian deslogeado alguna vez.
+        log("UsersManager: El juego comenzo, entonces veo que no este logeado pero que se haya logeado en algun momento.", LOG_DEBUG);
+        return !this->isLoggedIn(user) && this->isLoggedOff(user);
+    } else {
+        // Sino solo basta con que no esten logeados.
+        log("UsersManager: El juego no comenzo, entonces veo que no este logeado.", LOG_DEBUG);
+        return !this->isLoggedIn(user);
+    }
 }
 
 bool UsersManager::isLoggedIn(std::string user) {
@@ -49,7 +71,7 @@ bool UsersManager::isLoggedIn(std::string user) {
 }
 
 bool UsersManager::isLoggedOff(std::string user) {
-    log("UsersManager: Buscando " + user + "en la lista de desloggeados...", LOG_ERROR);
+    log("UsersManager: Buscando " + user + " en la lista de desloggeados...", LOG_ERROR);
     auto loggedOffSearch = this->loggedOffUsers.find(user);
     bool encontrado = loggedOffSearch != this->loggedOffUsers.end();
     if (encontrado) {

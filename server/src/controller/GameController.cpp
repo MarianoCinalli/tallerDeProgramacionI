@@ -87,6 +87,7 @@ bool GameController::shouldGameEnd() {
     // }
     return this->end;
 }
+
 void GameController::setEnd() {
     this->end = true;
 }

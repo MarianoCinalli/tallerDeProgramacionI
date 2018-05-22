@@ -4,6 +4,7 @@
 #include <mutex>
 #include <string>
 #include <set>
+#include "controller/GameControllerProxy.h"
 
 #ifndef USERSMANAGER_H
 #define USERSMANAGER_H
@@ -13,9 +14,11 @@ class UsersManager {
         std::map<std::string, std::string> usersAndPasswords;
         std::set<std::string> loggedInUsers;
         std::set<std::string> loggedOffUsers;
+        GameControllerProxy* gameControllerProxy;
     public:
-        UsersManager(std::map<std::string, std::string> usersAndPasswords);
+        UsersManager(std::map<std::string, std::string> usersAndPasswords, GameControllerProxy* gameControllerProxy);
         bool logIn(std::string user, std::string password);
+        void processLogIn(std::string user);
         bool canLogIn(std::string user);
         bool isLoggedIn(std::string user);
         bool isLoggedOff(std::string user);
