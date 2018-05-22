@@ -33,6 +33,8 @@ std::mutex log_mutex;
 GameInitializer* initializer;
 std::mutex quit_mutex;
 bool quit = false;
+std::string CLI_PORT = "";
+std::string CLI_IP = "";
 // Global variables ---------------------------------------
 
 
@@ -45,6 +47,8 @@ void imprimir_ayuda() {
     cout << "-h, --help     Imprimir esta ayuda.\n";
     cout << "-i, --input        Path del archivo de configuracion YAML.\n";
     cout << "-l, --logLevel        El nivel de log para la aplicacion. info;debug;error\n";
+    cout << "-d, --serverip        La ip del servidor a conectar.\n";
+    cout << "-p, --serverport        El puerto por el cual se conecta al servidor\n";
     cout << "Ejemplo:\n";
     cout << "main -i ~/conf.yaml -l info\n";
     cout << "\nREFERENCIA\nCon las flechas: se corre, \nCon W sprint, \nCon A barrida, \nCon S: patear, \nCon BARRA: cambiar de jugador";
@@ -64,12 +68,14 @@ int chequearOpciones(int argc, char* argv[]) {
             {"help", no_argument, 0, 'h'},
             {"input", required_argument, 0, 'i'},
             {"logLevel", required_argument, 0, 'l'},
+            {"serverip", required_argument, 0, 'd'},
+            {"serverport", required_argument, 0, 'p'},
             {0, 0, 0, 0}
         };
 
         int option_index = 0;
 
-        ch = getopt_long(argc, argv, "vhi:l:",
+        ch = getopt_long(argc, argv, "vhi:l:d:p:",
                          long_options, &option_index);
 
         /* Detecta fin de opciones. */
@@ -105,6 +111,14 @@ int chequearOpciones(int argc, char* argv[]) {
 
             case 'l':
                 CLI_LOG_LEVEL = optarg;
+                break;
+
+            case 'd':
+                CLI_IP = optarg;
+                break;
+
+            case 'p':
+                CLI_PORT = optarg;
                 break;
 
             default:
@@ -496,7 +510,17 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer = initializer->getRenderer();
 
     std::string servidor = "127.0.0.1";
+    if (CLI_IP != "") {
+        log("Main: Usando la ip definida por linea de comando:", CLI_IP, LOG_INFO);
+        servidor = CLI_IP;
+    }
+
     std::string puerto = "8080";
+    if (CLI_PORT != "") {
+        log("Main: Usando el puerto definida por linea de comando:", CLI_PORT, LOG_INFO);
+        puerto = CLI_PORT;
+    }
+
     std::string usuario = "zidane";
     std::string clave = "zidane";
     std::string equipo = " ";
