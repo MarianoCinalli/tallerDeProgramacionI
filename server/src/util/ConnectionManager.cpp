@@ -143,6 +143,10 @@ void ConnectionManager::sendToAll(std::string message) {
     }
 }
 
+int ConnectionManager::getMaxClients(){
+    return this->maxConnections;
+}
+
 ConnectionManager::~ConnectionManager() {
     delete(this->clients);
 }

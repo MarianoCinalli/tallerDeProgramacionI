@@ -47,6 +47,8 @@ class ConnectionManager {
         std::vector<int> getSockets();
         void processDisconection(pthread_t connectionHandlerId);
         void sendToAll(std::string message);
+        int getMaxClients();
+
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H
