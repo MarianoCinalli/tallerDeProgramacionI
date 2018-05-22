@@ -11,6 +11,7 @@ GameController::GameController(Pitch* pitch) {
 
 void GameController::addUser(std::string user, int teamNum){
   this->pitch->setUserTeam(user,teamNum);
+  this->pitch->changeActivePlayer(user);
 }
 
 Player* GameController::getActivePlayer(std::string user) {
