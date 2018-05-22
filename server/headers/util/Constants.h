@@ -69,8 +69,8 @@ const int TIME_BALL_NO_INTERCEPT = 4;
 
 
 //counts
-const int KICK_COUNT = 15;
-const int SLIDE_COUNT = 15;
+const int KICK_COUNT = 35;
+const int SLIDE_COUNT = 35;
 
 //
 // const int FRAME_WINDOW=1024;

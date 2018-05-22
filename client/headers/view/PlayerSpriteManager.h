@@ -33,6 +33,12 @@ class PlayerSpriteManager {
         int slidingCount;
         int runningCount;
 
+        //estado
+        bool sliding;
+        bool wasSliding;
+        bool kicking;
+        bool wasKicking;
+        
         // Para los sprites de jugador parado.
         void setStandingSprite(int orientation);
         void setStandingSpriteViewUp();
@@ -54,6 +60,17 @@ class PlayerSpriteManager {
 
         void setSlidingSprite();
         void setKickingSprite();
+
+        void startsKicking();
+        void stopKicking();
+        bool isKicking();
+        bool wasKickingYet();
+        void isAlreadyKicking();
+        bool isSliding();
+        bool wasSlidingYet();
+        void startsSliding();
+        void isAlreadySliding();
+        void stopSliding();
 
         // Para el marcador de jugador activo.
         SDL_Rect getActivePlayerMarker();

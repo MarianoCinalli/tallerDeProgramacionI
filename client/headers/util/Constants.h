@@ -67,10 +67,10 @@ const int TIME_BALL_NO_INTERCEPT = 4;
 
 //render
 const int DRAW_FRAME_RATE = 50;
-const int STANDING_DIVISOR = 4;
-const int RUNNING_DIVISOR = 4;
-const int SLIDING_DIVISOR = 20;
-const int KICKING_DIVISOR = 20;
+const int STANDING_DIVISOR = 10;
+const int RUNNING_DIVISOR = 10;
+const int SLIDING_DIVISOR = 15;
+const int KICKING_DIVISOR = 15;
 
 
 

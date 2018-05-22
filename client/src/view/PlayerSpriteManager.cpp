@@ -32,6 +32,12 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         bool still = this->player->isStill();
         bool sliding = this->player->isSliding();
         bool kicking = this->player->isKicking();
+        if (!kicking){
+          this->stopKicking();
+        }
+        if (!sliding) {
+            this->stopSliding();
+        }
         bool runningFast = this->player->isRunningFast();
         if (still && (!sliding) && (!kicking)) {
                 // Esta quieto, se dibuja parado.
@@ -165,6 +171,8 @@ void PlayerSpriteManager::setRunningSprite(bool runningFast) {
         if (runningCount==1024) { //TODO hardcode value
                 runningCount = 0;
         }
+        this->stopKicking();
+        this->stopSliding();
         if ((runningCount % RUNNING_DIVISOR) == 0) {
                 int cteVelocidad = 0;
                 if (runningFast) {
@@ -258,27 +266,76 @@ void PlayerSpriteManager::setRunningLeftSprite(int cteVelocidad) {
         }
 }
 
+//model
+
+
+void PlayerSpriteManager::startsKicking() {
+        if (!this->sliding) {
+                this->kicking = true;
+        }
+
+}
+
+void PlayerSpriteManager::stopKicking() {
+        // this->kicking = false;
+        this->wasKicking = false;
+}
+
+bool PlayerSpriteManager::isKicking() {
+        return this->kicking;
+}
+
+bool PlayerSpriteManager::wasKickingYet() {
+        return this->wasKicking;
+}
+
+void PlayerSpriteManager::isAlreadyKicking() {
+        this->wasKicking = true;
+}
+
+bool PlayerSpriteManager::isSliding() {
+        return this->sliding;
+}
+
+bool PlayerSpriteManager::wasSlidingYet() {
+        return this->wasSliding;
+}
+
+void PlayerSpriteManager::startsSliding() {
+        if (!this->kicking) {
+                this->sliding = true;
+        }
+        //this->velocity->accelerate(this->orientation, this->maxVelocity);
+}
+
+void PlayerSpriteManager::isAlreadySliding() {
+        this->wasSliding = true;
+}
+
+void PlayerSpriteManager::stopSliding() {
+        // this->sliding = false;
+        this->wasSliding = false;
+}
+
 // Kicking --------------------------------------------------------------------------
 
 void PlayerSpriteManager::setKickingSprite() {
         if (kickingCount==1024) { //TODO hardcode value
                 kickingCount = 0;
         }
-        if (kickingCount<30) {
-                if ((kickingCount % KICKING_DIVISOR) == 0) {
-                        int orientation = this->player->getOrientation();
-                        if (!this->player->wasKickingYet()) {
-                                log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
-                                this->sprite.x = 0;
-                                this->sprite.y = (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
-                                this->player->isAlreadyKicking();
+        if ((kickingCount % KICKING_DIVISOR) == 0) {
+                int orientation = this->player->getOrientation();
+                if (!this->wasKickingYet()) {
+                        log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_DEBUG);
+                        this->sprite.x = 0;
+                        this->sprite.y = (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
+                        this->isAlreadyKicking();
+                } else {
+                        if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
+                                // this->setStandingSprite(orientation);
+                                this->stopKicking();
                         } else {
-                                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (3 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
-                                        this->setStandingSprite(orientation);
-                                        this->player->stopKicking();
-                                } else {
-                                        this->sprite.x += SPRITE_SIZE;
-                                }
+                                this->sprite.x += SPRITE_SIZE;
                         }
                 }
         }
@@ -291,21 +348,19 @@ void PlayerSpriteManager::setSlidingSprite() {
         if (slidingCount==1024) { //TODO hardcode value
                 slidingCount = 0;
         }
-        if (slidingCount<30) {
-                if ((slidingCount % SLIDING_DIVISOR) == 0) {
-                        int orientation = this->player->getOrientation();
-                        if (!this->player->wasSlidingYet()) {
-                                log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
-                                this->sprite.x = 0;
-                                this->sprite.y = (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
-                                this->player->isAlreadySliding();
+        if ((slidingCount % SLIDING_DIVISOR) == 0) {
+                int orientation = this->player->getOrientation();
+                if (!this->wasSlidingYet()) {
+                        log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_DEBUG);
+                        this->sprite.x = 0;
+                        this->sprite.y = (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation));
+                        this->isAlreadySliding();
+                } else {
+                        if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
+                                // this->setStandingSprite(orientation);
+                                this->stopSliding();
                         } else {
-                                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (7 * SPRITE_SIZE + (SPRITE_SIZE * orientation)))) {
-                                        this->setStandingSprite(orientation);
-                                        this->player->stopSliding();
-                                } else {
-                                        this->sprite.x += SPRITE_SIZE;
-                                }
+                                this->sprite.x += SPRITE_SIZE;
                         }
                 }
         }
