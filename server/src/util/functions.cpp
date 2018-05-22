@@ -103,6 +103,7 @@ void* broadcast_to_clients(void* argument) {
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     // Termino la espera
     broadcaster->broadcastGameBegins();
+    sleep(3); //HACK time to get your shit together
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
         broadcaster->broadcast();
         usleep(MICROSECONDS_BETWEEEN_BROADCAST);
