@@ -41,9 +41,9 @@ bool UsersManager::isLoggedIn(std::string user) {
     auto loggedInSearch = this->loggedInUsers.find(user);
     bool encontrado = loggedInSearch != this->loggedInUsers.end();
     if (encontrado) {
-        log("UsersManager: Loggeado encontrado a ", user, LOG_DEBUG);
+        log("UsersManager: Loggeado encontrado: ", user, LOG_DEBUG);
     } else {
-        log("UsersManager: Loggeado no encontrado a ", user, LOG_DEBUG);
+        log("UsersManager: Loggeado no encontrado: ", user, LOG_DEBUG);
     }
     return encontrado;
 }
@@ -53,9 +53,9 @@ bool UsersManager::isLoggedOff(std::string user) {
     auto loggedOffSearch = this->loggedOffUsers.find(user);
     bool encontrado = loggedOffSearch != this->loggedOffUsers.end();
     if (encontrado) {
-        log("UsersManager: Desloggeado encontrado a ", user, LOG_DEBUG);
+        log("UsersManager: Desloggeado encontrado: ", user, LOG_DEBUG);
     } else {
-        log("UsersManager: Desloggeado no encontrado a ", user, LOG_DEBUG);
+        log("UsersManager: Desloggeado no encontrado: ", user, LOG_DEBUG);
     }
     return encontrado;
 }
