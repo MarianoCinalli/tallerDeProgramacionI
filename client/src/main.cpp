@@ -152,13 +152,13 @@ SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
 SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
 void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string mensaje, ConnectionManager* connectionManager) {
-    log("Entra al openLogin Server", LOG_INFO);
+    log("openLoginServer: Entra al openLogin Server", LOG_INFO);
     bool quit = false;
     SDL_Event e;
     TTF_Font* gFont = NULL;
     gFont = TTF_OpenFont("lazy.ttf", 30);
     if (gFont == NULL) {
-        log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+        log("openLoginServer: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
     }
     Texture opc1Texture;
     opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
@@ -229,13 +229,13 @@ void openLoginServer(SDL_Renderer* gRenderer, std::string& servidor, std::string
 }
 
 void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::string& puerto, std::string& usuario, std::string& clave, std::string mensaje, ConnectionManager* connectionManager) {
-    log("Entra al openLogin Usuario", LOG_INFO);
+    log("openLoginUsuario: Entra al openLogin Usuario", LOG_INFO);
     bool quit = false;
     SDL_Event e;
     TTF_Font* gFont = NULL;
     gFont = TTF_OpenFont("lazy.ttf", 30);
     if (gFont == NULL) {
-        log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+        log("openLoginUsuario: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
     }
     Texture opc1Texture;
     opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
@@ -332,13 +332,13 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
 }
 
 void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::string equipo1, std::string cantidad1, std::string equipo2, std::string cantidad2, std::string mensaje, ConnectionManager* connectionManager) {
-    log("Entra al openLogin Equipo", LOG_INFO);
+    log("openLoginEquipo: Entra al openLogin Equipo", LOG_INFO);
     bool quit = false;
     SDL_Event e;
     TTF_Font* gFont = NULL;
     gFont = TTF_OpenFont("lazy.ttf", 30);
     if (gFont == NULL) {
-        log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+        log("openLoginEquipo: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
     }
     Texture opc1Texture;
     opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
@@ -395,12 +395,12 @@ void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, int max, std::stri
 }
 
 void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string servidor, std::string puerto, std::string usuario, std::string equipo, ConnectionManager* connectionManager) {
-    log("Entra al openLogin Esperar", LOG_INFO);
+    log("openLoginEsperar: Entra al openLogin Esperar", LOG_INFO);
     SDL_Event e;
     TTF_Font* gFont = NULL;
     gFont = TTF_OpenFont("lazy.ttf", 30);
     if (gFont == NULL) {
-        log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+        log("openLoginEsperar: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
     }
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
@@ -474,7 +474,7 @@ void showLostConnectionMessage(SDL_Renderer* gRenderer) {
     TTF_Font* gFont = NULL;
     gFont = TTF_OpenFont("lazy.ttf", 30);
     if (gFont == NULL) {
-        log("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError(), LOG_INFO);
+        log("openDirtyExitMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
     }
     Texture line1Texture;
     line1Texture.loadFromRenderedText("Se perdio la conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
