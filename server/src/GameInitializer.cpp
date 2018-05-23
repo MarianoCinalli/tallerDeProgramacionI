@@ -56,9 +56,15 @@ GameInitializer::~GameInitializer() {
 
 // Metodos privados. ---------------------------------------------
 
+
+
+
 void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
+    std::map<int,std::string> nombresEquipos;
+    nombresEquipos[0] = "Argentina";
+    nombresEquipos[1] = "Brasil";
     log("GameInitializer: Creando equipo.", LOG_INFO);
-    Team* team = new Team(teamNumber);
+    Team* team = new Team(teamNumber, nombresEquipos[teamNumber]);
     log("GameInitializer: Seteando formacion.", LOG_INFO);
     team->setFormacion(33); //TODO formacion default, despues le pregunta al usuario
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {

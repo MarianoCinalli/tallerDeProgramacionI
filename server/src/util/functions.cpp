@@ -59,10 +59,12 @@ void* read_client(void* argument) {
                 }
                 // y mostrar cuantos jugadores hay en cada equipo
                 if (key == "get" && value == "equipo1") {
-                  connectionManager->sendMessage(socket,"Argentina:0");
+                  std::string stats = gameControllerProxy->getTeamStats(0);
+                  connectionManager->sendMessage(socket,stats);
                 }
                 if (key == "get" && value == "equipo2") {
-                  connectionManager->sendMessage(socket,"Brasil:0");
+                  std::string stats = gameControllerProxy->getTeamStats(1);
+                  connectionManager->sendMessage(socket,stats);
                 }
                 if (key == "use") {
                   user->processTeamAndFormationMessage(message);

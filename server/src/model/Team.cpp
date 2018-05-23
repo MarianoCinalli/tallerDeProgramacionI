@@ -1,10 +1,13 @@
 #include "model/Team.h"
 #include "util/Formaciones.h"
 
-Team::Team(int local) {
+
+
+Team::Team(int local, std::string name) {
     log("Team: Creando equipo.", LOG_INFO);
     this->players = {};
     this->local = local;
+    this->name = name;
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -16,6 +19,14 @@ void Team::addPlayer(Player* player) {
 
 std::list<Player*> Team::getPlayers() {
     return this->players;
+}
+
+int Team::getAmountPlayers(){
+  return players.size();
+}
+
+std::string Team::getName(){
+  return name;
 }
 
 Team::~Team() {

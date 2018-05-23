@@ -41,6 +41,10 @@ void GameControllerProxy::startGame() {
     this->hasStarted = true;
 }
 
+std::string GameControllerProxy::getTeamStats(int numberTeam) {
+  return this->gameController->getTeamStats(numberTeam);
+}
+
 bool GameControllerProxy::hasGameStarted() {
     // ESTO ES PROVISORIO!
     // Cuando manejemos tiempo borrar, y preguntarle al controller.

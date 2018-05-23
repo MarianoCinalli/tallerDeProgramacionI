@@ -6,10 +6,14 @@ GameController::GameController(Pitch* pitch) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->time = 0;    //ventana de tiempo de 1024 frames
+    // std::list users1;
+    this->users[0] = std::list<std::string>();
+    this->users[1] = std::list<std::string>();
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
 void GameController::addUser(std::string user, int teamNum){
+  this->users[teamNum].push_front(user);
   this->pitch->setUserTeam(user,teamNum);
   this->pitch->changeActivePlayer(user);
 }
@@ -90,6 +94,13 @@ bool GameController::shouldGameEnd() {
     // return true;
     // }
     return this->end;
+}
+
+std::string GameController::getTeamStats(int numberTeam) {
+  Team* team = this->pitch->getTeam(numberTeam);
+  std::string name = team->getName();
+  std::string amnt = std::to_string(users[numberTeam].size());
+  return name+":"+amnt;
 }
 
 void GameController::setEnd() {

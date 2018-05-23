@@ -1,4 +1,5 @@
 #include <string>
+#include <map>
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "util/conf.h"
@@ -14,6 +15,7 @@
 #include "controller/GameController.h"
 #include "controller/GameControllerProxy.h"
 #include "controller/actions/Action.h"
+
 
 #ifndef GAMEINITIALIZER_H
 #define GAMEINITIALIZER_H

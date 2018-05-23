@@ -28,6 +28,7 @@ class GameController {
         Player* activePlayer;
         bool end;
         int time;
+        std::map<int,std::list<std::string>> users; 
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
@@ -44,6 +45,7 @@ class GameController {
         bool shouldGameEnd();
         void setEnd();
         Player* getActivePlayer(std::string user);
+        std::string getTeamStats(int numberTeam);
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

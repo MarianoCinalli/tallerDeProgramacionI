@@ -21,6 +21,7 @@ class GameControllerProxy {
         void startGame();
         void addUser(std::string user, int teamNum);
         bool hasGameStarted();
+        std::string getTeamStats(int numberTeam);
         ~GameControllerProxy();
 };
 #endif // GAMECONTROLLERPROXY_H
