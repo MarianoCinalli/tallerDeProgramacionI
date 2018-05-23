@@ -2,6 +2,7 @@
 
 extern GameInitializer* initializer;
 extern bool quit;
+extern bool lostConnectionQuit;
 extern std::mutex quit_mutex;
 
 // Recibe los mensajes del servidor.
@@ -25,101 +26,103 @@ extern std::mutex quit_mutex;
 //  sl: this->sliding <- idem kicking
 //  ru: this->runningFast
 void* read_server(void* argument) {
-        log("read_server: Creado.", LOG_INFO);
-        std::string readMessage;
-        int readBytes;
-        ConnectionManager* connectionManager = (ConnectionManager*) argument;
-        // int count = 0; // esto esta provisorio.
-        log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
-        while (!quit) {
+    log("read_server: Creado.", LOG_INFO);
+    std::string readMessage;
+    int readBytes;
+    ConnectionManager* connectionManager = (ConnectionManager*) argument;
+    // int count = 0; // esto esta provisorio.
+    log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
+    while (!quit) {
 
-                // usleep(1000000/240);
-                readMessage = "";
-                readBytes = connectionManager->getMessage(readMessage);
-                if (readBytes < 0) {
-                        log("read_client: Error en la lectura del mensaje. Saliendo...", LOG_ERROR);
-                        setQuit(true);
-                } else if (readBytes == 0) {
-                        // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
-                        // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
-                        log("read_server: No se pudo establecer coneccion con el server. Saliendo...", LOG_INFO);
-                        setQuit(true);
-                } else {
-                        if (readMessage == "gameEnds:") {
-                                log("read_server: Se recibio el mensaje de fin de juego. Saliendo...", LOG_INFO);
-                                setQuit(true);
-                        } else {
-                                try {
-                                        std::string delimiter = ";;";
+        // usleep(1000000/240);
+        readMessage = "";
+        readBytes = connectionManager->getMessage(readMessage);
+        if (readBytes < 0) {
+            log("read_client: Error en la lectura del mensaje. Saliendo...", LOG_ERROR);
+            lostConnectionQuit = true;
+            setQuit(true);
+        } else if (readBytes == 0) {
+            // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
+            // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
+            log("read_server: No se pudo establecer coneccion con el server. Saliendo...", LOG_INFO);
+            lostConnectionQuit = true;
+            setQuit(true);
+        } else {
+            if (readMessage == "gameEnds:") {
+                log("read_server: Se recibio el mensaje de fin de juego. Saliendo...", LOG_INFO);
+                setQuit(true);
+            } else {
+                try {
+                    std::string delimiter = ";;";
 
-                                        size_t pos = 0;
-                                        std::string token;
-                                        while ((pos = readMessage.find(delimiter)) != std::string::npos) {
-                                                token = readMessage.substr(0, pos);
-                                                log("msg", LOG_DEBUG);
-                                                Player* player;
-                                                Ball* ball = initializer->getGameController()->getBall();
-                                                Camera* camera = initializer->getGameController()->getCamera();;
-                                                // YAML::Node node = YAML::Load(readMessage);
-                                                YAML::Node node = YAML::Load(token);
-                                                for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
-                                                        YAML::Node key = it->first;
-                                                        YAML::Node value = it->second;
-                                                        // * Aca se sabe que tipo es.
-                                                        if (key.Type() == YAML::NodeType::Scalar) {
-                                                                if (key.as<std::string>() == "ba") {
-                                                                        log("read_server: pelota", key.as<std::string>(), LOG_INFO);
-                                                                        ball->parseYaml(value);
-                                                                } else if((key.as<std::string>() == "cam")) {
-                                                                        log("read_server: camara",key.as<std::string>(), LOG_INFO);
-                                                                        camera->parseYaml(value);
-                                                                } else {
-                                                                        log("read_server: jugador", key.as<std::string>(), LOG_INFO);
-                                                                        player =  initializer->getGameController()->getPlayer(key.as<int>());
-                                                                        player->parseYaml(value);
-                                                                }
-                                                        }
-
-                                                        // Valores para objeto del tipo parseado arriba.
-                                                        if (value.Type() == YAML::NodeType::Map) {
-                                                                // Este for iria en el constructor para el objeto del tipo de arriba.
-                                                                for (YAML::const_iterator secondNode = value.begin(); secondNode != value.end(); ++secondNode) {
-                                                                        std::string secondkey = secondNode->first.as<std::string>();
-                                                                        std::string secondvalue = secondNode->second.as<std::string>();
-                                                                        log("read_server: " + secondkey + " = " + secondvalue, LOG_INFO);
-                                                                }
-                                                        }
-                                                }
-                                                readMessage.erase(0, pos + delimiter.length());
-                                        }
-                                } catch (const std::exception& e) {
-                                        log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
+                    size_t pos = 0;
+                    std::string token;
+                    while ((pos = readMessage.find(delimiter)) != std::string::npos) {
+                        token = readMessage.substr(0, pos);
+                        log("msg", LOG_DEBUG);
+                        Player* player;
+                        Ball* ball = initializer->getGameController()->getBall();
+                        Camera* camera = initializer->getGameController()->getCamera();;
+                        // YAML::Node node = YAML::Load(readMessage);
+                        YAML::Node node = YAML::Load(token);
+                        for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
+                            YAML::Node key = it->first;
+                            YAML::Node value = it->second;
+                            // * Aca se sabe que tipo es.
+                            if (key.Type() == YAML::NodeType::Scalar) {
+                                if (key.as<std::string>() == "ba") {
+                                    log("read_server: pelota", key.as<std::string>(), LOG_INFO);
+                                    ball->parseYaml(value);
+                                } else if ((key.as<std::string>() == "cam")) {
+                                    log("read_server: camara", key.as<std::string>(), LOG_INFO);
+                                    camera->parseYaml(value);
+                                } else {
+                                    log("read_server: jugador", key.as<std::string>(), LOG_INFO);
+                                    player =  initializer->getGameController()->getPlayer(key.as<int>());
+                                    player->parseYaml(value);
                                 }
+                            }
+
+                            // Valores para objeto del tipo parseado arriba.
+                            if (value.Type() == YAML::NodeType::Map) {
+                                // Este for iria en el constructor para el objeto del tipo de arriba.
+                                for (YAML::const_iterator secondNode = value.begin(); secondNode != value.end(); ++secondNode) {
+                                    std::string secondkey = secondNode->first.as<std::string>();
+                                    std::string secondvalue = secondNode->second.as<std::string>();
+                                    log("read_server: " + secondkey + " = " + secondvalue, LOG_INFO);
+                                }
+                            }
                         }
+                        readMessage.erase(0, pos + delimiter.length());
+                    }
+                } catch (const std::exception& e) {
+                    log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
                 }
+            }
         }
-        log("read_server: Finalizado.", LOG_INFO);
-        return NULL;
+    }
+    log("read_server: Finalizado.", LOG_INFO);
+    return NULL;
 }
 
 // Dibuja las vistas.
 // Este metodo esta dentro de todo completo.
 // Hay que ver si le falta algo.
 void* drawer(void* argument) {
-        log("drawer: Creado.", LOG_INFO);
-        SDL_Renderer* renderer = initializer->getRenderer();
-        PitchView* pitchView = initializer->getPitchView();
-        while (!quit) {
-                pitchView->render(renderer);
-                usleep(1000000/DRAW_FRAME_RATE); // Frame rate.
-        }
-        log("drawer: Finalizado.", LOG_INFO);
-        return NULL;
+    log("drawer: Creado.", LOG_INFO);
+    SDL_Renderer* renderer = initializer->getRenderer();
+    PitchView* pitchView = initializer->getPitchView();
+    while (!quit) {
+        pitchView->render(renderer);
+        usleep(1000000 / DRAW_FRAME_RATE); // Frame rate.
+    }
+    log("drawer: Finalizado.", LOG_INFO);
+    return NULL;
 }
 
 // Setea el quit de manera segura.
 void setQuit(bool newQuit) {
-        quit_mutex.lock();
-        quit = quit || newQuit;
-        quit_mutex.unlock();
+    quit_mutex.lock();
+    quit = quit || newQuit;
+    quit_mutex.unlock();
 }
