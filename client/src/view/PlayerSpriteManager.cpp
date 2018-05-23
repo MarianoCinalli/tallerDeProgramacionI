@@ -381,11 +381,11 @@ SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
                 if (name == "juan"){
                   size = 1;
                 } else if (name =="claudio"){
-                  size = 2;
+                  size = 1;
                 } else if (name =="mariano"){
                   size = 3;
-                } else if (name =="nico"){
-                  size = 1;
+                } else if (name =="nicolas"){
+                  size = 2;
                 }else if (name =="joaquin"){
                   size = 2;
                 }
