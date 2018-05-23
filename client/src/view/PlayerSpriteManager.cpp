@@ -20,6 +20,7 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
         this->kickingCount = 0;
         this->slidingCount = 0;
         this->runningCount = 0;
+        this->activePlayerCount = 0;
         log("PlayerSpriteManager: Vista creada.", LOG_INFO);
 }
 
@@ -369,6 +370,10 @@ void PlayerSpriteManager::setSlidingSprite() {
 // Active player marker ----------------------------
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
+  if (activePlayerCount==1024) { //TODO hardcode value
+          activePlayerCount = 0;
+  }
+  if ((activePlayerCount % ACTIVE_PLAYER_DIVISOR) == 0) {
         if ((this->activePlayerMarker.x == 0) && (this->activePlayerMarker.y == 16 * SPRITE_SIZE)) {
                 this->activePlayerMarker = {
                         SPRITE_SIZE,
@@ -384,7 +389,9 @@ SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
                         SPRITE_SIZE
                 };
         }
-        return this->activePlayerMarker;
+      }
+      activePlayerCount++;
+      return this->activePlayerMarker;
 }
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {

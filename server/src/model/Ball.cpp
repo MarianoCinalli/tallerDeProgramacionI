@@ -64,7 +64,7 @@ void Ball::isPassed(int direction, int passPower) {
         dominated = false;
         this->isInAPass = true;
         this->passPower = passPower;
-        this->decelerateDistance = passPower * 50;  //TODO: ver valores y poner ctes
+        // this->decelerateDistance = passPower * 50;  //TODO: ver valores y poner ctes
         this->startingPassPosition = this->position;
     }
 }
@@ -88,7 +88,11 @@ void Ball::updatePosition() {
     }
     if ((this->isInAPass) && (!this->velocity->isZero())) {
         if (this->timePassing % BALL_DECELERATE_TIME == 0) {
-            this->velocity->decelerate(1);
+            this->passPower -= 4;
+            if (this->passPower< 0){
+              this->timePassing = 0;
+              this->stopRolling();
+            }
         }
     }
     // if((this->isInAPass) && (!this->velocity->isZero())) {

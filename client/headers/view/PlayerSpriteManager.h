@@ -32,13 +32,14 @@ class PlayerSpriteManager {
         int kickingCount;
         int slidingCount;
         int runningCount;
+        int activePlayerCount;
 
         //estado
         bool sliding;
         bool wasSliding;
         bool kicking;
         bool wasKicking;
-        
+
         // Para los sprites de jugador parado.
         void setStandingSprite(int orientation);
         void setStandingSpriteViewUp();
