@@ -31,6 +31,7 @@ std::string Broadcaster::getMessage() {
     }
     message += ball->getAsYaml();
     message += camera->getAsYaml();
+    log("mensaje", message, LOG_DEBUG);
     return message+";;";
 }
 

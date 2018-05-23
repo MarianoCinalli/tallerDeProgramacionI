@@ -21,6 +21,7 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->runningFast = false;
     this->kickCount = 0;
     this->slideCount = 0;
+    this->userName = "NONE";
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -59,9 +60,13 @@ bool Player::isRunningDiagonaly() {
     return ((this->velocity->getComponentX() != 0) && (this->velocity->getComponentY() != 0));
 }
 
-void Player::toggleIsSelected() {
+void Player::toggleIsSelected(std::string name) {
   if (this->isSelected) {
     this->runningFast = false;
+    this->userName = "NONE";
+  }
+  else {
+    this->userName = name;
   }
     this->isSelected = !this->isSelected;
     this->isReturning = true;
@@ -335,6 +340,8 @@ this->id:
  sl: this->sliding
  ru: this->runningFast
  st: isStill()
+ or: this->orientation
+ nm: name
 */
 std::string Player::getAsYaml() {
     std::string message = "";
@@ -347,6 +354,7 @@ std::string Player::getAsYaml() {
     message += " sl: " + std::to_string(this->sliding) + "\n";
     message += " ru: " + std::to_string(this->runningFast) + "\n";
     message += " or: " + std::to_string(this->orientation) + "\n";
+    message += " nm: " + this->userName + "\n";
     message += " st: " + std::to_string(isStill()) + "\n" ;
     return message;
 }

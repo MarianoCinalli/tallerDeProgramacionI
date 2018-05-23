@@ -58,6 +58,7 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         if (this->player->getIsSelected()) {
                 SDL_Rect markerSprite = this->getActivePlayerMarker();
                 SDL_Rect markerPositionOnScreen = this->getActivePlayerMarkerPosition(coordinates);
+
                 SDL_RenderCopy(
                         screen,
                         spriteSheet,
@@ -374,16 +375,22 @@ SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
           activePlayerCount = 0;
   }
   if ((activePlayerCount % ACTIVE_PLAYER_DIVISOR) == 0) {
-        if ((this->activePlayerMarker.x == 0) && (this->activePlayerMarker.y == 16 * SPRITE_SIZE)) {
+        if (this->activePlayerMarker.y == 16 * SPRITE_SIZE) {
+                int size = 0;
+                std::string name = this->player->userName;
+                if (name == "juan"){
+                  size = 1;
+                } else if (name =="claudio"){
+                  size = 2;
+                } else if (name =="mariano"){
+                  size = 3;
+                } else if (name =="nico"){
+                  size = 1;
+                }else if (name =="joaquin"){
+                  size = 2;
+                }
                 this->activePlayerMarker = {
-                        SPRITE_SIZE,
-                        16 * SPRITE_SIZE,
-                        SPRITE_SIZE,
-                        SPRITE_SIZE
-                };
-        } else {
-                this->activePlayerMarker = {
-                        0,
+                        size*SPRITE_SIZE,
                         16 * SPRITE_SIZE,
                         SPRITE_SIZE,
                         SPRITE_SIZE

@@ -33,8 +33,6 @@ void* read_server(void* argument) {
     // int count = 0; // esto esta provisorio.
     log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
     while (!quit) {
-
-        // usleep(1000000/240);
         readMessage = "";
         readBytes = connectionManager->getMessage(readMessage);
         if (readBytes < 0) {

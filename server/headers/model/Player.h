@@ -26,6 +26,7 @@ class Player {
         bool runningFast;
         int kickCount;
         int slideCount;
+        std::string userName;
 
     public:
         static int ID;
@@ -51,7 +52,7 @@ class Player {
         void decelerate(int direction);
         void stop();
         void stopRunningInDirection(int direction);
-        void toggleIsSelected();
+        void toggleIsSelected(std::string name);
         void copyStats(Player* copyTo);
         void setTrayectory(Velocity* trayectory);
         // Cambia la posicion con respecto a su velocidad.

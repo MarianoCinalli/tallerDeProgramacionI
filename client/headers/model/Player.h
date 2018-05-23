@@ -27,7 +27,9 @@ class Player {
         bool dominatesTheBall;
         bool still;
 
+
     public:
+        std::string userName;
         Player(int orientation, Coordinates* position, int teamNumber);
 
         // Getters

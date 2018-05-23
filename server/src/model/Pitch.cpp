@@ -31,7 +31,7 @@ void Pitch::setUserTeam(std::string user, int team) {
         }
     }
     this->activePlayers[user] = teams[user]->getPlayers().back();
-    this->activePlayers[user]->toggleIsSelected();
+    this->activePlayers[user]->toggleIsSelected(user);
 }
 
 void Pitch::setBall(Ball* ball) {
@@ -94,9 +94,9 @@ void Pitch::changeActivePlayer(std::string user) {
         }
         Player* player = this->activePlayers[user];
         player->copyStats(nearestPlayer);
-        player->toggleIsSelected();
+        player->toggleIsSelected(user);
         this->activePlayers[user] = nearestPlayer;
-        nearestPlayer->toggleIsSelected();
+        nearestPlayer->toggleIsSelected(user);
         log("Pitch: Se cambio el jugador activo.", LOG_INFO);
     }
 }

@@ -70,6 +70,9 @@ void Player::parseYaml(YAML::Node node){
   if (node["cy"]){
     this->position->setY(node["cy"].as<int>());
   }
+  if (node["nm"]){
+    this->userName = node["nm"].as<std::string>();
+  }
 }
 
 // Setea la orientacion del jugador (a donde mira).
