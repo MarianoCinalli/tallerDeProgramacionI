@@ -11,6 +11,7 @@ User::User(GameInitializer* initializer, int userSocket) {
     this->connectionManager = initializer->getConnectionManager();
     this->userSocket = userSocket;
     this->manager = initializer->getUsersManager();
+    this->gameControllerProxy = initializer->getGameControllerProxy();
 }
 
 bool User::hasLogedIn() {
@@ -49,32 +50,24 @@ void User::processTeamAndFormationMessage(std::string message) {
     std::string value = this->getMessageValue(message);
     int team = 0;
     if (action == "use") {
-      team = stoi(value); // Guardar el que eligio el user.
+        team = stoi(value); // Guardar el que eligio el user.
+        // Si puede unirse a ese equipo, setea la formacion al equipo luego se ordena.
+        bool couldJoin = this->gameControllerProxy->joinTeam(
+            this->getName(),
+            team,
+            this->connectionManager->getMaxClients()
+        );
+        if (couldJoin) {
+            log("User: El usuario se unio al equipo: ", team, LOG_INFO);
+            this->teamNumber = team;
+            log("User: El usuario termino de elegir.", LOG_INFO);
+            this->hasPicked = true;
+            this->connectionManager->sendMessage(this->userSocket, "true:");
+        } else {
+            log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
+            this->connectionManager->sendMessage(this->userSocket, "false:noRoom");
+        }
     }
-    // Si puede unirse a ese equipo, setea la formacion al equipo luego se ordena.
-
-    // Dependiendo de la cantidad de jugadores
-    // Hay que llevar la cuenta de cuantos usuarios hay en cada equipo
-    // maxClients == 1
-    // Puede elegir cualquiera de los dos
-    // maxClients == 2
-    // ninguno conectado-> elige cualquiera
-    // uno ya conectado-> tiene que usar el otro equipo
-    // maxClients == 3
-    // ninguno conectado-> elige cualquiera
-    // uno ya conectado-> elige cualquiera
-    // dos ya conectado-> tiene que usar el otro equipo
-    // maxClients == 4
-    // ninguno conectado-> elige cualquiera
-    // uno ya conectado-> elige cualquiera
-    // dos ya conectado-> elige cualquiera
-    // tres ya conectado-> tiene que usar el otro equipo
-
-    log("User: El usuario se unio al equipo: ", team, LOG_INFO);
-    this->teamNumber = team;
-    // Le manda el resultado al cliente.
-    log("User: El usuario termino de elegir.", LOG_INFO);
-    this->hasPicked = true;
 }
 
 

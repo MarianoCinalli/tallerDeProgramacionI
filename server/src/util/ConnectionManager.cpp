@@ -48,7 +48,7 @@ void ConnectionManager::acceptConnection() {
     new_socket = accept(this->my_socket, (struct sockaddr*)&this->address, (socklen_t*)&addrlen);
     log("ConnectionManager: Aceptando conexion...", LOG_INFO);
     if (new_socket > 0) {
-        if (this->hasRoom()) {
+        //if (this->hasRoom()) {
             log("ConnectionManager: Conexion aceptada.", LOG_INFO);
             log("ConnectionManager: Creando thread para nueva conexion.", new_socket, LOG_INFO);
             this->socketCache.push_back(new_socket);
@@ -63,12 +63,13 @@ void ConnectionManager::acceptConnection() {
                 log("ConnectionManager: Error creando lector de cliente.", LOG_ERROR);
                 close(new_socket);
             }
-        } else {
+        //}
+        /* else {
             log("ConnectionManager: Conexion rechazada por falta de espacio, numero de clientes: ", this->acceptedConnections, LOG_INFO);
             std::string message = "noRoom:" + std::to_string(this->acceptedConnections);
             this->sendMessage(new_socket, message);
             close(new_socket);
-        }
+        }*/
     } else {
         log("ConnectionManager: Conexion rechazada.", LOG_ERROR);
     }
@@ -133,6 +134,7 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
 }
 
 void ConnectionManager::sendMessage(int socket, std::string message) {
+    log("ConnectionManager: Enviando " + message + " a ", socket, LOG_DEBUG);
     const char* constantMessage = (message).c_str();
     send(socket, constantMessage, strlen(constantMessage), 0);
 }

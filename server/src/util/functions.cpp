@@ -41,32 +41,31 @@ void* read_client(void* argument) {
             if (!user->hasLogedIn()) {
                 // No se logeo.
                 user->processLogInMessage(message);
-                if(!user->hasLogedIn()){
-                  connectionManager->sendMessage(socket,"logged:false");
+                if (!user->hasLogedIn()) {
+                    connectionManager->sendMessage(socket, "logged:false");
                 } else {
-                  connectionManager->sendMessage(socket,"logged:true");
+                    connectionManager->sendMessage(socket, "logged:true");
                 }
             } else if (!user->hasPickedTeamAndFormation()) {
                 // Se logeo, pero no eligio equipo y formacion.
-                log("ELIGE EL EQUIPO ", LOG_INFO);
+                log("read_client: ELIGE EL EQUIPO ", LOG_INFO);
                 std::string key = getMessageKey(message);
                 std::string value = getMessageValue(message);
                 if (key == "get" && value == "max") {
-                  // Mostrarle cuantos jugadores maximos tiene la partida
-                  connectionManager->sendMessage(socket,"max:"+std::to_string(connectionManager->getMaxClients()));
+                    // Mostrarle cuantos jugadores maximos tiene la partida
+                    connectionManager->sendMessage(socket, "max:" + std::to_string(connectionManager->getMaxClients()));
                 }
                 // y mostrar cuantos jugadores hay en cada equipo
                 if (key == "get" && value == "equipo1") {
-                  std::string stats = gameControllerProxy->getTeamStats(0);
-                  connectionManager->sendMessage(socket,stats);
+                    std::string stats = gameControllerProxy->getTeamStats(0);
+                    connectionManager->sendMessage(socket, stats);
                 }
                 if (key == "get" && value == "equipo2") {
-                  std::string stats = gameControllerProxy->getTeamStats(1);
-                  connectionManager->sendMessage(socket,stats);
+                    std::string stats = gameControllerProxy->getTeamStats(1);
+                    connectionManager->sendMessage(socket, stats);
                 }
                 if (key == "use") {
-                  user->processTeamAndFormationMessage(message);
-                  gameControllerProxy->addUser(user->getName(), user->getTeam());
+                    user->processTeamAndFormationMessage(message);
                 }
                 //connectionManager->sendMessage(socket,"Argentina:Brasil");
 
@@ -139,7 +138,7 @@ std::string getMessageKey(std::string message) {
 }
 
 std::string getMessageValue(std::string message) {
-    return message.substr(message.find(":")+1, message.length());   //iba un +1 LPM
+    return message.substr(message.find(":") + 1, message.length()); //iba un +1 LPM
 }
 
 // Espera y acepta conecciones.

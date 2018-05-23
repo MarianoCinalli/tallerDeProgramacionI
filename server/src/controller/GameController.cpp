@@ -1,7 +1,7 @@
 #include "controller/GameController.h"
 
 GameController::GameController(Pitch* pitch) {
-    log("ActionsManager: Creando gameController...", LOG_INFO);
+    log("GameController: Creando gameController...", LOG_INFO);
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
     this->end = false;
@@ -9,7 +9,7 @@ GameController::GameController(Pitch* pitch) {
     // std::list users1;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
-    log("ActionsManager: GameController creado.", LOG_INFO);
+    log("GameController: GameController creado.", LOG_INFO);
 }
 
 void GameController::addUser(std::string user, int teamNum){
@@ -61,7 +61,7 @@ void GameController::updatePlayers() {
             p->updateState();
         }
     }
-    log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);
+    log("GameController: se actualizaron los jugadores.", LOG_DEBUG);
 }
 
 
@@ -107,8 +107,33 @@ void GameController::setEnd() {
     this->end = true;
 }
 
+
+bool GameController::joinTeam(std::string playerName, int team, int maxPlayers) {
+    log("GameController: Viendo si el usuario " + playerName + "puede unirse al equipo:", team, LOG_INFO);
+    int usersInTeam = this->users[team].size();
+    if (maxPlayers == 1) {
+        if (usersInTeam != 0) {
+            log("GameController: El usuario " + playerName + "no puede unirse al equipo:", team, LOG_INFO);
+            return false;
+        } else {
+            log("GameController: El usuario " + playerName + "puede unirse al equipo:", team, LOG_INFO);
+            this->addUser(playerName, team);
+            return true;
+        }
+    } else {
+        if (usersInTeam == (maxPlayers - 1)) {
+            log("GameController: El usuario " + playerName + "no puede unirse al equipo:", team, LOG_INFO);
+            return false;
+        } else {
+            log("GameController: El usuario " + playerName + "puede unirse al equipo:", team, LOG_INFO);
+            this->addUser(playerName, team);
+            return true;
+        }
+    }
+}
+
 GameController::~GameController() {
-    log("ActionsManager: Liberando memoria. Borrando cancha...", LOG_INFO);
+    log("GameController: Liberando memoria. Borrando cancha...", LOG_INFO);
     delete(this->pitch);
-    log("ActionsManager: Cancha borrada.", LOG_INFO);
+    log("GameController: Cancha borrada.", LOG_INFO);
 }

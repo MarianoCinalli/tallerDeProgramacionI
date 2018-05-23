@@ -500,6 +500,35 @@ void showLostConnectionMessage(SDL_Renderer* gRenderer) {
     }
 }
 
+
+void showFullParty(SDL_Renderer* gRenderer, std::string message) {
+    log("openDirtyExitMessage: ", message, LOG_INFO);
+    SDL_Event e;
+    TTF_Font* gFont = NULL;
+    gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (gFont == NULL) {
+        log("openDirtyExitMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+    }
+    Texture line1Texture;
+    line1Texture.loadFromRenderedText(message, gRenderer, SDL_BLUE, gFont);
+    bool continueShowingMessage = true;
+    while (continueShowingMessage) {
+        if (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
+                continueShowingMessage = false;
+            }
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        //Render text textures
+        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 50, line1Texture.getWidth(), line1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderPresent(gRenderer);
+        usleep(1000);
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (chequearOpciones(argc, argv)) {
         //Si da 1 es o la version o el help o un flag inexistente.
@@ -573,6 +602,8 @@ int main(int argc, char* argv[]) {
     bool connected = false;
     bool hasLoggedIn = false;
     bool hasPickedTeam = false;
+    bool fullParty = false;
+    std::string mensajeError = "";
 
     while (!connected || !hasLoggedIn || !hasPickedTeam) {
         // Si no esta conectado, intenta:
@@ -586,7 +617,7 @@ int main(int argc, char* argv[]) {
             connected = connectionManager->connectToServer();
         }
         // Estoy conectado?
-        if (connected) {
+        if (connected && !hasLoggedIn) {
             openLoginUsuario(renderer, servidor, puerto, usuario, clave, mensaje, connectionManager);
             log("SALIO DEL LOGIN USUARIO", LOG_INFO);
             log("Login: Usuario: ", usuario, LOG_INFO);
@@ -617,87 +648,95 @@ int main(int argc, char* argv[]) {
                     }
                 }
             }
-            if (hasLoggedIn && !hasPickedTeam) {
-                // Aca, esta conectado al server, y esta bien logueado
-                // Tiene que elegir el equipo con el cual va a jugar
-                // Cuantos jugadores acepta la partida?
-                connectionManager->sendMessage("get:max");
-                message = "";
-                result = connectionManager->getMessage(message);
-                if (result < 0) {
-                    log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
-                } else if (result == 0) {
-                    log("Main: El server contesta cualquiera!", LOG_INFO);
-                } else {
-                    std::string key = message.substr(0, message.find(":"));
-                    std::string value = message.substr(message.find(":") + 1, message.length());
-                    if (key == "max") {
-                        max = stoi(value);
-                    }
-                    log("Main: Maximo: ", max, LOG_INFO);
+        }
+        if (connected && hasLoggedIn && !hasPickedTeam && !fullParty) {
+            // Aca, esta conectado al server, y esta bien logueado
+            // Tiene que elegir el equipo con el cual va a jugar
+            // Cuantos jugadores acepta la partida?
+            connectionManager->sendMessage("get:max");
+            message = "";
+            result = connectionManager->getMessage(message);
+            if (result < 0) {
+                log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
+            } else if (result == 0) {
+                log("Main: El server contesta cualquiera!", LOG_INFO);
+            } else {
+                std::string key = message.substr(0, message.find(":"));
+                std::string value = message.substr(message.find(":") + 1, message.length());
+                if (key == "max") {
+                    max = stoi(value);
                 }
-                // Cuales son los equipos posibles?
-                // Estado del equipo 1
-                connectionManager->sendMessage("get:equipo1");
-                message = "";
-                result = connectionManager->getMessage(message);
-                if (result < 0) {
-                    log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
-                } else if (result == 0) {
-                    log("Main: El server contesta cualquiera!", LOG_INFO);
+                log("Main: Maximo: ", max, LOG_INFO);
+            }
+            // Cuales son los equipos posibles?
+            // Estado del equipo 1
+            connectionManager->sendMessage("get:equipo1");
+            message = "";
+            result = connectionManager->getMessage(message);
+            if (result < 0) {
+                log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
+            } else if (result == 0) {
+                log("Main: El server contesta cualquiera!", LOG_INFO);
+            } else {
+                equipo1 = message.substr(0, message.find(":"));
+                cantidad1str = message.substr(message.find(":") + 1, message.length());
+                cantidad1 = stoi(cantidad1str);
+                log("Main: Equipo1: ", equipo1, LOG_INFO);
+                log("Main: Cant usuarios: ", cantidad1str, LOG_INFO);
+            }
+            // Estado del equipo 2
+            connectionManager->sendMessage("get:equipo2");
+            message = "";
+            result = connectionManager->getMessage(message);
+            if (result < 0) {
+                log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
+            } else if (result == 0) {
+                log("Main: El server contesta cualquiera!", LOG_INFO);
+            } else {
+                equipo2 = message.substr(0, message.find(":"));
+                cantidad2str = message.substr(message.find(":") + 1, message.length());
+                cantidad2 = stoi(cantidad2str);
+                log("Main: Equipo2: ", equipo2, LOG_INFO);
+                log("Main: Cant usuarios: ", cantidad2str, LOG_INFO);
+            }
+            if (cantidad1 + cantidad2 < max) {
+                if (mensajeError != "") {
+                    mensaje = mensajeError;
                 } else {
-                    equipo1 = message.substr(0, message.find(":"));
-                    cantidad1str = message.substr(message.find(":") + 1, message.length());
-                    cantidad1 = stoi(cantidad1str);
-                    log("Main: Equipo1: ", equipo1, LOG_INFO);
-                    log("Main: Cant usuarios: ", cantidad1str, LOG_INFO);
-                }
-                // Estado del equipo 2
-                connectionManager->sendMessage("get:equipo2");
-                message = "";
-                result = connectionManager->getMessage(message);
-                if (result < 0) {
-                    log("Main: Error en la lectura del mensaje. ", LOG_ERROR);
-                } else if (result == 0) {
-                    log("Main: El server contesta cualquiera!", LOG_INFO);
-                } else {
-                    equipo2 = message.substr(0, message.find(":"));
-                    cantidad2str = message.substr(message.find(":") + 1, message.length());
-                    cantidad2 = stoi(cantidad2str);
-                    log("Main: Equipo2: ", equipo2, LOG_INFO);
-                    log("Main: Cant usuarios: ", cantidad2str, LOG_INFO);
-                }
-                if (cantidad1 + cantidad2 < max) {
                     mensaje = "Elegir el equipo:";
-                    openLoginEquipo(renderer, seleccion, max, equipo1, cantidad1str, equipo2, cantidad2str, mensaje, connectionManager);
-                    if (seleccion == 0) {
-                        equipo = equipo1;
-                    } else {
-                        equipo = equipo2;
-                    }
-                    log("Main: Elige el equipo: " + equipo + " ->", seleccion, LOG_INFO);
-                    // Le aviso al servidor cual fue el equipo elegido
-                    connectionManager->sendMessage("use:" + std::to_string(seleccion));
-                    // Espero la validacion
-                    //if (result == "ok") {
-                    // Grabamos el player number
-                    hasPickedTeam = true;
-                    //} else {
-                    //  mensaje = "La partida ya esta llena.";
-                    //  mensaje = "No puede seleccionar ese equipo.";
-                    //}
-                } else {
-                    mensaje = "La partida ya esta llena.";
                 }
+                openLoginEquipo(renderer, seleccion, max, equipo1, cantidad1str, equipo2, cantidad2str, mensaje, connectionManager);
+                if (seleccion == 0) {
+                    equipo = equipo1;
+                } else {
+                    equipo = equipo2;
+                }
+                log("Main: Elige el equipo: " + equipo + " ->", seleccion, LOG_INFO);
+                // Le aviso al servidor cual fue el equipo elegido
+                connectionManager->sendMessage("use:" + std::to_string(seleccion));
+                std::string resultMessage;
+                connectionManager->getMessage(resultMessage);
+                std::string result = resultMessage.substr(0, resultMessage.find(":"));
+                log("Main: ->>>>> result: ", result, LOG_INFO);
+                if (result == "true") {
+                    hasPickedTeam = true;
+                } else {
+                    mensajeError = "Equipo lleno. Elegir otro";
+                }
+            } else {
+                log("Main: Full party.", LOG_INFO);
+                fullParty = true;
             }
-            if (hasLoggedIn && hasPickedTeam) {
-                // optimus! esta conectado, logueado y con equipo ya seleccionado
-                mensaje = "...";
-                openLoginEsperar(renderer, mensaje, servidor, puerto, usuario, equipo, connectionManager);
-            }
-        } else {
-            mensaje = "No se pudo conectar con el servidor.";
-            log("Main: No se pudo conectar con el servidor", LOG_INFO);
+        }
+        if (connected && hasLoggedIn && hasPickedTeam) {
+            // optimus! esta conectado, logueado y con equipo ya seleccionado
+            mensaje = "...";
+            openLoginEsperar(renderer, mensaje, servidor, puerto, usuario, equipo, connectionManager);
+        }
+        log("AAA", LOG_INFO);
+        if (fullParty) {
+            showFullParty(renderer, "La partida ya esta llena.");
+            endProgram(1, connectionManager);
         }
     }
 

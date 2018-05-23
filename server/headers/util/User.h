@@ -10,6 +10,7 @@
 #include "controller/actions/StopRunningFastAction.h"
 
 // #include "util/Constants.h"
+#include "controller/GameControllerProxy.h"
 #include "util/logger.h"
 #include "util/Broadcaster.h"
 #include "util/ConnectionManager.h"
@@ -22,11 +23,12 @@ class User {
     private:
         bool hasLoged;
         bool hasPicked;
-        ConnectionManager* connectionManager;
         int userSocket;
         int teamNumber;
-        UsersManager* manager;
         std::string user;
+        ConnectionManager* connectionManager;
+        UsersManager* manager;
+        GameControllerProxy* gameControllerProxy;
     public:
         User(GameInitializer* initializer, int socket);
         bool hasLogedIn();

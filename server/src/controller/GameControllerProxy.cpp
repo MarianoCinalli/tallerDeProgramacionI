@@ -51,6 +51,13 @@ bool GameControllerProxy::hasGameStarted() {
     return this->hasStarted;
 }
 
+bool GameControllerProxy::joinTeam(std::string playerName, int team, int maxPlayers) {
+    update_model_mutex.lock();
+    bool result = this->gameController->joinTeam(playerName, team, maxPlayers);
+    update_model_mutex.unlock();
+    return result;
+}
+
 GameControllerProxy::~GameControllerProxy() {
     log("GameControllerProxy: Eliminando gameControllerProxy...", LOG_INFO);
 }
