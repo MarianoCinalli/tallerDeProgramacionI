@@ -48,6 +48,7 @@ class GameController {
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);
         bool joinTeam(std::string playerName, int team, int maxPlayers);
+        void removeUser(std::string user);
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

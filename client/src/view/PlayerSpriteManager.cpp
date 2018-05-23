@@ -55,7 +55,8 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
                 &positionOnScreen
                 );
         // Active player marker.
-        if (this->player->getIsSelected()) {
+        if (this->player->getIsSelected() && (this->player->userName != "NONE")) {
+
                 SDL_Rect markerSprite = this->getActivePlayerMarker();
                 SDL_Rect markerPositionOnScreen = this->getActivePlayerMarkerPosition(coordinates);
 
@@ -388,6 +389,15 @@ SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
                   size = 2;
                 }else if (name =="joaquin"){
                   size = 2;
+                }else if (name =="NONE"){
+                  activePlayerCount++;
+                  this->activePlayerMarker = {
+                          size*SPRITE_SIZE,
+                          16 * SPRITE_SIZE,
+                          0,
+                          0
+                  };
+                  return this->activePlayerMarker;
                 }
                 this->activePlayerMarker = {
                         size*SPRITE_SIZE,

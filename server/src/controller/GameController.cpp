@@ -18,6 +18,10 @@ void GameController::addUser(std::string user, int teamNum){
   this->pitch->changeActivePlayer(user);
 }
 
+void GameController::removeUser(std::string user){
+  this->pitch->removeActivePlayer(user);
+}
+
 Player* GameController::getActivePlayer(std::string user) {
     return this->pitch->getActivePlayer(user);
 }

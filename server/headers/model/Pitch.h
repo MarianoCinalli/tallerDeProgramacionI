@@ -33,6 +33,7 @@ class Pitch {
         Camera* getCamera();
         void checkIntercepts();
         void changeBallOwnership();
+        void removeActivePlayer(std::string user);
         Team* getTeam(int user);
         ~Pitch();
 };

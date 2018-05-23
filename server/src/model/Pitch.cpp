@@ -72,6 +72,12 @@ Player* Pitch::getActivePlayer(std::string user) {
     return this->activePlayers[user];
 }
 
+void Pitch::removeActivePlayer(std::string user){
+  this->activePlayers[user]->toggleIsSelected(user);
+  this->activePlayers[user] = NULL;
+}
+
+
 void Pitch::changeActivePlayer(std::string user) {
     log("cambiando jugador activo", LOG_INFO);
     Team* team = teams[user];
