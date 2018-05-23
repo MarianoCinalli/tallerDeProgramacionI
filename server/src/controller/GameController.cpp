@@ -7,13 +7,13 @@ GameController::GameController(Pitch* pitch) {
     this->end = false;
     this->time = 0;    //ventana de tiempo de 1024 frames
     // std::list users1;
-    this->users[0] = std::list<std::string>();
-    this->users[1] = std::list<std::string>();
+    this->users[0] = std::set<std::string>();
+    this->users[1] = std::set<std::string>();
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
 void GameController::addUser(std::string user, int teamNum){
-  this->users[teamNum].push_front(user);
+  this->users[teamNum].insert(user);
   this->pitch->setUserTeam(user,teamNum);
   this->pitch->changeActivePlayer(user);
 }

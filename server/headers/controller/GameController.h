@@ -1,6 +1,7 @@
 #include "model/Pitch.h"
 #include "controller/actions/Action.h"
 #include "view/Camera.h"
+#include <set>
 
 /*
 Controlador de juego:
@@ -28,7 +29,7 @@ class GameController {
         Player* activePlayer;
         bool end;
         int time;
-        std::map<int,std::list<std::string>> users; 
+        std::map<int,std::set<std::string>> users;
     public:
         GameController(Pitch* pitch);
         // Ejecuta la accion sobre el jugador seleccionado.
