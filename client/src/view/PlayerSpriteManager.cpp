@@ -46,14 +46,16 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         } else {
                 this->setSprite(sliding, kicking, runningFast);
         }
+
         SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
         SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
+        // SDL_RenderSetScale(screen, 2,2);
         SDL_RenderCopy(
                 screen,
                 spriteSheet,
                 &this->sprite,
                 &positionOnScreen
-                );
+              );
         // Active player marker.
         if (this->player->getIsSelected() && (this->player->userName != "NONE")) {
 
@@ -67,6 +69,7 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
                         &markerPositionOnScreen
                         );
         }
+        // SDL_RenderSetScale(screen,1,1);
 }
 
 void PlayerSpriteManager::setSprite(bool sliding, bool kicking, bool runningFast) {
@@ -93,10 +96,10 @@ PlayerSpriteManager::~PlayerSpriteManager() {
 // Devuelve el cuadrado que va a ocupar el sprite en la pantalla.
 SDL_Rect PlayerSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates) {
         SDL_Rect renderQuad = {
-                coordinates->getX(),
-                coordinates->getY(),
-                SPRITE_SIZE,
-                SPRITE_SIZE
+                coordinates->getX() - DRAW_SIZE_CORRECTION,
+                coordinates->getY() - DRAW_SIZE_CORRECTION,
+                DRAW_SIZE_PLAYER,
+                DRAW_SIZE_PLAYER
         };
         return renderQuad;
 }
@@ -413,9 +416,9 @@ SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {
         return {
-                       coordinates->getX(),
-                               coordinates->getY() - SPRITE_SIZE,
-                               SPRITE_SIZE,
-                               SPRITE_SIZE
+                              coordinates->getX(),
+                               coordinates->getY() - DRAW_SIZE_PLAYER,
+                               DRAW_SIZE_PLAYER,
+                               DRAW_SIZE_PLAYER
         };
 }

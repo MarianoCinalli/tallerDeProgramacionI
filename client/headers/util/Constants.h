@@ -47,6 +47,9 @@ const int SCREEN_HEIGHT = 600;
 const int SPRITE_SIZE = 63;
 const int CUERPO_JUGADOR = 15;
 
+const int DRAW_SIZE_PLAYER = 85;
+const int DRAW_SIZE_CORRECTION = 15;
+
 // Velocidad de desplazamiento scroll camara
 const int SCROLL_SPEED = 13;
 
