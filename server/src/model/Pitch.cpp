@@ -85,7 +85,7 @@ void Pitch::changeActivePlayer(std::string user) {
     Coordinates* center = this->ball->getPosition();
 
     // Solo puede seleccionar de los jugadores dentro de los margenes,
-    std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 0);
+    std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 1);
     if (!playersList.empty()) {
         int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
         Player* nearestPlayer = playersList.back();

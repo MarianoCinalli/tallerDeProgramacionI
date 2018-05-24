@@ -88,26 +88,26 @@ void Camera::calculateNewPostion(Coordinates* centerPosition, int scrollSpeed) {
     }
 }
 
-std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteManager*>& views) {
-    // Solo los que estan dentro de la camara
-    std::list<PlayerSpriteManager*> resultado;
-    int playerX = 0;
-    int playerY = 0;
-    for (PlayerSpriteManager* p : views){
-        playerX = p->getPlayerCoordinates()->getX();
-        playerY = p->getPlayerCoordinates()->getY();
-
-        if ( (playerX > 0 - SPRITE_SIZE) &&
-             (playerX < LEVEL_WIDTH) &&
-             (playerY > 0 - SPRITE_SIZE) &&
-             (playerY < LEVEL_HEIGHT) ) {
-            // Esta dentro de los limites
-            resultado.push_back(p);
-        }
-    }
-
-    return resultado;
-}
+// std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteManager*>& views) {
+//     // Solo los que estan dentro de la camara
+//     std::list<PlayerSpriteManager*> resultado;
+//     int playerX = 0;
+//     int playerY = 0;
+//     for (PlayerSpriteManager* p : views){
+//         playerX = p->getPlayerCoordinates()->getX();
+//         playerY = p->getPlayerCoordinates()->getY();
+//
+//         if ( (playerX > 0 - SPRITE_SIZE) &&
+//              (playerX < LEVEL_WIDTH) &&
+//              (playerY > 0 - SPRITE_SIZE) &&
+//              (playerY < LEVEL_HEIGHT) ) {
+//             // Esta dentro de los limites
+//             resultado.push_back(p);
+//         }
+//     }
+//
+//     return resultado;
+// }
 
 bool isInsideMargin(Player* p,SDL_Rect* margin){
   int playerX = p->getPosition()->getX();

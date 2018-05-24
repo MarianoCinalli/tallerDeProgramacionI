@@ -24,7 +24,7 @@ class Camera {
         // transforma las coordenadas para que queden relativas a la camara.
         Coordinates* getRelativeCoordinates(Coordinates* coordinates);
         // calcular la nueva posicion de la camara basado en la coordenada quese le pasa
-        void calculateNewPostion(Coordinates* objPosition);
+        void calculateNewPosition(Coordinates* objPosition);
         // devuelve los jugadores dentro del margen.
         std::list<Player*> getPlayersInsideMargin(std::list<Player*> players, int outerMargin);
         // devuelve los jugadores dentro de la camara.

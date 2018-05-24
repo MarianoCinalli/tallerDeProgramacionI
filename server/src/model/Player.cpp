@@ -39,7 +39,7 @@ Velocity* Player::getVelocity() {
 
 int Player::getCurrentSpeed() {
     if (this->runningFast){
-      return this->maxVelocity*1.8; //Hardcode
+      return this->maxVelocity*FAST_SPEED_COEF; //Hardcode
     }
     else {
       return this->maxVelocity;

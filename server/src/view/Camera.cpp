@@ -27,24 +27,26 @@ Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     return relativePosition;
 }
 
-void Camera::calculateNewPostion(Coordinates* objPosition) {
+void Camera::calculateNewPosition(Coordinates* objPosition) {
     // Margen derecho
     int x = objPosition->getX();
     int y = objPosition->getY();
     log(std::to_string(x)+std::to_string(y),LOG_DEBUG);
     int difference;
-    difference = x + SPRITE_SIZE - (margin.x + margin.w);
+    int xCorrection = 40;
+    // Margen derecho
+    difference = x + SPRITE_SIZE - (margin.x - xCorrection + margin.w);
     if (difference> 0){
       log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
       this->position->addX(difference);
-      margin.x = this->position->getX() + margin_size;
+      margin.x = this->position->getX() + margin_size + xCorrection;
     }
     // Margen izquierdo
-    difference = x - margin.x;
+    difference = x - (margin.x + xCorrection);
     if (difference< 0){
       log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
       this->position->addX(difference);
-      margin.x = this->position->getX() + margin_size;
+      margin.x = this->position->getX() + margin_size + xCorrection;
     }
     // Margen inferior
     difference = (y + SPRITE_SIZE) - (margin.y + margin.h);
@@ -74,21 +76,8 @@ void Camera::calculateNewPostion(Coordinates* objPosition) {
     if (this->position->getY() > LEVEL_HEIGHT - this->height) {
         this->position->setY(LEVEL_HEIGHT - this->height);
     }
+  }
 
-    //Keep the margin in bounds
-    // if (margin.x < 0) {
-    //     margin.x = 0;
-    // }
-    // if (margin.y < 0) {
-    //     margin.y = 0;
-    // }
-    // if (margin.x > LEVEL_WIDTH - margin.w) {
-    //     margin.x = LEVEL_WIDTH - margin.w;
-    // }
-    // if (margin.y > LEVEL_HEIGHT - margin.h) {
-    //     margin.y = LEVEL_HEIGHT - margin.h;
-    // }
-}
 
 bool Camera::isInsideMargin(Player* p, SDL_Rect* margin, int outerMargin) {
     int playerX = p->getPosition()->getX();

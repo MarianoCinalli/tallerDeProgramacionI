@@ -86,7 +86,7 @@ void GameController::updateCameraPosition(Camera* camera) {
     Coordinates* position = this->ball->getPosition();
     // Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
     // int speed = this->pitch->getActivePlayer(0)->getCurrentSpeed();
-    camera->calculateNewPostion(position);
+    camera->calculateNewPosition(position);
 }
 
 // Aca deberia haber una nocion del tiempo.
