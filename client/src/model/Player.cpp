@@ -4,20 +4,12 @@ Player::Player(int orientation, Coordinates* position, int teamNumber) {
     log("Jugador: Creando jugador...", LOG_INFO);
     this->orientation = orientation;
     this->position = position;
-    this->basePosition = new Coordinates(800, 500);
-    this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
-    this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->team = team;
     this->sliding = false;
-    this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
     this->kicking = false;
-    this->wasKicking = false;
-    this->canMove = true;
     this->isSelected = false;
-    this->isReturning = false;
     this->still = true;
     this->runningFast = false;
-    this->dominatesTheBall = false;
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
@@ -83,6 +75,4 @@ bool Player::isSliding() {
 
 Player::~Player() {
     delete(this->position);
-    delete(this->basePosition);
-    delete(this->velocity);
 }

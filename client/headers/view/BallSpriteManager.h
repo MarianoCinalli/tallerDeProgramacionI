@@ -1,5 +1,4 @@
 #include "util/Coordinates.h"
-#include "util/Velocity.h"
 #include "util/Constants.h"
 #include "util/logger.h"
 #include "view/Texture.h"

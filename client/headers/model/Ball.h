@@ -1,6 +1,5 @@
 #include "util/Constants.h"
 #include "util/Coordinates.h"
-#include "util/Velocity.h"
 #include "util/logger.h"
 #include "model/Player.h"
 #include <SDL2/SDL.h>

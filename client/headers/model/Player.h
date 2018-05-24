@@ -1,6 +1,5 @@
 #include "util/Constants.h"
 #include "util/Coordinates.h"
-#include "util/Velocity.h"
 #include "util/logger.h"
 #include <SDL2/SDL.h>
 #include <yaml-cpp/yaml.h>
@@ -11,20 +10,13 @@
 class Player {
     private:
         int orientation;
-        int maxVelocity;
         int team;
         bool isSelected;
         bool isReturning;
-        Velocity* velocity;
         Coordinates* position;
-        Coordinates* basePosition;
         bool sliding;
-        bool wasSliding;
         bool kicking;
-        bool wasKicking;
-        bool canMove;
         bool runningFast;
-        bool dominatesTheBall;
         bool still;
 
 

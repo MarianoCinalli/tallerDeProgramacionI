@@ -73,7 +73,7 @@ void GameInitializer::initializePitchView(Conf* conf) {
 void GameInitializer::initializeBall(){
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
     // Player* player = this->pitch->activePlayer;
-    Coordinates* coords = new Coordinates(800,600);
+    Coordinates* coords = new Coordinates(0,0);
     Ball* ball = new Ball(coords);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
     BallSpriteManager* ballSpriteManager = new BallSpriteManager(this->localTeamSprites, ball);
@@ -93,12 +93,11 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     delete(shirt);
     // Crear los jugadores.
     log("GameInitializer: Creando equipo.", LOG_INFO);
-    Team* team = new Team(teamNumber);
+    Team* team = new Team();
     log("GameInitializer: Seteando formacion.", LOG_INFO);
-    team->setFormacion(conf->getFormacion());
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
-        Coordinates* coordinates = new Coordinates(800, 500);
+        Coordinates* coordinates = new Coordinates(0, 0);
         Player* player = new Player(PLAYER_ORIENTATION_RIGHT, coordinates, teamNumber);
         team->addPlayer(player);
         log("GameInitializer: Creando vista de jugador numero: ", i, LOG_INFO);
@@ -111,8 +110,6 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
         }
         this->pitchView->addPlayerView(playerSpriteManager);
     }
-    log("GameInitializer: Ordenando equipo local.", LOG_INFO);
-    team->order();
     log("GameInitializer: Agregando el equipo local a la cancha.", LOG_INFO);
     if (teamNumber==0){
       this->localTeam = team;
