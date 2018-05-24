@@ -63,8 +63,8 @@ const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 const int PASS_SPEED = 25;
 
 //interceptar pases
-const int INTERCEPT_VALUE = 40;
-const int STEAL_VALUE = 60;
+const int CHANGE_OWNERSHIP_VALUE= 40;
+const int STEAL_VALUE = 90;
 const int TIME_BALL_NO_INTERCEPT = 4;
 
 

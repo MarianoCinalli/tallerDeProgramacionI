@@ -31,7 +31,7 @@ class Pitch {
         std::list<Player*> getPlayersInsideCamera();
         Ball* getBall();
         Camera* getCamera();
-        void checkIntercepts();
+        void checkSteals();
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
         Team* getTeam(int user);

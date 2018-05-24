@@ -11,7 +11,7 @@ void SlidingAction::execute(Player* player) {
 
 void SlidingAction::execute(Pitch* pitch, std::string user) {
     log("SlidingAction: Tecla deslizar detectada.", LOG_DEBUG);
-    pitch->checkIntercepts();
+    pitch->checkSteals();
 }
 
 bool SlidingAction::valid(Player* player) {

@@ -86,7 +86,7 @@ void Pitch::changeActivePlayer()
 	}
 }
 
-void Pitch::checkIntercepts(){
+void Pitch::checkSteals(){
 	int value = STEAL_VALUE;
 	std::list<Player*> players = this->localTeam->getPlayers();
 	std::list<Player*> awayPlayers = this->awayTeam->getPlayers();

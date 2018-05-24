@@ -124,7 +124,7 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 }
 
 
-void Pitch::checkIntercepts() {
+void Pitch::checkSteals() {
     log("chequeando intercept", LOG_INFO);
     int value = STEAL_VALUE;
     std::list<Player*> players = this->localTeam->getPlayers();
@@ -152,7 +152,7 @@ void Pitch::checkIntercepts() {
 
 void Pitch::changeBallOwnership() {
     if (this->ball->isInterceptable()) {
-        int value = INTERCEPT_VALUE;
+        int value = CHANGE_OWNERSHIP_VALUE;
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
         players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());

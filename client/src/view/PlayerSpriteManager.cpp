@@ -416,7 +416,7 @@ SDL_Rect PlayerSpriteManager::getActivePlayerMarker() {
 
 SDL_Rect PlayerSpriteManager::getActivePlayerMarkerPosition(Coordinates* coordinates) {
         return {
-                              coordinates->getX(),
+                               coordinates->getX() - DRAW_SIZE_CORRECTION+1,
                                coordinates->getY() - DRAW_SIZE_PLAYER,
                                DRAW_SIZE_PLAYER,
                                DRAW_SIZE_PLAYER
