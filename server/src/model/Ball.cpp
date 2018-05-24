@@ -34,6 +34,7 @@ Player* Ball::getPlayer() {
 void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;
+    this->player->isWithBall(this->dominated);
 }
 
 bool Ball::isDominated() {
@@ -49,6 +50,7 @@ void Ball::isIntercepted(Player* player) {
     this->interceptable = false;
     this->player = player;
     this->dominated = true;
+    this->player->isWithBall(this->dominated);
     this->orientation = player->getOrientation();
 }
 
@@ -62,6 +64,7 @@ void Ball::isPassed(int direction, int passPower) {
             this->velocity->accelerate(passDirection);
         }
         dominated = false;
+        this->player->isWithBall(this->dominated);
         this->isInAPass = true;
         this->passPower = passPower;
         // this->decelerateDistance = passPower * 50;  //TODO: ver valores y poner ctes

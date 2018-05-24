@@ -24,6 +24,7 @@ class Player {
         bool wasKicking;
         bool canMove;
         bool runningFast;
+        bool withBall;
         int kickCount;
         int slideCount;
         std::string userName;
@@ -55,6 +56,7 @@ class Player {
         void toggleIsSelected(std::string name);
         void copyStats(Player* copyTo);
         void setTrayectory(Velocity* trayectory);
+        void isWithBall(bool dominated);
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void updateKicking();

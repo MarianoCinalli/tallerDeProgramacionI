@@ -21,12 +21,17 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->runningFast = false;
     this->kickCount = 0;
     this->slideCount = 0;
+    this->withBall = false;
     this->userName = "NONE";
     log("Jugador: Jugador creado.", LOG_INFO);
 }
 
 Coordinates* Player::getPosition() {
     return this->position;
+}
+
+void Player::isWithBall(bool dominated){
+  this->withBall = dominated;
 }
 
 int Player::getOrientation() {
@@ -233,10 +238,7 @@ Player::~Player() {
 void Player::startsRunningFast() {
     if (!this->sliding &&
         !this->kicking &&
-        //!this->velocity->isZero() &&
         !this->isRunningFast()) {
-        // !this->isRunningDiagonaly()) {
-            // this->velocity->accelerate(this->orientation, this->maxVelocity);
             this->runningFast = true;
             log("Jugador: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
     }
@@ -246,7 +248,6 @@ void Player::startsRunningFast() {
 
 void Player::stopsRunningFast() {
     if (this->runningFast) {
-        // this->velocity->decelerate(this->orientation, this->maxVelocity);
         this->runningFast = false;
         //log("Jugador: El jugador deja de correr rapido", LOG_DEBUG);
     }
@@ -292,10 +293,9 @@ bool Player::wasSlidingYet() {
 }
 
 void Player::startsSliding() {
-    if (!this->kicking) {
+    if (!this->kicking && !this->withBall) {
         this->sliding = true;
     }
-    //this->velocity->accelerate(this->orientation, this->maxVelocity);
 }
 
 void Player::isAlreadySliding() {
