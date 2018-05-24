@@ -12,41 +12,15 @@
 
 class Ball {
     private:
-        Velocity* velocity;
-        int maxVelocity;
+
         Coordinates* position;
-        int passPower;
-        int height;
-        int orientation;
-        bool dominated;
-        bool isInAPass;
-        bool interceptable;
-        int passDirection;
-        Coordinates* startingPassPosition;
-        int decelerateDistance;
-        int timePassing;
-        int decelerateLevel;
-        Player* player;
+
 
     public:
-        Ball(Coordinates* position, Player* player);
+        Ball(Coordinates* position);
 
         void parseYaml(YAML::Node node);
         Coordinates* getPosition();
-        Velocity* getVelocity();
-        Player* getPlayer();
-        void setPlayer(Player* player);
-        bool isDominated();
-        bool isInterceptable();
-
-        void isIntercepted(Player* player);
-        void isPassed(int direction, int passPower);
-        void updatePosition();
-
-        Coordinates* calculateDominatedPosition();
-        void progressiveDecelerate(float passDistance);
-        void stopRolling();
-
         ~Ball();
 };
 #endif // BALL_H

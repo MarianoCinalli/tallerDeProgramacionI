@@ -3,22 +3,6 @@
 Action::Action() {
 }
 
-void Action::execute(Player* player) {
-    log("Action: Llamando al execute de Action!", LOG_ERROR);
-}
-
-void Action::execute(Pitch* pitch) {
-    log("Action: Llamando al execute de Action!", LOG_ERROR);
-}
-
-bool Action::valid(Player* player) {
-    return false;
-}
-
-bool Action::valid(Pitch* pitch) {
-    return false;
-}
-
 std::string Action::getCommand() {
     log("Action: Llamando al getCommand de Action!", LOG_ERROR);
     return "NotImplemented";

@@ -10,10 +10,6 @@ class SlidingAction : public Action {
 	private:
     public:
         SlidingAction();
-        virtual void execute(Player* player);
-        virtual bool valid(Player* player);
-				virtual void execute(Pitch* pitch);
-        virtual bool valid(Pitch* pitch);
         virtual std::string getCommand();
         virtual std::string getParameters();
         ~SlidingAction();

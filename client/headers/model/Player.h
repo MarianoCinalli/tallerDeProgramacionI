@@ -34,43 +34,16 @@ class Player {
 
         // Getters
         Coordinates* getPosition();
-        Velocity* getVelocity();
-        int getCurrentSpeed();
         int getOrientation();
-        bool wasSlidingYet();
-        bool wasKickingYet();
+
         bool isSliding();
         bool isKicking();
         bool getIsSelected();
-        bool isRunningDiagonaly();
         bool isRunningFast();
+        bool isStill();
 
         // Modifiers
         void parseYaml(YAML::Node node);
-        // Cambia la velocidad a su maximo, por ahora.
-        void accelerate(int direction);
-        void decelerate(int direction);
-        void stop();
-        void stopRunningInDirection(int direction);
-        void toggleIsSelected();
-        void copyStats(Player* copyTo);
-        void setTrayectory(Velocity* trayectory);
-        // Cambia la posicion con respecto a su velocidad.
-        void updatePosition();
-        void setOrientation(int orientation);
-        void setPosition(Coordinates coord);
-        void setBasePosition(Coordinates coord);
-        void returnToBasePosition();
-        // Acciones
-        void startsRunningFast();
-        void stopsRunningFast();
-        void startsSliding();
-        void stopSliding();
-        void isAlreadySliding();   //TODO mejorar nombres de slide!
-        void startsKicking();
-        void stopKicking();
-        void isAlreadyKicking();
-        bool isStill();
 
         ~Player();
 };

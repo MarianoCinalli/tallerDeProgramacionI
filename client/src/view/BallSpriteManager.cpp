@@ -19,10 +19,9 @@ Coordinates* BallSpriteManager::getBallCoordinates() {
 }
 
 void BallSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
-    Velocity* velocity = this->ball->getVelocity();
-    if (!velocity->isZero()) {
-        this->setMovingBallSprite(velocity);
-    }
+
+
+    this->setMovingBallSprite();
     // Coordinates* coordinates = this->getBallCoordinates();
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
     SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
@@ -52,7 +51,7 @@ SDL_Rect BallSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* co
     return renderQuad;
 }
 
-void BallSpriteManager::setMovingBallSprite(Velocity* velocity) {
+void BallSpriteManager::setMovingBallSprite() {
     log("BallSpriteManager: Creando el sprite del balon.", LOG_DEBUG);
     if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 21 * SPRITE_SIZE)) {
         this->sprite.x = 0; // Reinicio la secuencia.

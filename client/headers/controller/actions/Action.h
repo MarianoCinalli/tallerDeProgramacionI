@@ -12,10 +12,6 @@ class Action {
     private:
     public:
         Action();
-        virtual void execute(Player* player);
-        virtual void execute(Pitch* pitch);
-        virtual bool valid(Player* player);
-        virtual bool valid(Pitch* pitch);
         virtual std::string getCommand();
         virtual std::string getParameters();
         virtual std::string toString();

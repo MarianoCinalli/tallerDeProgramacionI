@@ -10,8 +10,6 @@ class RunningFastAction : public Action {
 	private:
     public:
         RunningFastAction();
-        virtual void execute(Player* player);
-        virtual bool valid(Player* player);
         virtual std::string getCommand();
         virtual std::string getParameters();
         ~RunningFastAction();

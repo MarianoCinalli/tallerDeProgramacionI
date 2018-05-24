@@ -23,6 +23,6 @@ class BallSpriteManager {
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
 
-        void setMovingBallSprite(Velocity* velocity);
+        void setMovingBallSprite();
 };
 #endif // PLAYERSPRITEMANAGER_H

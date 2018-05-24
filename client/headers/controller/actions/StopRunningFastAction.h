@@ -10,8 +10,6 @@ class StopRunningFastAction : public Action {
 	private:
     public:
         StopRunningFastAction();
-        virtual void execute(Player* player);
-        virtual bool valid(Player* player);
         virtual std::string getCommand();
         virtual std::string getParameters();
         ~StopRunningFastAction();

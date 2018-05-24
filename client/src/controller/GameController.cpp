@@ -16,16 +16,6 @@ GameController::GameController(Pitch* pitch) {
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
-
-void GameController::execute(Action* action) {
-    if(action->valid(this->activePlayer)){
-      action->execute(this->activePlayer);
-    }
-    if (action->valid(this->pitch)){
-      action->execute(this->pitch);
-    }
-}
-
 Player* GameController::getPlayer(int num){
   return this->players[num];
 }
@@ -36,40 +26,6 @@ Ball* GameController::getBall(){
 
 Camera* GameController::getCamera() {
   return this->pitch->camera;
-}
-
-void GameController::updatePlayers() {
-    // Por ahora es lo unico que necesitamos
-    // porque solo se mueve un jugador.
-    this->activePlayer = this->pitch->activePlayer;
-    // Actualizar la posicion de todos los jugadores
-    std::list<Player*> players = this->pitch->getLocalTeam()->getPlayers();
-    if (!players.empty()){
-        for (Player* p : players) {
-            p->updatePosition();
-        }
-    }
-    log("ActionsManager: se actualizaron los jugadores.", LOG_INFO);
-}
-
-void GameController::updateBall() {
-
-  if(this->ball->isDominated() && this->ball->getPlayer()->isKicking()){
-    log("La pelota fue pateada", LOG_INFO);
-    this->ball->isPassed(this->ball->getPlayer()->getOrientation(), 15); //TODO valor de pase?
-  }
-  this->pitch->changeBallOwnership();
-  this->ball->updatePosition();
-}
-
-
-
-// Cuando el jugador pise el borde mueve la camara.
-// En este punto las coordenadas de el jugador son validas.
-void GameController::updateCameraPosition(Camera* camera) {
-    Coordinates* playerPosition = this->activePlayer->getPosition();
-    int playerSpeed = this->activePlayer->getCurrentSpeed();
-    camera->calculateNewPostion(playerPosition, playerSpeed);
 }
 
 GameController::~GameController() {

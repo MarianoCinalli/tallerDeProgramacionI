@@ -31,16 +31,10 @@ class GameController {
         map<int, Player*> players;
     public:
         GameController(Pitch* pitch);
-        // Ejecuta la accion sobre el jugador seleccionado.
-        void execute(Action* action);
         // Para actualizar los modelos.
-        void updatePlayers();
-        void updateBall();
         Player* getPlayer(int num);
         Ball* getBall();
         Camera* getCamera();
-        // Dependiendo de la posicion del active player, mueve la camara.
-        void updateCameraPosition(Camera* camera);
         ~GameController();
 };
 #endif // GAMECONTROLLER_H
