@@ -201,15 +201,6 @@ void PlayerSpriteManager::setRunningSprite(bool runningFast) {
                 }
         }
         runningCount +=1;
-//     if (this->isRunningUp(xComponent, yComponent)) {
-//         this->setRunningUpSprite(cteVelocidad);
-//     } else if (this->isRunningDown(xComponent, yComponent)) {
-//         this->setRunningDownSprite(cteVelocidad);
-//     } else if (this->isRunningLeft(xComponent, yComponent)) {
-//         this->setRunningLeftSprite(cteVelocidad);
-//     } else if (this->isRunningRight(xComponent, yComponent)) {
-//         this->setRunningRightSprite(cteVelocidad);
-//     }
 }
 
 bool PlayerSpriteManager::isRunningUp(int xComponent, int yComponent) {

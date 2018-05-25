@@ -34,6 +34,7 @@ Player* Ball::getPlayer() {
 void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;
+    this->velocity = this->player->getVelocity();
     this->player->isWithBall(this->dominated);
 }
 
@@ -48,17 +49,16 @@ bool Ball::isInterceptable() {
 void Ball::isIntercepted(Player* player) {
     this->stopRolling();
     this->interceptable = false;
-    this->player = player;
-    this->dominated = true;
-    this->player->isWithBall(this->dominated);
+    this->setPlayer(player);
     this->orientation = player->getOrientation();
 }
 
 void Ball::isPassed(int direction, int passPower) {
     if (this->isDominated()) {
         this->interceptable = false;
-        Velocity* passDirection = this->player->getVelocity();  //direction;
-        this->velocity->set(passDirection);
+        Velocity* passDirection = new Velocity(0,0);
+        passDirection->set(this->player->getVelocity());  //direction;
+        this->velocity = passDirection;
         if (passDirection->isZero()) {
             int passDirection = this->player->getOrientation();
             this->velocity->accelerate(passDirection);
@@ -98,17 +98,6 @@ void Ball::updatePosition() {
             }
         }
     }
-    // if((this->isInAPass) && (!this->velocity->isZero())) {
-    //  float passDistance = 0;
-    //  int abs_delta_x = 0;
-    //       int abs_delta_y = 0;
-    //       abs_delta_x = abs(this->position->getX() - this->startingPassPosition->getX());
-    //       abs_delta_y = abs(this->position->getY() - this->startingPassPosition->getY());
-    //  passDistance = (sqrt((abs_delta_x * abs_delta_x) + (abs_delta_y * abs_delta_y)));
-    //  if (passDistance > decelerateDistance) {
-    //      this->progressiveDecelerate(passDistance);
-    //  }
-    // }
     else {
         if (this->velocity->isZero()) {
             this->timePassing = 0;
@@ -139,35 +128,7 @@ Coordinates* Ball::calculateDominatedPosition() {
     Coordinates* newPosition = new Coordinates(x, y);
     return newPosition;
 }
-//
-// void Ball::progressiveDecelerate(float passDistance) {
-//  if ((passDistance > decelerateDistance) && (this->decelerateLevel) == 0) {
-//      float amount = (this->velocity->totalVelocity() / 4);
-//      this->velocity->decelerate(this->orientation, amount);
-//      this->decelerateLevel = 1;
-//  }
-//  else {
-//      if ((passDistance > (1.5*decelerateDistance)) && (decelerateLevel == 1)) {
-//          float amount = (this->velocity->totalVelocity() / 4);
-//          this->velocity->decelerate(this->orientation, amount);
-//          this->decelerateLevel = 2;
-//      }
-//      else {
-//          if ((passDistance > (1.75*decelerateDistance)) && (decelerateLevel == 2)) {
-//          float amount = (this->velocity->totalVelocity() / 4);
-//          this->velocity->decelerate(this->orientation, amount);
-//          this->decelerateLevel = 3;
-//          }
-//          else {
-//              if ((passDistance > (2*decelerateDistance)) && (decelerateLevel == 3)) {
-//              float amount = (this->velocity->totalVelocity() / 4);
-//              this->velocity->decelerate(this->orientation, amount);
-//              this->decelerateLevel = 4;
-//              }
-//          }
-//      }
-//  }
-// }
+
 
 void Ball::stopRolling() {
     this->velocity->stop();
@@ -190,13 +151,8 @@ std::string Ball::getAsYaml() {
     message += "ba:\n";
     message += " cx: " + std::to_string(this->position->getX()) + "\n";
     message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " st: " + std::to_string(this->velocity->isZero()) + "\n";
     return message;
-}
-
-// Metodo para dar compatibilidad con lo anterior,
-// ver si la velocidad que devuelve es la correcta.
-int Ball::getCurrentSpeed() {
-    return this->velocity->getComponentX();
 }
 
 Ball::~Ball() {

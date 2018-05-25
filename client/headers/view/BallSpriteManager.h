@@ -13,7 +13,7 @@ class BallSpriteManager {
         Ball* ball;
         Texture* spriteSheet;
         SDL_Rect sprite;
-
+        int rollingCount;
     public:
         BallSpriteManager(Texture* spriteSheet, Ball* ball);
         void render(SDL_Renderer* screen, Coordinates* coordinates);

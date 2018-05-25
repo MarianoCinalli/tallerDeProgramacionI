@@ -3,6 +3,7 @@
 BallSpriteManager::BallSpriteManager(Texture* spriteSheet, Ball* ball) {
     log("BallSpriteManager: Creando vista...", LOG_INFO);
     this->ball = ball;
+    this->rollingCount = 0;
     this->spriteSheet = spriteSheet;
     this->sprite = {
         0,
@@ -20,17 +21,17 @@ Coordinates* BallSpriteManager::getBallCoordinates() {
 
 void BallSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
 
-
-    this->setMovingBallSprite();
-    // Coordinates* coordinates = this->getBallCoordinates();
-    SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
-    SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
-    SDL_RenderCopy(
-        screen,
-        spriteSheet,
-        &this->sprite,
-        &positionOnScreen
-    );
+    if(!this->ball->isStill()){
+      this->setMovingBallSprite();
+    }
+      SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
+      SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
+      SDL_RenderCopy(
+          screen,
+          spriteSheet,
+          &this->sprite,
+          &positionOnScreen
+      );
 }
 
 
@@ -52,6 +53,10 @@ SDL_Rect BallSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* co
 }
 
 void BallSpriteManager::setMovingBallSprite() {
+  if (rollingCount==1024) { //TODO hardcode value
+          rollingCount = 0;
+  }
+  if ((rollingCount % ROLLING_DIVISOR) == 0) {
     log("BallSpriteManager: Creando el sprite del balon.", LOG_DEBUG);
     if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 21 * SPRITE_SIZE)) {
         this->sprite.x = 0; // Reinicio la secuencia.
@@ -59,4 +64,6 @@ void BallSpriteManager::setMovingBallSprite() {
     } else {
         this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
     }
+  }
+  rollingCount ++;
 }

@@ -74,6 +74,7 @@ const int STANDING_DIVISOR = 10;
 const int RUNNING_DIVISOR = 10;
 const int SLIDING_DIVISOR = 7;
 const int KICKING_DIVISOR = 6;
+const int ROLLING_DIVISOR = 5;
 const int ACTIVE_PLAYER_DIVISOR = 10;
 
 

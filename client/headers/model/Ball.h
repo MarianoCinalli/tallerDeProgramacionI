@@ -13,11 +13,11 @@ class Ball {
     private:
 
         Coordinates* position;
-
+        int still;
 
     public:
         Ball(Coordinates* position);
-
+        int isStill();
         void parseYaml(YAML::Node node);
         Coordinates* getPosition();
         ~Ball();
