@@ -26,7 +26,7 @@ void User::processLogInMessage(std::string message) {
     // Le manda el resultado al cliente.
     std::string parsedUser = this->getMessageAction(message);
     std::string parsedPassword = this->getMessageValue(message);
-    log("VALIDANDO USUARIO ", LOG_INFO);
+    log("User: Intentando logear a: ", parsedUser, LOG_INFO);
     this->hasLoged = this->manager->logIn(
         parsedUser,
         parsedPassword
@@ -34,10 +34,11 @@ void User::processLogInMessage(std::string message) {
     if (this->hasLoged) {
         log("User: Usuario logeado: ", parsedUser, LOG_INFO);
         this->user = parsedUser;
+        connectionManager->sendMessage(this->userSocket, "logged:true");
     } else {
         log("User: No se pudo logear el usuario.", LOG_INFO);
+        connectionManager->sendMessage(this->userSocket, "logged:false");
     }
-    log("FIN VALIDANDO USUARIO ", LOG_INFO);
 }
 
 bool User::hasPickedTeamAndFormation() {
@@ -60,8 +61,8 @@ void User::processTeamAndFormationMessage(std::string message) {
         if (couldJoin) {
             log("User: El usuario se unio al equipo: ", team, LOG_INFO);
             this->teamNumber = team;
-            log("User: El usuario termino de elegir.", LOG_INFO);
             this->hasPicked = true;
+            log("User: El usuario termino de elegir.", LOG_INFO);
             this->connectionManager->sendMessage(this->userSocket, "true:");
         } else {
             log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
@@ -105,15 +106,15 @@ std::string User::getMessageAction(std::string message) {
 }
 
 std::string User::getMessageValue(std::string message) {
-    return message.substr(message.find(":")+1, message.length());
+    return message.substr(message.find(":") + 1, message.length());
 }
 
 int User::getTeam() {
     return this->teamNumber;
 }
 
-std::string User::getName(){
-  return this->user;
+std::string User::getName() {
+    return this->user;
 }
 
 void User::logOff() {

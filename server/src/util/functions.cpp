@@ -10,7 +10,6 @@ void* read_client(void* argument) {
     log("read_client: Creado.", LOG_INFO);
     int socket;
     int readBytes;
-    // std::string message;
     bool continueReading = true;
     bool firstBroadcastRead = true;
     socket = *((int*) argument);
@@ -41,14 +40,8 @@ void* read_client(void* argument) {
             if (!user->hasLogedIn()) {
                 // No se logeo.
                 user->processLogInMessage(message);
-                if (!user->hasLogedIn()) {
-                    connectionManager->sendMessage(socket, "logged:false");
-                } else {
-                    connectionManager->sendMessage(socket, "logged:true");
-                }
             } else if (!user->hasPickedTeamAndFormation()) {
                 // Se logeo, pero no eligio equipo y formacion.
-                log("read_client: ELIGE EL EQUIPO ", LOG_INFO);
                 std::string key = getMessageKey(message);
                 std::string value = getMessageValue(message);
                 if (key == "get" && value == "max") {
@@ -68,10 +61,8 @@ void* read_client(void* argument) {
                     user->processTeamAndFormationMessage(message);
                 }
                 //connectionManager->sendMessage(socket,"Argentina:Brasil");
-
             } else {
                 // El usuario se inicializo. Vienen acciones sobre los jugadores.
-
                 Action* action = user->getAsAction(message);
                 if (action != NULL) {
                     gameControllerProxy->execute(action, user->getName());
