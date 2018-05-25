@@ -31,36 +31,35 @@ void Camera::calculateNewPosition(Coordinates* objPosition) {
     // Margen derecho
     int x = objPosition->getX();
     int y = objPosition->getY();
-    log(std::to_string(x)+std::to_string(y),LOG_DEBUG);
     int difference;
     int xCorrection = 40;
     // Margen derecho
     difference = x + SPRITE_SIZE - (margin.x - xCorrection + margin.w);
-    if (difference> 0){
-      log("Jugador activo a la derecha del margen derecho", LOG_DEBUG);
-      this->position->addX(difference);
-      margin.x = this->position->getX() + margin_size + xCorrection;
+    if (difference > 0) {
+        log("Camera: Jugador activo a la derecha del margen derecho", LOG_SPAM);
+        this->position->addX(difference);
+        margin.x = this->position->getX() + margin_size + xCorrection;
     }
     // Margen izquierdo
     difference = x - (margin.x + xCorrection);
-    if (difference< 0){
-      log("Jugador activo a la izquierda del margen izquierdo", LOG_DEBUG);
-      this->position->addX(difference);
-      margin.x = this->position->getX() + margin_size + xCorrection;
+    if (difference < 0) {
+        log("Camera: Jugador activo a la izquierda del margen izquierdo", LOG_SPAM);
+        this->position->addX(difference);
+        margin.x = this->position->getX() + margin_size + xCorrection;
     }
     // Margen inferior
     difference = (y + SPRITE_SIZE) - (margin.y + margin.h);
-    if (difference> 0){
-      log("Jugador activo debajo del margen inferior", LOG_DEBUG);
-      this->position->addY(difference);
-      margin.y = this->position->getY() + margin_size;
+    if (difference > 0) {
+        log("Camera: Jugador activo debajo del margen inferior", LOG_SPAM);
+        this->position->addY(difference);
+        margin.y = this->position->getY() + margin_size;
     }
     // Margen superior
-    difference = y- margin.y;
-    if (difference< 0){
-      log("Jugador activo sobre el margen superior", LOG_DEBUG);
-      this->position->addY(difference);
-      margin.y = this->position->getY() + margin_size;
+    difference = y - margin.y;
+    if (difference < 0) {
+        log("Camera: Jugador activo sobre el margen superior", LOG_SPAM);
+        this->position->addY(difference);
+        margin.y = this->position->getY() + margin_size;
     }
 
     //Keep the camera in bounds
@@ -76,33 +75,32 @@ void Camera::calculateNewPosition(Coordinates* objPosition) {
     if (this->position->getY() > LEVEL_HEIGHT - this->height) {
         this->position->setY(LEVEL_HEIGHT - this->height);
     }
-  }
+}
 
 
 bool Camera::isInsideMargin(Player* p, SDL_Rect* margin, int outerMargin) {
     int playerX = p->getPosition()->getX();
     int playerY = p->getPosition()->getY();
     int offset = 80;
-    if (!outerMargin){
-      if ((playerX > margin->x) &&
-              (playerX < margin->x + margin->w) &&
-              (playerY > margin->y) &&
-              (playerY < margin->y + margin->h)) {
-          return true;
-      } else {
-          return false;
-      }
+    if (!outerMargin) {
+        if ((playerX > margin->x) &&
+                (playerX < margin->x + margin->w) &&
+                (playerY > margin->y) &&
+                (playerY < margin->y + margin->h)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if ((playerX > this->position->getX() - offset) &&
+                (playerX < this->position->getX() + this->width + offset) &&
+                (playerY > this->position->getY() - offset) &&
+                (playerY < this->position->getY() + this->height + offset)) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    else{
-      if ((playerX > this->position->getX()-offset) &&
-              (playerX < this->position->getX() + this->width + offset) &&
-              (playerY > this->position->getY()-offset) &&
-              (playerY <this->position->getY() + this->height+offset)) {
-          return true;
-      } else {
-          return false;
-      }
-  }
 }
 
 std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players, int outerMargin) {
@@ -114,16 +112,6 @@ std::list<Player*> Camera::getPlayersInsideMargin(std::list<Player*> players, in
         }
     }
     return resultado;
-}
-
-SDL_Rect Camera::getRectToDraw() {
-    SDL_Rect renderQuad = {
-        position->getX(),
-        position->getY(),
-        this->width,
-        this->height
-    };
-    return renderQuad;
 }
 
 Camera::~Camera() {

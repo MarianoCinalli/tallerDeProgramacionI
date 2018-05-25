@@ -1,23 +1,23 @@
 #include "controller/actions/Action.h"
 
 Action::Action() {
-  // deberia haber un constructor con el numero de jugador?
+    // deberia haber un constructor con el numero de jugador?
 }
 
 void Action::execute(Player* player) {
-    log("Llamando al execute de Action!", LOG_ERROR);
+    log("Action: Llamando al execute de Action!", LOG_ERROR);
 }
 
-void Action::execute(Pitch* pitch, std::string user){
-  log("Llamando al execute de Action!", LOG_ERROR);
+void Action::execute(Pitch* pitch, std::string user) {
+    log("Action: Llamando al execute de Action!", LOG_ERROR);
 }
 
 bool Action::valid(Player* player) {
-  return false;
+    return false;
 }
 
 bool Action::valid(Pitch* pitch) {
-  return false;
+    return false;
 }
 
 Action::~Action() {

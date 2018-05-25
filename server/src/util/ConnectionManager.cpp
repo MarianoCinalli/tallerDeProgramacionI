@@ -127,14 +127,14 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
         log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
         readMessage = "";
     } else {
-        log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
+        log("ConnectionManager: Recibidos ", readBytes, LOG_SPAM);
         readMessage = buffer;
     }
     return readBytes;
 }
 
 void ConnectionManager::sendMessage(int socket, std::string message) {
-    log("ConnectionManager: Enviando " + message + " a ", socket, LOG_DEBUG);
+    log("ConnectionManager: Enviando " + message + " a ", socket, LOG_SPAM);
     const char* constantMessage = (message).c_str();
     send(socket, constantMessage, strlen(constantMessage), 0);
 }

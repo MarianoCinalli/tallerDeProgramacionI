@@ -87,9 +87,9 @@ void UsersManager::logOff(std::string user) {
     // Necesito el iterator por eso no uso la func de arriba.
     auto loggedInSearch = this->loggedInUsers.find(user);
     if(loggedInSearch != this->loggedInUsers.end()) {
-        log("UsersManager: Estaba logeado removiendo al usuario " + user + " de la lista.", LOG_INFO);
+        log("UsersManager: Estaba logeado removiendo al usuario " + user + " de la lista.", LOG_DEBUG);
         this->loggedInUsers.erase(loggedInSearch);
-        log("UsersManager: Agregando a la lista de deslogeados a: " + user, LOG_INFO);
+        log("UsersManager: Agregando a la lista de deslogeados a: " + user, LOG_DEBUG);
         this->loggedOffUsers.insert(user);
     } else {
         log("UsersManager: El usuario a deslogear no esta en la lista de loggeados: " + user, LOG_ERROR);

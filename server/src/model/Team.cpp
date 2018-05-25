@@ -21,12 +21,12 @@ std::list<Player*> Team::getPlayers() {
     return this->players;
 }
 
-int Team::getAmountPlayers(){
-  return players.size();
+int Team::getAmountPlayers() {
+    return players.size();
 }
 
-std::string Team::getName(){
-  return name;
+std::string Team::getName() {
+    return name;
 }
 
 Team::~Team() {
@@ -36,24 +36,26 @@ Team::~Team() {
     // for (it = this->players.begin(); it != this->players.end(); it++) {
     //     delete(*it);
 
-    for(Player* p : players){
-      delete(p);
+    for (Player* p : players) {
+        delete(p);
     }
     // Como la lista sigue llena, de punteros borrados, la vacio.
     this->players.clear();
     log("Team: Jugadores borrados. Memoria liberada.", LOG_INFO);
 }
 
-void Team::setFormacion(int formacion){
+void Team::setFormacion(int formacion) {
     this->formacion = formacion;
 }
 
-void Team::order(){
+void Team::order() {
+    log("Team: Ordenando equipo...", LOG_DEBUG);
     int i = 0;
-    for (Player* p : players){
-        p->setPosition(getFormation(this->local,this->formacion)[i]);
+    for (Player* p : players) {
+        p->setPosition(getFormation(this->local, this->formacion)[i]);
         // Coloca la posicion base de regreso
-        p->setBasePosition(getFormation(this->local,this->formacion)[i]);
+        p->setBasePosition(getFormation(this->local, this->formacion)[i]);
         i++;
     }
+    log("Team: Equipo ordenado.", LOG_DEBUG);
 }

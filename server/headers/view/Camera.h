@@ -29,8 +29,6 @@ class Camera {
         std::list<Player*> getPlayersInsideMargin(std::list<Player*> players, int outerMargin);
         // devuelve los jugadores dentro de la camara.
         bool isInsideMargin(Player* p, SDL_Rect* margin, int outerMargin);
-        // devuelve el SDL_Rect para dibujar la parte de la cancha.
-        SDL_Rect getRectToDraw();
         ~Camera();
 };
 #endif // CAMERA_H

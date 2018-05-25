@@ -5,7 +5,7 @@ Accelerate::Accelerate(int direction) {
 }
 
 void Accelerate::execute(Player* player) {
-    log("Accelerate: Acelerando al jugador.", LOG_DEBUG);
+    log("Accelerate: Acelerando al jugador.", LOG_SPAM);
     player->accelerate(this->direction);
 }
 

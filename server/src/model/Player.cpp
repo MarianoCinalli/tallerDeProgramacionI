@@ -3,7 +3,7 @@
 int Player::ID = 0;
 
 Player::Player(int orientation, Coordinates* position, int team) {
-    log("Jugador: Creando jugador...", LOG_INFO);
+    log("Player: Creando jugador...", LOG_INFO);
     this->id = ++ID;
     this->orientation = orientation;
     this->position = position;
@@ -23,15 +23,15 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->slideCount = 0;
     this->withBall = false;
     this->userName = "NONE";
-    log("Jugador: Jugador creado.", LOG_INFO);
+    log("Player: Jugador creado.", LOG_INFO);
 }
 
 Coordinates* Player::getPosition() {
     return this->position;
 }
 
-void Player::isWithBall(bool dominated){
-  this->withBall = dominated;
+void Player::isWithBall(bool dominated) {
+    this->withBall = dominated;
 }
 
 int Player::getOrientation() {
@@ -43,11 +43,10 @@ Velocity* Player::getVelocity() {
 }
 
 int Player::getCurrentSpeed() {
-    if (this->runningFast){
-      return this->maxVelocity*FAST_SPEED_COEF; //Hardcode
-    }
-    else {
-      return this->maxVelocity;
+    if (this->runningFast) {
+        return this->maxVelocity * FAST_SPEED_COEF; //Hardcode
+    } else {
+        return this->maxVelocity;
     }
 }
 
@@ -66,13 +65,12 @@ bool Player::isRunningDiagonaly() {
 }
 
 void Player::toggleIsSelected(std::string name) {
-  if (this->isSelected) {
-    this->runningFast = false;
-    this->userName = "NONE";
-  }
-  else {
-    this->userName = name;
-  }
+    if (this->isSelected) {
+        this->runningFast = false;
+        this->userName = "NONE";
+    } else {
+        this->userName = name;
+    }
     this->isSelected = !this->isSelected;
     this->isReturning = true;
 }
@@ -86,36 +84,36 @@ void Player::accelerate(int direction) {
     this->velocity->accelerate(direction);
     // Para que quede mirando para donde venia corriendo.
     this->setOrientation(this->velocity->getAsOrientation());
-    log("Jugador: El jugador esta acelerando, direccion actual: ", this->velocity, LOG_DEBUG);
+    log("Player: El jugador esta acelerando, direccion actual: ", this->velocity, LOG_SPAM);
 }
 
 void Player::decelerate(int direction) {
     if (this->isRunningFast()) {
         this->velocity->decelerate(direction, this->maxVelocity);
         this->setOrientation(this->velocity->getAsOrientation());
-        log("Jugador: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_DEBUG);
+        log("Player: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_SPAM);
     }
 }
 
 void Player::stopRunningInDirection(int direction) {
-    if(this->isRunningFast()) {
+    if (this->isRunningFast()) {
         this->stopsRunningFast();
     }
     this->velocity->stopDirection(direction);
-    log("Jugador: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
+    log("Player: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
 }
 
 void Player::stop() {
     this->velocity->stop();
     // this->runningFast = false;
-    log("Jugador: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_DEBUG);
+    log("Player: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_SPAM);
 }
 
 
-void Player::updateState(){
-  this->updatePosition();
-  this->updateKicking();
-  this->updateSliding();
+void Player::updateState() {
+    this->updatePosition();
+    this->updateKicking();
+    this->updateSliding();
 }
 //
 // int frameDiference(int current, int last){
@@ -126,43 +124,43 @@ void Player::updateState(){
 //   return frameDelta;
 // }
 
-void Player::updateKicking(){
-  if (this->kicking){
-    kickCount++;
-  }
-  if (kickCount>KICK_COUNT){
-    this->stopKicking();
-    kickCount = 0;
-  }
+void Player::updateKicking() {
+    if (this->kicking) {
+        kickCount++;
+    }
+    if (kickCount > KICK_COUNT) {
+        this->stopKicking();
+        kickCount = 0;
+    }
 
 }
 
-void Player::updateSliding(){
-  if (this->sliding){
-    slideCount++;
-  }
-  if (slideCount>SLIDE_COUNT){
-    this->stopSliding();
-    slideCount = 0;
-  }
+void Player::updateSliding() {
+    if (this->sliding) {
+        slideCount++;
+    }
+    if (slideCount > SLIDE_COUNT) {
+        this->stopSliding();
+        slideCount = 0;
+    }
 
 }
 void Player::updatePosition() {
     float speed = 1;
     if (this->runningFast) {
-      speed = FAST_SPEED_COEF; //TODO hardcode
+        speed = FAST_SPEED_COEF; //TODO hardcode
     }
     int maxSpeed = this->maxVelocity;
     if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX()*speed*maxSpeed);
-        this->position->addY(this->velocity->getComponentY()*speed*maxSpeed);
-        log("Jugador: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_DEBUG);
+        this->position->addX(this->velocity->getComponentX()*speed * maxSpeed);
+        this->position->addY(this->velocity->getComponentY()*speed * maxSpeed);
+        log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
     }
 
     // Si selecciona un jugador que estaba regresando lo detengo
     if (this->isSelected && this->isReturning) {
         this->isReturning = false;
-        log("Player: jugador deja de volver por seleccion.", LOG_INFO);
+        log("Player: jugador deja de volver, a la posicion original, por ser seleccionado.", LOG_DEBUG);
     }
 
     // Detener si el jugador no seleccionado regresando llego a su posicion inicial
@@ -174,8 +172,7 @@ void Player::updatePosition() {
         if ((abs_delta_x < 30) && (abs_delta_y < 30)) { //TODO hardcode valores
             this->stop();
             this->isReturning = false;
-            log("Player: jugador llega a la posicion.", LOG_INFO);
-
+            log("Player: jugador llega a la posicion original.", LOG_DEBUG);
         } else {
             this->returnToBasePosition();
         }
@@ -191,7 +188,7 @@ void Player::setBasePosition(Coordinates pos) {
 }
 
 void Player::returnToBasePosition() {
-    log("Jugador: Volviendo a su posicion base ", LOG_DEBUG);
+    log("Player: Volviendo a su posicion original ", LOG_SPAM);
     this->isReturning = true;
 
     // Calcular en que direccion debe regresar
@@ -222,7 +219,7 @@ void Player::returnToBasePosition() {
     }
 
     if (newY > 0) {
-        setY =-1;
+        setY = -1;
     }
 
     this->velocity->setComponentX(setX);
@@ -236,11 +233,9 @@ Player::~Player() {
 }
 
 void Player::startsRunningFast() {
-    if (!this->sliding &&
-        !this->kicking &&
-        !this->isRunningFast()) {
-            this->runningFast = true;
-            log("Jugador: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
+    if (!this->sliding && !this->kicking && !this->isRunningFast()) {
+        this->runningFast = true;
+        log("Player: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
     }
 }
 //TODO ver que hay que apretar la tecla cuando estas corriendo, sino no tiene efecto
@@ -249,7 +244,7 @@ void Player::startsRunningFast() {
 void Player::stopsRunningFast() {
     if (this->runningFast) {
         this->runningFast = false;
-        //log("Jugador: El jugador deja de correr rapido", LOG_DEBUG);
+        //log("Player: El jugador deja de correr rapido", LOG_DEBUG);
     }
 }
 
@@ -318,13 +313,12 @@ void Player::copyStats(Player* copyTo) {
 void Player::setTrayectory(Velocity* trayectory) {
     this->velocity->set(trayectory);
 }
-bool Player::isStill(){
-  if (this->velocity->isZero()){
-    return true;
-  }
-  else{
-    return false;
-  }
+bool Player::isStill() {
+    if (this->velocity->isZero()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 

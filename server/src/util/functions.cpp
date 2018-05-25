@@ -16,9 +16,9 @@ void* read_client(void* argument) {
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
-    log("read_client: Socket: ", socket, LOG_DEBUG);
+    log("read_client: Se recibio el socket: ", socket, LOG_DEBUG);
     while (continueReading && !quit) {
-        log("read_client: Reading...", LOG_DEBUG);
+        log("read_client: Reading...", LOG_SPAM);
         if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
             log("read_client: Esperando para sincronizar...", LOG_INFO);
             pthread_barrier_wait(&players_ready_barrier);
@@ -36,7 +36,7 @@ void* read_client(void* argument) {
             log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
             continueReading = false;
         } else {
-            log("read_client: Bytes Recibidos " + std::to_string(readBytes) + " - Mensaje: ", message, LOG_DEBUG);
+            log("read_client: Mensaje recibido: ", message, LOG_SPAM);
             if (!user->hasLogedIn()) {
                 // No se logeo.
                 user->processLogInMessage(message);

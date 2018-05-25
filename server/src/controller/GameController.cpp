@@ -12,14 +12,18 @@ GameController::GameController(Pitch* pitch) {
     log("GameController: GameController creado.", LOG_INFO);
 }
 
-void GameController::addUser(std::string user, int teamNum){
-  this->users[teamNum].insert(user);
-  this->pitch->setUserTeam(user,teamNum);
-  this->pitch->changeActivePlayer(user);
+void GameController::addUser(std::string user, int teamNum) {
+    log("GameController: Agregando usuario...", LOG_INFO);
+    this->users[teamNum].insert(user);
+    this->pitch->setUserTeam(user, teamNum);
+    this->pitch->changeActivePlayer(user);
+    log("GameController: Usuario agregado.", LOG_INFO);
 }
 
-void GameController::removeUser(std::string user){
-  this->pitch->removeActivePlayer(user);
+void GameController::removeUser(std::string user) {
+    log("GameController: Removiendo usuario...", LOG_INFO);
+    this->pitch->removeActivePlayer(user);
+    log("GameController: Usuario removido.", LOG_INFO);
 }
 
 Player* GameController::getActivePlayer(std::string user) {
@@ -28,7 +32,6 @@ Player* GameController::getActivePlayer(std::string user) {
 
 void GameController::execute(Action* action, std::string user) {
     Player* player = this->getActivePlayer(user);
-    log("user: ", user, LOG_INFO);
     if (action->valid(player)) {
         action->execute(player);
     }
@@ -65,14 +68,13 @@ void GameController::updatePlayers() {
             p->updateState();
         }
     }
-    log("GameController: se actualizaron los jugadores.", LOG_DEBUG);
+    log("GameController: se actualizaron los jugadores.", LOG_SPAM);
 }
 
 
 void GameController::updateBall() {
-
     if (this->ball->isDominated() && this->ball->getPlayer()->isKicking()) {
-        log("La pelota fue pateada", LOG_INFO);
+        log("GameController: La pelota fue pateada.", LOG_DEBUG);
         this->ball->isPassed(this->ball->getPlayer()->getOrientation(), PASS_SPEED); //TODO valor de pase?
     }
     this->pitch->changeBallOwnership();
@@ -101,35 +103,37 @@ bool GameController::shouldGameEnd() {
 }
 
 std::string GameController::getTeamStats(int numberTeam) {
-  Team* team = this->pitch->getTeam(numberTeam);
-  std::string name = team->getName();
-  std::string amnt = std::to_string(users[numberTeam].size());
-  return name+":"+amnt;
+    Team* team = this->pitch->getTeam(numberTeam);
+    std::string name = team->getName();
+    std::string amnt = std::to_string(users[numberTeam].size());
+    return name + ":" + amnt;
 }
 
 void GameController::setEnd() {
+    log("GameController: Seteando que el juego termine...", LOG_INFO);
     this->end = true;
+    log("GameController: Terminacion de juego seteada.", LOG_INFO);
 }
 
 
 bool GameController::joinTeam(std::string playerName, int team, int maxPlayers) {
-    log("GameController: Viendo si el usuario " + playerName + "puede unirse al equipo:", team, LOG_INFO);
+    log("GameController: Viendo si el usuario " + playerName + " puede unirse al equipo:", team, LOG_INFO);
     int usersInTeam = this->users[team].size();
     if (maxPlayers == 1) {
         if (usersInTeam != 0) {
-            log("GameController: El usuario " + playerName + "no puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: El usuario " + playerName + " no puede unirse al equipo:", team, LOG_INFO);
             return false;
         } else {
-            log("GameController: El usuario " + playerName + "puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: El usuario " + playerName + " puede unirse al equipo:", team, LOG_INFO);
             this->addUser(playerName, team);
             return true;
         }
     } else {
         if (usersInTeam == (maxPlayers - 1)) {
-            log("GameController: El usuario " + playerName + "no puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: El usuario " + playerName + " no puede unirse al equipo:", team, LOG_INFO);
             return false;
         } else {
-            log("GameController: El usuario " + playerName + "puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: El usuario " + playerName + " puede unirse al equipo:", team, LOG_INFO);
             this->addUser(playerName, team);
             return true;
         }
