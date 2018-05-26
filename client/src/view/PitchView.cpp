@@ -16,6 +16,7 @@ void PitchView::addBallView(BallSpriteManager* ballView) {
 }
 
 void PitchView::render(SDL_Renderer* screen) {
+    //log("PitchView: Comienza la renderizacion...", LOG_SPAM);
     // Dibujar cancha vista por camara.
     this->renderPitch(screen);
     // Dibuja la pelota, asi los jugadores quedan arriba
@@ -34,7 +35,7 @@ void PitchView::render(SDL_Renderer* screen) {
         (*viewIter)->render(screen, coordinates);
         delete(coordinates);
     }
-    log("rendereado", LOG_DEBUG);
+    //log("PitchView: Fin de renderizacion.", LOG_SPAM);
     SDL_RenderPresent(screen);
 }
 

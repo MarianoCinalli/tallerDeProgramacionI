@@ -9,12 +9,11 @@ ActionsManager::~ActionsManager() {
 }
 
 bool anyKeyPressed(bool* keys) {
-    log("TECLAS", LOG_DEBUG);
     // int i = 0;
     // for (bool b : keys){
     for (int i = 0; i < 4; i++) {
         if (keys[i]) {
-            log("Tecla: ", i, LOG_DEBUG);
+            log("ActionsManager: Tecla presionada: ", i, LOG_SPAM);
             return true;
         }
     }
@@ -27,7 +26,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
     bool* keys = this->keys;
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         // Actions for pressed keys.
-        log("ActionsManager: Se registro una tecla presionada.", LOG_DEBUG);
+        log("ActionsManager: Se registro una tecla presionada.", LOG_SPAM);
         switch (event.key.keysym.sym) {
             case SDLK_w:
                 action = new RunningFastAction();
@@ -66,7 +65,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
         }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
         // Actions for released keys.
-        log("ActionsManager: Se registro una tecla soltada.", LOG_DEBUG);
+        log("ActionsManager: Se registro una tecla soltada.", LOG_SPAM);
         if (event.key.keysym.sym == SDLK_w) {
             return new StopRunningFastAction();
         } else {

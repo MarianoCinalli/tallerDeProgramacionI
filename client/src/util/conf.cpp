@@ -29,15 +29,7 @@ int chooseDebugLevel(YAML::Node nod) {
             return VALOR_INVALIDO;
         }
         string str = nod["debug"]["level"].as<string>();
-        if (!str.compare("debug")) {
-            return LOG_DEBUG;
-        } else if (!str.compare("info")) {
-            return LOG_INFO;
-        } else if (!str.compare("error")) {
-            return LOG_ERROR;
-        } else {
-            return VALOR_INVALIDO;
-        }
+        return getLogLevelFromString(str);
     } catch (YAML::BadSubscript e) {
         return VALOR_INVALIDO;
     } catch (YAML::TypedBadConversion<int> e) {

@@ -30,7 +30,6 @@ void* read_server(void* argument) {
     std::string readMessage;
     int readBytes;
     ConnectionManager* connectionManager = (ConnectionManager*) argument;
-    // int count = 0; // esto esta provisorio.
     log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
     while (!quit) {
         readMessage = "";
@@ -57,7 +56,7 @@ void* read_server(void* argument) {
                     std::string token;
                     while ((pos = readMessage.find(delimiter)) != std::string::npos) {
                         token = readMessage.substr(0, pos);
-                        log("msg", LOG_DEBUG);
+                        //log("msg", LOG_SPAM);
                         Player* player;
                         Ball* ball = initializer->getGameController()->getBall();
                         Camera* camera = initializer->getGameController()->getCamera();;
@@ -69,13 +68,13 @@ void* read_server(void* argument) {
                             // * Aca se sabe que tipo es.
                             if (key.Type() == YAML::NodeType::Scalar) {
                                 if (key.as<std::string>() == "ba") {
-                                    log("read_server: pelota", key.as<std::string>(), LOG_INFO);
+                                    //log("read_server: pelota", key.as<std::string>(), LOG_SPAM);
                                     ball->parseYaml(value);
                                 } else if ((key.as<std::string>() == "cam")) {
-                                    log("read_server: camara", key.as<std::string>(), LOG_INFO);
+                                    //log("read_server: camara", key.as<std::string>(), LOG_SPAM);
                                     camera->parseYaml(value);
                                 } else {
-                                    log("read_server: jugador", key.as<std::string>(), LOG_INFO);
+                                    //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
                                     player =  initializer->getGameController()->getPlayer(key.as<int>());
                                     player->parseYaml(value);
                                 }
@@ -87,7 +86,7 @@ void* read_server(void* argument) {
                                 for (YAML::const_iterator secondNode = value.begin(); secondNode != value.end(); ++secondNode) {
                                     std::string secondkey = secondNode->first.as<std::string>();
                                     std::string secondvalue = secondNode->second.as<std::string>();
-                                    log("read_server: " + secondkey + " = " + secondvalue, LOG_INFO);
+                                    //log("read_server: " + secondkey + " = " + secondvalue, LOG_SPAM);
                                 }
                             }
                         }
@@ -120,7 +119,9 @@ void* drawer(void* argument) {
 
 // Setea el quit de manera segura.
 void setQuit(bool newQuit) {
+    log("setQuit: Seteando salida...", LOG_INFO);
     quit_mutex.lock();
     quit = quit || newQuit;
     quit_mutex.unlock();
+    log("setQuit: Salida seteada.", LOG_INFO);
 }

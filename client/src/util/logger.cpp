@@ -38,6 +38,9 @@ std::string getMessageLevelString(int messageLevel) {
         case LOG_DEBUG:
             return "DEBUG";
             break;
+        case LOG_SPAM:
+            return "SPAM";
+            break;
         default:
             return "WrongMessageLevel";
             break;
@@ -52,6 +55,8 @@ int getLogLevelFromString(std::string level) {
         return LOG_INFO;
     } else if (level == "debug") {
         return LOG_DEBUG;
+    } else if (level == "spam") {
+        return LOG_SPAM;
     } else {
         return LOG_WRONGLEVEL;
     }

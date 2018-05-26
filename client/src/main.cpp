@@ -717,7 +717,6 @@ int main(int argc, char* argv[]) {
                 std::string resultMessage;
                 connectionManager->getMessage(resultMessage);
                 std::string result = resultMessage.substr(0, resultMessage.find(":"));
-                log("Main: ->>>>> result: ", result, LOG_INFO);
                 if (result == "true") {
                     hasPickedTeam = true;
                 } else {
@@ -733,7 +732,6 @@ int main(int argc, char* argv[]) {
             mensaje = "...";
             openLoginEsperar(renderer, mensaje, servidor, puerto, usuario, equipo, connectionManager);
         }
-        log("AAA", LOG_INFO);
         if (fullParty) {
             showFullParty(renderer, "La partida ya esta llena.");
             endProgram(1, connectionManager);

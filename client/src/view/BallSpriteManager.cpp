@@ -20,23 +20,23 @@ Coordinates* BallSpriteManager::getBallCoordinates() {
 }
 
 void BallSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
-
-    if(!this->ball->isStill()){
-      this->setMovingBallSprite();
+    if (!this->ball->isStill()) {
+        this->setMovingBallSprite();
     }
-      SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
-      SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
-      SDL_RenderCopy(
-          screen,
-          spriteSheet,
-          &this->sprite,
-          &positionOnScreen
-      );
+    SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
+    SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
+    SDL_RenderCopy(
+        screen,
+        spriteSheet,
+        &this->sprite,
+        &positionOnScreen
+    );
 }
 
 
 
 BallSpriteManager::~BallSpriteManager() {
+    log("BallSpriteManager: Vista eliminada.", LOG_INFO);
 }
 
 // Metodos privados. -------------------------------------------------------------------------
@@ -53,17 +53,17 @@ SDL_Rect BallSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* co
 }
 
 void BallSpriteManager::setMovingBallSprite() {
-  if (rollingCount==1024) { //TODO hardcode value
-          rollingCount = 0;
-  }
-  if ((rollingCount % ROLLING_DIVISOR) == 0) {
-    log("BallSpriteManager: Creando el sprite del balon.", LOG_DEBUG);
-    if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 21 * SPRITE_SIZE)) {
-        this->sprite.x = 0; // Reinicio la secuencia.
-        this->sprite.y = (21 * SPRITE_SIZE);
-    } else {
-        this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    if (rollingCount == 1024) { //TODO hardcode value
+        rollingCount = 0;
     }
-  }
-  rollingCount ++;
+    if ((rollingCount % ROLLING_DIVISOR) == 0) {
+        log("BallSpriteManager: Creando el sprite del balon.", LOG_SPAM);
+        if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != 21 * SPRITE_SIZE)) {
+            this->sprite.x = 0; // Reinicio la secuencia.
+            this->sprite.y = (21 * SPRITE_SIZE);
+        } else {
+            this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+        }
+    }
+    rollingCount ++;
 }

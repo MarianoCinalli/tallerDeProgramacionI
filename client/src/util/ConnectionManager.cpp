@@ -44,14 +44,14 @@ int ConnectionManager::getSocket() {
 }
 
 void ConnectionManager::setIp(std::string ip) {
-  this->ip = ip;
+    this->ip = ip;
 }
 
 void ConnectionManager::setPort(int port) {
-  this->port = port;
+    this->port = port;
 }
 
-int ConnectionManager::getMessage(std::string & readMessage) {
+int ConnectionManager::getMessage(std::string& readMessage) {
     int readBytes;
     int bufferLength = 4096;
     int bufferSize = sizeof(char) * bufferLength;
@@ -68,7 +68,7 @@ int ConnectionManager::getMessage(std::string & readMessage) {
         log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
         readMessage = "";
     } else {
-        log("ConnectionManager: Recibidos ", readBytes, LOG_DEBUG);
+        log("ConnectionManager: Recibidos ", readBytes, LOG_SPAM);
         // readMessage = buffer;
         // std::string s(buffer, readBytes/sizeof(char));
         readMessage = buffer;
@@ -77,10 +77,10 @@ int ConnectionManager::getMessage(std::string & readMessage) {
 }
 
 void ConnectionManager::sendMessage(std::string message) {
-    log("ConnectionManager: Enviando: \n", message, LOG_DEBUG);
-    const char * constantMessage = message.c_str();
+    log("ConnectionManager: Enviando: ", message, LOG_SPAM);
+    const char* constantMessage = message.c_str();
     send(this->my_socket, constantMessage, strlen(constantMessage), 0);
-    log("ConnectionManager: Mensaje enviado.", LOG_DEBUG);
+    log("ConnectionManager: Mensaje enviado.", LOG_SPAM);
 }
 
 void ConnectionManager::closeConnection() {

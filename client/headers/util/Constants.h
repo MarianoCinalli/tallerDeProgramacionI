@@ -3,10 +3,11 @@
 
 // No tocar que revienta una validacion
 enum logLevels {
-    LOG_DEBUG = 1,
-    LOG_INFO = 2,
-    LOG_ERROR = 3,
-    LOG_WRONGLEVEL = 4
+    LOG_SPAM = 1,
+    LOG_DEBUG = 2,
+    LOG_INFO = 3,
+    LOG_ERROR = 4,
+    LOG_WRONGLEVEL = 5
 };
 
 // Para indicar a donde se mueve/mira el jugador.
@@ -20,10 +21,10 @@ enum PlayerOrientations {
 };
 
 enum KeyboardBools {
-  KUP = 0,
-  KDOWN = 1,
-  KLEFT = 2,
-  KRIGHT = 3
+    KUP = 0,
+    KDOWN = 1,
+    KLEFT = 2,
+    KRIGHT = 3
 };
 
 //para indicar accion a realizar
