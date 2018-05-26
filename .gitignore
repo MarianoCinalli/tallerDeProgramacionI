@@ -56,3 +56,6 @@ headers/.DS_Store
 *.gcc-flags.json
 .tags*
 core
+
+#Copias
+copy*OfClient/
