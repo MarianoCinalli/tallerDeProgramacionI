@@ -24,9 +24,9 @@
 // Global variables ---------------------------------------
 std::ofstream LOG_FILE_POINTER;
 const std::string logFileName = "trabajoPractico.log";
-const std::string defaultConfFileName = "src/default.yaml";
+const std::string defaultConfFileName = "config/default.yaml";
 const std::string defaultSpritesFileName = "images/spritesDefaults.png";
-std::string confFileName = "conf.yaml";
+std::string confFileName = "config/conf.yaml";
 int LOG_MIN_LEVEL = LOG_DEBUG; // Dejarlo asi para que cuando empieze loggee todo.
 std::string CLI_LOG_LEVEL = "";
 std::mutex log_mutex;
@@ -130,7 +130,7 @@ int chequearOpciones(int argc, char* argv[]) {
     if (tempConf != "") {
         confFileName = tempConf;
     } else {
-        confFileName = "conf.yaml";
+        confFileName = "config/conf.yaml";
     }
     return 0;
 }
