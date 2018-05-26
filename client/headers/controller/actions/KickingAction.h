@@ -8,8 +8,9 @@
 
 class KickingAction : public Action {
 	private:
+		int power;
     public:
-        KickingAction();
+        KickingAction(int power);
         virtual std::string getCommand();
         virtual std::string getParameters();
         ~KickingAction();

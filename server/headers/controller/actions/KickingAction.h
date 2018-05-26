@@ -8,8 +8,9 @@
 
 class KickingAction : public Action {
 	private:
+		int power;
     public:
-        KickingAction();
+        KickingAction(int power);
         virtual void execute(Player* player);
         virtual bool valid(Player* player);
         ~KickingAction();

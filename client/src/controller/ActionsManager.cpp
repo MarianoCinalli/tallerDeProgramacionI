@@ -35,8 +35,11 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 action = new SlidingAction();
                 break;
             case SDLK_s:
-                action = new KickingAction();
+            {
+                int passPower = 1;    //TODO constante a definir, cuanto pass power
+                action = new KickingAction(passPower);
                 break;
+              }
             case SDLK_SPACE:
                 action = new ChangeActivePlayer();
                 break;

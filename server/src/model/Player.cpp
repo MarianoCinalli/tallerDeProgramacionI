@@ -16,6 +16,7 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->kicking = false;
     this->wasKicking = false;
     this->canMove = true;
+    this->kickPower = 1;    //inicializacion default?
     this->isSelected = false;
     this->isReturning = false;
     this->runningFast = false;
@@ -36,6 +37,10 @@ void Player::isWithBall(bool dominated) {
 
 int Player::getOrientation() {
     return this->orientation;
+}
+
+int Player::getKickPower(){
+  return this->kickPower;
 }
 
 Velocity* Player::getVelocity() {
@@ -254,8 +259,9 @@ bool Player::isRunningFast() {
 
 //SLIDE AND KICK FUNCTIONS
 
-void Player::startsKicking() {
+void Player::startsKicking(int power) {
     if (!this->sliding) {
+        this->kickPower = power;
         this->kicking = true;
         this->canMove = false;
     }

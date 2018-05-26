@@ -13,6 +13,7 @@ class Player {
         int team;
         int orientation;
         int maxVelocity;
+        int kickPower;
         bool isSelected;
         bool isReturning;
         Velocity* velocity;
@@ -38,6 +39,7 @@ class Player {
         Velocity* getVelocity();
         int getCurrentSpeed();
         int getOrientation();
+        int getKickPower();
         bool wasSlidingYet();
         bool wasKickingYet();
         bool isSliding();
@@ -72,7 +74,7 @@ class Player {
         void startsSliding();
         void stopSliding();
         void isAlreadySliding();   //TODO mejorar nombres de slide!
-        void startsKicking();
+        void startsKicking(int power);
         void stopKicking();
         void isAlreadyKicking();
 

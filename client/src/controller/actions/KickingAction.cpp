@@ -1,7 +1,7 @@
 #include "controller/actions/KickingAction.h"
 
-KickingAction::KickingAction() {
-    //TODO ver clase
+KickingAction::KickingAction(int power) {
+    this->power = power;
 }
 
 
@@ -10,7 +10,7 @@ std::string KickingAction::getCommand() {
 }
 
 std::string KickingAction::getParameters() {
-    return "";
+    return std::to_string(this->power);
 }
 
 KickingAction::~KickingAction() {
