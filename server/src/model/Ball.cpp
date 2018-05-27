@@ -149,6 +149,7 @@ std::string Ball::getAsYaml() {
     message += " cx: " + std::to_string(this->position->getX()) + "\n";
     message += " cy: " + std::to_string(this->position->getY()) + "\n";
     message += " st: " + std::to_string(this->velocity->isZero()) + "\n";
+    message += " sd: " + std::to_string(this->orientation) + "\n";
     return message;
 }
 

@@ -4,6 +4,7 @@ Ball::Ball(Coordinates* position) {
     log("Pelota: Creando pelota...", LOG_INFO);
     this->position = position;
     this->still = true;
+    this->orientation = 0;
     log("Pelota: Pelota creada...", LOG_INFO);
 }
 
@@ -13,6 +14,10 @@ Coordinates* Ball::getPosition() {
 
 int Ball::isStill(){
   return this->still;
+}
+
+int Ball::getOrientation() {
+  return this->orientation;
 }
 
 
@@ -25,6 +30,9 @@ void Ball::parseYaml(YAML::Node node){
   }
   if (node["st"]){
     this->still = node["st"].as<int>();
+  }
+  if (node["sd"]){
+    this->orientation = node["sd"].as<int>();
   }
 }
 
