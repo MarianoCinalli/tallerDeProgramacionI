@@ -15,7 +15,9 @@ GameController::GameController(Pitch* pitch) {
 void GameController::addUser(std::string user, int teamNum) {
     log("GameController: Agregando usuario...", LOG_INFO);
     this->users[teamNum].insert(user);
+    log("Pitch: Agregando usuario al equipo...", user, LOG_DEBUG);
     this->pitch->setUserTeam(user, teamNum);
+    log("Pitch: Cambiando jugador...", user, LOG_DEBUG);
     this->pitch->changeActivePlayer(user);
     log("GameController: Usuario agregado.", LOG_INFO);
 }

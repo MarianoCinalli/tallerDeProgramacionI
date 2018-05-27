@@ -22,11 +22,15 @@ void* read_client(void* argument) {
     while (continueReading && !quit) {
         log("read_client: Reading...", LOG_SPAM);
         if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
-            connectionManager->ready(pthread_self(), socket);
             log("read_client: Esperando para sincronizar...", LOG_INFO);
-            pthread_barrier_wait(&players_ready_barrier);
-            firstBroadcastRead = false;
+            if (!gameControllerProxy->hasGameStarted()) {
+                pthread_barrier_wait(&players_ready_barrier);
+            }
             log("read_client: Sincronizacion terminada.", LOG_INFO);
+            connectionManager->sendMessage(socket, "gameBegins:");
+            sleep(3);
+            connectionManager->ready(pthread_self(), socket);
+            firstBroadcastRead = false;
         }
         std::string message = "";
         readBytes = connectionManager->getMessage(socket, message);
@@ -77,7 +81,6 @@ void* broadcast_to_clients(void* argument) {
     );
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     // Termino la espera
-    broadcaster->broadcastGameBegins();
     sleep(3); //HACK time to get your shit together
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
         broadcaster->broadcast();

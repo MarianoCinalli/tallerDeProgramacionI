@@ -21,17 +21,28 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 }
 
 void Pitch::setUserTeam(std::string user, int team) {
+    log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", team, LOG_DEBUG);
     if (team == 0) {
         if (this->localTeam != NULL) {
+            log("Pitch: Usuario " + user + " agregado al equipo: ", team, LOG_DEBUG);
             teams[user] = this->localTeam;
+        } else {
+            log("Pitch: El equpo local es nulo.", LOG_ERROR);
         }
     } else if (team == 1) {
         if (this->awayTeam != NULL) {
+            log("Pitch: Usuario " + user + " agregado al equipo: ", team, LOG_DEBUG);
             teams[user] = this->awayTeam;
+        } else {
+            log("Pitch: El equpo visitante es nulo.", LOG_ERROR);
         }
+    } else {
+        log("Pitch: Error numero de equipo desconocido: ", team, LOG_ERROR);
     }
+    log("Pitch: Se le asignaron jugador al usuario: ", user, LOG_DEBUG);
     this->activePlayers[user] = teams[user]->getPlayers().back();
     this->activePlayers[user]->toggleIsSelected(user);
+    log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);
 }
 
 void Pitch::setBall(Ball* ball) {
@@ -118,7 +129,7 @@ void Pitch::changeActivePlayer(std::string user) {
         Player* nearestPlayer = playersList.back();
         for (Player* p : playersList) {
             int distance = p->getPosition()->distanceTo(center);
-            log("Distancia: ", distance, LOG_SPAM);
+            log("Pitch: Distancia ", distance, LOG_SPAM);
             // if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
             if (distance < nearestDistance  && !p->getIsSelected()) {
                 nearestDistance = distance;
