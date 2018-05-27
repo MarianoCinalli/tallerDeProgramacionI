@@ -29,6 +29,8 @@ function createCopies {
         # Copiar archivos.
         cp client/main "$new_client_dir/"
         cp -R client/config "$new_client_dir/"
+        cp -R client/images "$new_client_dir/"
+        cp -R client/lazy.ttf "$new_client_dir/"
         i=$[$i+1]
     done
 
