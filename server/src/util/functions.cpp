@@ -148,5 +148,4 @@ void setQuit() {
     quit_mutex.lock();
     quit = true;
     quit_mutex.unlock();
-
 }

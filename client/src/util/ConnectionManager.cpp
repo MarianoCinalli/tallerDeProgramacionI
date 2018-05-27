@@ -76,11 +76,20 @@ int ConnectionManager::getMessage(std::string& readMessage) {
     return readBytes;
 }
 
-void ConnectionManager::sendMessage(std::string message) {
+bool ConnectionManager::sendMessage(std::string message) {
     log("ConnectionManager: Enviando: ", message, LOG_SPAM);
     const char* constantMessage = message.c_str();
-    send(this->my_socket, constantMessage, strlen(constantMessage), 0);
-    log("ConnectionManager: Mensaje enviado.", LOG_SPAM);
+    int sendBytes = send(this->my_socket, constantMessage, strlen(constantMessage), 0);
+    bool success = false;
+    if (sendBytes < 0) {
+        log("ConnectionManager: Escritura fallida: ", strerror(errno), LOG_ERROR);
+    } else if (sendBytes == 0) {
+        log("ConnectionManager: Escritura igual a 0. ", LOG_ERROR);
+    } else {
+        success = true;
+    }
+    log("ConnectionManager: Mensaje enviado. Bytes enviados: ", sendBytes, LOG_SPAM);
+    return success;
 }
 
 void ConnectionManager::closeConnection() {

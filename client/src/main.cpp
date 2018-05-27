@@ -713,6 +713,7 @@ int main(int argc, char* argv[]) {
     // Main loop ------------------------------------------
     log("Main: Entrando en el main loop...", LOG_INFO);
     // Este thread escucha los eventos de teclado y se los manda al server.
+    bool sendSuccess = false;
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (actionsManager->shouldQuit(e)) {
@@ -722,7 +723,12 @@ int main(int argc, char* argv[]) {
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
                 if (action != NULL) {
-                    connectionManager->sendMessage(action->toString());
+                    sendSuccess = connectionManager->sendMessage(action->toString());
+                    if (!sendSuccess) {
+                        log("Main: Se detecto error en el envio del mensaje. Saliendo...", LOG_ERROR);
+                        lostConnectionQuit = true;
+                        setQuit(true);
+                    }
                     delete(action);
                 }
             }
