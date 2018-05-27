@@ -31,8 +31,12 @@ Coordinates* Player::getPosition() {
     return this->position;
 }
 
-void Player::isWithBall(bool dominated) {
-    this->withBall = dominated;
+void Player::getsTheBall() {
+    this->withBall = true;
+}
+
+void Player::dropsTheBall() {
+    this->withBall = false;
 }
 
 int Player::getOrientation() {
@@ -41,6 +45,10 @@ int Player::getOrientation() {
 
 int Player::getKickPower(){
   return this->kickPower;
+}
+
+bool Player::hasTheBall() {
+    return this->withBall;
 }
 
 Velocity* Player::getVelocity() {

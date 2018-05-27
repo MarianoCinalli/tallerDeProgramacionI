@@ -80,32 +80,37 @@ void Pitch::removeActivePlayer(std::string user){
 
 void Pitch::changeActivePlayer(std::string user) {
     log("Pitch: Cambiando jugador activo", LOG_INFO);
-    Team* team = teams[user];
-    // Coordinates* center = this->activePlayers[user]->getPosition();
-    Coordinates* center = this->ball->getPosition();
+    if (!(this->activePlayers[user]->hasTheBall())) {
+        Team* team = teams[user];
+        // Coordinates* center = this->activePlayers[user]->getPosition();
+        Coordinates* center = this->ball->getPosition();
 
-    // Solo puede seleccionar de los jugadores dentro de los margenes,
-    std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 1);
-    if (!playersList.empty()) {
-        int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
-        Player* nearestPlayer = playersList.back();
-        for (Player* p : playersList) {
-            int distance = p->getPosition()->distanceTo(center);
-            log("Distancia: ", distance, LOG_SPAM);
-            // if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
-            if (distance < nearestDistance  && !p->getIsSelected()) {
-                nearestDistance = distance;
-                nearestPlayer = p;
+        // Solo puede seleccionar de los jugadores dentro de los margenes,
+        std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 1);
+        if (!playersList.empty()) {
+            int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
+            Player* nearestPlayer = playersList.back();
+            for (Player* p : playersList) {
+                int distance = p->getPosition()->distanceTo(center);
+                log("Distancia: ", distance, LOG_SPAM);
+                // if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
+                if (distance < nearestDistance  && !p->getIsSelected()) {
+                    nearestDistance = distance;
+                    nearestPlayer = p;
+                }
             }
+            Player* player = this->activePlayers[user];
+            player->copyStats(nearestPlayer);
+            player->toggleIsSelected(user);
+            this->activePlayers[user] = nearestPlayer;
+            nearestPlayer->toggleIsSelected(user);
+            log("Pitch: Se cambio el jugador activo.", LOG_INFO);
+        } else {
+            log("Pitch: La lista de jugadores esta vacia!.", LOG_ERROR);
         }
-        Player* player = this->activePlayers[user];
-        player->copyStats(nearestPlayer);
-        player->toggleIsSelected(user);
-        this->activePlayers[user] = nearestPlayer;
-        nearestPlayer->toggleIsSelected(user);
-        log("Pitch: Se cambio el jugador activo.", LOG_INFO);
-    } else {
-        log("Pitch: La lista de jugadores esta vacia!.", LOG_ERROR);
+    }
+    else {
+        log("Pitch: No se cambio el jugador activo ya que tiene el balon.", LOG_INFO);
     }
 }
 

@@ -48,6 +48,7 @@ class Player {
         bool isRunningDiagonaly();
         bool isRunningFast();
         bool isStill();
+        bool hasTheBall();
 
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
@@ -58,7 +59,8 @@ class Player {
         void toggleIsSelected(std::string name);
         void copyStats(Player* copyTo);
         void setTrayectory(Velocity* trayectory);
-        void isWithBall(bool dominated);
+        void getsTheBall();
+        void dropsTheBall();
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void updateKicking();
