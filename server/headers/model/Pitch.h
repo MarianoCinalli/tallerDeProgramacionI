@@ -36,5 +36,7 @@ class Pitch {
         void removeActivePlayer(std::string user);
         Team* getTeam(int user);
         ~Pitch();
+    private:
+        std::string getUsersWithActivePlayersAsString();
 };
 #endif // PITCH_H

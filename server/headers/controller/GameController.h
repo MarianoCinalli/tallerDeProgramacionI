@@ -50,5 +50,8 @@ class GameController {
         bool joinTeam(std::string playerName, int team, int maxPlayers, std::string & errorMessage);
         void removeUser(std::string user);
         ~GameController();
+    private:
+        void removeUserFromTeam(std::string user);
+        std::string getUsersWithTeamAsString();
 };
 #endif // GAMECONTROLLER_H

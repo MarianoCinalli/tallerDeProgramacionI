@@ -20,10 +20,57 @@ void GameController::addUser(std::string user, int teamNum) {
     log("GameController: Usuario agregado.", LOG_INFO);
 }
 
+
 void GameController::removeUser(std::string user) {
     log("GameController: Removiendo usuario...", LOG_INFO);
+    this->removeUserFromTeam(user);
     this->pitch->removeActivePlayer(user);
     log("GameController: Usuario removido.", LOG_INFO);
+}
+
+// Recorre el map, para cada team busca al jugador.
+// Si lo encuentra lo borra.
+void GameController::removeUserFromTeam(std::string user) {
+    log("GameController: Original: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
+    log("GameController: Buscando al jugador:", user, LOG_DEBUG);
+    bool errased = false;
+    log("GameController: En el equipo local...", LOG_DEBUG);
+    for (auto it = this->users[0].begin(); it != this->users[0].end();) {
+        if (*it == user) {
+            it = this->users[0].erase(it);
+            errased = true;
+        } else {
+            ++it;
+        }
+    }
+    log("GameController: En el equipo visitante...", LOG_DEBUG);
+    for (auto it = this->users[1].begin(); it != this->users[1].end();) {
+        if (*it == user) {
+            it = this->users[1].erase(it);
+            errased = true;
+        } else {
+            ++it;
+        }
+    }
+    if (errased) {
+        log("GameController: Jugador removido: ", user, LOG_DEBUG);
+        log("GameController: Despues: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
+    } else {
+        log("GameController: No se encontro el jugador, dentro de los equipos", user, LOG_ERROR);
+        log("GameController: Despues: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
+    }
+}
+
+// Metodo para debugear.
+std::string GameController::getUsersWithTeamAsString() {
+    std::string usersWithActivePlayers = "";
+    for (auto it = this->users[0].begin(); it != this->users[0].end(); ++it) {
+        usersWithActivePlayers += "E:0 J:" + *it + " - ";
+    }
+    for (auto it = this->users[1].begin(); it != this->users[1].end(); ++it) {
+        usersWithActivePlayers += "E:1 J:" + *it + " - ";
+    }
+    return usersWithActivePlayers;
 }
 
 Player* GameController::getActivePlayer(std::string user) {
@@ -116,7 +163,7 @@ void GameController::setEnd() {
 }
 
 
-bool GameController::joinTeam(std::string playerName, int team, int maxPlayers, std::string &errorMessage) {
+bool GameController::joinTeam(std::string playerName, int team, int maxPlayers, std::string& errorMessage) {
     log("GameController: Viendo si el usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
     int usersInTeam = this->users[team].size();
     if (maxPlayers == 1) {

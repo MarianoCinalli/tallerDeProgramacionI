@@ -74,26 +74,36 @@ Player* Pitch::getActivePlayer(std::string user) {
     if(search != this->activePlayers.end()) {
         activePlayer = this->activePlayers[user];
     } else {
-        log("ConnectionManager: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
+        log("Pitch: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
     }
     if (activePlayer) {
-        log("ConnectionManager: El jugador activo es nulo para el usuario: ", user, LOG_ERROR);
+        log("Pitch: El jugador activo es nulo para el usuario: ", user, LOG_ERROR);
     }
     return activePlayer;
 }
 
 void Pitch::removeActivePlayer(std::string user) {
-    log("ConnectionManager: Para remover el jugador activo, buscandolo para usuario: ", user, LOG_DEBUG);
-    Player* player = this->getActivePlayer(user);
-    if (player != NULL) {
-        log("ConnectionManager: Removiendo jugador activo para usuario ", user, LOG_DEBUG);
+    log("Pitch: Para remover el jugador activo, buscandolo para usuario: ", user, LOG_DEBUG);
+    auto search = this->activePlayers.find(user);
+    if(search != this->activePlayers.end()) {
+        log("Pitch: Removiendo jugador activo para usuario ", user, LOG_DEBUG);
         this->activePlayers[user]->toggleIsSelected(user);
         this->activePlayers[user] = NULL;
+        this->activePlayers.erase(search);
     } else {
-        log("ConnectionManager: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
+        log("Pitch: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
+        log("Pitch: ", this->getUsersWithActivePlayersAsString(), LOG_DEBUG);
     }
 }
 
+// Metodo para debugear.
+std::string Pitch::getUsersWithActivePlayersAsString() {
+    std::string usersWithActivePlayers = "";
+    for (auto const& activePlayer : this->activePlayers) {
+        usersWithActivePlayers += activePlayer.first + "";
+    }
+    return usersWithActivePlayers;
+}
 
 void Pitch::changeActivePlayer(std::string user) {
     log("Pitch: Cambiando jugador activo", LOG_INFO);
