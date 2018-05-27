@@ -117,23 +117,23 @@ void GameController::setEnd() {
 
 
 bool GameController::joinTeam(std::string playerName, int team, int maxPlayers) {
-    log("GameController: Viendo si el usuario " + playerName + " puede unirse al equipo:", team, LOG_INFO);
+    log("GameController: Viendo si el usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
     int usersInTeam = this->users[team].size();
     if (maxPlayers == 1) {
         if (usersInTeam != 0) {
-            log("GameController: El usuario " + playerName + " no puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: Equipo lleno. El usuario " + playerName + " no puede unirse al equipo: ", team, LOG_INFO);
             return false;
         } else {
-            log("GameController: El usuario " + playerName + " puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: El usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
             this->addUser(playerName, team);
             return true;
         }
     } else {
         if (usersInTeam == (maxPlayers - 1)) {
-            log("GameController: El usuario " + playerName + " no puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: Equipo lleno. El usuario " + playerName + " no puede unirse al equipo: ", team, LOG_INFO);
             return false;
         } else {
-            log("GameController: El usuario " + playerName + " puede unirse al equipo:", team, LOG_INFO);
+            log("GameController: El usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
             this->addUser(playerName, team);
             return true;
         }

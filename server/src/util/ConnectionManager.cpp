@@ -48,7 +48,7 @@ void ConnectionManager::acceptConnection() {
     new_socket = accept(this->my_socket, (struct sockaddr*)&this->address, (socklen_t*)&addrlen);
     log("ConnectionManager: Aceptando conexion...", LOG_INFO);
     if (new_socket > 0) {
-        //if (this->hasRoom()) {
+        if (this->hasRoom()) {
             log("ConnectionManager: Conexion aceptada.", LOG_INFO);
             log("ConnectionManager: Creando thread para nueva conexion.", new_socket, LOG_INFO);
             this->socketCache.push_back(new_socket);
@@ -57,22 +57,29 @@ void ConnectionManager::acceptConnection() {
                 &(this->socketCache.back())
             );
             if (threadId != 0) {
-                this->threadIdsAndSockets[threadId] = new_socket;
                 ++this->acceptedConnections;
             } else {
                 log("ConnectionManager: Error creando lector de cliente.", LOG_ERROR);
                 close(new_socket);
             }
-        //}
-        /* else {
+        } else {
             log("ConnectionManager: Conexion rechazada por falta de espacio, numero de clientes: ", this->acceptedConnections, LOG_INFO);
             std::string message = "noRoom:" + std::to_string(this->acceptedConnections);
             this->sendMessage(new_socket, message);
-            close(new_socket);
-        }*/
+            // Esto no cierra el socket.
+            // Solo lo inhabilita para send y recieve.
+            // Cuando se llame a closeOpenedSockets() se cierra los colgados.
+            shutdown(new_socket, SHUT_RDWR);
+            this->socketsRejected.push_back(new_socket);
+        }
     } else {
         log("ConnectionManager: Conexion rechazada.", LOG_ERROR);
     }
+}
+
+void ConnectionManager::ready(pthread_t threadId, int socket) {
+    log("ConnectionManager: Socket is ready for broadcast: ", socket, LOG_INFO);
+    this->threadIdsAndSockets[threadId] = socket;
 }
 
 bool ConnectionManager::hasRoom() {
@@ -88,11 +95,16 @@ std::vector<int> ConnectionManager::getSockets() {
 }
 
 void ConnectionManager::processDisconection(pthread_t connectionHandlerId) {
-    log("ConnectionManager: Liberando recursos de: ", connectionHandlerId, LOG_INFO);
-    close(this->threadIdsAndSockets[connectionHandlerId]);
-    this->threadIdsAndSockets.erase(connectionHandlerId);
-    --this->acceptedConnections;
-    log("ConnectionManager: Recursos liberados.", LOG_INFO);
+    auto search = this->threadIdsAndSockets.find(connectionHandlerId);
+    if(search != this->threadIdsAndSockets.end()) {
+        int socketToClose = search->second;
+        log("ConnectionManager: Procesando la desconexion de: ", socketToClose, LOG_INFO);
+        this->threadIdsAndSockets.erase(connectionHandlerId);
+        close(socketToClose);
+        --this->acceptedConnections;
+    } else {
+        log("ConnectionManager: No se encontro el cliente a desconectar, correspondiente a: ", connectionHandlerId, LOG_ERROR);
+    }
 }
 
 void ConnectionManager::waitForAllConnectionsToFinish() {
@@ -102,10 +114,15 @@ void ConnectionManager::waitForAllConnectionsToFinish() {
 }
 
 void ConnectionManager::closeOpenedSockets() {
-    log("ConnectionManager: Cerrando sockets abiertos...", LOG_INFO);
+    log("ConnectionManager: Cerrando sockets aceptados que quedaron abiertos...", LOG_INFO);
     for (auto const& threadAndSocket : this->threadIdsAndSockets) {
         log("ConnectionManager: Cerrando socket de: ", threadAndSocket.first, LOG_INFO);
         close(threadAndSocket.second);
+    }
+    log("ConnectionManager: Cerrando sockets rechazados que quedaron abiertos...", LOG_INFO);
+    for(int socket : this->socketsRejected) {
+        log("ConnectionManager: Cerrando socket de: ", socket, LOG_INFO);
+        close(socket);
     }
     log("ConnectionManager: Socket cerrados.", LOG_INFO);
 }
@@ -150,5 +167,9 @@ int ConnectionManager::getMaxClients(){
 }
 
 ConnectionManager::~ConnectionManager() {
+    log("ConnectionManager: Liberando recursos...", LOG_INFO);
+    this->waitForAllConnectionsToFinish();
+    this->closeOpenedSockets();
     delete(this->clients);
+    log("ConnectionManager: Recursos liberados.", LOG_INFO);
 }

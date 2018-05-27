@@ -17,9 +17,12 @@ void* read_client(void* argument) {
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
     log("read_client: Se recibio el socket: ", socket, LOG_DEBUG);
+    log("read_client: Eviando mensaje de conexion aceptada...", LOG_SPAM);
+    connectionManager->sendMessage(socket, "true:");
     while (continueReading && !quit) {
         log("read_client: Reading...", LOG_SPAM);
         if (firstBroadcastRead && user->hasLogedIn() && user->hasPickedTeamAndFormation()) {
+            connectionManager->ready(pthread_self(), socket);
             log("read_client: Esperando para sincronizar...", LOG_INFO);
             pthread_barrier_wait(&players_ready_barrier);
             firstBroadcastRead = false;
@@ -41,26 +44,7 @@ void* read_client(void* argument) {
                 // No se logeo.
                 user->processLogInMessage(message);
             } else if (!user->hasPickedTeamAndFormation()) {
-                // Se logeo, pero no eligio equipo y formacion.
-                std::string key = getMessageKey(message);
-                std::string value = getMessageValue(message);
-                if (key == "get" && value == "max") {
-                    // Mostrarle cuantos jugadores maximos tiene la partida
-                    connectionManager->sendMessage(socket, "max:" + std::to_string(connectionManager->getMaxClients()));
-                }
-                // y mostrar cuantos jugadores hay en cada equipo
-                if (key == "get" && value == "equipo1") {
-                    std::string stats = gameControllerProxy->getTeamStats(0);
-                    connectionManager->sendMessage(socket, stats);
-                }
-                if (key == "get" && value == "equipo2") {
-                    std::string stats = gameControllerProxy->getTeamStats(1);
-                    connectionManager->sendMessage(socket, stats);
-                }
-                if (key == "use") {
-                    user->processTeamAndFormationMessage(message);
-                }
-                //connectionManager->sendMessage(socket,"Argentina:Brasil");
+                user->processTeamAndFormationMessage(message);
             } else {
                 // El usuario se inicializo. Vienen acciones sobre los jugadores.
                 Action* action = user->getAsAction(message);
@@ -121,16 +105,6 @@ void* game_updater(void* argument) {
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
-}
-
-
-// Separan key:value en key value
-std::string getMessageKey(std::string message) {
-    return message.substr(0, message.find(":"));
-}
-
-std::string getMessageValue(std::string message) {
-    return message.substr(message.find(":") + 1, message.length()); //iba un +1 LPM
 }
 
 // Espera y acepta conecciones.

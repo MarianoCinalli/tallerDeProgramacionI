@@ -68,6 +68,8 @@ void User::processTeamAndFormationMessage(std::string message) {
             log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
             this->connectionManager->sendMessage(this->userSocket, "false:noRoom");
         }
+    } else {
+        log("User: Accion no entendida: ", action, LOG_ERROR);
     }
 }
 
