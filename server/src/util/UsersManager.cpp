@@ -38,10 +38,10 @@ void UsersManager::processLogIn(std::string user) {
     if (this->gameControllerProxy->hasGameStarted()) {
         auto loggedOffSearch = loggedOffUsers.find(user);
         if(loggedOffSearch != loggedOffUsers.end()) {
-            std::cout << "UsersManager: Removiendo al usuario de la lista de desloggeados" << std::endl;
+            log("UsersManager: Removiendo al usuario de la lista de desloggeados.", LOG_INFO);
             loggedOffUsers.erase(loggedOffSearch);
         } else {
-            std::cout << "UsersManager: No estaba deslogeado. Que paso?" << std::endl;
+            log("UsersManager: No estaba deslogeado. Que paso?", LOG_ERROR);
         }
     }
 }

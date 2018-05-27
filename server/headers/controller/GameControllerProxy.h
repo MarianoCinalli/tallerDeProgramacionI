@@ -24,7 +24,7 @@ class GameControllerProxy {
         void removeUser(std::string user);
         bool hasGameStarted();
         std::string getTeamStats(int numberTeam);
-        bool joinTeam(std::string playerName, int team, int maxPlayers);
+        bool joinTeam(std::string playerName, int team, int maxPlayers, std::string &errorMessage);
         ~GameControllerProxy();
 };
 #endif // GAMECONTROLLERPROXY_H
