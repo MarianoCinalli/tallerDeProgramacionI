@@ -12,12 +12,12 @@ UsersManager::UsersManager(std::map<std::string, std::string> usersAndPasswords,
     log("UsersManager: UsersManager creado.", LOG_INFO);
 }
 
-bool UsersManager::logIn(std::string user, std::string password) {
+bool UsersManager::logIn(std::string user, std::string password, std::string &errorMessage) {
     users_mutex.lock();
     bool result = false;
     for (auto const& userAndPassword : this->usersAndPasswords) {
         if ((userAndPassword.first == user) && (userAndPassword.second == password)) {
-            if (this->canLogIn(user)) {
+            if (this->canLogIn(user, errorMessage)) {
                 this->processLogIn(user);
                 log("UsersManager: Se loggeo el usuario: ", user, LOG_INFO);
                 result = true;
@@ -29,6 +29,7 @@ bool UsersManager::logIn(std::string user, std::string password) {
         }
     }
     log("UsersManager: No se pudo loggear el usuario:" + user + " con password: " + password, LOG_INFO);
+    errorMessage = "Credenciales invalidas.";
     users_mutex.unlock();
     return result;
 }
@@ -46,16 +47,30 @@ void UsersManager::processLogIn(std::string user) {
     }
 }
 
-bool UsersManager::canLogIn(std::string user) {
+bool UsersManager::canLogIn(std::string user, std::string &errorMessage) {
+    bool result = false;
     if (this->gameControllerProxy->hasGameStarted()) {
         // Si el juego ya empezo solo se pueden logear los que se habian deslogeado alguna vez.
         log("UsersManager: El juego comenzo, entonces veo que no este logeado pero que se haya logeado en algun momento.", LOG_DEBUG);
-        return !this->isLoggedIn(user) && this->isLoggedOff(user);
+        if (this->isLoggedIn(user)) {
+            errorMessage = "El usuario ya esta jugando.";
+        } else {
+            if (this->isLoggedOff(user)) {
+                result = true;
+            } else {
+                errorMessage = "El usuario no se logeo antes del comienzo del partido.";
+            }
+        }
     } else {
         // Sino solo basta con que no esten logeados.
         log("UsersManager: El juego no comenzo, entonces veo que no este logeado.", LOG_DEBUG);
-        return !this->isLoggedIn(user);
+        if (!this->isLoggedIn(user)) {
+            result = true;
+        } else {
+            errorMessage = "El usuario esta logeado.";
+        }
     }
+    return result;
 }
 
 bool UsersManager::isLoggedIn(std::string user) {

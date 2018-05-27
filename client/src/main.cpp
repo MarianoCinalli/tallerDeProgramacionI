@@ -640,14 +640,14 @@ int main(int argc, char* argv[]) {
                     // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
                     log("Main: El server contesta cualquiera!", LOG_INFO);
                 } else {
-                    std::string logged = message.substr(message.find(":") + 1, message.length());
-                    log("Main: Resultado del Main: ", logged, LOG_INFO);
-                    if (logged == "true") {
+                    std::string resultKey = message.substr(0, message.find(":"));
+                    std::string resultValue = message.substr(message.find(":") + 1, message.length());
+                    if (resultKey == "true") {
                         hasLoggedIn = true;
-                        log("Main: Credenciales validas. Logeo aceptado.", logged, LOG_INFO);
-                    } else if (logged == "false") {
-                        log("Main: Usuario o clave incorrecto.", logged, LOG_INFO);
-                        mensaje = "Credenciales incorrectas.";
+                        log("Main: Credenciales validas. Logeo aceptado.", LOG_INFO);
+                    } else if (resultKey == "false") {
+                        log("Main: No se pudo logear con usuario = " + usuario + " y clave = " + clave + ". Server error: " + resultValue, LOG_INFO);
+                        mensaje = resultValue;
                         hasLoggedIn = false;
                     }
                 }

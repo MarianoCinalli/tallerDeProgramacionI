@@ -17,9 +17,9 @@ class UsersManager {
         GameControllerProxy* gameControllerProxy;
     public:
         UsersManager(std::map<std::string, std::string> usersAndPasswords, GameControllerProxy* gameControllerProxy);
-        bool logIn(std::string user, std::string password);
+        bool logIn(std::string user, std::string password, std::string &errorMessage);
         void processLogIn(std::string user);
-        bool canLogIn(std::string user);
+        bool canLogIn(std::string user, std::string &errorMessage);
         bool isLoggedIn(std::string user);
         bool isLoggedOff(std::string user);
         void logOff(std::string user);

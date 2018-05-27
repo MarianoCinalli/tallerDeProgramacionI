@@ -27,17 +27,19 @@ void User::processLogInMessage(std::string message) {
     std::string parsedUser = this->getMessageAction(message);
     std::string parsedPassword = this->getMessageValue(message);
     log("User: Intentando logear a: ", parsedUser, LOG_INFO);
+    std::string errorMessage = "";
     this->hasLoged = this->manager->logIn(
         parsedUser,
-        parsedPassword
+        parsedPassword,
+        errorMessage
     );
     if (this->hasLoged) {
         log("User: Usuario logeado: ", parsedUser, LOG_INFO);
         this->user = parsedUser;
-        connectionManager->sendMessage(this->userSocket, "logged:true");
+        connectionManager->sendMessage(this->userSocket, "true:");
     } else {
         log("User: No se pudo logear el usuario.", LOG_INFO);
-        connectionManager->sendMessage(this->userSocket, "logged:false");
+        connectionManager->sendMessage(this->userSocket, "false:" + errorMessage);
     }
 }
 
