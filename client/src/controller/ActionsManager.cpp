@@ -20,6 +20,22 @@ bool anyKeyPressed(bool* keys) {
     return false;
 }
 
+
+int customMap(int val){   //funcion para mapear la potencia del tiro, superhardcode
+  if (val<150){
+    return 3;
+  }
+  else if (val <250){
+    return 4;   //de 1 a 5
+  }
+  else if (val <350){
+    return 5;   //de 1 a 5
+  }
+  else{
+    return 6;
+  }
+}
+
 // Devuelve la accion correspondiente a un evento.
 Action* ActionsManager::getAction(SDL_Event event) {
     Action* action = NULL;
@@ -36,8 +52,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 break;
             case SDLK_s:
             {
-                int passPower = 1;    //TODO constante a definir, cuanto pass power
-                action = new KickingAction(passPower);
+                this->kickTime = SDL_GetTicks();
                 break;
               }
             case SDLK_SPACE:
@@ -89,6 +104,17 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     keys[KRIGHT] = false;
                     action = new Accelerate(PLAYER_ORIENTATION_LEFT);
                     break;
+                case SDLK_s:
+                {
+                    int currentTime = SDL_GetTicks();
+                    currentTime = currentTime - this->kickTime;
+                    int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
+                    action = new KickingAction(passPower);
+                    log("poder de pase", passPower, LOG_DEBUG);
+                    log("tiempo de pase", currentTime, LOG_DEBUG);
+
+                    break;
+                  }
             }
             if (!anyKeyPressed(keys)) {
                 if (action != NULL) {

@@ -15,6 +15,7 @@
 
 class ActionsManager {
     private:
+      int kickTime;
     public:
         ActionsManager();
         bool keys[4] = {false};

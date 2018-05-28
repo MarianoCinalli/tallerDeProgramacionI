@@ -60,7 +60,6 @@ void* read_server(void* argument) {
                         Player* player;
                         Ball* ball = initializer->getGameController()->getBall();
                         Camera* camera = initializer->getGameController()->getCamera();;
-                        // YAML::Node node = YAML::Load(readMessage);
                         YAML::Node node = YAML::Load(token);
                         for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                             YAML::Node key = it->first;
@@ -94,6 +93,7 @@ void* read_server(void* argument) {
                     }
                 } catch (const std::exception& e) {
                     log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
+                    log("mensaje leido en error: ", readMessage, LOG_SPAM);
                 }
             }
         }
