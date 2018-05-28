@@ -27,17 +27,19 @@ void User::processLogInMessage(std::string message) {
     std::string parsedUser = this->getMessageAction(message);
     std::string parsedPassword = this->getMessageValue(message);
     log("User: Intentando logear a: ", parsedUser, LOG_INFO);
+    std::string errorMessage = "";
     this->hasLoged = this->manager->logIn(
         parsedUser,
-        parsedPassword
+        parsedPassword,
+        errorMessage
     );
     if (this->hasLoged) {
         log("User: Usuario logeado: ", parsedUser, LOG_INFO);
         this->user = parsedUser;
-        connectionManager->sendMessage(this->userSocket, "logged:true");
+        connectionManager->sendMessage(this->userSocket, "true:");
     } else {
         log("User: No se pudo logear el usuario.", LOG_INFO);
-        connectionManager->sendMessage(this->userSocket, "logged:false");
+        connectionManager->sendMessage(this->userSocket, "false:" + errorMessage);
     }
 }
 
@@ -53,10 +55,12 @@ void User::processTeamAndFormationMessage(std::string message) {
     if (action == "use") {
         team = stoi(value); // Guardar el que eligio el user.
         // Si puede unirse a ese equipo, setea la formacion al equipo luego se ordena.
+        std::string errorMessage = "";
         bool couldJoin = this->gameControllerProxy->joinTeam(
             this->getName(),
             team,
-            this->connectionManager->getMaxClients()
+            this->connectionManager->getMaxClients(),
+            errorMessage
         );
         if (couldJoin) {
             log("User: El usuario se unio al equipo: ", team, LOG_INFO);
@@ -66,8 +70,10 @@ void User::processTeamAndFormationMessage(std::string message) {
             this->connectionManager->sendMessage(this->userSocket, "true:");
         } else {
             log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
-            this->connectionManager->sendMessage(this->userSocket, "false:noRoom");
+            this->connectionManager->sendMessage(this->userSocket, "false:" + errorMessage);
         }
+    } else {
+        log("User: Accion no entendida: ", action, LOG_ERROR);
     }
 }
 

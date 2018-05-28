@@ -15,7 +15,6 @@ class Broadcaster {
         Broadcaster(Pitch* pitch, ConnectionManager* connectionManager);
         void broadcast();
         std::string getMessage();
-        void broadcastGameBegins();
         void broadcastGameEnded();
         ~Broadcaster();
 };

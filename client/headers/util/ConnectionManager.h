@@ -21,7 +21,7 @@ class ConnectionManager {
         ConnectionManager(std::string ip, int port);
         bool connectToServer();
         int getMessage(std::string& readMessage);
-        void sendMessage(std::string message);
+        bool sendMessage(std::string message);
         void closeConnection();
         int getSocket();
         void setIp(std::string ip);

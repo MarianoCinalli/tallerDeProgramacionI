@@ -21,17 +21,28 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 }
 
 void Pitch::setUserTeam(std::string user, int team) {
+    log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", team, LOG_DEBUG);
     if (team == 0) {
         if (this->localTeam != NULL) {
+            log("Pitch: Usuario " + user + " agregado al equipo: ", team, LOG_DEBUG);
             teams[user] = this->localTeam;
+        } else {
+            log("Pitch: El equpo local es nulo.", LOG_ERROR);
         }
     } else if (team == 1) {
         if (this->awayTeam != NULL) {
+            log("Pitch: Usuario " + user + " agregado al equipo: ", team, LOG_DEBUG);
             teams[user] = this->awayTeam;
+        } else {
+            log("Pitch: El equpo visitante es nulo.", LOG_ERROR);
         }
+    } else {
+        log("Pitch: Error numero de equipo desconocido: ", team, LOG_ERROR);
     }
+    log("Pitch: Se le asignaron jugador al usuario: ", user, LOG_DEBUG);
     this->activePlayers[user] = teams[user]->getPlayers().back();
     this->activePlayers[user]->toggleIsSelected(user);
+    log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);
 }
 
 void Pitch::setBall(Ball* ball) {
@@ -69,14 +80,41 @@ Coordinates* getCenter() {
 }
 
 Player* Pitch::getActivePlayer(std::string user) {
-    return this->activePlayers[user];
+    Player* activePlayer = NULL;
+    auto search = this->activePlayers.find(user);
+    if(search != this->activePlayers.end()) {
+        activePlayer = this->activePlayers[user];
+    } else {
+        log("Pitch: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
+    }
+    if (activePlayer) {
+        log("Pitch: El jugador activo es nulo para el usuario: ", user, LOG_ERROR);
+    }
+    return activePlayer;
 }
 
-void Pitch::removeActivePlayer(std::string user){
-  this->activePlayers[user]->toggleIsSelected(user);
-  this->activePlayers[user] = NULL;
+void Pitch::removeActivePlayer(std::string user) {
+    log("Pitch: Para remover el jugador activo, buscandolo para usuario: ", user, LOG_DEBUG);
+    auto search = this->activePlayers.find(user);
+    if(search != this->activePlayers.end()) {
+        log("Pitch: Removiendo jugador activo para usuario ", user, LOG_DEBUG);
+        this->activePlayers[user]->toggleIsSelected(user);
+        this->activePlayers[user] = NULL;
+        this->activePlayers.erase(search);
+    } else {
+        log("Pitch: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
+        log("Pitch: ", this->getUsersWithActivePlayersAsString(), LOG_DEBUG);
+    }
 }
 
+// Metodo para debugear.
+std::string Pitch::getUsersWithActivePlayersAsString() {
+    std::string usersWithActivePlayers = "";
+    for (auto const& activePlayer : this->activePlayers) {
+        usersWithActivePlayers += activePlayer.first + "";
+    }
+    return usersWithActivePlayers;
+}
 
 void Pitch::changeActivePlayer(std::string user) {
     log("Pitch: Cambiando jugador activo", LOG_INFO);
@@ -91,7 +129,7 @@ void Pitch::changeActivePlayer(std::string user) {
         Player* nearestPlayer = playersList.back();
         for (Player* p : playersList) {
             int distance = p->getPosition()->distanceTo(center);
-            log("Distancia: ", distance, LOG_SPAM);
+            log("Pitch: Distancia ", distance, LOG_SPAM);
             // if (distance < nearestDistance && distance > 0 && !p->getIsSelected()) {
             if (distance < nearestDistance  && !p->getIsSelected()) {
                 nearestDistance = distance;
@@ -127,7 +165,7 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 
 
 void Pitch::checkSteals() {
-    log("Pitch: Chequeando interceptaciones.", LOG_DEBUG);
+    log("Pitch: Chequeando interceptaciones...", LOG_DEBUG);
     int value = STEAL_VALUE;
     std::list<Player*> players = this->localTeam->getPlayers();
     std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
@@ -147,7 +185,7 @@ void Pitch::checkSteals() {
         }
         if (nearestPlayer != NULL) {
             this->ball->isIntercepted(nearestPlayer);
-            log("Pitch: Cambiado a jugador!", LOG_DEBUG);
+            log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
         }
     }
 }
@@ -163,7 +201,7 @@ void Pitch::changeBallOwnership() {
             Player* nearestPlayer = NULL;
             for (Player* p : players) {
                 int distance = p->getPosition()->distanceTo(this->ball->getPosition());
-                log("Distancia a pelota: ", distance, LOG_SPAM);
+                log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
                 if (distance < nearestDistance && distance > 0 && distance < value) {
                     nearestDistance = distance;
                     nearestPlayer = p;
@@ -171,7 +209,7 @@ void Pitch::changeBallOwnership() {
             }
             if (nearestPlayer != NULL) {
                 this->ball->isIntercepted(nearestPlayer);
-                log("Cambiado a jugador!", LOG_DEBUG);
+                log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
             }
         }
     }

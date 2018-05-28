@@ -29,6 +29,7 @@ class ConnectionManager {
         ThreadSpawner* clients;
         std::map<pthread_t, int> threadIdsAndSockets;
         std::vector<int> socketCache;
+        std::vector<int> socketsRejected;
     public:
         ConnectionManager(int port, int maxConnections);
         // Prepara el socket para escucha.
@@ -47,8 +48,8 @@ class ConnectionManager {
         std::vector<int> getSockets();
         void processDisconection(pthread_t connectionHandlerId);
         void sendToAll(std::string message);
+        void ready(pthread_t threadId, int socket);
         int getMaxClients();
-
         ~ConnectionManager();
 };
 #endif // CONNECTIONMANAGER_H

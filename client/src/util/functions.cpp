@@ -31,6 +31,7 @@ void* read_server(void* argument) {
     int readBytes;
     ConnectionManager* connectionManager = (ConnectionManager*) argument;
     log("read_server: Empezando a recibir mensajes. ", LOG_INFO);
+    int nroDeMensajes = 0;
     while (!quit) {
         readMessage = "";
         readBytes = connectionManager->getMessage(readMessage);
@@ -95,6 +96,7 @@ void* read_server(void* argument) {
                     log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
                     log("mensaje leido en error: ", readMessage, LOG_SPAM);
                 }
+                nroDeMensajes++;
             }
         }
     }
