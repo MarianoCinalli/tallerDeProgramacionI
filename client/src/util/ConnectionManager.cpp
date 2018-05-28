@@ -53,7 +53,7 @@ void ConnectionManager::setPort(int port) {
 
 int ConnectionManager::getMessage(std::string& readMessage) {
     int readBytes;
-    int bufferLength = 4096;
+    int bufferLength = 10000;
     int bufferSize = sizeof(char) * bufferLength;
     char buffer[bufferLength] = {0};
     memset(buffer, 0x00, bufferSize);

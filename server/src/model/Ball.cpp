@@ -73,10 +73,6 @@ void Ball::isPassed(int direction, int passPower) {
 }
 
 void Ball::updatePosition() {
-    //if (((!this->isDominated) && this->velocity->totalVelocity()) < VELOCIDAD_MINIMA_BALON) {
-    //  this->stopRolling();
-    //}
-
     if (this->isDominated()) {
         this->position = this->calculateDominatedPosition();
         this->orientation = player->getOrientation();
