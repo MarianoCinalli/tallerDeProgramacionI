@@ -17,6 +17,7 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->wasKicking = false;
     this->canMove = true;
     this->kickPower = 1;    //inicializacion default?
+    this->highPass = false;
     this->isSelected = false;
     this->isReturning = false;
     this->runningFast = false;
@@ -33,6 +34,10 @@ Coordinates* Player::getPosition() {
 
 void Player::isWithBall(bool dominated) {
     this->withBall = dominated;
+}
+
+bool Player::isAHighPass() {
+    return this->highPass;
 }
 
 int Player::getOrientation() {

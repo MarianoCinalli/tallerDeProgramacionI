@@ -1,12 +1,12 @@
 #include "controller/actions/KickingAction.h"
 
-KickingAction::KickingAction(int power, bool highPass) {
+KickingAction::KickingAction(int power) {
     this->power = power;
-    this->highPass = highPass;
 }
 
 void KickingAction::execute(Player* player) {
     log("KickingAction: Tecla patear detectada.", LOG_DEBUG);
+    bool highPass = false;
     player->startsKicking(this->power, this->highPass);
 }
 

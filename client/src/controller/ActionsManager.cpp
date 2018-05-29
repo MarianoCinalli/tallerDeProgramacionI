@@ -114,8 +114,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     int currentTime = SDL_GetTicks();
                     currentTime = currentTime - this->kickTime;
                     int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
-                    bool highPass = false;
-                    action = new KickingAction(passPower, highPass);
+                    action = new KickingAction(passPower);
                     log("poder de pase", passPower, LOG_DEBUG);
                     log("tiempo de pase", currentTime, LOG_DEBUG);
                     break;
@@ -125,8 +124,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     int currentTime = SDL_GetTicks();
                     currentTime = currentTime - this->kickTime;
                     int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
-                    bool highPass = true;
-                    action = new KickingAction(passPower, highPass);
+                    action = new HighKickingAction(passPower);
                     log("poder de pase", passPower, LOG_DEBUG);
                     log("tiempo de pase", currentTime, LOG_DEBUG);
                     break;

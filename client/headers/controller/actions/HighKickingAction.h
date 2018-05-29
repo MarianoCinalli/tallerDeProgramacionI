@@ -3,16 +3,16 @@
 #include "model/Player.h"
 #include "util/logger.h"
 
-#ifndef KICKINGACTION_H
-#define KICKINGACTION_H
+#ifndef HIGHKICKINGACTION_H
+#define HIGHKICKINGACTION_H
 
-class KickingAction : public Action {
+class HighKickingAction : public Action {
 	private:
 		int power;
     public:
-        KickingAction(int power);
+        HighKickingAction(int power);
         virtual std::string getCommand();
         virtual std::string getParameters();
-        ~KickingAction();
+        ~HighKickingAction();
 };
-#endif // KICKINGACTION_H
+#endif // HIGHKICKINGACTION_H
