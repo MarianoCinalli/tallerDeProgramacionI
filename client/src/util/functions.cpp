@@ -34,7 +34,7 @@ void* read_server(void* argument) {
     int nroDeMensajes = 0;
     while (!quit) {
         readMessage = "";
-        readBytes = connectionManager->getMessage(readMessage);
+        readBytes = connectionManager->getMessage(readMessage, 5); //10 sec of timeout
         if (readBytes < 0) {
             log("read_client: Error en la lectura del mensaje. Saliendo...", LOG_ERROR);
             lostConnectionQuit = true;

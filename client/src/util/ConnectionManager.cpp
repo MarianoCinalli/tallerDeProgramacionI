@@ -51,29 +51,49 @@ void ConnectionManager::setPort(int port) {
     this->port = port;
 }
 
+int ConnectionManager::getMessage(std::string& readMessage, int timeoutSecs){
+  int readBytes;
+  int bufferLength = 10000;
+  int bufferSize = sizeof(char) * bufferLength;
+  char buffer[bufferLength] = {0};
+  memset(buffer, 0x00, bufferSize);
+  fd_set set;
+  struct timeval timeout;
+  FD_ZERO(&set); /* clear the set */
+  FD_SET(this->my_socket, &set); /* add our file descriptor to the set */
+  timeout.tv_sec = timeoutSecs;
+  timeout.tv_usec = 0;
+  int rv = select(this->my_socket + 1, &set, NULL, NULL, &timeout);
+  if (rv < 0) {
+        log("Error in select: ", strerror(errno) , LOG_ERROR);
+        return rv;
+    } else if (rv == 0)
+    {
+      log("timeout, no se recibion nada", LOG_DEBUG);
+      return rv;
+    } else{
+  readBytes = read(this->my_socket, buffer, bufferSize);
+  // Cuidado aca con strerror que no es thread safe:
+  // Otro thread puede setear el errno, y este escribirlo.
+  // Ver de usar strerror_r que es thread safe.
+  if (readBytes < 0) {
+      log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
+      readMessage = "";
+  } else if (readBytes == 0) {
+      log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
+      readMessage = "";
+  } else {
+      log("ConnectionManager: Recibidos ", readBytes, LOG_SPAM);
+      // readMessage = buffer;
+      // std::string s(buffer, readBytes/sizeof(char));
+      readMessage = buffer;
+  }
+  return readBytes;
+}
+}
+
 int ConnectionManager::getMessage(std::string& readMessage) {
-    int readBytes;
-    int bufferLength = 10000;
-    int bufferSize = sizeof(char) * bufferLength;
-    char buffer[bufferLength] = {0};
-    memset(buffer, 0x00, bufferSize);
-    readBytes = read(this->my_socket, buffer, bufferSize);
-    // Cuidado aca con strerror que no es thread safe:
-    // Otro thread puede setear el errno, y este escribirlo.
-    // Ver de usar strerror_r que es thread safe.
-    if (readBytes < 0) {
-        log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
-        readMessage = "";
-    } else if (readBytes == 0) {
-        log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
-        readMessage = "";
-    } else {
-        log("ConnectionManager: Recibidos ", readBytes, LOG_SPAM);
-        // readMessage = buffer;
-        // std::string s(buffer, readBytes/sizeof(char));
-        readMessage = buffer;
-    }
-    return readBytes;
+    return this->getMessage(readMessage, 60);//default timeout 1 minuto
 }
 
 bool ConnectionManager::sendMessage(std::string message) {
