@@ -25,6 +25,26 @@ extern std::mutex quit_mutex;
 //      creo que hay que guardar el valor a pisar en wasKicking porque se usa para dibujar.
 //  sl: this->sliding <- idem kicking
 //  ru: this->runningFast
+
+
+// Setea el quit de manera segura.
+void setQuit(bool newQuit) {
+    log("setQuit: Seteando salida...", LOG_INFO);
+    quit_mutex.lock();
+    quit = quit || newQuit;
+    quit_mutex.unlock();
+    log("setQuit: Salida seteada.", LOG_INFO);
+}
+
+// Setea el lost Connection de manera segura.
+void setLostConnectionQuit(bool newLostConnection){
+  log("setLostConnection: Seteando salida...", LOG_INFO);
+  quit_mutex.lock();
+  lostConnectionQuit =  newLostConnection;
+  quit_mutex.unlock();
+  log("setLostConnection: Salida seteada.", LOG_INFO);
+}
+
 void* read_server(void* argument) {
     log("read_server: Creado.", LOG_INFO);
     std::string readMessage;
@@ -37,19 +57,22 @@ void* read_server(void* argument) {
         readBytes = connectionManager->getMessage(readMessage, 5); //10 sec of timeout
         if (readBytes < 0) {
             log("read_client: Error en la lectura del mensaje. Saliendo...", LOG_ERROR);
-            lostConnectionQuit = true;
+            setLostConnectionQuit(true);
             setQuit(true);
         } else if (readBytes == 0) {
             // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             log("read_server: No se pudo establecer coneccion con el server. Saliendo...", LOG_INFO);
-            lostConnectionQuit = true;
+            setLostConnectionQuit(true);
             // setQuit(true);
         } else {
             if (readMessage == "gameEnds:") {
                 log("read_server: Se recibio el mensaje de fin de juego. Saliendo...", LOG_INFO);
                 setQuit(true);
             } else {
+              if(lostConnectionQuit == true){
+                setLostConnectionQuit(false);
+              }
                 try {
                     std::string delimiter = ";;";
 
@@ -117,22 +140,4 @@ void* drawer(void* argument) {
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;
-}
-
-// Setea el quit de manera segura.
-void setQuit(bool newQuit) {
-    log("setQuit: Seteando salida...", LOG_INFO);
-    quit_mutex.lock();
-    quit = quit || newQuit;
-    quit_mutex.unlock();
-    log("setQuit: Salida seteada.", LOG_INFO);
-}
-
-// Setea el lost Connection de manera segura.
-void setLostConnection(bool newLostConnection){
-  log("setLostConnection: Seteando salida...", LOG_INFO);
-  quit_mutex.lock();
-  lostConnectionQuit = lostConnectionQuit || newLostConnection;
-  quit_mutex.unlock();
-  log("setLostConnection: Salida seteada.", LOG_INFO);
 }
