@@ -345,7 +345,7 @@ void showLostConnectionMessage(SDL_Renderer* gRenderer) {
     Texture line2Texture;
     line2Texture.loadFromRenderedText("Presionar 'escape' para salir...", gRenderer, SDL_BLUE, gFont);
     bool continueShowingMessage = true;
-    while (continueShowingMessage) {
+    while (continueShowingMessage && lostConnectionQuit) {
         if (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
                 continueShowingMessage = false;
