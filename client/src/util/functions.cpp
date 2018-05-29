@@ -135,8 +135,10 @@ void* drawer(void* argument) {
     SDL_Renderer* renderer = initializer->getRenderer();
     PitchView* pitchView = initializer->getPitchView();
     while (!quit) {
+      if (!lostConnectionQuit){
         pitchView->render(renderer);
         usleep(1000000 / DRAW_FRAME_RATE); // Frame rate.
+      }
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;
