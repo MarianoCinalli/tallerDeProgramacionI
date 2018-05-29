@@ -732,6 +732,9 @@ int main(int argc, char* argv[]) {
                         lostConnectionQuit = true;
                         setQuit(true);
                     }
+                    if (lostConnectionQuit) {
+                        showLostConnectionMessage(renderer);
+                    }
                     delete(action);
                 }
             }

@@ -44,7 +44,7 @@ void* read_server(void* argument) {
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             log("read_server: No se pudo establecer coneccion con el server. Saliendo...", LOG_INFO);
             lostConnectionQuit = true;
-            setQuit(true);
+            // setQuit(true);
         } else {
             if (readMessage == "gameEnds:") {
                 log("read_server: Se recibio el mensaje de fin de juego. Saliendo...", LOG_INFO);
@@ -126,4 +126,13 @@ void setQuit(bool newQuit) {
     quit = quit || newQuit;
     quit_mutex.unlock();
     log("setQuit: Salida seteada.", LOG_INFO);
+}
+
+// Setea el lost Connection de manera segura.
+void setLostConnection(bool newLostConnection){
+  log("setLostConnection: Seteando salida...", LOG_INFO);
+  quit_mutex.lock();
+  lostConnectionQuit = lostConnectionQuit || newLostConnection;
+  quit_mutex.unlock();
+  log("setLostConnection: Salida seteada.", LOG_INFO);
 }

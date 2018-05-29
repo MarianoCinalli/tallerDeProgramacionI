@@ -69,7 +69,7 @@ int ConnectionManager::getMessage(std::string& readMessage, int timeoutSecs){
         return rv;
     } else if (rv == 0)
     {
-      log("timeout, no se recibion nada", LOG_DEBUG);
+      log("timeout, no se recibio nada", LOG_DEBUG);
       return rv;
     } else{
   readBytes = read(this->my_socket, buffer, bufferSize);
