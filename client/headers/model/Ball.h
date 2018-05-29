@@ -14,10 +14,13 @@ class Ball {
 
         Coordinates* position;
         int still;
+        int orientation;
+        int height;
 
     public:
         Ball(Coordinates* position);
         int isStill();
+        int getHeight();
         void parseYaml(YAML::Node node);
         Coordinates* getPosition();
         ~Ball();

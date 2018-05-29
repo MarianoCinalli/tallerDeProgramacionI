@@ -1,7 +1,8 @@
 #include "controller/actions/KickingAction.h"
 
-KickingAction::KickingAction(int power) {
+KickingAction::KickingAction(int power, bool highPass) {
     this->power = power;
+    this->highPass = highPass;
 }
 
 
@@ -14,5 +15,4 @@ std::string KickingAction::getParameters() {
 }
 
 KickingAction::~KickingAction() {
-	//preguntar por esto!
 }

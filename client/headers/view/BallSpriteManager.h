@@ -14,6 +14,7 @@ class BallSpriteManager {
         Texture* spriteSheet;
         SDL_Rect sprite;
         int rollingCount;
+        bool dibujoConOffset;
     public:
         BallSpriteManager(Texture* spriteSheet, Ball* ball);
         void render(SDL_Renderer* screen, Coordinates* coordinates);
@@ -21,7 +22,7 @@ class BallSpriteManager {
         ~BallSpriteManager();
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
-
+        void cambioOffset();
         void setMovingBallSprite();
 };
 #endif // PLAYERSPRITEMANAGER_H

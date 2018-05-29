@@ -54,7 +54,12 @@ Action* ActionsManager::getAction(SDL_Event event) {
             {
                 this->kickTime = SDL_GetTicks();
                 break;
-              }
+            }
+            case SDLK_d:
+            {
+                this->kickTime = SDL_GetTicks();
+                break;
+            }
             case SDLK_SPACE:
                 action = new ChangeActivePlayer();
                 break;
@@ -109,10 +114,21 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     int currentTime = SDL_GetTicks();
                     currentTime = currentTime - this->kickTime;
                     int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
-                    action = new KickingAction(passPower);
+                    bool highPass = false;
+                    action = new KickingAction(passPower, highPass);
                     log("poder de pase", passPower, LOG_DEBUG);
                     log("tiempo de pase", currentTime, LOG_DEBUG);
-
+                    break;
+                }
+                case SDLK_d:
+                {
+                    int currentTime = SDL_GetTicks();
+                    currentTime = currentTime - this->kickTime;
+                    int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
+                    bool highPass = true;
+                    action = new KickingAction(passPower, highPass);
+                    log("poder de pase", passPower, LOG_DEBUG);
+                    log("tiempo de pase", currentTime, LOG_DEBUG);
                     break;
                   }
             }

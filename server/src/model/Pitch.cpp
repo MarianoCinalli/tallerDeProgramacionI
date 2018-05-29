@@ -166,32 +166,34 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 
 void Pitch::checkSteals() {
     log("Pitch: Chequeando interceptaciones...", LOG_DEBUG);
-    int value = STEAL_VALUE;
-    std::list<Player*> players = this->localTeam->getPlayers();
-    std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
-    players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
-    if (!players.empty()) {
-        int nearestDistance = 500; //max distance harcodeadeo TODO
-        Player* nearestPlayer = NULL;
-        for (Player* p : players) {
-            if (p->isSliding()) {
-                int distance = p->getPosition()->distanceTo(this->ball->getPosition());
-                log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
-                if (distance < nearestDistance && distance > 0 && distance < value) {
-                    nearestDistance = distance;
-                    nearestPlayer = p;
+    if (this->ball->getHeight() < 1) {  //TODO mejorar, esta feo
+        int value = STEAL_VALUE;
+        std::list<Player*> players = this->localTeam->getPlayers();
+        std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
+        players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
+        if (!players.empty()) {
+            int nearestDistance = 500; //max distance harcodeadeo TODO
+            Player* nearestPlayer = NULL;
+            for (Player* p : players) {
+                if (p->isSliding()) {
+                    int distance = p->getPosition()->distanceTo(this->ball->getPosition());
+                    log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
+                    if (distance < nearestDistance && distance > 0 && distance < value) {
+                        nearestDistance = distance;
+                        nearestPlayer = p;
+                    }
                 }
             }
-        }
-        if (nearestPlayer != NULL) {
-            this->ball->isIntercepted(nearestPlayer);
-            log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
+            if (nearestPlayer != NULL) {
+                this->ball->isIntercepted(nearestPlayer);
+                log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
+            }
         }
     }
 }
 
 void Pitch::changeBallOwnership() {
-    if (this->ball->isInterceptable()) {
+    if (this->ball->isInterceptable() && (this->ball->getHeight() < 1)) {
         int value = CHANGE_OWNERSHIP_VALUE;
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();

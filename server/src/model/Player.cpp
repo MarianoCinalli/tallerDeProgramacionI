@@ -259,9 +259,10 @@ bool Player::isRunningFast() {
 
 //SLIDE AND KICK FUNCTIONS
 
-void Player::startsKicking(int power) {
+void Player::startsKicking(int power, bool highPass) {
     if (!this->sliding) {
         this->kickPower = power;
+        this->highPass = highPass;
         this->kicking = true;
         this->canMove = false;
     }

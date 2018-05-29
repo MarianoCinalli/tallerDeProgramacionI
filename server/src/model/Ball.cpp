@@ -3,13 +3,15 @@
 Ball::Ball(Coordinates* position) {
     log("Pelota: Creando pelota...", LOG_INFO);
     this->position = position;
-    this->passPower = 0;  //CTE DE 1 a 3
+    this->passPower = 0;
+    this->initialPassPower = 0; 
     this->height = 0;
     this->orientation = 0;
     this->dominated = true;
     this->velocity = new Velocity(0, 0);
     this->isInAPass = false;
-    this->passDirection = 0;  //CTE DE 1 a 12 tq 360/CTE = orientacion
+    this->isInAHighPass = false;
+    this->passDirection = 0;  
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
     this->timePassing = 0; // corrector para frames TODO
@@ -21,6 +23,10 @@ Ball::Ball(Coordinates* position) {
 
 Coordinates* Ball::getPosition() {
     return this->position;
+}
+
+int Ball::getHeight() {
+    return this->height;
 }
 
 Velocity* Ball::getVelocity() {
@@ -53,7 +59,7 @@ void Ball::isIntercepted(Player* player) {
     this->orientation = player->getOrientation();
 }
 
-void Ball::isPassed(int direction, int passPower) {
+void Ball::isPassed(int direction, int passPower, bool highPass) {
     if (this->isDominated()) {
         this->interceptable = false;
         Velocity* passDirection = new Velocity(0,0);
@@ -66,7 +72,11 @@ void Ball::isPassed(int direction, int passPower) {
         dominated = false;
         this->player->isWithBall(this->dominated);
         this->isInAPass = true;
+        if(highPass) {
+            this->isInAHighPass = true;
+        }
         this->passPower = passPower;
+        this->initialPassPower = passPower;
         this->startingPassPosition = this->position;
     }
 }
@@ -99,9 +109,77 @@ void Ball::updatePosition() {
             this->stopRolling();
         }
     }
+    if(this->isInAHighPass) {
+        this->calculateHeight();
+    }
 }
 
 //--------------------------PRIVATE----------------------------------
+
+void Ball::calculateHeight() {
+    if (!this->velocity->isZero()) {
+        if ((initialPassPower * 0.5) < passPower) {
+            if ((initialPassPower * 0.75) < passPower) {
+                if ((initialPassPower * 0.825) < passPower) {
+                    if ((initialPassPower * 0.9) < passPower) {
+                        if (heightLevel == 0) {
+                            this->height++;
+                            this->heightLevel = 1;
+                        }
+                    }
+                    else {
+                        if (heightLevel == 1) {
+                            this->height++;
+                            this->heightLevel = 2;
+                        }
+                    }
+                }
+                else{
+                    if (heightLevel == 2) {
+                        this->height++;
+                        this->heightLevel = 3;
+                    }
+                }
+            }
+            else{
+                if (heightLevel == 3) {
+                    this->height++;
+                    this->heightLevel == 4;
+                }
+            }
+        }
+        else{     //empieza a bajar
+            if ((initialPassPower * 0.1) < passPower) {
+                if ((initialPassPower * 0.125) < passPower) {
+                    if ((initialPassPower * 0.25) < passPower) {
+                        if (heightLevel == 4) {
+                            this->height--;
+                            this->heightLevel = 5;
+                        }
+                    }
+                    else {
+                        if (heightLevel == 5) {
+                            this->height--;
+                            this->heightLevel = 6;
+                        }
+                    }
+                }
+                else{
+                    if (heightLevel == 6) {
+                        this->height--;
+                        this->heightLevel = 7;
+                    }
+                }
+            }
+            else{
+                if (heightLevel == 7) {
+                    this->height--;
+                    this->heightLevel == 8;
+                }
+            }
+        }
+    }
+}
 
 Coordinates* Ball::calculateDominatedPosition() {
     int x = this->player->getPosition()->getX(); // TODO: ver q no viole independencia
@@ -128,10 +206,12 @@ Coordinates* Ball::calculateDominatedPosition() {
 void Ball::stopRolling() {
     this->velocity->stop();
     this->isInAPass = false;
+    this->isInAHighPass = false;
     this->passPower = 0;
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
     this->height = 0;
+    this->heightLevel = 0;
 }
 
 /*
@@ -147,6 +227,8 @@ std::string Ball::getAsYaml() {
     message += " cx: " + std::to_string(this->position->getX()) + "\n";
     message += " cy: " + std::to_string(this->position->getY()) + "\n";
     message += " st: " + std::to_string(this->velocity->isZero()) + "\n";
+    message += " hg: " + std::to_string(this->height) + "\n";
+    message += " or: " + std::to_string(this->orientation) + "\n";
     return message;
 }
 

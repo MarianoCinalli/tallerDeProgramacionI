@@ -15,7 +15,9 @@ class Ball {
         int maxVelocity;
         Coordinates* position;
         int passPower;
+        int initialPassPower;
         int height;
+        int heightLevel;
         int orientation;
         bool dominated;
         bool isInAPass;
@@ -32,6 +34,7 @@ class Ball {
 
         Coordinates* getPosition();
         Velocity* getVelocity();
+        int getHeight();
         Player* getPlayer();
         void setPlayer(Player* player);
         bool isDominated();

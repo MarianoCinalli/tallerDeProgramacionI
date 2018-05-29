@@ -9,8 +9,9 @@
 class KickingAction : public Action {
 	private:
 		int power;
+		bool highPass;
     public:
-        KickingAction(int power);
+        KickingAction(int power, bool highPass);
         virtual std::string getCommand();
         virtual std::string getParameters();
         ~KickingAction();
