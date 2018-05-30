@@ -331,6 +331,46 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     clave = inputs[1];
 }
 
+
+void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* connectionManager, bool reconnect) {
+    log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
+    SDL_Event e;
+    TTF_Font* gFont = NULL;
+    gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (gFont == NULL) {
+        log("showLostConnectionMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+    }
+    Texture line1Texture;
+    if (reconnect){
+    line1Texture.loadFromRenderedText("Entablando conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
+  }else{
+    line1Texture.loadFromRenderedText("Conexion perdida con el servidor!", gRenderer, SDL_BLUE, gFont);
+  }
+    Texture line2Texture;
+    line2Texture.loadFromRenderedText("Para cancelar presionar 'escape'...", gRenderer, SDL_BLUE, gFont);
+    bool continueShowingMessage = true;
+    while (continueShowingMessage && lostConnectionQuit) {
+        if (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
+                continueShowingMessage = false;
+                endProgram(1, connectionManager);
+            }
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        //Render text textures
+        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 50, line1Texture.getWidth(), line1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 150, line2Texture.getWidth(), line2Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderPresent(gRenderer);
+        usleep(1000);
+    }
+}
+
+
+
 void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, std::string mensaje, ConnectionManager* connectionManager) {
     log("openLoginEquipo: Entra al openLoginEquipo", LOG_INFO);
     bool quit = false;
@@ -451,6 +491,7 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             log("Main: Error esperando el mensaje de comienzo del partido. Saliendo...", LOG_ERROR);
             endProgram(1, connectionManager);
         } else if (readBytes == 0) {
+            showLostConnectionMessage(gRenderer, connectionManager, true);
             log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
             endProgram(1, connectionManager);
         } else {
@@ -464,39 +505,6 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
         }
     }
 }
-
-void showLostConnectionMessage(SDL_Renderer* gRenderer) {
-    log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
-    SDL_Event e;
-    TTF_Font* gFont = NULL;
-    gFont = TTF_OpenFont("lazy.ttf", 30);
-    if (gFont == NULL) {
-        log("showLostConnectionMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
-    }
-    Texture line1Texture;
-    line1Texture.loadFromRenderedText("Se perdio la conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
-    Texture line2Texture;
-    line2Texture.loadFromRenderedText("Presionar 'escape' para salir...", gRenderer, SDL_BLUE, gFont);
-    bool continueShowingMessage = true;
-    while (continueShowingMessage) {
-        if (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
-                continueShowingMessage = false;
-            }
-        }
-        //Clear screen
-        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(gRenderer);
-        //Render text textures
-        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 50, line1Texture.getWidth(), line1Texture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 150, line2Texture.getWidth(), line2Texture.getHeight() };
-        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
-        SDL_RenderPresent(gRenderer);
-        usleep(1000);
-    }
-}
-
 
 void showFullParty(SDL_Renderer* gRenderer, std::string message) {
     log("openDirtyExitMessage: Mostrando mensaje de partida llena.", LOG_INFO);
@@ -729,16 +737,20 @@ int main(int argc, char* argv[]) {
                         lostConnectionQuit = true;
                         setQuit(true);
                     }
+
                     delete(action);
                 }
             }
+        }
+        if (lostConnectionQuit) {
+            showLostConnectionMessage(renderer, connectionManager, true);
         }
         usleep(sleepTime);
     }
 
     // Si se sale por pedida de conexion mostrar mensaje.
     if (lostConnectionQuit) {
-        showLostConnectionMessage(renderer);
+        showLostConnectionMessage(renderer, connectionManager, false);
     }
 
     // threads->terminateSpawnedThreads(); // signalea a los threads para que terminen.

@@ -83,10 +83,11 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
 
 void GameInitializer::initializeBall() {
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
-    // Player* player = this->pitch->getActivePlayer(0); //TODO user 0 es el dueño del balon al ppio
     Coordinates* coords = new Coordinates(800, 600);
     Ball* ball = new Ball(coords);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
+    Player* jugador = this->pitch->getTeam(0)->getPlayers().back();
+    ball->isIntercepted(jugador); //darle la pelota al jugador mas cerca
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }
 
