@@ -28,6 +28,7 @@ class ConnectionManager {
         struct sockaddr_in address;
         ThreadSpawner* clients;
         std::map<pthread_t, int> threadIdsAndSockets;
+        std::map<int, int> err; //mapa de contador de errores segun socket
         std::vector<int> socketCache;
         std::vector<int> socketsRejected;
     public:

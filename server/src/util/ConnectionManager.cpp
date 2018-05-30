@@ -38,6 +38,7 @@ bool ConnectionManager::openConnections() {
         return false;
     }
     log("ConnectionManager: Escuchando conexiones. ", LOG_INFO);
+    this->err[this->my_socket] = 0;
     return true;
 }
 
@@ -162,8 +163,13 @@ void ConnectionManager::sendMessage(int socket, std::string message) {
     FD_SET(socket, &wfds);
     if(select(socket + 1, NULL, &wfds, NULL, &timeout) < 0) {
         log("Connection Manager: error en socket al escribir, posible timeout ", strerror(errno), LOG_DEBUG);
+        this->err[socket] += 1;
     }else if(FD_ISSET(socket, &wfds)){
         send(socket, constantMessage, strlen(constantMessage), 0);
+    }
+    if (this->err[socket] > MAX_ERRORS){
+      log("ConnectionManager: Cerrando socket de: ", socket, LOG_INFO);
+      close(socket);
     }
 }
 
