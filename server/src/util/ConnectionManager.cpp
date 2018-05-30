@@ -136,34 +136,41 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
 
     struct timeval timeout;
     timeout.tv_sec = 0;
-    timeout.tv_usec = 100000/12; //HACK, timeout en microsegundos
+    timeout.tv_usec = 10000; //HACK, timeout en microsegundos
 
     fd_set rfds;
     FD_ZERO(&rfds);
     FD_SET(socket, &rfds);
     int rv = select(socket + 1,  &rfds,NULL, NULL, &timeout);
     if (rv<0){
-      log("socket no disponible, error:", strerror(errno), LOG_ERROR);
+      log("Connection Manager: socket no disponible, error:", strerror(errno), LOG_ERROR);
       return rv;
     } else if (rv == 0){
-      log("timeout, 0 bytes recieved",strerror(errno), LOG_ERROR);
-      return rv;
-    }
+      log("Connection Manager: timeout, 0 bytes recieved. ",strerror(errno), LOG_DEBUG); //no es propiamente un error si es timeout
+      // log("Connection Manager: segundos", timeout.tv_sec, LOG_ERROR);
+      // log("Connection Manager: microsegundos", timeout.tv_usec, LOG_ERROR);
+    } else{
     readBytes = read(socket, buffer, bufferSize);
     // Cuidado aca con strerror que no es thread safe:
     // Otro thread puede setear el errno, y este escribirlo.
     // Ver de usar strerror_r que es thread safe.
+
     if (readBytes < 0) {
         log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
         readMessage = "";
     } else if (readBytes == 0) {
         log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
         readMessage = "";
+
     } else {
         log("ConnectionManager: Recibidos ", readBytes, LOG_SPAM);
         readMessage = buffer;
+
     }
     return readBytes;
+  }
+    return rv;
+
 }
 
 void ConnectionManager::sendMessage(int socket, std::string message) {
