@@ -153,7 +153,18 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
 void ConnectionManager::sendMessage(int socket, std::string message) {
     log("ConnectionManager: Enviando " + message + " a ", socket, LOG_SPAM);
     const char* constantMessage = (message).c_str();
-    send(socket, constantMessage, strlen(constantMessage), 0);
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 100000/12; //HACK, timeout en microsegundos
+
+    fd_set wfds;
+    FD_ZERO(&wfds);
+    FD_SET(socket, &wfds);
+    if(select(socket + 1, NULL, &wfds, NULL, &timeout) < 0) {
+        log("Connection Manager: error en socket al escribir, posible timeout ", strerror(errno), LOG_DEBUG);
+    }else if(FD_ISSET(socket, &wfds)){
+        send(socket, constantMessage, strlen(constantMessage), 0);
+    }
 }
 
 void ConnectionManager::sendToAll(std::string message) {
