@@ -4,7 +4,6 @@ HighKickingAction::HighKickingAction(int power) {
     this->power = power;
 }
 
-
 std::string HighKickingAction::getCommand() {
     return "HighKicking";
 }

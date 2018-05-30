@@ -7,7 +7,7 @@ KickingAction::KickingAction(int power) {
 void KickingAction::execute(Player* player) {
     log("KickingAction: Tecla patear detectada.", LOG_DEBUG);
     bool highPass = false;
-    player->startsKicking(this->power, this->highPass);
+    player->startsKicking(this->power, highPass);
 }
 
 bool KickingAction::valid(Player* player) {

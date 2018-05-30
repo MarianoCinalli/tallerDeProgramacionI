@@ -21,6 +21,7 @@ class Ball {
         Ball(Coordinates* position);
         int isStill();
         int getHeight();
+        int getOrientation();
         void parseYaml(YAML::Node node);
         Coordinates* getPosition();
         ~Ball();

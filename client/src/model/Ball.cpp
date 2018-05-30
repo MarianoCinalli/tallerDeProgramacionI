@@ -17,8 +17,12 @@ int Ball::isStill(){
   return this->still;
 }
 
-ing Ball::getHeight(){
+int Ball::getHeight(){
   return this->height;
+}
+
+int Ball::getOrientation() {
+  return this->orientation;
 }
 
 void Ball::parseYaml(YAML::Node node){

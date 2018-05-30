@@ -116,7 +116,9 @@ void Ball::updatePosition() {
 
 //--------------------------PRIVATE----------------------------------
 
-void Ball::calculateHeight() {
+void Ball::calculateHeight() {     //VER QUE LLEGA SIEMPRE A LA MISMA ALTURA SIN IMPORTAR EL PASSPOWER
+    float initialPassPower = (this->initialPassPower * 7) / 8;
+    float passPower = (this->passPower * 7) / 8;
     if (!this->velocity->isZero()) {
         if ((initialPassPower * 0.5) < passPower) {
             if ((initialPassPower * 0.75) < passPower) {
@@ -144,7 +146,7 @@ void Ball::calculateHeight() {
             else{
                 if (heightLevel == 3) {
                     this->height++;
-                    this->heightLevel == 4;
+                    this->heightLevel = 4;
                 }
             }
         }
@@ -174,7 +176,7 @@ void Ball::calculateHeight() {
             else{
                 if (heightLevel == 7) {
                     this->height--;
-                    this->heightLevel == 8;
+                    this->heightLevel = 8;
                 }
             }
         }

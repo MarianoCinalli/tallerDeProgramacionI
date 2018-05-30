@@ -21,6 +21,7 @@ class Ball {
         int orientation;
         bool dominated;
         bool isInAPass;
+        bool isInAHighPass;
         bool interceptable;
         int passDirection;
         Coordinates* startingPassPosition;
@@ -41,12 +42,13 @@ class Ball {
         bool isInterceptable();
 
         void isIntercepted(Player* player);
-        void isPassed(int direction, int passPower);
+        void isPassed(int direction, int passPower, bool highPass);
         void updatePosition();
 
         Coordinates* calculateDominatedPosition();
         void progressiveDecelerate(float passDistance);
         void stopRolling();
+        void calculateHeight();
 
         std::string getAsYaml();
 

@@ -57,7 +57,7 @@ void BallSpriteManager::setMovingBallSprite() {
     if (rollingCount == 1024) { //TODO hardcode value
         rollingCount = 0;
     }
-    level = this->ball->getHeight();
+    int level = this->ball->getHeight();
     if (level == 0) {
         int orientation = (this->ball->getOrientation());
         int orientationOffset = 0;
@@ -89,15 +89,16 @@ void BallSpriteManager::setMovingBallSprite() {
         }
     }
     else {
-        if (0 < level < 5)
-        if ((rollingCount % ROLLING_DIVISOR) == 0) {
-            log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
-            if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 25 + level) * SPRITE_SIZE)) {
-                this->sprite.x = 0; // Reinicio la secuencia.
-                this->sprite.y = ((25 + level) * SPRITE_SIZE);
-            } else {
-                this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-            }
+        if ((0 < level) && (level < 5)) {
+            if ((rollingCount % ROLLING_DIVISOR) == 0) {
+                log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
+                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 25 + level) * SPRITE_SIZE)) {
+                    this->sprite.x = 0; // Reinicio la secuencia.
+                    this->sprite.y = ((25 + level) * SPRITE_SIZE);
+                } else {
+                    this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+                }
+            }    
         }
         else {
             log("BallSpriteManager: Problema con nivel de pase aereo.", LOG_SPAM);
