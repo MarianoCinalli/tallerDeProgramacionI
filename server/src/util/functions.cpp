@@ -1,4 +1,5 @@
 #include "util/functions.h"
+#include <ctime>
 
 extern GameInitializer* initializer;
 extern pthread_barrier_t players_ready_barrier;
@@ -12,8 +13,10 @@ void* read_client(void* argument) {
     int readBytes;
     bool continueReading = true;
     bool firstBroadcastRead = true;
+    bool firstError = false;
+    double timeDifference = 0;
     socket = *((int*) argument);
-    int errorAmount = 0;
+    time_t firstTimeError;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
@@ -43,8 +46,13 @@ void* read_client(void* argument) {
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
             // continueReading = false;
-                  errorAmount += 1;
-            if (errorAmount > MAX_ERRORS){
+            if (!firstError){
+              firstError = true;
+              time(&firstTimeError);
+            }else {
+              timeDifference = difftime(firstTimeError, time(NULL));
+            }
+            if (timeDifference > 10){
               log("read_client: superados errores maximos de socket: ", socket, LOG_INFO);
               continueReading = false;
             }
