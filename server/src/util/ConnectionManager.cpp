@@ -168,8 +168,8 @@ void ConnectionManager::sendMessage(int socket, std::string message) {
         send(socket, constantMessage, strlen(constantMessage), 0);
     }
     if (this->err[socket] > MAX_ERRORS){
-      log("ConnectionManager: Cerrando socket de: ", socket, LOG_INFO);
-      close(socket);
+      log("ConnectionManager:superados errores maximos de socket: ", socket, LOG_INFO);
+      // close(socket);
     }
 }
 
