@@ -332,7 +332,7 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
 }
 
 
-void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* connectionManager) {
+void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* connectionManager, bool reconnect) {
     log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
     SDL_Event e;
     TTF_Font* gFont = NULL;
@@ -341,9 +341,13 @@ void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* conne
         log("showLostConnectionMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
     }
     Texture line1Texture;
-    line1Texture.loadFromRenderedText("Se perdio la conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
+    if (reconnect){
+    line1Texture.loadFromRenderedText("Entablando conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
+  }else{
+    line1Texture.loadFromRenderedText("Conexion perdida con el servidor!", gRenderer, SDL_BLUE, gFont);
+  }
     Texture line2Texture;
-    line2Texture.loadFromRenderedText("Presionar 'escape' para salir...", gRenderer, SDL_BLUE, gFont);
+    line2Texture.loadFromRenderedText("Para cancelar presionar 'escape'...", gRenderer, SDL_BLUE, gFont);
     bool continueShowingMessage = true;
     while (continueShowingMessage && lostConnectionQuit) {
         if (SDL_PollEvent(&e) != 0) {
@@ -487,7 +491,7 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             log("Main: Error esperando el mensaje de comienzo del partido. Saliendo...", LOG_ERROR);
             endProgram(1, connectionManager);
         } else if (readBytes == 0) {
-            showLostConnectionMessage(gRenderer, connectionManager);
+            showLostConnectionMessage(gRenderer, connectionManager, true);
             log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
             endProgram(1, connectionManager);
         } else {
@@ -739,14 +743,14 @@ int main(int argc, char* argv[]) {
             }
         }
         if (lostConnectionQuit) {
-            showLostConnectionMessage(renderer, connectionManager);
+            showLostConnectionMessage(renderer, connectionManager, true);
         }
         usleep(sleepTime);
     }
 
     // Si se sale por pedida de conexion mostrar mensaje.
     if (lostConnectionQuit) {
-        showLostConnectionMessage(renderer, connectionManager);
+        showLostConnectionMessage(renderer, connectionManager, false);
     }
 
     // threads->terminateSpawnedThreads(); // signalea a los threads para que terminen.
