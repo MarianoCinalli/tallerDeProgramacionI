@@ -332,7 +332,7 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
 }
 
 
-void showLostConnectionMessage(SDL_Renderer* gRenderer) {
+void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* connectionManager) {
     log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
     SDL_Event e;
     TTF_Font* gFont = NULL;
@@ -349,6 +349,7 @@ void showLostConnectionMessage(SDL_Renderer* gRenderer) {
         if (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
                 continueShowingMessage = false;
+                endProgram(1, connectionManager);
             }
         }
         //Clear screen
@@ -486,7 +487,7 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             log("Main: Error esperando el mensaje de comienzo del partido. Saliendo...", LOG_ERROR);
             endProgram(1, connectionManager);
         } else if (readBytes == 0) {
-            showLostConnectionMessage(gRenderer);
+            showLostConnectionMessage(gRenderer, connectionManager);
             log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
             endProgram(1, connectionManager);
         } else {
@@ -738,14 +739,14 @@ int main(int argc, char* argv[]) {
             }
         }
         if (lostConnectionQuit) {
-            showLostConnectionMessage(renderer);
+            showLostConnectionMessage(renderer, connectionManager);
         }
         usleep(sleepTime);
     }
 
     // Si se sale por pedida de conexion mostrar mensaje.
     if (lostConnectionQuit) {
-        showLostConnectionMessage(renderer);
+        showLostConnectionMessage(renderer, connectionManager);
     }
 
     // threads->terminateSpawnedThreads(); // signalea a los threads para que terminen.
