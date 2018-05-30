@@ -38,7 +38,6 @@ bool ConnectionManager::openConnections() {
         return false;
     }
     log("ConnectionManager: Escuchando conexiones. ", LOG_INFO);
-    this->err[this->my_socket] = 0;
     return true;
 }
 
@@ -134,6 +133,22 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
     int bufferSize = sizeof(char) * bufferLength;
     char buffer[bufferLength] = {0};
     memset(buffer, 0x00, bufferSize);
+
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 100000/12; //HACK, timeout en microsegundos
+
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(socket, &rfds);
+    int rv = select(socket + 1,  &rfds,NULL, NULL, &timeout);
+    if (rv<0){
+      log("socket no disponible, error:", strerror(errno), LOG_ERROR);
+      return rv;
+    } else if (rv == 0){
+      log("timeout, 0 bytes recieved",strerror(errno), LOG_ERROR);
+      return rv;
+    }
     readBytes = read(socket, buffer, bufferSize);
     // Cuidado aca con strerror que no es thread safe:
     // Otro thread puede setear el errno, y este escribirlo.
@@ -163,14 +178,10 @@ void ConnectionManager::sendMessage(int socket, std::string message) {
     FD_SET(socket, &wfds);
     if(select(socket + 1, NULL, &wfds, NULL, &timeout) < 0) {
         log("Connection Manager: error en socket al escribir, posible timeout ", strerror(errno), LOG_DEBUG);
-        this->err[socket] += 1;
     }else if(FD_ISSET(socket, &wfds)){
         send(socket, constantMessage, strlen(constantMessage), 0);
     }
-    if (this->err[socket] > MAX_ERRORS){
-      log("ConnectionManager:superados errores maximos de socket: ", socket, LOG_INFO);
-      // close(socket);
-    }
+
 }
 
 void ConnectionManager::sendToAll(std::string message) {

@@ -13,6 +13,7 @@ void* read_client(void* argument) {
     bool continueReading = true;
     bool firstBroadcastRead = true;
     socket = *((int*) argument);
+    int errorAmount = 0;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
@@ -41,7 +42,12 @@ void* read_client(void* argument) {
             // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
-            continueReading = false;
+            // continueReading = false;
+                  errorAmount += 1;
+            if (errorAmount > MAX_ERRORS){
+              log("read_client: superados errores maximos de socket: ", socket, LOG_INFO);
+              continueReading = false;
+            }
         } else {
             log("read_client: Mensaje recibido: ", message, LOG_SPAM);
             if (!user->hasLogedIn()) {
