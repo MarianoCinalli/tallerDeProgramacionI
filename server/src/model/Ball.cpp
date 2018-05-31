@@ -59,9 +59,12 @@ void Ball::isPassed(int direction, int passPower) {
         Velocity* passDirection = new Velocity(0,0);
         passDirection->set(this->player->getVelocity());  //direction;
         this->velocity = passDirection;
+        log(this->velocity->toString(),LOG_DEBUG);
+        // log()
         if (passDirection->isZero()) {
-            int passDirection = this->player->getOrientation();
-            this->velocity->accelerate(passDirection);
+            log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
+            int passOrientation = this->player->getOrientation();
+            this->velocity->accelerate(passOrientation);
         }
         dominated = false;
         this->player->setWithBall(this->dominated);

@@ -112,11 +112,10 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     action = new KickingAction(passPower);
                     log("poder de pase", passPower, LOG_DEBUG);
                     log("tiempo de pase", currentTime, LOG_DEBUG);
-
                     break;
                   }
             }
-            if (!anyKeyPressed(keys)) {
+            if (!(event.key.keysym.sym == SDLK_s) & !anyKeyPressed(keys)) {
                 if (action != NULL) {
                     delete(action);
                 }

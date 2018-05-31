@@ -90,7 +90,7 @@ Player* Pitch::getActivePlayer(std::string user) {
     } else {
         log("Pitch: No se encontro el jugador activo para el usuario: ", user, LOG_ERROR);
     }
-    if (activePlayer) {
+    if (activePlayer== NULL) {
         log("Pitch: El jugador activo es nulo para el usuario: ", user, LOG_ERROR);
     }
     return activePlayer;
