@@ -31,6 +31,10 @@ Coordinates* Player::getPosition() {
     return this->position;
 }
 
+int Player::getTeam(){
+  return this->team;
+}
+
 void Player::setWithBall(bool dominated) {
     this->withBall = dominated;
 }

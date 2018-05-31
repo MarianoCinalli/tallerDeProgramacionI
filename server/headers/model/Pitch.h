@@ -18,7 +18,7 @@ class Pitch {
         Team* awayTeam;
         Camera* camera;
         Ball* ball;
-        std::map<std::string, Team*> teams;
+        std::map<Team*,std::list<std::string>> teams;
         std::map<std::string, Player*> activePlayers;
     public:
         Pitch(Camera* camera);
@@ -35,7 +35,7 @@ class Pitch {
         void checkSteals();
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
-        Team* getTeam(int user);
+        Team* getTeam(int teamNumber);
         ~Pitch();
     private:
         std::string getUsersWithActivePlayersAsString();

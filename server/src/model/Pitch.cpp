@@ -8,8 +8,7 @@ Pitch::Pitch(Camera* camera) {
     this->localTeam = NULL;
     this->awayTeam = NULL;
     this->camera = camera;
-    // teams[0] = this->localTeam; //TODO definir que jugadores tienen que equipo. por ejempl,
-    // teams[1] = this->awayTeam;
+    // teams();
 }
 
 void Pitch::setTeam(Team* team, int teamNumber) {
@@ -18,29 +17,33 @@ void Pitch::setTeam(Team* team, int teamNumber) {
     } else if (teamNumber == 1) {
         this->awayTeam = team;
     }
+
 }
 
-void Pitch::setUserTeam(std::string user, int team) {
-    log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", team, LOG_DEBUG);
-    if (team == 0) {
+void Pitch::setUserTeam(std::string user, int teamNum) {
+    log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", teamNum, LOG_DEBUG);
+    Team* team;
+    if (teamNum == 0) {
         if (this->localTeam != NULL) {
-            log("Pitch: Usuario " + user + " agregado al equipo: ", team, LOG_DEBUG);
-            teams[user] = this->localTeam;
+            log("Pitch: Usuario " + user + " agregado al equipo: ", teamNum, LOG_DEBUG);
+            teams[this->localTeam].push_front(user);
+            team = this->localTeam;
         } else {
             log("Pitch: El equpo local es nulo.", LOG_ERROR);
         }
-    } else if (team == 1) {
+    } else if (teamNum == 1) {
         if (this->awayTeam != NULL) {
-            log("Pitch: Usuario " + user + " agregado al equipo: ", team, LOG_DEBUG);
-            teams[user] = this->awayTeam;
+            log("Pitch: Usuario " + user + " agregado al equipo: ", teamNum, LOG_DEBUG);
+            teams[this->awayTeam].push_front(user);
+            team = this->awayTeam;
         } else {
             log("Pitch: El equpo visitante es nulo.", LOG_ERROR);
         }
     } else {
-        log("Pitch: Error numero de equipo desconocido: ", team, LOG_ERROR);
+        log("Pitch: Error numero de equipo desconocido: ", teamNum, LOG_ERROR);
     }
     log("Pitch: Se le asignaron jugador al usuario: ", user, LOG_DEBUG);
-    this->activePlayers[user] = teams[user]->getPlayers().back();
+    this->activePlayers[user] = team->getPlayers().back();
     this->activePlayers[user]->toggleIsSelected(user);
     log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);
 }
@@ -118,16 +121,16 @@ std::string Pitch::getUsersWithActivePlayersAsString() {
 
 void Pitch::changeActivePlayer(std::string user) {
     log("Pitch: Cambiando jugador activo", LOG_INFO);
-    Team* team = teams[user];
     // Coordinates* center = this->activePlayers[user]->getPosition();
     Coordinates* center = this->ball->getPosition();
     Player* player = this->activePlayers[user];
+    Team* team = this->getTeam(player->getTeam());
     if (!player->isWithBall()){
     // Solo puede seleccionar de los jugadores dentro de los margenes,
     std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 1);
     if (!playersList.empty()) {
         int nearestDistance = LEVEL_WIDTH; //max distance harcodeadeo TODO
-        Player* nearestPlayer = playersList.back();
+        Player* nearestPlayer = NULL;
         for (Player* p : playersList) {
             int distance = p->getPosition()->distanceTo(center);
             log("Pitch: Distancia ", distance, LOG_SPAM);
@@ -136,6 +139,9 @@ void Pitch::changeActivePlayer(std::string user) {
                 nearestDistance = distance;
                 nearestPlayer = p;
             }
+        }
+        if (nearestPlayer == NULL){
+          nearestPlayer = playersList.back();
         }
         // Player* player = this->activePlayers[user];
         this->setActivePlayer(user, nearestPlayer);
@@ -146,12 +152,15 @@ void Pitch::changeActivePlayer(std::string user) {
 }
 
 void Pitch::setActivePlayer(std::string user, Player* player){
+
   Player* currentPlayer = this->activePlayers[user];
+  if (currentPlayer != NULL){
   currentPlayer->copyStats(player);
   currentPlayer->toggleIsSelected(user);
   this->activePlayers[user] = player;
   player->toggleIsSelected(user);
   log("Pitch: Se cambio el jugador activo.", LOG_INFO);
+}
 }
 
 std::list<Player*> Pitch::getPlayersInsideCamera() {
@@ -192,7 +201,9 @@ void Pitch::checkSteals() {
         }
         if (nearestPlayer != NULL) {
             this->ball->isIntercepted(nearestPlayer);
-
+            // Team* team = this->getTeam(nearestPlayer->getTeam());
+            // std::string user = teams[team].front();
+            // this->setActivePlayer(user, nearestPlayer); //which user?
             log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
         }
     }
@@ -217,6 +228,9 @@ void Pitch::changeBallOwnership() {
             }
             if (nearestPlayer != NULL) {
                 this->ball->isIntercepted(nearestPlayer);
+                Team* team = this->getTeam(nearestPlayer->getTeam());
+                std::string user = teams[team].front();
+                this->setActivePlayer(user, nearestPlayer); //which user?
                 log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
             }
         }

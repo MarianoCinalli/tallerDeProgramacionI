@@ -1,8 +1,10 @@
 #include <list>
+#include <string>
 #include "model/Player.h"
 
 #ifndef TEAM_H
 #define TEAM_H
+
 
 class Team {
     private:
@@ -18,9 +20,10 @@ class Team {
         void addPlayer(Player* player);
         std::list<Player*> getPlayers();
         void setFormacion(int formacion);
+        int getTeamNum();
         int getAmountPlayers();
         std::string getName();
-        
+
 };
 #endif // TEAM_H
 

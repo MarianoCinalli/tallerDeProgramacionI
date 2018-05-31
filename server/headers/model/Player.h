@@ -37,6 +37,7 @@ class Player {
         // Getters
         Coordinates* getPosition();
         Velocity* getVelocity();
+        int getTeam();
         int getCurrentSpeed();
         int getOrientation();
         int getKickPower();
