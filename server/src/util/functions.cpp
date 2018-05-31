@@ -49,10 +49,11 @@ void* read_client(void* argument) {
             if (!firstError){
               firstError = true;
               time(&firstTimeError);
+              log("read_client: first time error", LOG_DEBUG);
             }else {
               time(&currentErrorTime);
               timeDifference = difftime(currentErrorTime, firstTimeError);
-              // log("read_client: diferencia de tiempo:",timeDifference, LOG_DEBUG);
+              log("read_client: diferencia de tiempo:",timeDifference, LOG_SPAM);
               if (timeDifference > 25){
                 log("read_client: superados tiempo maximo de socket: esperando ", socket, LOG_INFO);
                 continueReading = false;
@@ -61,6 +62,7 @@ void* read_client(void* argument) {
 
         } else {
           if (firstError){
+            log("read_client: limpiado first time error", LOG_DEBUG);
             firstError = false;
             timeDifference = 0;
           }
