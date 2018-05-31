@@ -163,18 +163,18 @@ void Pitch::setActivePlayer(std::string user, Player* player){
 }
 }
 
-std::list<Player*> Pitch::getPlayersInsideCamera() {
-    // std::list<Player*> localPlayers = this->camera->getPlayersInsideMargin(localTeam->getPlayers());
-    // std::list<Player*> awayPlayers = this->camera->getPlayersInsideMargin(awayTeam->getPlayers());
+std::list<Player*> Pitch::getPlayers() {
     list<Player*> teamPlayers = this->localTeam->getPlayers();
     list<Player*> awayPlayers = this->awayTeam->getPlayers();
     teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
 
-    // std::list<Player*>::iterator it;
-    // it = localPlayers.begin();
-    // ++it;
-    // localPlayers.splice(it, awayPlayers);
-    // Luego de esto, los jugadores de awayPlayers se pasan a localPlayers.
+    return teamPlayers;
+}
+
+std::list<Player*> Pitch::getPlayersInsideCamera() {
+    list<Player*> teamPlayers = this->localTeam->getPlayers();
+    list<Player*> awayPlayers = this->awayTeam->getPlayers();
+    teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
 
     return this->camera->getPlayersInsideMargin(teamPlayers, 1);
 }

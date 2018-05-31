@@ -13,7 +13,8 @@ class Broadcaster {
         ConnectionManager* connectionManager;
     public:
         Broadcaster(Pitch* pitch, ConnectionManager* connectionManager);
-        void broadcast();
+        void broadcast(bool);
+        std::string getFirstMessage();
         std::string getMessage();
         void broadcastGameEnded();
         ~Broadcaster();
