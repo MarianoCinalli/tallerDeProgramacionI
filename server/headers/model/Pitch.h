@@ -23,6 +23,7 @@ class Pitch {
     public:
         Pitch(Camera* camera);
         // Player* activePlayer;
+        void setActivePlayer(std::string user, Player* player);
         void changeActivePlayer(std::string user);
         Player* getActivePlayer(std::string user);
         void setTeam(Team* team, int teamNumber);

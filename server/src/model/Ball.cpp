@@ -35,7 +35,7 @@ void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;
     this->velocity = this->player->getVelocity();
-    this->player->isWithBall(this->dominated);
+    this->player->setWithBall(this->dominated);
 }
 
 bool Ball::isDominated() {
@@ -64,7 +64,7 @@ void Ball::isPassed(int direction, int passPower) {
             this->velocity->accelerate(passDirection);
         }
         dominated = false;
-        this->player->isWithBall(this->dominated);
+        this->player->setWithBall(this->dominated);
         this->isInAPass = true;
         this->passPower = passPower;
         this->startingPassPosition = this->position;

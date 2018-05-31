@@ -31,8 +31,12 @@ Coordinates* Player::getPosition() {
     return this->position;
 }
 
-void Player::isWithBall(bool dominated) {
+void Player::setWithBall(bool dominated) {
     this->withBall = dominated;
+}
+
+bool Player::isWithBall() {
+    return this->withBall;
 }
 
 int Player::getOrientation() {
@@ -78,6 +82,10 @@ void Player::toggleIsSelected(std::string name) {
     }
     this->isSelected = !this->isSelected;
     this->isReturning = true;
+}
+
+std::string Player::getUsername(){
+  return this->userName;
 }
 
 bool Player::getIsSelected() {

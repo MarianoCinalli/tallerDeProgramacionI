@@ -121,7 +121,8 @@ void Pitch::changeActivePlayer(std::string user) {
     Team* team = teams[user];
     // Coordinates* center = this->activePlayers[user]->getPosition();
     Coordinates* center = this->ball->getPosition();
-
+    Player* player = this->activePlayers[user];
+    if (!player->isWithBall()){
     // Solo puede seleccionar de los jugadores dentro de los margenes,
     std::list<Player*> playersList = this->camera->getPlayersInsideMargin(team->getPlayers(), 1);
     if (!playersList.empty()) {
@@ -136,15 +137,21 @@ void Pitch::changeActivePlayer(std::string user) {
                 nearestPlayer = p;
             }
         }
-        Player* player = this->activePlayers[user];
-        player->copyStats(nearestPlayer);
-        player->toggleIsSelected(user);
-        this->activePlayers[user] = nearestPlayer;
-        nearestPlayer->toggleIsSelected(user);
-        log("Pitch: Se cambio el jugador activo.", LOG_INFO);
+        // Player* player = this->activePlayers[user];
+        this->setActivePlayer(user, nearestPlayer);
     } else {
         log("Pitch: La lista de jugadores esta vacia!.", LOG_ERROR);
     }
+  }
+}
+
+void Pitch::setActivePlayer(std::string user, Player* player){
+  Player* currentPlayer = this->activePlayers[user];
+  currentPlayer->copyStats(player);
+  currentPlayer->toggleIsSelected(user);
+  this->activePlayers[user] = player;
+  player->toggleIsSelected(user);
+  log("Pitch: Se cambio el jugador activo.", LOG_INFO);
 }
 
 std::list<Player*> Pitch::getPlayersInsideCamera() {
@@ -185,6 +192,7 @@ void Pitch::checkSteals() {
         }
         if (nearestPlayer != NULL) {
             this->ball->isIntercepted(nearestPlayer);
+
             log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
         }
     }
