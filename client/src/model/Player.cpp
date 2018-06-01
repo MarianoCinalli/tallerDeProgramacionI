@@ -65,6 +65,7 @@ bool Player::isStill(){
 bool Player::isRunningFast() {
     return this->runningFast;
 }
+
 bool Player::isKicking() {
     return this->kicking;
 }

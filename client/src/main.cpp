@@ -38,7 +38,6 @@ std::string CLI_PORT = "";
 std::string CLI_IP = "";
 // Global variables ---------------------------------------
 
-
 void imprimir_ayuda() {
     cout << "Usage:\n";
     cout << "main -h\n";
@@ -331,7 +330,6 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     clave = inputs[1];
 }
 
-
 void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* connectionManager, bool reconnect) {
     log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
     SDL_Event e;
@@ -368,8 +366,6 @@ void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* conne
         usleep(1000);
     }
 }
-
-
 
 void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, std::string mensaje, ConnectionManager* connectionManager) {
     log("openLoginEquipo: Entra al openLoginEquipo", LOG_INFO);
@@ -460,10 +456,6 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
                 endProgram(1, connectionManager);
             }
-        }
-        mensaje += ".";
-        if (mensaje == "...........................................") {
-            mensaje = ".";
         }
         Texture mensajeTexture;
         mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);

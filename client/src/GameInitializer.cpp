@@ -164,7 +164,6 @@ void GameInitializer::initializeCommonSdlResources() {
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
             printf("Warning: Linear texture filtering not enabled!");
             log("Warning: Linear texture filtering not enabled!", LOG_ERROR);
-
         }
         this->window = SDL_CreateWindow("ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (this->window == NULL) {

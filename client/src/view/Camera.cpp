@@ -11,8 +11,6 @@ Camera::Camera(Coordinates* position, int width, int height, int margen) {
     log("Camera: Camara creada.", LOG_INFO);
 }
 
-
-
 void Camera::parseYaml(YAML::Node node){
   if (node["cx"]){
     this->position->setX(node["cx"].as<int>());

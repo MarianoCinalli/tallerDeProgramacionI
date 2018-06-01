@@ -83,7 +83,9 @@ void* read_server(void* argument) {
                         //log("msg", LOG_SPAM);
                         Player* player;
                         Ball* ball = initializer->getGameController()->getBall();
-                        Camera* camera = initializer->getGameController()->getCamera();;
+                        Camera* camera = initializer->getGameController()->getCamera();
+                        //Clock* clock = initializer->getGameController()->getClock();
+                        //Score* score = initializer->getGameController()->getScore();
                         YAML::Node node = YAML::Load(token);
                         for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                             YAML::Node key = it->first;
@@ -96,9 +98,15 @@ void* read_server(void* argument) {
                                 } else if ((key.as<std::string>() == "cam")) {
                                     //log("read_server: camara", key.as<std::string>(), LOG_SPAM);
                                     camera->parseYaml(value);
+                                } else if ((key.as<std::string>() == "clock")) {
+                                    //log("read_server: clock", key.as<std::string>(), LOG_SPAM);
+                                    //clock->parseYaml(value);
+                                } else if ((key.as<std::string>() == "score")) {
+                                    //log("read_server: score", key.as<std::string>(), LOG_SPAM);
+                                    //score->parseYaml(value);
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
-                                    player =  initializer->getGameController()->getPlayer(key.as<int>());
+                                    player = initializer->getGameController()->getPlayer(key.as<int>());
                                     player->parseYaml(value);
                                 }
                             }
