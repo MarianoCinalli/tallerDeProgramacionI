@@ -20,7 +20,7 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 
 }
 
-void Pitch::setUserTeam(std::string user, int teamNum) {
+void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
     log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", teamNum, LOG_DEBUG);
     Team* team;
     if (teamNum == 0) {
@@ -43,6 +43,9 @@ void Pitch::setUserTeam(std::string user, int teamNum) {
         log("Pitch: Error numero de equipo desconocido: ", teamNum, LOG_ERROR);
     }
     log("Pitch: Se le asignaron jugador al usuario: ", user, LOG_DEBUG);
+    team->setFormacion(formation);
+    team->order();
+    log("Pitch: formacion: ", formation, LOG_DEBUG);
     this->activePlayers[user] = team->getPlayers().back();
     this->activePlayers[user]->toggleIsSelected(user);
     log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);

@@ -547,6 +547,7 @@ int main(int argc, char* argv[]) {
     log("Main: Cargando configuracion...", LOG_INFO);
     Conf* configuration = new Conf(defaultConfFileName, defaultSpritesFileName);
     configuration->loadConf(confFileName);
+    int formation = configuration->getFormacion();
     log("Main: Configuracion cargada: ", configuration, LOG_INFO);
     int cliLogLevelInt = LOG_WRONGLEVEL;
     LOG_MIN_LEVEL = configuration->getDebugLevel();
@@ -678,7 +679,8 @@ int main(int argc, char* argv[]) {
             }
             // Le aviso al servidor cual fue el equipo elegido
             log("Main: Mandandole al server: ", LOG_INFO);
-            connectionManager->sendMessage("use:" + std::to_string(seleccion));
+            // int formation = conf->getFormacion();
+            connectionManager->sendMessage("use:" + std::to_string(seleccion)+"-"+std::to_string(formation));
             std::string resultMessage;
             connectionManager->getMessage(resultMessage);
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
@@ -749,7 +751,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Si se sale por pedida de conexion mostrar mensaje.
-    if (lostConnectionQuit) {
+    if (quit) {
         showLostConnectionMessage(renderer, connectionManager, false);
     }
 

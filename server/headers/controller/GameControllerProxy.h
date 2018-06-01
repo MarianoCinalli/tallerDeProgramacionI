@@ -20,11 +20,11 @@ class GameControllerProxy {
         bool shouldGameEnd();
         void end();
         void startGame();
-        void addUser(std::string user, int teamNum);
+        // void addUser(std::string user, int teamNum);
         void removeUser(std::string user);
         bool hasGameStarted();
         std::string getTeamStats(int numberTeam);
-        bool joinTeam(std::string playerName, int team, int maxPlayers, std::string &errorMessage);
+        bool joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage);
         ~GameControllerProxy();
 };
 #endif // GAMECONTROLLERPROXY_H

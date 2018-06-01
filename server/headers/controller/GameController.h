@@ -42,12 +42,12 @@ class GameController {
         void updateCameraPosition(Camera* camera);
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
-        void addUser(std::string user, int teamNum);
+        void addUser(std::string user, int teamNum, int formation);
         bool shouldGameEnd();
         void setEnd();
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);
-        bool joinTeam(std::string playerName, int team, int maxPlayers, std::string & errorMessage);
+        bool joinTeam(std::string playerName, int team,int formation, int maxPlayers, std::string & errorMessage);
         void removeUser(std::string user);
         ~GameController();
     private:

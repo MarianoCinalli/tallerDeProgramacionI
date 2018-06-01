@@ -52,13 +52,19 @@ void User::processTeamAndFormationMessage(std::string message) {
     std::string action = this->getMessageAction(message);
     std::string value = this->getMessageValue(message);
     int team = 0;
+    int formation = 33;
     if (action == "use") {
-        team = stoi(value); // Guardar el que eligio el user.
+        team = stoi(value.substr(0, value.find("-")));
+        formation = stoi(value.substr(value.find("-")+1,value.length()));
+        // log("User: equipo", team, LOG_DEBUG);
+        // log("User: formacion", formation, LOG_DEBUG);
+
         // Si puede unirse a ese equipo, setea la formacion al equipo luego se ordena.
         std::string errorMessage = "";
         bool couldJoin = this->gameControllerProxy->joinTeam(
             this->getName(),
             team,
+            formation,
             this->connectionManager->getMaxClients(),
             errorMessage
         );

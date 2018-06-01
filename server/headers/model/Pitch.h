@@ -27,7 +27,7 @@ class Pitch {
         void changeActivePlayer(std::string user);
         Player* getActivePlayer(std::string user);
         void setTeam(Team* team, int teamNumber);
-        void setUserTeam(std::string user, int team);
+        void setUserTeam(std::string user, int team, int formation);
         void setBall(Ball* ball);
         std::list<Player*> getPlayersInsideCamera();
         std::list<Player*> getPlayers();

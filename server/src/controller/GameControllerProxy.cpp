@@ -9,10 +9,10 @@ GameControllerProxy::GameControllerProxy(GameController* gameController) {
     // Cuando manejemos tiempo borrar.
     this->hasStarted = false;
 }
-
-void GameControllerProxy::addUser(std::string user, int teamNum){
-  this->gameController->addUser(user, teamNum);
-}
+// 
+// void GameControllerProxy::addUser(std::string user, int teamNum){
+//   this->gameController->addUser(user, teamNum);
+// }
 
 void GameControllerProxy::removeUser(std::string user){
   update_model_mutex.lock();
@@ -57,9 +57,9 @@ bool GameControllerProxy::hasGameStarted() {
     return this->hasStarted;
 }
 
-bool GameControllerProxy::joinTeam(std::string playerName, int team, int maxPlayers, std::string &errorMessage) {
+bool GameControllerProxy::joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage) {
     update_model_mutex.lock();
-    bool result = this->gameController->joinTeam(playerName, team, maxPlayers, errorMessage);
+    bool result = this->gameController->joinTeam(playerName, team, formation,maxPlayers, errorMessage);
     update_model_mutex.unlock();
     return result;
 }

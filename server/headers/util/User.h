@@ -23,6 +23,7 @@ class User {
     private:
         bool hasLoged;
         bool hasPicked;
+        int formation;
         int userSocket;
         int teamNumber;
         std::string user;

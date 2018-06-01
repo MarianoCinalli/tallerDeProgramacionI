@@ -12,11 +12,11 @@ GameController::GameController(Pitch* pitch) {
     log("GameController: GameController creado.", LOG_INFO);
 }
 
-void GameController::addUser(std::string user, int teamNum) {
+void GameController::addUser(std::string user, int teamNum, int formation) {
     log("GameController: Agregando usuario...", LOG_INFO);
     this->users[teamNum].insert(user);
     log("Pitch: Agregando usuario al equipo...", user, LOG_DEBUG);
-    this->pitch->setUserTeam(user, teamNum);
+    this->pitch->setUserTeam(user, teamNum, formation);
     log("Pitch: Cambiando jugador...", user, LOG_DEBUG);
     this->pitch->changeActivePlayer(user);
     log("GameController: Usuario agregado.", LOG_INFO);
@@ -166,7 +166,7 @@ void GameController::setEnd() {
 }
 
 
-bool GameController::joinTeam(std::string playerName, int team, int maxPlayers, std::string& errorMessage) {
+bool GameController::joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string& errorMessage) {
     log("GameController: Viendo si el usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
     int usersInTeam = this->users[team].size();
     if (maxPlayers == 1) {
@@ -176,7 +176,7 @@ bool GameController::joinTeam(std::string playerName, int team, int maxPlayers, 
             return false;
         } else {
             log("GameController: El usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
-            this->addUser(playerName, team);
+            this->addUser(playerName, team, formation);
             return true;
         }
     } else {
@@ -186,7 +186,7 @@ bool GameController::joinTeam(std::string playerName, int team, int maxPlayers, 
             return false;
         } else {
             log("GameController: El usuario " + playerName + " puede unirse al equipo: ", team, LOG_INFO);
-            this->addUser(playerName, team);
+            this->addUser(playerName, team, formation);
             return true;
         }
     }

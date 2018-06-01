@@ -33,7 +33,7 @@ void* read_client(void* argument) {
             }
             log("read_client: Sincronizacion terminada.", LOG_INFO);
             connectionManager->sendMessage(socket, "gameBegins:");
-            sleep(3);
+            sleep(2);
             connectionManager->ready(pthread_self(), socket);
             firstBroadcastRead = false;
         }
