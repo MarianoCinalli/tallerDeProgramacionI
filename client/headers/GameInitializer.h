@@ -36,6 +36,10 @@ class GameInitializer {
         Team* localTeam; // Liberado en Pitch.
         Team* awayTeam; // Liberado en Pitch.
         Pitch* pitch; // Liberado en game controller.
+
+        //Clock* clock;
+        //Minimap* minimap;
+        //Score* score;
     public:
         GameInitializer(Conf* configuration);
         GameController* getGameController();
