@@ -37,6 +37,7 @@ class Pitch {
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
         Team* getTeam(int teamNumber);
+        std::string getScoresYAML();
         ~Pitch();
     private:
         std::string getUsersWithActivePlayersAsString();

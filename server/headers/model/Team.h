@@ -12,7 +12,7 @@ class Team {
         int local; // 0 si es local, 1 si es visitante
         int formacion;
         std::string name;
-
+        int score;
     public:
         Team(int, std::string);
         ~Team();
@@ -23,7 +23,8 @@ class Team {
         int getTeamNum();
         int getAmountPlayers();
         std::string getName();
-
+        void increaseScore();
+        int getScore();
 };
 #endif // TEAM_H
 

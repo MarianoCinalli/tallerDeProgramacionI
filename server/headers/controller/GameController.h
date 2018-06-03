@@ -58,5 +58,6 @@ class GameController {
     private:
         void removeUserFromTeam(std::string user);
         std::string getUsersWithTeamAsString();
+        std::string getGameStatsMessage();
 };
 #endif // GAMECONTROLLER_H

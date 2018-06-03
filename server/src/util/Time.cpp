@@ -13,7 +13,7 @@ int Time::getMinutes() {
 }
 
 std::string Time::toString() {
-    return this->getMinutesAsString() + ":" + this->getSecondsAsString();
+    return this->getMinutesAsString() + "-" + this->getSecondsAsString();
 }
 
 std::string Time::getSecondsAsString() {

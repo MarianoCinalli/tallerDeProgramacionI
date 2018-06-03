@@ -215,7 +215,7 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     Ball* ball = this->pitch->getBall();
     Camera* camera = this->pitch->getCamera();
     if (ball == NULL) {
-        log("Broadcaster: La pelota es null!", LOG_ERROR);
+        log("GameController: La pelota es null.", LOG_ERROR);
         return "";
     }
     for (Player* player : players) {
@@ -223,9 +223,25 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     }
     message += ball->getAsYaml();
     message += camera->getAsYaml();
+    message += this->getGameStatsMessage();
     return message + ";;";
 }
 
+std::string GameController::getGameStatsMessage() {
+    std::string message = "";
+    message += "clock: ";
+    Time* time = this->timer->getTime();
+    if (time != NULL) {
+        message += "'" + time->toString() + "'\n";
+        delete(time);
+    } else {
+        log("GameController: El tiempo es null.", LOG_ERROR);
+        message += "'er-er'\n";
+    }
+    message += "score:\n";
+    message += this->pitch->getScoresYAML();
+    return message;
+}
 
 GameController::~GameController() {
     log("GameController: Liberando memoria.", LOG_INFO);

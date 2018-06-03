@@ -239,3 +239,19 @@ void Pitch::changeBallOwnership() {
         }
     }
 }
+
+std::string Pitch::getScoresYAML() {
+    std::string message = "";
+    if (this->localTeam != NULL) {
+        message += " gl: " + std::to_string(this->localTeam->getScore()) + "\n";
+    } else {
+        log("Pitch: El equipo local es null.", LOG_ERROR);
+    }
+    if (this->awayTeam != NULL) {
+        message += " gv: " + std::to_string(this->awayTeam->getScore()) + "\n";
+    } else {
+        log("Pitch: El equipo visitante es null.", LOG_ERROR);
+    }
+    return message;
+}
+

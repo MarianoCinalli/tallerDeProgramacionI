@@ -6,6 +6,7 @@ Team::Team(int local, std::string name) {
     this->players = {};
     this->local = local;
     this->name = name;
+    this->score = 0;
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -59,4 +60,12 @@ void Team::order() {
         i++;
     }
     log("Team: Equipo ordenado.", LOG_DEBUG);
+}
+
+void Team::increaseScore() {
+    ++this->score;
+}
+
+int Team::getScore() {
+    return this->score;
 }
