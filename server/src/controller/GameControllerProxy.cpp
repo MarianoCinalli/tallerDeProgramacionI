@@ -48,8 +48,9 @@ std::string GameControllerProxy::getTeamStats(int numberTeam) {
 
 bool GameControllerProxy::hasGameStarted() {
     update_model_mutex.lock();
-    return this->gameController->hasGameStarted();
+    bool result = this->gameController->hasGameStarted();
     update_model_mutex.unlock();
+    return result;
 }
 
 bool GameControllerProxy::joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage) {
