@@ -7,6 +7,7 @@ GameController::GameController(Pitch* pitch) {
     this->end = false;
     this->time = 0;    //ventana de tiempo de 1024 frames
     // std::list users1;
+    this->timer = new Timer();
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
     log("GameController: GameController creado.", LOG_INFO);
@@ -90,10 +91,13 @@ void GameController::execute(Action* action, std::string user) {
 }
 
 void GameController::update(Camera* camera) {
+    // Dejo el tiempo pasado, por si se quiere usar en los updates.
+    Time* elapsedTime = this->timer->getTime();
     this->updatePlayers();
     this->updateBall();
     this->updateCameraPosition(camera);
     this->count();
+    delete(elapsedTime);
 }
 
 void GameController::count() {
@@ -192,8 +196,20 @@ bool GameController::joinTeam(std::string playerName, int team, int formation, i
     }
 }
 
+void GameController::startGame() {
+    this->timer->start();
+}
+
+bool GameController::hasGameStarted() {
+    return this->timer->hasStarted();
+}
+
+
 GameController::~GameController() {
-    log("GameController: Liberando memoria. Borrando cancha...", LOG_INFO);
+    log("GameController: Liberando memoria.", LOG_INFO);
+    log("GameController: Borrando cancha...", LOG_INFO);
     delete(this->pitch);
+    log("GameController: Borrando timer...", LOG_INFO);
+    delete(this->timer);
     log("GameController: Cancha borrada.", LOG_INFO);
 }

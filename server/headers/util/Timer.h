@@ -9,9 +9,11 @@
 class Timer {
     private:
         std::chrono::system_clock::time_point startTimePoint;
+        bool started;
     public:
         Timer();
         void start();
+        bool hasStarted();
         Time* getTime();
         void stop();
         ~Timer();

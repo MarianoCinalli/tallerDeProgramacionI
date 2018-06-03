@@ -10,12 +10,11 @@ Broadcaster::Broadcaster(Pitch* pitch, ConnectionManager* connectionManager) {
 void Broadcaster::broadcast(bool first = false) {
 
     std::string message;
-    if (first){
-      message = this->getFirstMessage();
+    if (first) {
+        message = this->getFirstMessage();
+    } else {
+        message = this->getMessage();
     }
-    else {
-    message = this->getMessage();
-  }
     if (message != "") {
         connectionManager->sendToAll(message);
     } else {

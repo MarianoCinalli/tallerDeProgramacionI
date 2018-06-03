@@ -1,6 +1,7 @@
 #include "model/Pitch.h"
 #include "controller/actions/Action.h"
 #include "view/Camera.h"
+#include "util/Timer.h"
 #include <set>
 
 /*
@@ -27,6 +28,7 @@ class GameController {
         Pitch* pitch;
         Ball* ball;
         Player* activePlayer;
+        Timer* timer;
         bool end;
         int time;
         std::map<int,std::set<std::string>> users;
@@ -43,12 +45,14 @@ class GameController {
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
         void addUser(std::string user, int teamNum, int formation);
-        bool shouldGameEnd();
-        void setEnd();
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);
         bool joinTeam(std::string playerName, int team,int formation, int maxPlayers, std::string & errorMessage);
         void removeUser(std::string user);
+        void startGame();
+        bool hasGameStarted();
+        bool shouldGameEnd();
+        void setEnd();
         ~GameController();
     private:
         void removeUserFromTeam(std::string user);
