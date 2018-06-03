@@ -9,13 +9,11 @@
 
 class Broadcaster {
     private:
-        Pitch* pitch;
+        GameControllerProxy* gameControllerProxy;
         ConnectionManager* connectionManager;
     public:
-        Broadcaster(Pitch* pitch, ConnectionManager* connectionManager);
+        Broadcaster(GameControllerProxy* gameControllerProxy, ConnectionManager* connectionManager);
         void broadcast(bool);
-        std::string getFirstMessage();
-        std::string getMessage();
         void broadcastGameEnded();
         ~Broadcaster();
 };

@@ -53,6 +53,7 @@ class GameController {
         bool hasGameStarted();
         bool shouldGameEnd();
         void setEnd();
+        std::string getMessageToBroadcast(bool allPlayers);
         ~GameController();
     private:
         void removeUserFromTeam(std::string user);

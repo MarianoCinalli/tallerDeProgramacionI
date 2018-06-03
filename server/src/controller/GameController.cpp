@@ -204,6 +204,28 @@ bool GameController::hasGameStarted() {
     return this->timer->hasStarted();
 }
 
+std::string GameController::getMessageToBroadcast(bool allPlayers) {
+    std::string message = "";
+    std::list<Player*> players = {};
+    if (allPlayers) {
+        players = this->pitch->getPlayers();
+    } else {
+        players = this->pitch->getPlayersInsideCamera();
+    }
+    Ball* ball = this->pitch->getBall();
+    Camera* camera = this->pitch->getCamera();
+    if (ball == NULL) {
+        log("Broadcaster: La pelota es null!", LOG_ERROR);
+        return "";
+    }
+    for (Player* player : players) {
+        message += player->getAsYaml();
+    }
+    message += ball->getAsYaml();
+    message += camera->getAsYaml();
+    return message + ";;";
+}
+
 
 GameController::~GameController() {
     log("GameController: Liberando memoria.", LOG_INFO);

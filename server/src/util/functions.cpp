@@ -98,11 +98,11 @@ void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("broadcast_to_clients: Sincronizacion terminada.", LOG_INFO);
+    GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     Broadcaster* broadcaster = new Broadcaster(
-        initializer->getPitch(),
+        gameControllerProxy,
         initializer->getConnectionManager()
     );
-    GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     // Termino la espera
     sleep(2); //HACK time to get your shit together
     broadcaster->broadcast(true);

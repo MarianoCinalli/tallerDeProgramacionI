@@ -25,6 +25,7 @@ class GameControllerProxy {
         bool hasGameStarted();
         std::string getTeamStats(int numberTeam);
         bool joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage);
+        std::string getMessageToBroadcast(bool allPlayers);
         ~GameControllerProxy();
 };
 #endif // GAMECONTROLLERPROXY_H

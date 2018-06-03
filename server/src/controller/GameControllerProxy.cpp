@@ -59,6 +59,12 @@ bool GameControllerProxy::joinTeam(std::string playerName, int team, int formati
     return result;
 }
 
+std::string GameControllerProxy::getMessageToBroadcast(bool allPlayers) {
+    // No hace falta bloquear.
+    return this->gameController->getMessageToBroadcast(allPlayers);
+}
+
+
 GameControllerProxy::~GameControllerProxy() {
     log("GameControllerProxy: Eliminando gameControllerProxy...", LOG_INFO);
 }
