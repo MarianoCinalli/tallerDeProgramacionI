@@ -16,6 +16,7 @@ class Time {
         std::string toString();
         std::string getSecondsAsString();
         std::string getMinutesAsString();
+        int getSecondsCount();
         ~Time();
 };
 #endif // TIME_H
