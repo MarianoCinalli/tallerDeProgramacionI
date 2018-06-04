@@ -58,11 +58,12 @@ PitchView::~PitchView() {
 }
 
 void PitchView::renderPitch(SDL_Renderer* screen) {
-    SDL_Rect rect = this->camera->getRectToDraw();
+    SDL_Rect que = this->camera->getRectToDraw();
+    SDL_Rect donde = {0,100,800,600};
     SDL_RenderCopy(
         screen,
         this->pitch->getSpriteSheetTexture(),
-        &rect,
-        NULL
+        &que,
+        &donde
     );
 }

@@ -21,7 +21,7 @@ void Ball::parseYaml(YAML::Node node){
     this->position->setX(node["cx"].as<int>());
   }
   if (node["cy"]){
-    this->position->setY(node["cy"].as<int>());
+    this->position->setY(node["cy"].as<int>() + CAMERA_OFFSET);
   }
   if (node["st"]){
     this->still = node["st"].as<int>();
