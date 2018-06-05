@@ -128,7 +128,7 @@ void GameInitializer::initializePitch(Conf* conf) {
 
 void GameInitializer::initializeGameController() {
     log("GameInitializer: Creando GameController...", LOG_INFO);
-    this->gameController = new GameController(this->pitch);
+    this->gameController = new GameController(this->pitch, this->camera);
 }
 
 void GameInitializer::initializeConnectionManager(Conf* configuration) {

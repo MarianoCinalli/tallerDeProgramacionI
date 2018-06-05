@@ -126,14 +126,14 @@ void* game_updater(void* argument) {
     log("game_updater: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
-    Camera* camera = initializer->getCamera();
+    // Camera* camera = initializer->getCamera();
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     gameControllerProxy->startGame();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
         if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-          gameControllerProxy->updateModel(camera);
+          gameControllerProxy->updateModel();
         }
     }
     log("game_updater: Finalizado.", LOG_INFO);

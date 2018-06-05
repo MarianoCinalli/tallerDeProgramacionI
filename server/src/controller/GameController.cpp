@@ -1,7 +1,8 @@
 #include "controller/GameController.h"
 
-GameController::GameController(Pitch* pitch) {
+GameController::GameController(Pitch* pitch, Camera* camera) {
     log("GameController: Creando gameController...", LOG_INFO);
+    this->camera = camera;
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
     this->end = false;
@@ -90,12 +91,12 @@ void GameController::execute(Action* action, std::string user) {
     }
 }
 
-void GameController::update(Camera* camera) {
+void GameController::update() {
     // Dejo el tiempo pasado, por si se quiere usar en los updates.
     Time* elapsedTime = this->timer->getTime();
     this->updatePlayers();
     this->updateBall();
-    this->updateCameraPosition(camera);
+    this->updateCameraPosition();
     this->count();
     delete(elapsedTime);
 }
@@ -138,11 +139,11 @@ void GameController::updateBall() {
 
 // Cuando el jugador pise el borde mueve la camara.
 // En este punto las coordenadas de el jugador son validas.
-void GameController::updateCameraPosition(Camera* camera) {
+void GameController::updateCameraPosition() {
     Coordinates* position = this->ball->getPosition();
     // Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
     // int speed = this->pitch->getActivePlayer(0)->getCurrentSpeed();
-    camera->calculateNewPosition(position);
+    this->camera->calculateNewPosition(position);
 }
 
 // Aca deberia haber una nocion del tiempo.
