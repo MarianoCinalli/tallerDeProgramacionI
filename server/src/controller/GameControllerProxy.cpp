@@ -6,10 +6,6 @@ GameControllerProxy::GameControllerProxy(GameController* gameController) {
     log("GameControllerProxy: Creando gameControllerProxy...", LOG_INFO);
     this->gameController = gameController;
 }
-//
-// void GameControllerProxy::addUser(std::string user, int teamNum){
-//   this->gameController->addUser(user, teamNum);
-// }
 
 void GameControllerProxy::removeUser(std::string user){
   update_model_mutex.lock();

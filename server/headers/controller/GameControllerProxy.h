@@ -20,7 +20,6 @@ class GameControllerProxy {
         bool shouldGameEnd();
         void end();
         void startGame();
-        // void addUser(std::string user, int teamNum);
         void removeUser(std::string user);
         bool hasGameStarted();
         std::string getTeamStats(int numberTeam);

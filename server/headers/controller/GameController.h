@@ -40,7 +40,6 @@ class GameController {
         // Para actualizar los modelos.
         void updatePlayers();
         void update();
-        void count();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.

@@ -6,8 +6,6 @@ GameController::GameController(Pitch* pitch, Camera* camera) {
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
     this->end = false;
-    this->time = 0;    //ventana de tiempo de 1024 frames
-    // std::list users1;
     this->timer = new Timer();
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -97,26 +95,16 @@ void GameController::update() {
     this->updatePlayers();
     this->updateBall();
     this->updateCameraPosition();
-    this->count();
     delete(elapsedTime);
-}
-
-void GameController::count() {
-    this->time++;
-    if (this->time == 1024) {
-        this->time = 0;
-    }
 }
 
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
-    // this->activePlayer = this->pitch->activePlayer; Este parece no se necesario.
     // Actualizar la posicion de todos los jugadores
     std::list<Player*> teamPlayers = this->pitch->getTeam(0)->getPlayers();
     std::list<Player*> awayPlayers = this->pitch->getTeam(1)->getPlayers();
     teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
-    // std::list<Player*> players = this->pitch->getTeam(0)->getPlayers(); //TODO usuario 0
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
             p->updateState();
@@ -142,7 +130,6 @@ void GameController::updateBall() {
 void GameController::updateCameraPosition() {
     Coordinates* position = this->ball->getPosition();
     // Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
-    // int speed = this->pitch->getActivePlayer(0)->getCurrentSpeed();
     this->camera->calculateNewPosition(position);
 }
 
@@ -150,10 +137,6 @@ void GameController::updateCameraPosition() {
 // Un reloj que termine el juego luego del tiempo. Proximo tp?
 // Tenemos que poner algo que nos permita controlar cuando teminar.
 bool GameController::shouldGameEnd() {
-    // this->end++;
-    // if (this->end>100000){
-    // return true;
-    // }
     return this->end;
 }
 
