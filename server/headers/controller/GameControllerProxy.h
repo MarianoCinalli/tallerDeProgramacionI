@@ -16,11 +16,10 @@ class GameControllerProxy {
       GameController* gameController; //despues hacerlo privado
         GameControllerProxy(GameController* gameController);
         void execute(Action* action, std::string team);
-        void updateModel(Camera* camera);
+        void updateModel();
         bool shouldGameEnd();
         void end();
         void startGame();
-        // void addUser(std::string user, int teamNum);
         void removeUser(std::string user);
         bool hasGameStarted();
         std::string getTeamStats(int numberTeam);

@@ -25,6 +25,7 @@ Controlador de juego:
 
 class GameController {
     private:
+        Camera* camera;
         Pitch* pitch;
         Ball* ball;
         Player* activePlayer;
@@ -33,15 +34,14 @@ class GameController {
         int time;
         std::map<int,std::set<std::string>> users;
     public:
-        GameController(Pitch* pitch);
+        GameController(Pitch* pitch, Camera* camera);
         // Ejecuta la accion sobre el jugador seleccionado.
         void execute(Action* action, std::string user);
         // Para actualizar los modelos.
         void updatePlayers();
-        void update(Camera* camera);
-        void count();
+        void update();
         // Dependiendo de la posicion del active player, mueve la camara.
-        void updateCameraPosition(Camera* camera);
+        void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
         void addUser(std::string user, int teamNum, int formation);
