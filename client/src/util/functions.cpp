@@ -142,10 +142,13 @@ void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
     SDL_Renderer* renderer = initializer->getRenderer();
     PitchView* pitchView = initializer->getPitchView();
+    int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!quit) {
       if (!lostConnectionQuit){
-        pitchView->render(renderer);
-        usleep(1000000 / DRAW_FRAME_RATE); // Frame rate.
+        if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
+          timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+          pitchView->render(renderer);
+        }
       }
     }
     log("drawer: Finalizado.", LOG_INFO);

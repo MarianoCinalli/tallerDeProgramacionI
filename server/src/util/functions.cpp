@@ -106,9 +106,12 @@ void* broadcast_to_clients(void* argument) {
     // Termino la espera
     sleep(2); //HACK time to get your shit together
     broadcaster->broadcast(true);
+    int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
+      if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
+        timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
         broadcaster->broadcast(false);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
+      }
     }
     // Termino el juego
     broadcaster->broadcastGameEnded();
@@ -124,11 +127,14 @@ void* game_updater(void* argument) {
     pthread_barrier_wait(&players_ready_barrier);
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
     Camera* camera = initializer->getCamera();
+    int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     gameControllerProxy->startGame();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
-        gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
+        if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
+          timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+          gameControllerProxy->updateModel(camera);
+        }
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
