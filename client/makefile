@@ -3,7 +3,7 @@
  TEMP := $(subst src/,obj/,$(SOURCES))
  OBJECTS := $(subst .cpp,.o,$(TEMP))
  COMPILER := g++
- LIBRARIES := -lSDL2 -lSDL2_image -lSDL2_ttf -lyaml-cpp -pthread
+ LIBRARIES := -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lyaml-cpp -pthread
  LINKING_FLAGS := $(LIBRARIES) -Wall -I headers/ -o
  COMPILING_FLAGS := -g -std=c++11 -Wall -I headers/ -c -o
 
@@ -37,6 +37,6 @@
 # Install dependencies:
  dependencies:
 	apt-get update
-	apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libyaml-cpp-dev libboost-all-dev
+	apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libyaml-cpp-dev libboost-all-dev
 
 .PHONY: all clean main fast

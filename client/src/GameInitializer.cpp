@@ -1,5 +1,6 @@
 #include "GameInitializer.h"
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
@@ -42,7 +43,6 @@ Team* GameInitializer::getTeam(int teamNumber) {
       return this->awayTeam;
     }
 }
-
 
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
@@ -157,7 +157,7 @@ void GameInitializer::initializeActionsManager() {
 
 void GameInitializer::initializeCommonSdlResources() {
     //Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
         log("SDL could not initialize! SDL Error: %s\n", SDL_GetError(), LOG_ERROR);
     } else {
@@ -181,8 +181,15 @@ void GameInitializer::initializeCommonSdlResources() {
                     log("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError(), LOG_ERROR);
                 }
             }
-            if( TTF_Init() == -1 ) {
-    					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+            //Initialize SDL_mixer
+            if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0) {
+                printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+                log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR);
+            }
+            //Initialize SDL_ttf
+            if ( TTF_Init() == -1 ) {
+    				  	printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+                log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError(), LOG_ERROR);
     				}
         }
     }
@@ -197,8 +204,9 @@ void GameInitializer::cleanCommonSdlResources() {
     SDL_DestroyWindow(this->window);
     this->window = NULL;
     //Quit SDL subsystems
-    log("GameInitializer: Saliendo de SDL_IMG.", LOG_INFO);
-    IMG_Quit();
     log("GameInitializer: Saliendo de SDL.", LOG_INFO);
+    IMG_Quit();
+    TTF_Quit();
+    Mix_Quit();
     SDL_Quit();
 }

@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <string>
 #include <fstream>
 #include <unistd.h>
@@ -36,6 +37,14 @@ bool quit = false;
 bool lostConnectionQuit = false;
 std::string CLI_PORT = "";
 std::string CLI_IP = "";
+// Music
+Mix_Music *gMusic = NULL;
+// Sound effects
+Mix_Chunk *gKickSound = NULL; //kick
+Mix_Chunk *gGoalSound = NULL; //goal
+Mix_Chunk *gWhistleSound = NULL; //whistle
+Mix_Chunk *gStartSound = NULL; //whistle
+Mix_Chunk *gCountdownSound = NULL; //whistle
 // Global variables ---------------------------------------
 
 void imprimir_ayuda() {
@@ -135,6 +144,21 @@ int chequearOpciones(int argc, char* argv[]) {
 }
 
 void endProgram(int statusToExit, ConnectionManager* connectionManager) {
+    //Free the music
+    Mix_FreeMusic( gMusic );
+    gMusic = NULL;
+    //Free the sound effects
+    Mix_FreeChunk( gKickSound );
+    Mix_FreeChunk( gGoalSound );
+    Mix_FreeChunk( gWhistleSound );
+    Mix_FreeChunk( gStartSound );
+    Mix_FreeChunk( gCountdownSound );
+    gKickSound = NULL;
+    gGoalSound = NULL;
+    gWhistleSound = NULL;
+    gStartSound = NULL;
+    gCountdownSound = NULL;
+    // Cerrar la conexion
     connectionManager->closeConnection();
     delete(connectionManager);
     delete(initializer);
@@ -559,6 +583,40 @@ int main(int argc, char* argv[]) {
     float sleepTime = (float)200000 / (float)frameRate;
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
+
+    // Cargar archivos de audio
+    gMusic = Mix_LoadMUS( "sounds/beat.wav" );
+    if( gMusic == NULL ){
+        printf( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gKickSound = Mix_LoadWAV( "sounds/kick.wav" );
+    if( gKickSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gGoalSound = Mix_LoadWAV( "sounds/goal.wav" );
+    if( gGoalSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gWhistleSound = Mix_LoadWAV( "sounds/whistle.wav" );
+    if( gWhistleSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gStartSound = Mix_LoadWAV( "sounds/start.wav" );
+    if( gStartSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gCountdownSound = Mix_LoadWAV( "sounds/countdown.wav" );
+    if( gCountdownSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    // Comenzar a reproducir la musica
+    Mix_PlayMusic( gMusic, -1 );
 
     ConnectionManager* connectionManager = new ConnectionManager();
 
