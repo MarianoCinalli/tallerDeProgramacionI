@@ -18,9 +18,17 @@ void PitchView::addBallView(BallSpriteManager* ballView) {
 void PitchView::render(SDL_Renderer* screen) {
     //log("PitchView: Comienza la renderizacion...", LOG_SPAM);
     // Dibujar cancha vista por camara.
+    //Top left corner viewport
+    SDL_Rect cancha;
+    cancha.x = 0;
+    cancha.y = CAMERA_OFFSET;
+    cancha.w = SCREEN_WIDTH ;
+    cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
+    SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
     this->renderPitch(screen);
     // Dibuja la pelota, asi los jugadores quedan arriba
     Coordinates* coordinates = this->camera->getRelativeCoordinates(this->ballView->getBallCoordinates());
+
     this->ballView->render(screen, coordinates);
     delete(coordinates);
     // Obtener los jugadores vistos por la camara
@@ -32,6 +40,7 @@ void PitchView::render(SDL_Renderer* screen) {
         Coordinates* coordinates = this->camera->getRelativeCoordinates(
             (*viewIter)->getPlayerCoordinates()
         );
+
         (*viewIter)->render(screen, coordinates);
         delete(coordinates);
     }
@@ -59,11 +68,11 @@ PitchView::~PitchView() {
 
 void PitchView::renderPitch(SDL_Renderer* screen) {
     SDL_Rect que = this->camera->getRectToDraw();
-    SDL_Rect donde = {0,100,800,600};
+    // SDL_Rect donde = {0,100,800,600};
     SDL_RenderCopy(
         screen,
         this->pitch->getSpriteSheetTexture(),
         &que,
-        &donde
+        NULL
     );
 }

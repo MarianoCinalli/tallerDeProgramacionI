@@ -53,7 +53,7 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
 
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
     SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
-    // SDL_RenderSetScale(screen, 2,2);
+
     SDL_RenderCopy(
         screen,
         spriteSheet,
