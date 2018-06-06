@@ -1,4 +1,7 @@
 #include "controller/ActionsManager.h"
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Music *gMusic;
 
 ActionsManager::ActionsManager() {
     log("ActionsManager: Creando actionsManager.", LOG_INFO);
@@ -44,6 +47,19 @@ Action* ActionsManager::getAction(SDL_Event event) {
         // Actions for pressed keys.
         log("ActionsManager: Se registro una tecla presionada.", LOG_SPAM);
         switch (event.key.keysym.sym) {
+            case SDLK_m:
+                //If there is no music playing
+                if ( Mix_PlayingMusic() == 0 ) {
+                    Mix_PlayMusic( gMusic, -1 ); //Play the music
+                } else {
+                    //If music is being played
+                    if ( Mix_PausedMusic() == 1 ) {
+                        Mix_ResumeMusic(); //Resume the music
+                    } else {
+                        Mix_PauseMusic(); //Pause the music
+                    }
+                }
+                break;
             case SDLK_w:
                 action = new RunningFastAction();
                 break;
