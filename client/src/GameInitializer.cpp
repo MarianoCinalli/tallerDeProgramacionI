@@ -140,8 +140,8 @@ void GameInitializer::initializeTeamSprites(std::string shirtsPath, Colour* shir
 
 void GameInitializer::initializePitch(Conf* conf) {
     log("GameInitializer: Creando la cancha...", LOG_INFO);
-    Coordinates* cameraPosition = new Coordinates(400, 200);
-    this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT-CAMERA_OFFSET, conf->getMargen());
+    Coordinates* cameraPosition = new Coordinates(400, 300);
+    this->camera = new Camera(cameraPosition, CAMERA_WIDTH, CAMERA_HEIGHT);
     this->pitch = new Pitch(this->camera);
 }
 

@@ -121,7 +121,7 @@ Conf*  GameInitializer::getConfiguration() {
 
 void GameInitializer::initializePitch(Conf* conf) {
     log("GameInitializer: Creando la cancha...", LOG_INFO);
-    Coordinates* cameraPosition = new Coordinates(400, 200);
+    Coordinates* cameraPosition = new Coordinates(400, 300);
     this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf->getMargen());
     this->pitch = new Pitch(this->camera);
 }

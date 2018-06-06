@@ -16,22 +16,18 @@ class Camera {
         Coordinates* position;
         int width;
         int height;
-        int margin_size;
+        // int margin_size;
         // La camara tiene sus margenes
-        SDL_Rect margin;
+        // SDL_Rect margin;
     public:
-        Camera(Coordinates* position, int width, int height, int margin);
+        Camera(Coordinates* position, int width, int height);
         // parsea YAML
         void parseYaml(YAML::Node node);
         // transforma las coordenadas para que queden relativas a la camara.
         Coordinates* getRelativeCoordinates(Coordinates* coordinates);
-        // calcular la nueva posicion de la camara basado en el jugador activo
-        void calculateNewPostion(Coordinates* playerPosition, int playerSpeed);
-        // devuelve los jugadores dentro del margen.
-        std::list<Player*> getPlayersInsideMargin(std::list<Player*> players);
-        // devuelve los jugadores dentro de la camara.
+        // // devuelve los jugadores dentro de la camara.
         std::list<PlayerSpriteManager*> getPlayersInside(std::list<PlayerSpriteManager*>& views);
-        // devuelve el SDL_Rect para dibujar la parte de la cancha.
+        // // devuelve el SDL_Rect para dibujar la parte de la cancha.
         SDL_Rect getRectToDraw();
         ~Camera();
 };

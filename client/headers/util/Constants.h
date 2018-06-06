@@ -43,6 +43,9 @@ const int LEVEL_HEIGHT = 1000;
 // Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 700;
+
+const int CAMERA_WIDTH = 800;
+const int CAMERA_HEIGHT = 600;
 // const int SCREEN_HEIGHT = 700;
 
 // Necesario para la camara
@@ -51,6 +54,11 @@ const int CUERPO_JUGADOR = 15;
 
 const int DRAW_SIZE_PLAYER = 85;
 const int DRAW_SIZE_CORRECTION = 15;
+
+
+const int FIELD_CORRECTION = 0;
+const int FIELD_WIDTH = 800*0.8;
+const int FIELD_HEIGHT = 600*0.8;
 
 // Velocidad de desplazamiento scroll camara
 const int SCROLL_SPEED = 13;
