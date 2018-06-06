@@ -1,4 +1,8 @@
 #include "view/PlayerSpriteManager.h"
+#include <SDL2/SDL_mixer.h>
+#include "util/Constants.h"
+
+extern Mix_Chunk *gKickSound;
 
 PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
     log("PlayerSpriteManager: Creando vista...", LOG_INFO);
@@ -288,6 +292,8 @@ bool PlayerSpriteManager::wasKickingYet() {
 
 void PlayerSpriteManager::isAlreadyKicking() {
     this->wasKicking = true;
+    // Kick sound
+    Mix_PlayChannel( -1, gKickSound, 0 );
 }
 
 bool PlayerSpriteManager::isSliding() {

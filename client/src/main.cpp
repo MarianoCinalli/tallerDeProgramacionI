@@ -40,11 +40,11 @@ std::string CLI_IP = "";
 // Music
 Mix_Music *gMusic = NULL;
 // Sound effects
-Mix_Chunk *gKickSound = NULL; //kick
+extern Mix_Chunk *gKickSound = NULL; //kick
 Mix_Chunk *gGoalSound = NULL; //goal
 Mix_Chunk *gWhistleSound = NULL; //whistle
-Mix_Chunk *gStartSound = NULL; //whistle
-Mix_Chunk *gCountdownSound = NULL; //whistle
+Mix_Chunk *gStartSound = NULL; //start
+Mix_Chunk *gCountdownSound = NULL; //countdown
 // Global variables ---------------------------------------
 
 void imprimir_ayuda() {
@@ -514,6 +514,8 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             if (beginMessage == "gameBegins:") {
                 log("Main: Se recibio el mensaje de comienzo del partido.", LOG_INFO);
                 gameBegins = true;
+                // Silbato
+                Mix_PlayChannel( -1, gWhistleSound, 0 );
             } else {
                 log("Main: Esperando el mensaje de comienzo de partido, se recibio otra cosa: ", beginMessage, LOG_INFO);
                 gameBegins = false;
