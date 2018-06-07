@@ -24,7 +24,8 @@ Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     );
     return relativePosition;
 }
-//
+
+
 std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteManager*>& views) {
     // Solo los que estan dentro de la camara
     std::list<PlayerSpriteManager*> resultado;
@@ -33,7 +34,6 @@ std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteM
     for (PlayerSpriteManager* p : views){
         playerX = p->getPlayerCoordinates()->getX();
         playerY = p->getPlayerCoordinates()->getY();
-
         if ( (playerX > 0 - SPRITE_SIZE) &&
              (playerX < LEVEL_WIDTH) &&
              (playerY > 0 - SPRITE_SIZE) &&
@@ -42,7 +42,6 @@ std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteM
             resultado.push_back(p);
         }
     }
-
     return resultado;
 }
 

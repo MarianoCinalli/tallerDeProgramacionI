@@ -25,9 +25,9 @@ class Camera {
         void parseYaml(YAML::Node node);
         // transforma las coordenadas para que queden relativas a la camara.
         Coordinates* getRelativeCoordinates(Coordinates* coordinates);
-        // // devuelve los jugadores dentro de la camara.
+        // devuelve los jugadores dentro de la camara, para dibujar solo lo que este dentro de la camara
         std::list<PlayerSpriteManager*> getPlayersInside(std::list<PlayerSpriteManager*>& views);
-        // // devuelve el SDL_Rect para dibujar la parte de la cancha.
+        // devuelve el SDL_Rect para dibujar la parte de la cancha.
         SDL_Rect getRectToDraw();
         ~Camera();
 };
