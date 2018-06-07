@@ -2,7 +2,7 @@
 
 Camera::Camera(Coordinates* position, int width, int height) {
     log("Camera: Creando camara...", LOG_INFO);
-    this->position = position;
+    this->center = position;
     this->width = width;
     this->height = height;
     log("Camera: Camara creada.", LOG_INFO);
@@ -10,17 +10,17 @@ Camera::Camera(Coordinates* position, int width, int height) {
 
 void Camera::parseYaml(YAML::Node node){
   if (node["cx"]){
-    this->position->setX(node["cx"].as<int>());
+    this->center->setX(node["cx"].as<int>());
   }
   if (node["cy"]){
-    this->position->setY(node["cy"].as<int>());
+    this->center->setY(node["cy"].as<int>());
   }
 }
 
 Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     Coordinates* relativePosition = new Coordinates(
-        absolutePosition->getX() - position->getX(),
-        absolutePosition->getY() - position->getY()
+        absolutePosition->getX() - this->center->getX()+width/2,
+        absolutePosition->getY() - this->center->getY()+height/2
     );
     return relativePosition;
 }
@@ -47,8 +47,8 @@ std::list<PlayerSpriteManager*> Camera::getPlayersInside(std::list<PlayerSpriteM
 
 SDL_Rect Camera::getRectToDraw() {
     SDL_Rect renderQuad = {
-        position->getX(),
-        position->getY(),
+        this->center->getX()-this->width/2,
+        this->center->getY()-this->height/2,
         this->width,
         this->height
     };
@@ -57,6 +57,6 @@ SDL_Rect Camera::getRectToDraw() {
 
 Camera::~Camera() {
     log("Camera: Liberando memoria. Borrando posicion...", LOG_INFO);
-    delete(this->position);
+    delete(this->center);
     log("Camera: Posicion borrada. Memoria liberada.", LOG_INFO);
 }

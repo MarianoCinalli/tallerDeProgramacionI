@@ -11,11 +11,18 @@ Camera::Camera(Coordinates* position, int width, int height, int margen) {
     log("Camera: Camara creada.", LOG_INFO);
 }
 
+Coordinates Camera::getCenter(){
+  int x = this->position->getX() + this->width/2;
+  int y = this->position->getY() + this->height/2;
+  return Coordinates(x, y);
+}
+
 std::string Camera::getAsYaml() {
     std::string message = "";
+    Coordinates center = getCenter();
     message += "cam:\n";
-    message += " cx: " + std::to_string(this->position->getX()) + "\n";
-    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " cx: " + std::to_string(center.getX()) + "\n";
+    message += " cy: " + std::to_string(center.getY()) + "\n";
     return message;
 }
 

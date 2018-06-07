@@ -13,7 +13,7 @@
 class Camera {
     private:
         // La posicion es el punto de arriba a la izquierda del rectangulo.
-        Coordinates* position;
+        Coordinates* center;
         int width;
         int height;
         // int margin_size;
