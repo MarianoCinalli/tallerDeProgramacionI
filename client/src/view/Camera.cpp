@@ -17,10 +17,13 @@ void Camera::parseYaml(YAML::Node node){
   }
 }
 
+const float CX = 1.25;
+const float CY = 1.25;
+
 Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
     Coordinates* relativePosition = new Coordinates(
-        absolutePosition->getX() - this->center->getX()+width/2,
-        absolutePosition->getY() - this->center->getY()+height/2
+        (absolutePosition->getX() - (this->center->getX()-width/2))*CX,
+        (absolutePosition->getY() - (this->center->getY()-height/2))*CY
     );
     return relativePosition;
 }

@@ -26,14 +26,6 @@ std::string Camera::getAsYaml() {
     return message;
 }
 
-Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
-    Coordinates* relativePosition = new Coordinates(
-        absolutePosition->getX() - position->getX(),
-        absolutePosition->getY() - position->getY()
-    );
-    return relativePosition;
-}
-
 void Camera::calculateNewPosition(Coordinates* objPosition) {
     // Margen derecho
     int x = objPosition->getX();

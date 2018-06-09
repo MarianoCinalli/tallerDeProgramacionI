@@ -81,10 +81,6 @@ Pitch::~Pitch() {
     }
 }
 
-Coordinates* getCenter() {
-    return new Coordinates(LEVEL_WIDTH / 2, SCREEN_HEIGHT / 2);
-}
-
 Player* Pitch::getActivePlayer(std::string user) {
     Player* activePlayer = NULL;
     auto search = this->activePlayers.find(user);
@@ -254,4 +250,3 @@ std::string Pitch::getScoresYAML() {
     }
     return message;
 }
-

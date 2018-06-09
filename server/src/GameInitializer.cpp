@@ -1,5 +1,10 @@
 #include "GameInitializer.h"
 
+// Screen dimension constants
+const int SCREEN_WIDTH = (800)*0.8;
+const int SCREEN_HEIGHT = (600)*0.8;
+
+
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
     this->initializePitch(configuration);

@@ -47,7 +47,7 @@ void PitchView::render(SDL_Renderer* screen) {
         delete(coordinates);
     }
     //log("PitchView: Fin de renderizacion.", LOG_SPAM);
-  
+
     SDL_RenderPresent(screen);
 
 }

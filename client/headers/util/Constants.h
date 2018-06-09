@@ -44,8 +44,6 @@ const int LEVEL_HEIGHT = 1000;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 700;
 
-const int CAMERA_WIDTH = 800;
-const int CAMERA_HEIGHT = 600;
 // const int SCREEN_HEIGHT = 700;
 
 // Necesario para la camara

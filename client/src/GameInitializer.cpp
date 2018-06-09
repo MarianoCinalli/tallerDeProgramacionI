@@ -2,6 +2,9 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
+const int CAMERA_WIDTH = (800)*0.8;
+const int CAMERA_HEIGHT = (600)*0.8;
+
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
     this->initializeCommonSdlResources();
