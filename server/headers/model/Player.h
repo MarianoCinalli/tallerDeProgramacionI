@@ -32,7 +32,7 @@ class Player {
 
     public:
         static int ID;
-        Player(int orientation, Coordinates* position, int team);
+        Player(Coordinates* position, int team);
 
         // Getters
         Coordinates* getPosition();

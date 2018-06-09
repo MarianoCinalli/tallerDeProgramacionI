@@ -52,6 +52,5 @@ class GameInitializer {
         void initializeUsersManager(Conf* configuration);
         std::string getTeamString(int teamNumber);
         void setTeam(Team* team, int teamNumber);
-        int getOrientation(int teamNumber);
 };
 #endif // GAMEINITIALIZER_H

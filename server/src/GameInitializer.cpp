@@ -75,8 +75,7 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
-        int orientation = this->getOrientation(teamNumber);
-        Player* player = new Player(orientation, coordinates, teamNumber);
+        Player* player = new Player(coordinates, teamNumber);
         team->addPlayer(player);
     }
     log("GameInitializer: Ordenando equipo local.", LOG_INFO);
@@ -109,14 +108,6 @@ void GameInitializer::setTeam(Team* team, int teamNumber) {
         this->localTeam = team;
     } else if (teamNumber == 1) {
         this->awayTeam = team;
-    }
-}
-
-int GameInitializer::getOrientation(int teamNumber) {
-    if (teamNumber == 0) {
-        return PLAYER_ORIENTATION_RIGHT;
-    } else {
-        return PLAYER_ORIENTATION_LEFT;
     }
 }
 
