@@ -2,11 +2,6 @@
 
 int Player::ID = 0;
 
-const int KEEPER_STEAL_COEF = 90;
-const int DEFENSE_STEAL_COEF = 80;
-const int MIDFIELD_STEAL_COEF = 70;
-const int STRIKER_STEAL_COEF = 50;
-
 Player::Player(Coordinates* position, int team) {
 
         log("Player: Creando jugador...", LOG_INFO);
