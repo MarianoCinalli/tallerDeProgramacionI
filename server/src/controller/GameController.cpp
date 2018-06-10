@@ -107,7 +107,7 @@ void GameController::updatePlayers() {
     teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
-            p->updateState();
+            p->updateState(this->ball->getPosition());
         }
     }
     log("GameController: se actualizaron los jugadores.", LOG_SPAM);

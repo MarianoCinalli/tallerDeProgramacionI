@@ -159,8 +159,8 @@ void Player::stop() {
 }
 
 
-void Player::updateState() {
-    this->updatePosition();
+void Player::updateState(Coordinates* positionToFollow) {
+    this->updatePosition(positionToFollow);
     this->updateKicking();
     this->updateSliding();
 }
@@ -194,18 +194,24 @@ void Player::updateSliding() {
     }
 
 }
-void Player::updatePosition() {
+
+void Player::updatePosition(Coordinates* positionToFollow) {
     float speed = 1;
     if (this->runningFast) {
         speed = FAST_SPEED_COEF; //TODO hardcode
     }
-    int maxSpeed = this->maxVelocity;
-    if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX()*speed * maxSpeed);
-        this->position->addY(this->velocity->getComponentY()*speed * maxSpeed);
-        log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
+
+    if (!this->isSelected) {
+        this->follow(positionToFollow);
     }
 
+    int maxSpeed = this->maxVelocity;
+    if (this->canMove) {
+        this->position->addX(this->velocity->getComponentX() * speed * maxSpeed);
+        this->position->addY(this->velocity->getComponentY() * speed * maxSpeed);
+        log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
+    }
+    /*
     // Si selecciona un jugador que estaba regresando lo detengo
     if (this->isSelected && this->isReturning) {
         this->isReturning = false;
@@ -225,7 +231,22 @@ void Player::updatePosition() {
         } else {
             this->returnToBasePosition();
         }
+    }*/
+}
+
+void Player::follow(Coordinates* positionToFollow) {
+    int deltaX = positionToFollow->getX() - this->position->getX();
+    int deltaY = positionToFollow->getY() - this->position->getY();
+    // Normalizacion.
+    if (deltaX != 0) {
+        deltaX = deltaX / abs(deltaX);
     }
+    if (deltaY != 0) {
+        deltaY = deltaY / abs(deltaY);
+    }
+    this->stop();
+    this->velocity->setComponentX(deltaX);
+    this->velocity->setComponentY(deltaY);
 }
 
 void Player::setPosition(Coordinates pos) {

@@ -66,10 +66,10 @@ class Player {
         void setWithBall(bool dominated);
         bool isWithBall();
         // Cambia la posicion con respecto a su velocidad.
-        void updatePosition();
+        void updatePosition(Coordinates* positionToFollow);
         void updateKicking();
         void updateSliding();
-        void updateState();
+        void updateState(Coordinates* positionToFollow);
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);
@@ -87,5 +87,7 @@ class Player {
         std::string getAsYaml();
 
         ~Player();
+    private:
+        void follow(Coordinates* positionToFollow);
 };
 #endif // PLAYER_H
