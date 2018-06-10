@@ -4,168 +4,165 @@ int Player::ID = 0;
 
 Player::Player(Coordinates* position, int team) {
 
-        log("Player: Creando jugador...", LOG_INFO);
-        this->id = ++ID;
-        if (team == 0) {
-                this->orientation =  PLAYER_ORIENTATION_RIGHT;
-        } else {
-                this->orientation = PLAYER_ORIENTATION_LEFT;
-        }
-        this->position = position;
-        this->team = team;
-        this->basePosition = new Coordinates(800, 500);
-        this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
-        this->velocity = new Velocity(0, 0); // Empieza quieto.
-        this->sliding = false;
-        this->wasSliding = false; //Deberia estar en PlayerSpriteManager
-        this->kicking = false;
-        this->wasKicking = false;
-        this->canMove = true;
-        this->kickPower = 1; //inicializacion default?
-        this->isSelected = false;
-        this->isReturning = false;
-        this->runningFast = false;
-        this->kickCount = 0;
-        this->slideCount = 0;
-        this->withBall = false;
-        this->userName = "NONE";
-        this->stealCoef = DEFENSE_STEAL_COEF;
-        log("Player: Jugador creado.", LOG_INFO);
+    log("Player: Creando jugador...", LOG_INFO);
+    this->id = ++ID;
+    if (team == 0) {
+        this->orientation =  PLAYER_ORIENTATION_RIGHT;
+    } else {
+        this->orientation = PLAYER_ORIENTATION_LEFT;
+    }
+    this->position = position;
+    this->team = team;
+    this->basePosition = new Coordinates(800, 500);
+    this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
+    this->velocity = new Velocity(0, 0); // Empieza quieto.
+    this->sliding = false;
+    this->wasSliding = false; //Deberia estar en PlayerSpriteManager
+    this->kicking = false;
+    this->wasKicking = false;
+    this->canMove = true;
+    this->kickPower = 1; //inicializacion default?
+    this->isSelected = false;
+    this->isReturning = false;
+    this->runningFast = false;
+    this->kickCount = 0;
+    this->slideCount = 0;
+    this->withBall = false;
+    this->userName = "NONE";
+    this->stealCoef = DEFENSE_STEAL_COEF;
+    log("Player: Jugador creado.", LOG_INFO);
 }
 
 Coordinates* Player::getPosition() {
-        return this->position;
+    return this->position;
 }
 
-int Player::getTeam(){
-        return this->team;
+int Player::getTeam() {
+    return this->team;
 }
 
-int Player::getStealCoef(){
-  return this->stealCoef;
+int Player::getStealCoef() {
+    return this->stealCoef;
 }
 
 void Player::setWithBall(bool dominated) {
-        this->withBall = dominated;
+    this->withBall = dominated;
 }
 
 bool Player::isWithBall() {
-        return this->withBall;
+    return this->withBall;
 }
 
 int Player::getOrientation() {
-        return this->orientation;
+    return this->orientation;
 }
 
-int Player::getKickPower(){
-        return this->kickPower;
+int Player::getKickPower() {
+    return this->kickPower;
 }
 
 Velocity* Player::getVelocity() {
-        return this->velocity;
+    return this->velocity;
 }
 
 int Player::getCurrentSpeed() {
-        if (this->runningFast) {
-                return this->maxVelocity * FAST_SPEED_COEF; //Hardcode
-        } else {
-                return this->maxVelocity;
-        }
+    if (this->runningFast) {
+        return this->maxVelocity * FAST_SPEED_COEF; //Hardcode
+    } else {
+        return this->maxVelocity;
+    }
 }
 
-void Player::setFieldPosition(int formation){
-  int number = this->id;
-if (number>7){
-  number -= 7;
-}
-int defense = formation / 1 % 10;
-int midfield = formation / 10 % 10;
-if (number==1){
-  this->fieldPosition = KEEPER_POSITION;
-  this->stealCoef = KEEPER_STEAL_COEF;
-}
-else if (number <= (1+defense)){
-  this->fieldPosition = DEFENSE_POSITION;
-  this->stealCoef = DEFENSE_STEAL_COEF;
-}
-else if (number <=(1+defense+midfield)){
-  this->fieldPosition = MIDFIELD_POSITION;
-  this->stealCoef = MIDFIELD_STEAL_COEF;
-}
-else{
-  this->fieldPosition = STRIKER_POSITION;
-  this->stealCoef = STRIKER_STEAL_COEF;
-}
-log("Player: posicion en cancha: ",this->fieldPosition, LOG_DEBUG);
+void Player::setFieldPosition(int formation) {
+    int number = this->id;
+    if (number > 7) {
+        number -= 7;
+    }
+    int defense = formation / 1 % 10;
+    int midfield = formation / 10 % 10;
+    if (number == 1) {
+        this->fieldPosition = KEEPER_POSITION;
+        this->stealCoef = KEEPER_STEAL_COEF;
+    } else if (number <= (1 + defense)) {
+        this->fieldPosition = DEFENSE_POSITION;
+        this->stealCoef = DEFENSE_STEAL_COEF;
+    } else if (number <= (1 + defense + midfield)) {
+        this->fieldPosition = MIDFIELD_POSITION;
+        this->stealCoef = MIDFIELD_STEAL_COEF;
+    } else {
+        this->fieldPosition = STRIKER_POSITION;
+        this->stealCoef = STRIKER_STEAL_COEF;
+    }
+    log("Player: posicion en cancha: ", this->fieldPosition, LOG_DEBUG);
 }
 // Setea la orientacion del jugador (a donde mira).
 void Player::setOrientation(int orientation) {
-        // Para el caso en que el vector trayectoria sea nulo
-        // deberia ser suficiente que mire en la ultima direccion
-        if (orientation != PLAYER_ORIENTATION_INVALID) {
-                this->orientation = orientation;
-        }
+    // Para el caso en que el vector trayectoria sea nulo
+    // deberia ser suficiente que mire en la ultima direccion
+    if (orientation != PLAYER_ORIENTATION_INVALID) {
+        this->orientation = orientation;
+    }
 }
 
 // Si corre en dos direcciones devuelve true.
 bool Player::isRunningDiagonaly() {
-        return ((this->velocity->getComponentX() != 0) && (this->velocity->getComponentY() != 0));
+    return ((this->velocity->getComponentX() != 0) && (this->velocity->getComponentY() != 0));
 }
 
 void Player::toggleIsSelected(std::string name) {
-        if (this->isSelected) {
-                this->runningFast = false;
-                this->userName = "NONE";
-        } else {
-                this->userName = name;
-        }
-        this->isSelected = !this->isSelected;
-        this->isReturning = true;
+    if (this->isSelected) {
+        this->runningFast = false;
+        this->userName = "NONE";
+    } else {
+        this->userName = name;
+    }
+    this->isSelected = !this->isSelected;
+    this->isReturning = true;
 }
 
-std::string Player::getUsername(){
-        return this->userName;
+std::string Player::getUsername() {
+    return this->userName;
 }
 
 bool Player::getIsSelected() {
-        return this->isSelected;
+    return this->isSelected;
 }
 
 void Player::accelerate(int direction) {
-        // Todo: Renombrar velocity a trayectory.
-        this->velocity->accelerate(direction);
-        // Para que quede mirando para donde venia corriendo.
-        this->setOrientation(this->velocity->getAsOrientation());
-        log("Player: El jugador esta acelerando, direccion actual: ", this->velocity, LOG_SPAM);
+    // Todo: Renombrar velocity a trayectory.
+    this->velocity->accelerate(direction);
+    // Para que quede mirando para donde venia corriendo.
+    this->setOrientation(this->velocity->getAsOrientation());
+    log("Player: El jugador esta acelerando, direccion actual: ", this->velocity, LOG_SPAM);
 }
 
 void Player::decelerate(int direction) {
-        if (this->isRunningFast()) {
-                this->velocity->decelerate(direction, this->maxVelocity);
-                this->setOrientation(this->velocity->getAsOrientation());
-                log("Player: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_SPAM);
-        }
+    if (this->isRunningFast()) {
+        this->velocity->decelerate(direction, this->maxVelocity);
+        this->setOrientation(this->velocity->getAsOrientation());
+        log("Player: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_SPAM);
+    }
 }
 
 void Player::stopRunningInDirection(int direction) {
-        if (this->isRunningFast()) {
-                this->stopsRunningFast();
-        }
-        this->velocity->stopDirection(direction);
-        log("Player: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
+    if (this->isRunningFast()) {
+        this->stopsRunningFast();
+    }
+    this->velocity->stopDirection(direction);
+    log("Player: El Jugador deja de correr en direccion: ", direction, LOG_DEBUG);
 }
 
 void Player::stop() {
-        this->velocity->stop();
-        // this->runningFast = false;
-        log("Player: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_SPAM);
+    this->velocity->stop();
+    // this->runningFast = false;
+    log("Player: El jugador esta quieto, velocidad actual: ", this->velocity, LOG_SPAM);
 }
 
 
 void Player::updateState() {
-        this->updatePosition();
-        this->updateKicking();
-        this->updateSliding();
+    this->updatePosition();
+    this->updateKicking();
+    this->updateSliding();
 }
 //
 // int frameDiference(int current, int last){
@@ -177,201 +174,201 @@ void Player::updateState() {
 // }
 
 void Player::updateKicking() {
-        if (this->kicking) {
-                kickCount++;
-        }
-        if (kickCount > KICK_COUNT) {
-                this->stopKicking();
-                kickCount = 0;
-        }
+    if (this->kicking) {
+        kickCount++;
+    }
+    if (kickCount > KICK_COUNT) {
+        this->stopKicking();
+        kickCount = 0;
+    }
 
 }
 
 void Player::updateSliding() {
-        if (this->sliding) {
-                slideCount++;
-        }
-        if (slideCount > SLIDE_COUNT) {
-                this->stopSliding();
-                slideCount = 0;
-        }
+    if (this->sliding) {
+        slideCount++;
+    }
+    if (slideCount > SLIDE_COUNT) {
+        this->stopSliding();
+        slideCount = 0;
+    }
 
 }
 void Player::updatePosition() {
-        float speed = 1;
-        if (this->runningFast) {
-                speed = FAST_SPEED_COEF; //TODO hardcode
-        }
-        int maxSpeed = this->maxVelocity;
-        if (this->canMove) {
-                this->position->addX(this->velocity->getComponentX()*speed * maxSpeed);
-                this->position->addY(this->velocity->getComponentY()*speed * maxSpeed);
-                log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
-        }
+    float speed = 1;
+    if (this->runningFast) {
+        speed = FAST_SPEED_COEF; //TODO hardcode
+    }
+    int maxSpeed = this->maxVelocity;
+    if (this->canMove) {
+        this->position->addX(this->velocity->getComponentX()*speed * maxSpeed);
+        this->position->addY(this->velocity->getComponentY()*speed * maxSpeed);
+        log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
+    }
 
-        // Si selecciona un jugador que estaba regresando lo detengo
-        if (this->isSelected && this->isReturning) {
-                this->isReturning = false;
-                log("Player: jugador deja de volver, a la posicion original, por ser seleccionado.", LOG_DEBUG);
-        }
+    // Si selecciona un jugador que estaba regresando lo detengo
+    if (this->isSelected && this->isReturning) {
+        this->isReturning = false;
+        log("Player: jugador deja de volver, a la posicion original, por ser seleccionado.", LOG_DEBUG);
+    }
 
-        // Detener si el jugador no seleccionado regresando llego a su posicion inicial
-        if (this->isReturning) {
-                int abs_delta_x = 0;
-                int abs_delta_y = 0;
-                abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
-                abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-                if ((abs_delta_x < 30) && (abs_delta_y < 30)) { //TODO hardcode valores
-                        this->stop();
-                        this->isReturning = false;
-                        log("Player: jugador llega a la posicion original.", LOG_DEBUG);
-                } else {
-                        this->returnToBasePosition();
-                }
+    // Detener si el jugador no seleccionado regresando llego a su posicion inicial
+    if (this->isReturning) {
+        int abs_delta_x = 0;
+        int abs_delta_y = 0;
+        abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
+        abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
+        if ((abs_delta_x < 30) && (abs_delta_y < 30)) { //TODO hardcode valores
+            this->stop();
+            this->isReturning = false;
+            log("Player: jugador llega a la posicion original.", LOG_DEBUG);
+        } else {
+            this->returnToBasePosition();
         }
+    }
 }
 
 void Player::setPosition(Coordinates pos) {
-        this->position->setCoord(pos);
+    this->position->setCoord(pos);
 }
 
 void Player::setBasePosition(Coordinates pos) {
-        this->basePosition->setCoord(pos);
+    this->basePosition->setCoord(pos);
 }
 
 void Player::returnToBasePosition() {
-        log("Player: Volviendo a su posicion original ", LOG_SPAM);
-        this->isReturning = true;
+    log("Player: Volviendo a su posicion original ", LOG_SPAM);
+    this->isReturning = true;
 
-        // Calcular en que direccion debe regresar
-        int newX = this->position->getX() - this->basePosition->getX();
-        int newY = this->position->getY() - this->basePosition->getY();
+    // Calcular en que direccion debe regresar
+    int newX = this->position->getX() - this->basePosition->getX();
+    int newY = this->position->getY() - this->basePosition->getY();
 
-        //TODO: Normalizar el vector al factor maxVelocity para que corra por el camino mas corto
-        int setX = newX;
-        int setY = newY;
-        if (newX == 0) {
-                setX = 0;
-        }
+    //TODO: Normalizar el vector al factor maxVelocity para que corra por el camino mas corto
+    int setX = newX;
+    int setY = newY;
+    if (newX == 0) {
+        setX = 0;
+    }
 
-        if (newX < 0) {
-                setX = 1;
-        }
+    if (newX < 0) {
+        setX = 1;
+    }
 
-        if (newX > 0) {
-                setX = -1;
-        }
+    if (newX > 0) {
+        setX = -1;
+    }
 
-        if (newY == 0) {
-                setY = 0;
-        }
+    if (newY == 0) {
+        setY = 0;
+    }
 
-        if (newY < 0) {
-                setY = 1;
-        }
+    if (newY < 0) {
+        setY = 1;
+    }
 
-        if (newY > 0) {
-                setY = -1;
-        }
+    if (newY > 0) {
+        setY = -1;
+    }
 
-        this->velocity->setComponentX(setX);
-        this->velocity->setComponentY(setY);
+    this->velocity->setComponentX(setX);
+    this->velocity->setComponentY(setY);
 }
 
 Player::~Player() {
-        delete(this->position);
-        delete(this->basePosition);
-        delete(this->velocity);
+    delete(this->position);
+    delete(this->basePosition);
+    delete(this->velocity);
 }
 
 void Player::startsRunningFast() {
-        if (!this->sliding && !this->kicking && !this->isRunningFast()) {
-                this->runningFast = true;
-                log("Player: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
-        }
+    if (!this->sliding && !this->kicking && !this->isRunningFast()) {
+        this->runningFast = true;
+        log("Player: El jugador corre rapido en direccion: ", this->orientation, LOG_DEBUG);
+    }
 }
 //TODO ver que hay que apretar la tecla cuando estas corriendo, sino no tiene efecto
 //TODO anda mal en diagonal
 
 void Player::stopsRunningFast() {
-        if (this->runningFast) {
-                this->runningFast = false;
-                //log("Player: El jugador deja de correr rapido", LOG_DEBUG);
-        }
+    if (this->runningFast) {
+        this->runningFast = false;
+        //log("Player: El jugador deja de correr rapido", LOG_DEBUG);
+    }
 }
 
 bool Player::isRunningFast() {
-        return this->runningFast;
+    return this->runningFast;
 }
 
 //SLIDE AND KICK FUNCTIONS
 
 void Player::startsKicking(int power) {
-        if (!this->sliding) {
-                this->kickPower = power;
-                this->kicking = true;
-                this->canMove = false;
-        }
+    if (!this->sliding) {
+        this->kickPower = power;
+        this->kicking = true;
+        this->canMove = false;
+    }
 }
 
 void Player::stopKicking() {
-        this->kicking = false;
-        this->wasKicking = false;
-        this->canMove = true;
+    this->kicking = false;
+    this->wasKicking = false;
+    this->canMove = true;
 }
 
 bool Player::isKicking() {
-        return this->kicking;
+    return this->kicking;
 }
 
 bool Player::wasKickingYet() {
-        return this->wasKicking;
+    return this->wasKicking;
 }
 
 void Player::isAlreadyKicking() {
-        this->wasKicking = true;
+    this->wasKicking = true;
 }
 
 bool Player::isSliding() {
-        return this->sliding;
+    return this->sliding;
 }
 
 bool Player::wasSlidingYet() {
-        return this->wasSliding;
+    return this->wasSliding;
 }
 
 void Player::startsSliding() {
-        if (!this->kicking && !this->withBall) {
-                this->sliding = true;
-        }
+    if (!this->kicking && !this->withBall) {
+        this->sliding = true;
+    }
 }
 
 void Player::isAlreadySliding() {
-        this->wasSliding = true;
+    this->wasSliding = true;
 }
 
 void Player::stopSliding() {
-        this->sliding = false;
-        this->wasSliding = false;
+    this->sliding = false;
+    this->wasSliding = false;
 }
 
 void Player::copyStats(Player* copyTo) {
-        copyTo->setOrientation(this->getOrientation());
-        copyTo->setTrayectory(this->getVelocity());
-        if (this->isRunningFast()) {
-                copyTo->startsRunningFast();
-        }
+    copyTo->setOrientation(this->getOrientation());
+    copyTo->setTrayectory(this->getVelocity());
+    if (this->isRunningFast()) {
+        copyTo->startsRunningFast();
+    }
 }
 
 void Player::setTrayectory(Velocity* trayectory) {
-        this->velocity->set(trayectory);
+    this->velocity->set(trayectory);
 }
 bool Player::isStill() {
-        if (this->velocity->isZero()) {
-                return true;
-        } else {
-                return false;
-        }
+    if (this->velocity->isZero()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -391,17 +388,17 @@ bool Player::isStill() {
    nm: name
  */
 std::string Player::getAsYaml() {
-        std::string message = "";
-        message += std::to_string(this->id) + ":\n";
-        message += " te: " + std::to_string(this->team) + "\n";
-        message += " cx: " + std::to_string(this->position->getX()) + "\n";
-        message += " cy: " + std::to_string(this->position->getY()) + "\n";
-        message += " se: " + std::to_string(this->isSelected) + "\n";
-        message += " ki: " + std::to_string(this->kicking) + "\n";
-        message += " sl: " + std::to_string(this->sliding) + "\n";
-        message += " ru: " + std::to_string(this->runningFast) + "\n";
-        message += " or: " + std::to_string(this->orientation) + "\n";
-        message += " nm: " + this->userName + "\n";
-        message += " st: " + std::to_string(isStill()) + "\n";
-        return message;
+    std::string message = "";
+    message += std::to_string(this->id) + ":\n";
+    message += " te: " + std::to_string(this->team) + "\n";
+    message += " cx: " + std::to_string(this->position->getX()) + "\n";
+    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " se: " + std::to_string(this->isSelected) + "\n";
+    message += " ki: " + std::to_string(this->kicking) + "\n";
+    message += " sl: " + std::to_string(this->sliding) + "\n";
+    message += " ru: " + std::to_string(this->runningFast) + "\n";
+    message += " or: " + std::to_string(this->orientation) + "\n";
+    message += " nm: " + this->userName + "\n";
+    message += " st: " + std::to_string(isStill()) + "\n";
+    return message;
 }
