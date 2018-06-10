@@ -68,6 +68,27 @@ int Player::getCurrentSpeed() {
         }
 }
 
+void Player::setFieldPosition(int formation){
+  int number = this->id;
+if (number>7){
+  number -= 7;
+}
+int defense = formation / 1 % 10;
+int midfield = formation / 10 % 10;
+if (number==1){
+  this->fieldPosition = KEEPER_POSITION;
+}
+else if (number <= (1+defense)){
+  this->fieldPosition = DEFENSE_POSITION;
+}
+else if (number <=(1+defense+midfield)){
+  this->fieldPosition = MIDFIELD_POSITION;
+}
+else{
+  this->fieldPosition = STRIKER_POSITION;
+}
+log("Player: posicion en cancha: ",this->fieldPosition, LOG_DEBUG);
+}
 // Setea la orientacion del jugador (a donde mira).
 void Player::setOrientation(int orientation) {
         // Para el caso en que el vector trayectoria sea nulo

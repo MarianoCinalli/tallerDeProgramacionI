@@ -34,6 +34,11 @@ enum PlayerStandedActions {
     KICK_ACTION = 6,
 };
 
+const int KEEPER_POSITION = 0;
+const int DEFENSE_POSITION = 1;
+const int MIDFIELD_POSITION = 2;
+const int STRIKER_POSITION = 3;
+
 const int SALIDA_LINEA_COMANDOS = 4;
 
 // The dimensions of the level

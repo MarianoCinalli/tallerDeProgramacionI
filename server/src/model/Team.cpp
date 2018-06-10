@@ -48,6 +48,9 @@ Team::~Team() {
 
 void Team::setFormacion(int formacion) {
     this->formacion = formacion;
+    for (Player* p: players){
+      p->setFieldPosition(formacion);
+    }
 }
 
 void Team::order() {

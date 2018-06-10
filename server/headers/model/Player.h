@@ -29,6 +29,7 @@ class Player {
         int kickCount;
         int slideCount;
         std::string userName;
+        int fieldPosition;
 
     public:
         static int ID;
@@ -59,6 +60,7 @@ class Player {
         void stopRunningInDirection(int direction);
         void toggleIsSelected(std::string name);
         void copyStats(Player* copyTo);
+        void setFieldPosition(int formation);
         void setTrayectory(Velocity* trayectory);
         void setWithBall(bool dominated);
         bool isWithBall();
