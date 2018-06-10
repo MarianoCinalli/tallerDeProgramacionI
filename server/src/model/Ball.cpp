@@ -143,6 +143,7 @@ Esta asi, para ahorrar caracteres.
 ba:
  cx: this->velocity->getComponentX()
  cy: this->velocity->getComponentY()
+ st: this->velocity->isZero()
 */
 std::string Ball::getAsYaml() {
     std::string message = "";

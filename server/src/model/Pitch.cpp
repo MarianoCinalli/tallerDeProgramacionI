@@ -180,8 +180,8 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 
 
 void Pitch::checkSteals() {
-    log("Pitch: Chequeando interceptaciones...", LOG_DEBUG);
-    int value = STEAL_VALUE;
+    log("Pitch: Chequeando intercepciones...", LOG_DEBUG);
+
     std::list<Player*> players = this->localTeam->getPlayers();
     std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
     players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
@@ -190,9 +190,12 @@ void Pitch::checkSteals() {
         Player* nearestPlayer = NULL;
         for (Player* p : players) {
             if (p->isSliding()) {
+                int value = p->getStealCoef();
+                int prob = rand()%100;
+                log("Pitch: probabilidad de sacar:",prob,LOG_SPAM);
                 int distance = p->getPosition()->distanceTo(this->ball->getPosition());
                 log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
-                if (distance < nearestDistance && distance > 0 && distance < value) {
+                if (prob<value && distance < nearestDistance && distance > 0 && distance < STEAL_DISTANCE) {
                     nearestDistance = distance;
                     nearestPlayer = p;
                 }

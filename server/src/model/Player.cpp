@@ -2,6 +2,11 @@
 
 int Player::ID = 0;
 
+const int KEEPER_STEAL_COEF = 90;
+const int DEFENSE_STEAL_COEF = 80;
+const int MIDFIELD_STEAL_COEF = 70;
+const int STRIKER_STEAL_COEF = 50;
+
 Player::Player(Coordinates* position, int team) {
 
         log("Player: Creando jugador...", LOG_INFO);
@@ -29,6 +34,7 @@ Player::Player(Coordinates* position, int team) {
         this->slideCount = 0;
         this->withBall = false;
         this->userName = "NONE";
+        this->stealCoef = DEFENSE_STEAL_COEF;
         log("Player: Jugador creado.", LOG_INFO);
 }
 
@@ -38,6 +44,10 @@ Coordinates* Player::getPosition() {
 
 int Player::getTeam(){
         return this->team;
+}
+
+int Player::getStealCoef(){
+  return this->stealCoef;
 }
 
 void Player::setWithBall(bool dominated) {
@@ -77,15 +87,19 @@ int defense = formation / 1 % 10;
 int midfield = formation / 10 % 10;
 if (number==1){
   this->fieldPosition = KEEPER_POSITION;
+  this->stealCoef = KEEPER_STEAL_COEF;
 }
 else if (number <= (1+defense)){
   this->fieldPosition = DEFENSE_POSITION;
+  this->stealCoef = DEFENSE_STEAL_COEF;
 }
 else if (number <=(1+defense+midfield)){
   this->fieldPosition = MIDFIELD_POSITION;
+  this->stealCoef = MIDFIELD_STEAL_COEF;
 }
 else{
   this->fieldPosition = STRIKER_POSITION;
+  this->stealCoef = STRIKER_STEAL_COEF;
 }
 log("Player: posicion en cancha: ",this->fieldPosition, LOG_DEBUG);
 }

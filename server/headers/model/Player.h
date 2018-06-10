@@ -30,6 +30,7 @@ class Player {
         int slideCount;
         std::string userName;
         int fieldPosition;
+        int stealCoef;
 
     public:
         static int ID;
@@ -51,7 +52,7 @@ class Player {
         bool isRunningFast();
         bool isStill();
         std::string getUsername();
-
+        int getStealCoef();
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
