@@ -15,17 +15,62 @@ void PitchView::addBallView(BallSpriteManager* ballView) {
     this->ballView = ballView;
 }
 
+void PitchView::renderMinimap(SDL_Renderer* screen) {
+    // Este es el viewPort del Minimap
+    SDL_Rect minimapViewport;
+    minimapViewport.x = SCREEN_WIDTH / 3;
+    minimapViewport.y = 0;
+    minimapViewport.w = SCREEN_WIDTH / 3;
+    minimapViewport.h = 100;
+    SDL_RenderSetViewport( screen, &minimapViewport ); //Render texture to screen
+    // Dibujo los bordes del minimapViewport
+    SDL_Rect outlineRect = { 0, 0, minimapViewport.w, minimapViewport.h };
+    SDL_SetRenderDrawColor( screen, 0x00, 0xFF, 0x00, 0xFF ); //VERDE
+    SDL_RenderDrawRect( screen, &outlineRect );
+
+    // Dibujar la camara
+    Coordinates coordinatesCam = this->camera->getPosition();
+    SDL_Rect cameraRect;
+    cameraRect.x = coordinatesCam.getX() - 790; //TODO
+    cameraRect.y = coordinatesCam.getY() - 480; //TODO
+    cameraRect.w = 30;//hacer proporcion
+    cameraRect.h = 25;//hacer proporcion
+    SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+    SDL_RenderDrawRect( screen, &cameraRect );
+
+    // Bibujar la pelota
+    // Coordinates* coordinatesBall = this->ballView->getBallCoordinates();
+    // SDL_Rect ballRect = { coordinatesBall->getX(), coordinatesBall->getY(), 3, 3 };
+    // SDL_RenderFillRect( screen, &ballRect );
+    // delete(coordinatesBall);
+
+    // Obtener la posicion de todos los jugadores
+    std::list<PlayerSpriteManager*> views = this->camera->getPlayersInside(this->playerViews);
+    // Dibujar cada uno.
+    std::list<PlayerSpriteManager*>::iterator viewIter;
+    for (viewIter = views.begin(); viewIter != views.end(); viewIter++) {
+        // Relativizar las coordenadas a la camara.
+        Coordinates* coordinates = this->camera->getRelativeCoordinates(
+            (*viewIter)->getPlayerCoordinates()
+        );
+        SDL_Rect playerRect = { coordinates->getX() - 790, coordinates->getY() - 480, 3, 3 };
+        SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
+        SDL_RenderFillRect( screen, &playerRect );
+        delete(coordinates);
+    }
+}
+
 void PitchView::render(SDL_Renderer* screen) {
+    // Dibujar el minimap
+    this->renderMinimap(screen);
     //log("PitchView: Comienza la renderizacion...", LOG_SPAM);
     // Dibujar cancha vista por camara.
-    //Top left corner viewport
     SDL_Rect cancha;
     cancha.x = 0;
     cancha.y = CAMERA_OFFSET;
-    cancha.w = SCREEN_WIDTH ;
+    cancha.w = SCREEN_WIDTH;
     cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
     SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
-
 
     this->renderPitch(screen);
     // Dibuja la pelota, asi los jugadores quedan arriba

@@ -58,6 +58,12 @@ SDL_Rect Camera::getRectToDraw() {
     return renderQuad;
 }
 
+Coordinates Camera::getPosition(){
+  int x = this->center->getX()-this->width/2;
+  int y = this->center->getY()-this->height/2;
+  return Coordinates(x, y);
+}
+
 Camera::~Camera() {
     log("Camera: Liberando memoria. Borrando posicion...", LOG_INFO);
     delete(this->center);
