@@ -90,6 +90,8 @@ Action* User::getAsAction(std::string message) {
         action = new SlidingAction();
     } else if (messageAction == "Kicking") {
         action = new KickingAction(std::stoi(messageValue, nullptr));
+    } else if (messageAction == "HighKicking") {
+        action = new HighKickingAction(std::stoi(messageValue, nullptr));
     } else if (messageAction == "ChangeActivePlayer") {
         action = new ChangeActivePlayer();
     } else if (messageAction == "Stop") {

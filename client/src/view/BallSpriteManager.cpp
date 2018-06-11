@@ -8,7 +8,7 @@ BallSpriteManager::BallSpriteManager(Texture* spriteSheet, Ball* ball) {
     this->spriteSheet = spriteSheet;
     this->sprite = {
         0,
-        29 * SPRITE_SIZE,
+        21 * SPRITE_SIZE,
         SPRITE_SIZE,
         SPRITE_SIZE
     };
@@ -23,6 +23,9 @@ Coordinates* BallSpriteManager::getBallCoordinates() {
 void BallSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
     if (!this->ball->isStill()) {
         this->setMovingBallSprite();
+    }
+    else {
+        this->setStillBall();
     }
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
     SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
@@ -53,12 +56,18 @@ SDL_Rect BallSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* co
     return renderQuad;
 }
 
+void BallSpriteManager::setStillBall() {
+    this->sprite.x = 0;
+    this->sprite.y = (21 * SPRITE_SIZE);
+}
+
 void BallSpriteManager::setMovingBallSprite() {
     if (rollingCount == 1024) { //TODO hardcode value
         rollingCount = 0;
-    }
-    int level = this->ball->getHeight();
-    if (level == 0) {
+    } 
+    int height = this->ball->getHeight();
+    int level = 0;
+    if (height == 0) {
         int orientation = (this->ball->getOrientation());
         int orientationOffset = 0;
         if (this->dibujoConOffset) {      //Para que dibuje una con offset y una no
@@ -89,19 +98,16 @@ void BallSpriteManager::setMovingBallSprite() {
         }
     }
     else {
-        if ((0 < level) && (level < 5)) {
-            if ((rollingCount % ROLLING_DIVISOR) == 0) {
-                log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
-                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 25 + level) * SPRITE_SIZE)) {
-                    this->sprite.x = 0; // Reinicio la secuencia.
-                    this->sprite.y = ((25 + level) * SPRITE_SIZE);
-                } else {
-                    this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-                }
-            }    
-        }
-        else {
-            log("BallSpriteManager: Problema con nivel de pase aereo.", LOG_SPAM);
+        if ((rollingCount % ROLLING_DIVISOR) == 0) {
+            log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
+            level = (height / BALL_DECELERATE_CONST);
+            if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (25 + level) * SPRITE_SIZE)) {
+                this->sprite.x = 0; // Reinicio la secuencia.
+                this->sprite.y = ((25 + level) * SPRITE_SIZE);
+            } 
+            else {
+                this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+            }
         }
     }
     rollingCount ++;

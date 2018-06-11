@@ -63,7 +63,7 @@ const int PLAYERS_PER_TEAM = 7;
 //Velocidad
 const int NORMAL_VELOCITY = 15;
 const int BALL_DECELERATE_TIME = 15; //a numeros mas grandes, tarda mas
-
+const int BALL_DECELERATE_CONST = 3;
 
 //interceptar pases
 const int INTERCEPT_VALUE = 40;

@@ -24,5 +24,6 @@ class BallSpriteManager {
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
         void cambioOffset();
         void setMovingBallSprite();
+        void setStillBall();
 };
 #endif // PLAYERSPRITEMANAGER_H
