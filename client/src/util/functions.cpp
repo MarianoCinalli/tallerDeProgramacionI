@@ -145,14 +145,21 @@ void* drawer(void* argument) {
     PitchView* pitchView = initializer->getPitchView();
     Clock* clock = initializer->getGameController()->getClock();
     Score* score = initializer->getGameController()->getScore();
+    const int MILISECONDS_TIMEOUT = 20;
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!quit) {
       if (!lostConnectionQuit){
         if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-          pitchView->render(renderer);
+          // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+          /* Clear the entire screen to our selected color. */
+          // SDL_RenderClear(renderer);
           clock->render(renderer);
           score->render(renderer);
+          // Dibujar el minimap
+
+          pitchView->renderMinimap(renderer);
+          pitchView->render(renderer);
         }
       }
     }

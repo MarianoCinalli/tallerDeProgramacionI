@@ -46,7 +46,7 @@ void Clock::render(SDL_Renderer* screen) {
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
     SDL_Rect posicion = {0, 0, clockViewport.w, clockViewport.h};
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
-    SDL_RenderPresent(screen);
+    // SDL_RenderPresent(screen);
 }
 
 Clock::~Clock() {

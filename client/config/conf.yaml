@@ -4,7 +4,7 @@ equipo:
   casaca: 'principal' #'principal' o 'alternativa'
   nombre: 'zidane'
 debug:
-  level: 'debug' #'debug' o "info" o "error"
+  level: 'spam' #  'spam' o 'debug' o "info" o "error"
 assets:
   cancha: 'images/cancha.png'
   sprites: 'images/sprites.png'
