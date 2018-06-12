@@ -28,12 +28,15 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     SDL_SetRenderDrawColor( screen, 0x00, 0xFF, 0x00, 0xFF ); //VERDE
     SDL_RenderDrawRect( screen, &outlineRect );
 
+    // TODO pasar a Constants
+    double MINIMAP_SCALE = 0.2;
+
     // Dibujar la camara
     Coordinates coordinatesCam = this->camera->getPosition();
     SDL_Rect cameraRect;
-    cameraRect.x = coordinatesCam.getX() - 790; //TODO
-    cameraRect.y = coordinatesCam.getY() - 480; //TODO
-    cameraRect.w = 30;//hacer proporcion
+    cameraRect.x = coordinatesCam.getX() * MINIMAP_SCALE;
+    cameraRect.y = coordinatesCam.getY() * MINIMAP_SCALE;
+    cameraRect.w = 40;//hacer proporcion
     cameraRect.h = 25;//hacer proporcion
     SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
     SDL_RenderDrawRect( screen, &cameraRect );
@@ -53,7 +56,7 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
         Coordinates* coordinates = this->camera->getRelativeCoordinates(
             (*viewIter)->getPlayerCoordinates()
         );
-        SDL_Rect playerRect = { coordinates->getX() - 790, coordinates->getY() - 480, 3, 3 };
+        SDL_Rect playerRect = { coordinates->getX() * MINIMAP_SCALE, coordinates->getY() * MINIMAP_SCALE, 3, 3 };
         SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
         SDL_RenderFillRect( screen, &playerRect );
         delete(coordinates);

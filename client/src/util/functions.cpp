@@ -104,7 +104,7 @@ void* read_server(void* argument) {
                                     clock->value = value.as<std::string>(); // No es un YAML
                                 } else if ((key.as<std::string>() == "score")) {
                                     //log("read_server: score ", value.as<std::string>(), LOG_DEBUG);
-                                    //score->parseYaml(value);
+                                    score->parseYaml(value);
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
                                     player = initializer->getGameController()->getPlayer(key.as<int>());

@@ -4,6 +4,11 @@
 
 Clock::Clock() {
     log("Clock: Creando clock...", LOG_INFO);
+    this->gFont = NULL;
+    this->gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (this->gFont == NULL) {
+        log("openLoginServer: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+    }
 }
 
 void Clock::parseYaml(YAML::Node node){
@@ -32,17 +37,12 @@ void Clock::render(SDL_Renderer* screen) {
     SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
     SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
-    TTF_Font* gFont = NULL;
-    gFont = TTF_OpenFont("lazy.ttf", 30);
-    if (gFont == NULL) {
-        log("openLoginServer: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
-    }
     std::string mensaje = this->value;
     if (mensaje.empty()) {
       mensaje = "00-00";
     }
     Texture mensajeTexture;
-    mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, gFont);
+    mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &clockViewport, 0.0, NULL, SDL_FLIP_NONE);
     SDL_RenderPresent(screen);
 }

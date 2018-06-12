@@ -5,7 +5,9 @@ Score::Score() {
 }
 
 void Score::parseYaml(YAML::Node node){
-
+    if (node["clock"]){
+        node["clock"].as<std::string>();
+    }
 }
 
 Score::~Score() {
