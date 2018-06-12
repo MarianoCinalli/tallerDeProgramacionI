@@ -4,6 +4,7 @@
 
 Clock::Clock() {
     log("Clock: Creando clock...", LOG_INFO);
+    this->value = "00-00";
     this->gFont = NULL;
     this->gFont = TTF_OpenFont("lazy.ttf", 30);
     if (this->gFont == NULL) {
@@ -20,7 +21,7 @@ void Clock::parseYaml(YAML::Node node){
 void Clock::render(SDL_Renderer* screen) {
     // Este es el viewPort del Clock
     SDL_Rect clockViewport;
-    clockViewport.x = 0;
+    clockViewport.x = 2 * (SCREEN_WIDTH / 3);
     clockViewport.y = 0;
     clockViewport.w = SCREEN_WIDTH / 3;
     clockViewport.h = 100;
@@ -43,7 +44,8 @@ void Clock::render(SDL_Renderer* screen) {
     }
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
-    SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &clockViewport, 0.0, NULL, SDL_FLIP_NONE);
+    SDL_Rect posicion = {0, 0, clockViewport.w, clockViewport.h};
+    SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
     SDL_RenderPresent(screen);
 }
 

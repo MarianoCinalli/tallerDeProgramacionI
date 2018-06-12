@@ -144,6 +144,7 @@ void* drawer(void* argument) {
     SDL_Renderer* renderer = initializer->getRenderer();
     PitchView* pitchView = initializer->getPitchView();
     Clock* clock = initializer->getGameController()->getClock();
+    Score* score = initializer->getGameController()->getScore();
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!quit) {
       if (!lostConnectionQuit){
@@ -151,6 +152,7 @@ void* drawer(void* argument) {
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
           pitchView->render(renderer);
           clock->render(renderer);
+          score->render(renderer);
         }
       }
     }
