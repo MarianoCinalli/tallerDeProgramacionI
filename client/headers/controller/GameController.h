@@ -1,6 +1,8 @@
 #include "model/Pitch.h"
 #include "controller/actions/Action.h"
 #include "view/Camera.h"
+#include "view/Clock.h"
+#include "view/Score.h"
 
 /*
 Controlador de juego:
@@ -28,13 +30,18 @@ class GameController {
         Pitch* pitch;
         Player* activePlayer;
         Ball* ball;
+        Clock* clock;
+        Score* score;
         map<int, Player*> players;
+
     public:
         GameController(Pitch* pitch);
         // Para actualizar los modelos.
         Player* getPlayer(int num);
         Ball* getBall();
         Camera* getCamera();
+        Clock* getClock();
+        Score* getScore();
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

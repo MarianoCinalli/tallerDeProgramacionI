@@ -84,8 +84,8 @@ void* read_server(void* argument) {
                         Player* player;
                         Ball* ball = initializer->getGameController()->getBall();
                         Camera* camera = initializer->getGameController()->getCamera();
-                        //Clock* clock = initializer->getGameController()->getClock();
-                        //Score* score = initializer->getGameController()->getScore();
+                        Clock* clock = initializer->getGameController()->getClock();
+                        Score* score = initializer->getGameController()->getScore();
                         YAML::Node node = YAML::Load(token);
                         for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                             YAML::Node key = it->first;
@@ -99,10 +99,11 @@ void* read_server(void* argument) {
                                     //log("read_server: camara", key.as<std::string>(), LOG_SPAM);
                                     camera->parseYaml(value);
                                 } else if ((key.as<std::string>() == "clock")) {
-                                    //log("read_server: clock", key.as<std::string>(), LOG_SPAM);
+                                    //log("read_server: clock ", value.as<std::string>(), LOG_DEBUG);
                                     //clock->parseYaml(value);
+                                    clock->value = value.as<std::string>(); // No es un YAML
                                 } else if ((key.as<std::string>() == "score")) {
-                                    //log("read_server: score", key.as<std::string>(), LOG_SPAM);
+                                    //log("read_server: score ", value.as<std::string>(), LOG_DEBUG);
                                     //score->parseYaml(value);
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
@@ -142,12 +143,14 @@ void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
     SDL_Renderer* renderer = initializer->getRenderer();
     PitchView* pitchView = initializer->getPitchView();
+    Clock* clock = initializer->getGameController()->getClock();
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!quit) {
       if (!lostConnectionQuit){
         if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
           pitchView->render(renderer);
+          clock->render(renderer);
         }
       }
     }

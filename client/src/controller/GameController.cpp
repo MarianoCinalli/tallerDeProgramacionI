@@ -13,6 +13,8 @@ GameController::GameController(Pitch* pitch) {
       players[i] = p;
       i++;
     }
+    this->clock = new Clock();
+    this->score = new Score();
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
@@ -28,8 +30,18 @@ Camera* GameController::getCamera() {
   return this->pitch->camera;
 }
 
+Clock* GameController::getClock() {
+  return this->clock;
+}
+
+Score* GameController::getScore() {
+  return this->score;
+}
+
 GameController::~GameController() {
     log("ActionsManager: Liberando memoria. Borrando cancha...", LOG_INFO);
     delete(this->pitch);
+    delete(this->clock);
+    delete(this->score);
     log("ActionsManager: Cancha borrada.", LOG_INFO);
 }
