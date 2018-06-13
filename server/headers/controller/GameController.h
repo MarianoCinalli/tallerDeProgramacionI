@@ -32,6 +32,7 @@ class GameController {
         Player* activePlayer;
         Timer* timer;
         int state;
+        int stateOption;
         bool end;
         int time;
         std::map<int,std::set<std::string>> users;

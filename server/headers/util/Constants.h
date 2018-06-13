@@ -88,6 +88,11 @@ const int KICK_COUNT = 35;
 const int SLIDE_COUNT = 35;
 const int MILISECONDS_TIMEOUT = 12;
 
+//state vars
+const int CENTER_START = 0;
+const int LEFT_START = 1;
+const int RIGHT_START = 2;
+
 const int MAX_ERRORS = 50000;
 //
 // const int FRAME_WINDOW=1024;

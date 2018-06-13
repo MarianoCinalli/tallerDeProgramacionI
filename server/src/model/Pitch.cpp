@@ -20,21 +20,26 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 
 }
 
-bool Pitch::goalkick(){
+int Pitch::goalkick(){
   Ball* ball = this->ball;
   int x = ball->getPosition()->getX();
   int y = ball->getPosition()->getY();
-  if (x < 30 || x > 1510){
-    return true;
+  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400))){
+    return CENTER_START;
   }
-  else
-    return false;
+  else if (x < 30){
+    return LEFT_START;
+  }
+  else if (x > 1510){
+    return RIGHT_START;
+  }
+  return -1;
 }
 
-void Pitch::setStart(){
+void Pitch::setStart(int position){
   this->localTeam->order();
   this->awayTeam->order();
-  this->ball->restart();
+  this->ball->restart(position);
 }
 
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {

@@ -31,9 +31,24 @@ Player* Ball::getPlayer() {
     return this->player;
 }
 
-void Ball::restart(){
-  this->position->setX(800);
-  this->position->setY(400);
+void Ball::restart(int position){
+  this->dominated = false;
+  this->player->setWithBall(this->dominated);
+  this->stopRolling();
+  this->interceptable=true;
+
+  if (position == CENTER_START){
+    this->position->setX(LEVEL_WIDTH/2);
+    this->position->setY(LEVEL_HEIGHT/2);
+  }
+  else if (position == LEFT_START){
+    this->position->setX(60);
+    this->position->setY(LEVEL_HEIGHT/2);
+  }
+  else if (position == RIGHT_START){
+    this->position->setX(LEVEL_WIDTH-100);
+    this->position->setY(LEVEL_HEIGHT/2);
+  }
 }
 
 void Ball::setPlayer(Player* player) {

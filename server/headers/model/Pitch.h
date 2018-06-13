@@ -33,8 +33,8 @@ class Pitch {
         std::list<Player*> getPlayers();
         Ball* getBall();
         Camera* getCamera();
-        bool goalkick();
-        void setStart();
+        int goalkick();
+        void setStart(int position);
         void checkSteals();
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
