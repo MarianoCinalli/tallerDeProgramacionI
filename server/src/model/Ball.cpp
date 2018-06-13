@@ -42,11 +42,11 @@ void Ball::restart(int position){
     this->position->setY(LEVEL_HEIGHT/2);
   }
   else if (position == LEFT_START){
-    this->position->setX(60);
+    this->position->setX(150);
     this->position->setY(LEVEL_HEIGHT/2);
   }
   else if (position == RIGHT_START){
-    this->position->setX(LEVEL_WIDTH-100);
+    this->position->setX(LEVEL_WIDTH-150);
     this->position->setY(LEVEL_HEIGHT/2);
   }
 }
