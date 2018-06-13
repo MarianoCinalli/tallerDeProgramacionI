@@ -28,7 +28,7 @@ std::string Time::getSecondsAsString() {
     int seconds = this->getSeconds();
     std::string secondsString = std::to_string(seconds);
     if (seconds < 10) {
-        secondsString += "0";
+        secondsString = "0" + secondsString;
     }
     return secondsString;
 }
