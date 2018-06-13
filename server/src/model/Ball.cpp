@@ -31,6 +31,11 @@ Player* Ball::getPlayer() {
     return this->player;
 }
 
+void Ball::restart(){
+  this->position->setX(800);
+  this->position->setY(400);
+}
+
 void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;

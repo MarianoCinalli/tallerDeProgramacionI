@@ -20,6 +20,23 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 
 }
 
+bool Pitch::goalkick(){
+  Ball* ball = this->ball;
+  int x = ball->getPosition()->getX();
+  int y = ball->getPosition()->getY();
+  if (x < 30 || x > 1510){
+    return true;
+  }
+  else
+    return false;
+}
+
+void Pitch::setStart(){
+  this->localTeam->order();
+  this->awayTeam->order();
+  this->ball->restart();
+}
+
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
     log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", teamNum, LOG_DEBUG);
     Team* team;

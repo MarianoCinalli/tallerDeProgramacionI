@@ -36,7 +36,7 @@ class Ball {
         void setPlayer(Player* player);
         bool isDominated();
         bool isInterceptable();
-
+        void restart();
         void isIntercepted(Player* player);
         void isPassed(int direction, int passPower);
         void updatePosition();

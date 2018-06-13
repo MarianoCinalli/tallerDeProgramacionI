@@ -34,6 +34,15 @@ enum PlayerStandedActions {
     KICK_ACTION = 6,
 };
 
+enum states {
+  NORMAL_STATE = 1,
+  START_STATE = 2,
+  GOAL_STATE = 3,
+  THROWIN_STATE = 4,
+  GOALKICK_STATE = 5,
+};
+
+
 const int KEEPER_POSITION = 0;
 const int DEFENSE_POSITION = 1;
 const int MIDFIELD_POSITION = 2;

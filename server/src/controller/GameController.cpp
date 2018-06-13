@@ -7,6 +7,7 @@ GameController::GameController(Pitch* pitch, Camera* camera) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->timer = new Timer();
+    this->state = NORMAL_STATE;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
     log("GameController: GameController creado.", LOG_INFO);
@@ -90,14 +91,31 @@ void GameController::execute(Action* action, std::string user) {
 }
 
 void GameController::update() {
-    // Dejo el tiempo pasado, por si se quiere usar en los updates.
-    Time* elapsedTime = this->timer->getTime();
-    this->updatePlayers();
-    this->updateBall();
-    this->updateCameraPosition();
-    delete(elapsedTime);
-}
 
+      Time* elapsedTime = this->timer->getTime();
+      this->updatePlayers();
+      this->updateBall();
+      this->updateCameraPosition();
+      delete(elapsedTime);
+
+      checkState();
+
+}
+void GameController::checkState(){
+  switch (this->state) {
+    case NORMAL_STATE:{
+      if (this->pitch->goalkick()){
+        this->state = GOALKICK_STATE;
+      }
+      break;
+    }
+    case GOALKICK_STATE:{
+      this->pitch->setStart();
+      this->state = NORMAL_STATE;
+    }
+    break;
+  }
+}
 void GameController::updatePlayers() {
     // Por ahora es lo unico que necesitamos
     // porque solo se mueve un jugador.
