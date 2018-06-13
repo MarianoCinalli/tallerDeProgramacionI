@@ -23,6 +23,7 @@ Controlador de juego:
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+
 class GameController {
     private:
         Camera* camera;
@@ -30,6 +31,8 @@ class GameController {
         Ball* ball;
         Player* activePlayer;
         Timer* timer;
+        int state;
+        int stateOption;
         bool end;
         int time;
         std::map<int,std::set<std::string>> users;
@@ -40,6 +43,7 @@ class GameController {
         // Para actualizar los modelos.
         void updatePlayers();
         void update();
+        void checkState();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.

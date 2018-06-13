@@ -80,7 +80,7 @@ const int TIME_BALL_NO_INTERCEPT = 4;
 
 //render
 const int DRAW_FRAME_RATE = 50;
-const int MILISECONDS_TIMEOUT = 16;
+// const int MILISECONDS_TIMEOUT = 20;
 const int STANDING_DIVISOR = 10;
 const int RUNNING_DIVISOR = 10;
 const int SLIDING_DIVISOR = 7;

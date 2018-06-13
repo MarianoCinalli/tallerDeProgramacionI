@@ -8,6 +8,7 @@
 #include "view/Camera.h"
 #include <SDL2/SDL.h>
 
+
 /*
 VistaCancha:
     - Tiene las vistas de los jugadores.
@@ -38,6 +39,7 @@ class PitchView {
         PitchView(Texture* pitch, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);
+        void renderMinimap(SDL_Renderer* screen);
 
         void render(SDL_Renderer* screen);
         ~PitchView();

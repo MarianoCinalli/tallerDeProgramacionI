@@ -19,7 +19,7 @@ Player::Player(Coordinates* position, int team) {
     this->sliding = false;
     this->wasSliding = false; //Deberia estar en PlayerSpriteManager
     this->kicking = false;
-    this->wasKicking = false;
+    this->kicked = false;
     this->canMove = true;
     this->kickPower = 1; //inicializacion default?
     this->isSelected = false;
@@ -328,13 +328,14 @@ void Player::startsKicking(int power) {
     if (!this->sliding) {
         this->kickPower = power;
         this->kicking = true;
+        this->kicked = false;
         this->canMove = false;
     }
 }
 
 void Player::stopKicking() {
     this->kicking = false;
-    this->wasKicking = false;
+    this->kicked = false;
     this->canMove = true;
 }
 
@@ -342,12 +343,13 @@ bool Player::isKicking() {
     return this->kicking;
 }
 
-bool Player::wasKickingYet() {
-    return this->wasKicking;
+
+bool Player::hasKicked() {
+    return this->kicked;
 }
 
-void Player::isAlreadyKicking() {
-    this->wasKicking = true;
+void Player::setKicked(bool k){
+  this->kicked=k;
 }
 
 bool Player::isSliding() {

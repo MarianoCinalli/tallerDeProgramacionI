@@ -29,6 +29,7 @@ class Camera {
         std::list<PlayerSpriteManager*> getPlayersInside(std::list<PlayerSpriteManager*>& views);
         // devuelve el SDL_Rect para dibujar la parte de la cancha.
         SDL_Rect getRectToDraw();
+        Coordinates getPosition();
         ~Camera();
 };
 #endif // CAMERA_H

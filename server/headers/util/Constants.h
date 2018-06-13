@@ -34,6 +34,15 @@ enum PlayerStandedActions {
     KICK_ACTION = 6,
 };
 
+enum states {
+  NORMAL_STATE = 1,
+  START_STATE = 2,
+  GOAL_STATE = 3,
+  THROWIN_STATE = 4,
+  GOALKICK_STATE = 5,
+};
+
+
 const int KEEPER_POSITION = 0;
 const int DEFENSE_POSITION = 1;
 const int MIDFIELD_POSITION = 2;
@@ -78,6 +87,11 @@ const int TIME_BALL_NO_INTERCEPT = 4;
 const int KICK_COUNT = 35;
 const int SLIDE_COUNT = 35;
 const int MILISECONDS_TIMEOUT = 12;
+
+//state vars
+const int CENTER_START = 0;
+const int LEFT_START = 1;
+const int RIGHT_START = 2;
 
 const int MAX_ERRORS = 50000;
 //

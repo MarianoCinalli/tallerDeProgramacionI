@@ -22,7 +22,7 @@ class Player {
         bool sliding;
         bool wasSliding;
         bool kicking;
-        bool wasKicking;
+        bool kicked;
         bool canMove;
         bool runningFast;
         bool withBall;
@@ -44,7 +44,7 @@ class Player {
         int getOrientation();
         int getKickPower();
         bool wasSlidingYet();
-        bool wasKickingYet();
+        bool hasKicked();
         bool isSliding();
         bool isKicking();
         bool getIsSelected();
@@ -68,6 +68,7 @@ class Player {
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition(Coordinates* positionToFollow);
         void updateKicking();
+        void setKicked(bool);
         void updateSliding();
         void updateState(Coordinates* positionToFollow);
         void setOrientation(int orientation);

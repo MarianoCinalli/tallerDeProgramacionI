@@ -31,6 +31,26 @@ Player* Ball::getPlayer() {
     return this->player;
 }
 
+void Ball::restart(int position){
+  this->dominated = false;
+  this->player->setWithBall(this->dominated);
+  this->stopRolling();
+  this->interceptable=true;
+
+  if (position == CENTER_START){
+    this->position->setX(LEVEL_WIDTH/2);
+    this->position->setY(LEVEL_HEIGHT/2);
+  }
+  else if (position == LEFT_START){
+    this->position->setX(150);
+    this->position->setY(LEVEL_HEIGHT/2);
+  }
+  else if (position == RIGHT_START){
+    this->position->setX(LEVEL_WIDTH-150);
+    this->position->setY(LEVEL_HEIGHT/2);
+  }
+}
+
 void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;
@@ -84,8 +104,12 @@ void Ball::updatePosition() {
         if (!this->interceptable && timePassing > TIME_BALL_NO_INTERCEPT) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
-        this->position->addX(this->velocity->getComponentX()*this->passPower);
-        this->position->addY(this->velocity->getComponentY()*this->passPower);
+        if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
+          this->velocity->scaleY(-1);
+        }
+        if(this->position->addY(this->velocity->getComponentY()*this->passPower)<0){
+          this->velocity->scaleY(-1);
+        }
     }
     if ((this->isInAPass) && (!this->velocity->isZero())) {
         if (this->timePassing % BALL_DECELERATE_TIME == 0) {

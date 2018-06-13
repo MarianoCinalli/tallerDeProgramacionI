@@ -7,6 +7,8 @@ GameController::GameController(Pitch* pitch, Camera* camera) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->timer = new Timer();
+    this->state = GOALKICK_STATE;
+    this->stateOption=0;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
     log("GameController: GameController creado.", LOG_INFO);
@@ -90,12 +92,35 @@ void GameController::execute(Action* action, std::string user) {
 }
 
 void GameController::update() {
-    // Dejo el tiempo pasado, por si se quiere usar en los updates.
-    Time* elapsedTime = this->timer->getTime();
-    this->updatePlayers();
-    this->updateBall();
-    this->updateCameraPosition();
-    delete(elapsedTime);
+
+      Time* elapsedTime = this->timer->getTime();
+      this->updatePlayers();
+      this->updateBall();
+      this->updateCameraPosition();
+      delete(elapsedTime);
+
+      checkState();
+
+}
+
+void GameController::checkState(){
+  switch (this->state) {
+    case NORMAL_STATE:
+    {
+      this->stateOption=this->pitch->goalkick();
+      if (this->stateOption>=0){
+        this->state = GOALKICK_STATE;
+      }
+      break;
+    }
+    case GOALKICK_STATE:
+    {
+      this->pitch->setStart(this->stateOption);
+      this->state = NORMAL_STATE;
+      break;
+    }
+
+  }
 }
 
 void GameController::updatePlayers() {
@@ -115,10 +140,11 @@ void GameController::updatePlayers() {
 
 
 void GameController::updateBall() {
-    if (this->ball->isDominated() && this->ball->getPlayer()->isKicking()) {
+    if (this->ball->isDominated() && this->ball->getPlayer()->isKicking() && !this->ball->getPlayer()->hasKicked()) {
         log("GameController: La pelota fue pateada.", LOG_DEBUG);
         Player* player = this->ball->getPlayer();
         this->ball->isPassed(player->getOrientation(), player->getKickPower()*PASS_SPEED); //TODO valor de pase?
+        player->setKicked(true);
     }
     this->pitch->changeBallOwnership();
     this->ball->updatePosition();

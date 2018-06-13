@@ -110,7 +110,7 @@ void* broadcast_to_clients(void* argument) {
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
       if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
         timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-        broadcaster->broadcast(false);
+        broadcaster->broadcast(true);
       }
     }
     // Termino el juego
