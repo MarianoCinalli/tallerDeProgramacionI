@@ -39,11 +39,11 @@ class PitchView {
         PitchView(Texture* pitch, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);
+        void renderMinimap(SDL_Renderer* screen);
 
         void render(SDL_Renderer* screen);
         ~PitchView();
     private:
         void renderPitch(SDL_Renderer* screen);
-        void renderMinimap(SDL_Renderer* screen);
 };
 #endif // PITCHVIEW_H

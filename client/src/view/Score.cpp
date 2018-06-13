@@ -31,9 +31,12 @@ void Score::render(SDL_Renderer* screen) {
     scoreViewport.y = 0;
     scoreViewport.w = SCREEN_WIDTH / 3;
     scoreViewport.h = 100;
+
     SDL_RenderSetViewport( screen, &scoreViewport ); //Render texture to screen
     // Dibujo los bordes del scoreViewport
     SDL_Rect outlineRect = { 0, 0, scoreViewport.w, scoreViewport.h };
+    SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
+    SDL_RenderFillRect(screen, &outlineRect);
     SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
     SDL_RenderDrawRect( screen, &outlineRect );
 
@@ -52,7 +55,6 @@ void Score::render(SDL_Renderer* screen) {
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
     SDL_Rect posicion = {0, 0, scoreViewport.w, scoreViewport.h};
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
-    // SDL_RenderPresent(screen);
 }
 
 Score::~Score() {

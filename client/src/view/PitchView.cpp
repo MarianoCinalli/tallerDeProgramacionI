@@ -25,6 +25,8 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     SDL_RenderSetViewport( screen, &minimapViewport ); //Render texture to screen
     // Dibujo los bordes del minimapViewport
     SDL_Rect outlineRect = { 0, 0, minimapViewport.w, minimapViewport.h };
+    SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
+    SDL_RenderFillRect(screen, &outlineRect);
     SDL_SetRenderDrawColor( screen, 0x00, 0xFF, 0x00, 0xFF ); //VERDE
     SDL_RenderDrawRect( screen, &outlineRect );
 
@@ -61,12 +63,6 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
         SDL_RenderFillRect( screen, &playerRect );
         delete(coordinates);
     }
-    // SDL_SetRenderDrawColor(screen, 255, 255, 255, 255);
-    //
-    // /* Clear the entire screen to our selected color. */
-    // SDL_RenderClear(screen);
-
-    SDL_RenderPresent(screen);
 }
 
 void PitchView::render(SDL_Renderer* screen) {

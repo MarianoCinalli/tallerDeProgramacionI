@@ -25,9 +25,14 @@ void Clock::render(SDL_Renderer* screen) {
     clockViewport.y = 0;
     clockViewport.w = SCREEN_WIDTH / 3;
     clockViewport.h = 100;
+
     SDL_RenderSetViewport( screen, &clockViewport ); //Render texture to screen
+    // SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
+    // SDL_RenderFillRect(screen, &clockViewport);
     // Dibujo los bordes del clockViewport
     SDL_Rect outlineRect = { 0, 0, clockViewport.w, clockViewport.h };
+    SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
+    SDL_RenderFillRect(screen, &outlineRect);
     SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
     SDL_RenderDrawRect( screen, &outlineRect );
 
@@ -46,7 +51,6 @@ void Clock::render(SDL_Renderer* screen) {
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
     SDL_Rect posicion = {0, 0, clockViewport.w, clockViewport.h};
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
-    // SDL_RenderPresent(screen);
 }
 
 Clock::~Clock() {
