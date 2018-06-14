@@ -58,14 +58,10 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     // Dibujar cada uno.
     std::list<PlayerSpriteManager*>::iterator viewIter;
     for (viewIter = views.begin(); viewIter != views.end(); viewIter++) {
-        // Relativizar las coordenadas a la camara.
-        //TODO: Aca el problema es que estas coordenadas NO TIENEN QUE SER RELATIVAS!!!!
-        Coordinates* coordinates = this->camera->getRelativeCoordinates(
-            (*viewIter)->getPlayerCoordinates()
-        );
-        team = (*viewIter)->getPlayerTeam();
-
+        // Coordenadas absolutas
+        Coordinates* coordinates = (*viewIter)->getPlayerCoordinates();
         SDL_Rect playerRect = { coordinates->getX() * MINIMAP_SCALE_X, coordinates->getY() * MINIMAP_SCALE_Y, 3, 3 };
+        team = (*viewIter)->getPlayerTeam();
         if (team==0) {
           // equipo Rojo
           SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
@@ -73,13 +69,10 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
           SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
         }
         SDL_RenderFillRect( screen, &playerRect );
-        delete(coordinates);
     }
 }
 
 void PitchView::render(SDL_Renderer* screen) {
-
-
     //log("PitchView: Comienza la renderizacion...", LOG_SPAM);
     // Dibujar cancha vista por camara.
     SDL_Rect cancha;
@@ -109,9 +102,7 @@ void PitchView::render(SDL_Renderer* screen) {
         delete(coordinates);
     }
     //log("PitchView: Fin de renderizacion.", LOG_SPAM);
-
     SDL_RenderPresent(screen);
-
 }
 
 PitchView::~PitchView() {
