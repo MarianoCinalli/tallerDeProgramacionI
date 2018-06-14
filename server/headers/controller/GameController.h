@@ -44,6 +44,7 @@ class GameController {
         void updatePlayers();
         void update();
         void checkState();
+        void checkGoal();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.

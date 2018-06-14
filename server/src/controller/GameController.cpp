@@ -93,13 +93,14 @@ void GameController::execute(Action* action, std::string user) {
 
 void GameController::update() {
 
+      checkState(); 
+
       Time* elapsedTime = this->timer->getTime();
       this->updatePlayers();
       this->updateBall();
       this->updateCameraPosition();
       delete(elapsedTime);
 
-      checkState();
 
 }
 
@@ -115,11 +116,26 @@ void GameController::checkState(){
     }
     case GOALKICK_STATE:
     {
+      this->checkGoal();
       this->pitch->setStart(this->stateOption);
       this->state = NORMAL_STATE;
       break;
     }
 
+  }
+}
+
+void GameController::checkGoal(){
+  if (this->stateOption == CENTER_START) {
+    int x = this->ball->getPosition()->getX();
+    Team* left = this->pitch->getTeam(0);
+    Team* right = this->pitch->getTeam(1);
+    if (x<800) {
+      left->increaseScore();
+    }
+    else{
+      right->increaseScore();
+    }
   }
 }
 

@@ -20,11 +20,14 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 
 }
 
+const int GOAL_HEIGHT = 3;
+
 int Pitch::goalkick(){
   Ball* ball = this->ball;
   int x = ball->getPosition()->getX();
   int y = ball->getPosition()->getY();
-  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400))){
+  //int height = ball->getHeight();
+  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400))){ //&& height<GOAL_HEIGHT){
     return CENTER_START;
   }
   else if (x < 30){

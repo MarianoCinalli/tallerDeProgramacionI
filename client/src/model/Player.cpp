@@ -56,6 +56,10 @@ int Player::getOrientation() {
     return this->orientation;
 }
 
+int Player::getTeam() {
+    return this->team;
+}
+
 bool Player::getIsSelected() {
     return this->isSelected;
 }
