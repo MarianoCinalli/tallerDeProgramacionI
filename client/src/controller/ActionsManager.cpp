@@ -146,7 +146,7 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     break;
                   }
             }
-            if (!(event.key.keysym.sym == SDLK_s) & !anyKeyPressed(keys)) {
+            if (!(event.key.keysym.sym == SDLK_s) & !(event.key.keysym.sym == SDLK_d) & !anyKeyPressed(keys)) {
                 if (action != NULL) {
                     delete(action);
                 }
