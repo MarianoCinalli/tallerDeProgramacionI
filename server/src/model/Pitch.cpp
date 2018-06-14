@@ -206,7 +206,7 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 
 void Pitch::checkSteals() {
     log("Pitch: Chequeando intercepciones...", LOG_DEBUG);
-    if (this->ball->getHeight() > BALL_DECELERATE_CONST) {
+    if (this->ball->getHeight() < BALL_DECELERATE_CONST) {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
         players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
