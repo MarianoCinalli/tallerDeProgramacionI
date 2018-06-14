@@ -799,7 +799,7 @@ int main(int argc, char* argv[]) {
         if (lostConnectionQuit) {
             showLostConnectionMessage(renderer, connectionManager, true);
         }
-        usleep(sleepTime);
+        usleep(sleepTime/8);
     }
 
     // Si se sale por pedida de conexion mostrar mensaje.
