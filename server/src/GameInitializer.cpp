@@ -151,5 +151,5 @@ void GameInitializer::initializeUsersManager(Conf* configuration) {
 
 void GameInitializer::initializeTimer(Conf* configuration) {
     log("GameInitializer: Creando timer...", LOG_INFO);
-    this->timer = new Timer();
+    this->timer = new Timer(configuration->getTimePerHalf());
 }

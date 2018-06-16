@@ -1,8 +1,9 @@
 #include "util/Timer.h"
 
-Timer::Timer() {
+Timer::Timer(int timePerHalf) {
     log("Timer: Creando el timer...", LOG_INFO);
     this->started = false;
+    this->timePerHalf = timePerHalf;
 }
 
 void Timer::start() {

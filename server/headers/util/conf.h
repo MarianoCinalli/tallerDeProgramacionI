@@ -25,6 +25,7 @@ class Conf : public Loggable {
     string defaultSprites;
     int maxClients;
     int port;
+    int timePerHalf;
 
     Conf(string, string);
     ~Conf();
@@ -34,6 +35,7 @@ class Conf : public Loggable {
     int getMargen();
     int getMaxClients();
     int getPort();
+    int getTimePerHalf();
     string toString();
     map<string, string> getUsuarios();
   private:
