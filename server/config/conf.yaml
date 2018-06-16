@@ -13,3 +13,5 @@ server:
   port: 8080
 performance:
   margenes: 180
+juego:
+  minutosPorTiempo: 5
