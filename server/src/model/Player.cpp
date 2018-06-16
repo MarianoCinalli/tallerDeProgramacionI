@@ -2,7 +2,7 @@
 
 int Player::ID = 0;
 
-Player::Player(Coordinates* position, int team) {
+Player::Player(Coordinates* position, int team, PlayerMovent* playerMovent) {
 
     log("Player: Creando jugador...", LOG_INFO);
     this->id = ++ID;
@@ -30,6 +30,7 @@ Player::Player(Coordinates* position, int team) {
     this->withBall = false;
     this->userName = "NONE";
     this->stealCoef = DEFENSE_STEAL_COEF;
+    this->playerMovent = playerMovent;
     log("Player: Jugador creado.", LOG_INFO);
 }
 
@@ -205,10 +206,11 @@ void Player::updatePosition(Coordinates* positionToFollow) {
         this->follow(positionToFollow);
     }
 
-    int maxSpeed = this->maxVelocity;
-    if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX() * speed * maxSpeed);
-        this->position->addY(this->velocity->getComponentY() * speed * maxSpeed);
+    int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
+    int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
+    if (this->canMove(amountX, amountY)) {
+        this->position->addX(amountX);
+        this->position->addY(amountY);
         log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
     }
     /*
@@ -232,6 +234,15 @@ void Player::updatePosition(Coordinates* positionToFollow) {
             this->returnToBasePosition();
         }
     }*/
+}
+
+bool Player::shouldMove(int amountX, int amountY) {
+    return this->canMove && this->playerMovent->canMoveTo(
+        this->position->getX() + amountX,
+        this->position->getY() + amountY,
+        this->id,
+        this->isSelected
+    );
 }
 
 void Player::follow(Coordinates* positionToFollow) {

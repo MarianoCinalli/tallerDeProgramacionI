@@ -2,6 +2,7 @@
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
 #include "util/logger.h"
+#include "contoller/PlayerMovent.h"
 #include <SDL2/SDL.h>
 
 #ifndef PLAYER_H
@@ -31,10 +32,10 @@ class Player {
         std::string userName;
         int fieldPosition;
         int stealCoef;
-
+        PlayerMovent* playerMovent;
     public:
         static int ID;
-        Player(Coordinates* position, int team);
+        Player(Coordinates* position, int team, PlayerMovent* playerMovent);
 
         // Getters
         Coordinates* getPosition();
