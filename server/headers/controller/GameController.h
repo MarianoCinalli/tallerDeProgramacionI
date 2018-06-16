@@ -66,6 +66,6 @@ class GameController {
         std::string getUsersWithTeamAsString();
         std::string getGameStatsMessage();
         void checkTime(Time* elapsedTime);
-        bool hasFistHalfEnded(Time* elapsedTime);
+        bool hasHalfEnded(Time* elapsedTime, int halfNumber);
 };
 #endif // GAMECONTROLLER_H

@@ -171,15 +171,18 @@ void GameController::updateCameraPosition() {
 }
 
 void GameController::checkTime(Time* elapsedTime) {
-    if (this->isFistHalf && this->hasFistHalfEnded(elapsedTime)) {
+    if (this->isFistHalf && this->hasHalfEnded(elapsedTime, 1)) {
         this->isFistHalf = false;
         log("GameController: Termino el primer tiempo.", LOG_INFO);
         // Aca voy a invertir a las formaciones. Cuando termine con el refator.
+    } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
+        log("GameController: Termino el segundo tiempo.", LOG_INFO);
+        this->setEnd();
     }
 }
 
-bool GameController::hasFistHalfEnded(Time* elapsedTime) {
-    return elapsedTime->getMinutes() >= MINUTES_PER_HALF;
+bool GameController::hasHalfEnded(Time* elapsedTime, int halfNumber) {
+    return elapsedTime->getMinutes() >= (MINUTES_PER_HALF * halfNumber);
 }
 
 // Aca deberia haber una nocion del tiempo.
