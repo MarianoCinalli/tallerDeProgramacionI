@@ -35,6 +35,7 @@ class GameController {
         int stateOption;
         bool end;
         int time;
+        bool isFistHalf;
         std::map<int,std::set<std::string>> users;
     public:
         GameController(Pitch* pitch, Camera* camera, Timer* timer);
@@ -64,5 +65,7 @@ class GameController {
         void removeUserFromTeam(std::string user);
         std::string getUsersWithTeamAsString();
         std::string getGameStatsMessage();
+        void checkTime(Time* elapsedTime);
+        bool hasFistHalfEnded(Time* elapsedTime);
 };
 #endif // GAMECONTROLLER_H

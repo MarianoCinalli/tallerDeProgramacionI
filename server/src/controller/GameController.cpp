@@ -9,6 +9,7 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->timer = timer;
     this->state = GOALKICK_STATE;
     this->stateOption = 0;
+    this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
     log("GameController: GameController creado.", LOG_INFO);
@@ -97,6 +98,7 @@ void GameController::update() {
     this->updatePlayers();
     this->updateBall();
     this->updateCameraPosition();
+    this->checkTime(elapsedTime);
     delete(elapsedTime);
 }
 
@@ -166,6 +168,18 @@ void GameController::updateCameraPosition() {
     Coordinates* position = this->ball->getPosition();
     // Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
     this->camera->calculateNewPosition(position);
+}
+
+void GameController::checkTime(Time* elapsedTime) {
+    if (this->isFistHalf && this->hasFistHalfEnded(elapsedTime)) {
+        this->isFistHalf = false;
+        log("GameController: Termino el primer tiempo.", LOG_INFO);
+        // Aca voy a invertir a las formaciones. Cuando termine con el refator.
+    }
+}
+
+bool GameController::hasFistHalfEnded(Time* elapsedTime) {
+    return elapsedTime->getMinutes() >= MINUTES_PER_HALF;
 }
 
 // Aca deberia haber una nocion del tiempo.
