@@ -60,7 +60,7 @@ void Coordinates::subtractY(int amount) {
     validatePositionInBounds();
 }
 
-void Coordinates::setCoord(Coordinates other){
+void Coordinates::set(Coordinates other){
     this->x = other.x;
     this->y = other.y;
     validatePositionInBounds();

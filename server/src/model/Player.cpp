@@ -237,11 +237,11 @@ void Player::updatePosition() {
 }
 
 void Player::setPosition(Coordinates pos) {
-    this->position->setCoord(pos);
+    this->position->set(pos);
 }
 
 void Player::setBasePosition(Coordinates pos) {
-    this->basePosition->setCoord(pos);
+    this->basePosition->set(pos);
 }
 
 void Player::returnToBasePosition() {

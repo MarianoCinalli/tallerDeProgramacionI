@@ -34,6 +34,7 @@ class Ball {
         Ball(Coordinates* position);
 
         Coordinates* getPosition();
+        void setPosition(Coordinates* pos);
         Velocity* getVelocity();
         int getHeight();
         Player* getPlayer();

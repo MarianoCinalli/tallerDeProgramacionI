@@ -7,8 +7,8 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->timer = timer;
-    this->state = NORMAL_STATE;
-    this->stateOption = 0;
+    this->state = HALF_START_STATE;
+    this->stateOption = CENTER_LEFT_START;
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -117,20 +117,28 @@ void GameController::checkState() {
             this->state = NORMAL_STATE;
             break;
         }
+        case HALF_START_STATE: {
+          this->pitch->setStart(this->stateOption);
+          this->state = NORMAL_STATE;
+          break;
+        }
     }
 }
 
 void GameController::checkGoal() {
-    if (this->stateOption == CENTER_START) {
-        int x = this->ball->getPosition()->getX();
-        Team* left = this->pitch->getTeam(0);
-        Team* right = this->pitch->getTeam(1);
-        if (x < 800) {
-            left->increaseScore();
-        } else {
-            right->increaseScore();
+    int x = this->ball->getPosition()->getX();
+    if (x < 200 || x > 1400){
+      if ((this->stateOption ==CENTER_LEFT_START) || (this->stateOption ==CENTER_RIGHT_START)){
+      Team* team;
+      if (this->stateOption == CENTER_LEFT_START) {
+          team = this->pitch->getTeam(TEAM_RIGHT);
         }
+      else if (this->stateOption == CENTER_RIGHT_START) {
+          team = this->pitch->getTeam(TEAM_LEFT);
+      }
+      team->increaseScore();
     }
+  }
 }
 
 void GameController::updatePlayers() {

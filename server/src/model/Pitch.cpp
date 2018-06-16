@@ -28,8 +28,11 @@ int Pitch::goalkick(){
   int y = ball->getPosition()->getY();
   int height = ball->getHeight();
   if (((x < 30) || (x > 1510)) && ((y<600) && (y>400)) && height<GOAL_HEIGHT){
-    log("PITCH: altura, ", height, LOG_DEBUG);
-    return CENTER_START;
+    // log("PITCH: altura, ", height, LOG_DEBUG);
+    if (x<30)
+      return CENTER_LEFT_START;
+    else
+      return CENTER_RIGHT_START;
 
   }
   else if (x < 30){
@@ -46,11 +49,24 @@ void Pitch::setStart(int position){
   this->awayTeam->order();
   Player* player = this->localTeam->getPlayer(6); //TODO DEFAULT
   if (position == LEFT_START){
-    player = this->localTeam->getPlayer(1);
+    player = this->getTeam(TEAM_LEFT)->getPlayer(1);
+    player->setOrientation(PLAYER_ORIENTATION_RIGHT);
   }
   else if (position == RIGHT_START){
-    player = this->awayTeam->getPlayer(1);
+    player = this->getTeam(TEAM_RIGHT)->getPlayer(1);
+    player->setOrientation(PLAYER_ORIENTATION_LEFT);
+
   }
+  else if (position == CENTER_LEFT_START){
+    player = this->getTeam(TEAM_LEFT)->getPlayer(5);
+    player->setOrientation(PLAYER_ORIENTATION_RIGHT);
+
+  }
+  else if (position == CENTER_RIGHT_START){
+    player = this->getTeam(TEAM_RIGHT)->getPlayer(5);
+    player->setOrientation(PLAYER_ORIENTATION_LEFT);
+  }
+
   this->ball->restart(position);
   this->ball->setPlayer(player);
 }

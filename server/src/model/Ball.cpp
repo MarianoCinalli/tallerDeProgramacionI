@@ -26,6 +26,10 @@ Coordinates* Ball::getPosition() {
     return this->position;
 }
 
+void Ball::setPosition(Coordinates* pos){
+  this->position->set(*pos);
+}
+
 int Ball::getHeight() {
     return this->height;
 }
@@ -44,7 +48,7 @@ void Ball::restart(int position){
   this->stopRolling();
   this->interceptable=true;
 
-  if (position == CENTER_START){
+  if ((position == CENTER_LEFT_START) ||  (position == CENTER_LEFT_START)){
     this->position->setX(LEVEL_WIDTH/2);
     this->position->setY(LEVEL_HEIGHT/2);
   }
@@ -61,6 +65,7 @@ void Ball::restart(int position){
 void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;
+    this->setPosition(player->getPosition());
     this->player->setWithBall(this->dominated);
     this->velocity = this->player->getVelocity();
 }
