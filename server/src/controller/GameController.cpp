@@ -7,7 +7,7 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->timer = timer;
-    this->state = GOALKICK_STATE;
+    this->state = NORMAL_STATE;
     this->stateOption = 0;
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();

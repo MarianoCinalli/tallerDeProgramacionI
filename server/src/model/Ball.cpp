@@ -4,7 +4,7 @@ Ball::Ball(Coordinates* position) {
     log("Pelota: Creando pelota...", LOG_INFO);
     this->position = position;
     this->passPower = 0;
-    this->initialPassPower = 0; 
+    this->initialPassPower = 0;
     this->height = 0;
     this->heightLevel = 0;
     this->orientation = 0;
@@ -12,7 +12,7 @@ Ball::Ball(Coordinates* position) {
     this->velocity = new Velocity(0, 0);
     this->isInAPass = false;
     this->isInAHighPass = false;
-    this->passDirection = 0;  
+    this->passDirection = 0;
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
     this->timePassing = 0; // corrector para frames TODO
@@ -61,8 +61,8 @@ void Ball::restart(int position){
 void Ball::setPlayer(Player* player) {
     this->player = player;
     this->dominated = true;
-    this->velocity = this->player->getVelocity();
     this->player->setWithBall(this->dominated);
+    this->velocity = this->player->getVelocity();
 }
 
 bool Ball::isDominated() {

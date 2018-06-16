@@ -42,6 +42,9 @@ int Player::getTeam() {
     return this->team;
 }
 
+int Player::getId(){
+  return this->id;
+}
 int Player::getStealCoef() {
     return this->stealCoef;
 }

@@ -44,7 +44,15 @@ int Pitch::goalkick(){
 void Pitch::setStart(int position){
   this->localTeam->order();
   this->awayTeam->order();
+  Player* player = this->localTeam->getPlayer(6); //TODO DEFAULT
+  if (position == LEFT_START){
+    player = this->localTeam->getPlayer(1);
+  }
+  else if (position == RIGHT_START){
+    player = this->awayTeam->getPlayer(1);
+  }
   this->ball->restart(position);
+  this->ball->setPlayer(player);
 }
 
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {

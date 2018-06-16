@@ -20,6 +20,18 @@ std::list<Player*> Team::getPlayers() {
     return this->players;
 }
 
+Player* Team::getPlayer(int num){
+  if (this->local==1){
+    num +=7;
+  }
+  for (Player* player : this->players){
+    if (player->getId() == num){
+      return player;
+    }
+  }
+    return NULL;
+}
+
 int Team::getAmountPlayers() {
     return this->players.size();
 }
