@@ -1,14 +1,14 @@
 #include "controller/GameController.h"
 
-GameController::GameController(Pitch* pitch, Camera* camera) {
+GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     log("GameController: Creando gameController...", LOG_INFO);
     this->camera = camera;
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
     this->end = false;
-    this->timer = new Timer();
+    this->timer = timer;
     this->state = GOALKICK_STATE;
-    this->stateOption=0;
+    this->stateOption = 0;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
     log("GameController: GameController creado.", LOG_INFO);
@@ -93,50 +93,47 @@ void GameController::execute(Action* action, std::string user) {
 
 void GameController::update() {
 
-      checkState(); 
+    checkState();
 
-      Time* elapsedTime = this->timer->getTime();
-      this->updatePlayers();
-      this->updateBall();
-      this->updateCameraPosition();
-      delete(elapsedTime);
+    Time* elapsedTime = this->timer->getTime();
+    this->updatePlayers();
+    this->updateBall();
+    this->updateCameraPosition();
+    delete(elapsedTime);
 
 
 }
 
-void GameController::checkState(){
-  switch (this->state) {
-    case NORMAL_STATE:
-    {
-      this->stateOption=this->pitch->goalkick();
-      if (this->stateOption>=0){
-        this->state = GOALKICK_STATE;
-      }
-      break;
-    }
-    case GOALKICK_STATE:
-    {
-      this->checkGoal();
-      this->pitch->setStart(this->stateOption);
-      this->state = NORMAL_STATE;
-      break;
-    }
+void GameController::checkState() {
+    switch (this->state) {
+        case NORMAL_STATE: {
+                this->stateOption = this->pitch->goalkick();
+                if (this->stateOption >= 0) {
+                    this->state = GOALKICK_STATE;
+                }
+                break;
+            }
+        case GOALKICK_STATE: {
+                this->checkGoal();
+                this->pitch->setStart(this->stateOption);
+                this->state = NORMAL_STATE;
+                break;
+            }
 
-  }
+    }
 }
 
-void GameController::checkGoal(){
-  if (this->stateOption == CENTER_START) {
-    int x = this->ball->getPosition()->getX();
-    Team* left = this->pitch->getTeam(0);
-    Team* right = this->pitch->getTeam(1);
-    if (x<800) {
-      left->increaseScore();
+void GameController::checkGoal() {
+    if (this->stateOption == CENTER_START) {
+        int x = this->ball->getPosition()->getX();
+        Team* left = this->pitch->getTeam(0);
+        Team* right = this->pitch->getTeam(1);
+        if (x < 800) {
+            left->increaseScore();
+        } else {
+            right->increaseScore();
+        }
     }
-    else{
-      right->increaseScore();
-    }
-  }
 }
 
 void GameController::updatePlayers() {
@@ -271,10 +268,7 @@ std::string GameController::getGameStatsMessage() {
 }
 
 GameController::~GameController() {
-    log("GameController: Liberando memoria.", LOG_INFO);
-    log("GameController: Borrando cancha...", LOG_INFO);
+    log("GameController: Liberando memoria. Borrando cancha...", LOG_INFO);
     delete(this->pitch);
-    log("GameController: Borrando timer...", LOG_INFO);
-    delete(this->timer);
-    log("GameController: Cancha borrada.", LOG_INFO);
+    log("GameController: Cancha borrada. Memoria liberada.", LOG_INFO);
 }

@@ -37,7 +37,7 @@ class GameController {
         int time;
         std::map<int,std::set<std::string>> users;
     public:
-        GameController(Pitch* pitch, Camera* camera);
+        GameController(Pitch* pitch, Camera* camera, Timer* timer);
         // Ejecuta la accion sobre el jugador seleccionado.
         void execute(Action* action, std::string user);
         // Para actualizar los modelos.
