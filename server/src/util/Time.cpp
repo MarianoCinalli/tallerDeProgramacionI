@@ -2,6 +2,12 @@
 
 Time::Time(std::chrono::duration<double> interval) {
     this->interval = interval;
+    this->scaleFactor = 1;
+}
+
+Time::Time(std::chrono::duration<double> interval, float scaleFactor) {
+    this->interval = interval;
+    this->scaleFactor = scaleFactor;
 }
 
 // Devuelve los segundos pasados. Sin los minutos. Ver toString() como se usa.
@@ -11,7 +17,7 @@ int Time::getSeconds() {
 
 // Devuelve los minutos pasados. Sin los segundos. Ver toString() como se usa.
 int Time::getMinutes() {
-    return ((int) floor(this->interval.count() / 60));
+    return ((int) floor(this->getSecondsCount() / 60));
 }
 
 // Devuelve Minutos-Segundos
@@ -21,7 +27,7 @@ std::string Time::toString() {
 
 // Devuelve el tiempo que paso en segundos.
 int Time::getSecondsCount() {
-    return (int) floor(this->interval.count());
+    return (int) floor(this->interval.count() * this->scaleFactor);
 }
 
 std::string Time::getSecondsAsString() {
