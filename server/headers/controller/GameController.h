@@ -54,6 +54,7 @@ class GameController {
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);
         bool joinTeam(std::string playerName, int team,int formation, int maxPlayers, std::string & errorMessage);
+        bool setTeamFormation(int team, int formation);
         void removeUser(std::string user);
         void startGame();
         bool hasGameStarted();

@@ -825,13 +825,16 @@ int main(int argc, char* argv[]) {
             // Le aviso al servidor cual fue el equipo elegido
             log("Main: Mandandole al server: ", LOG_INFO);
             // int formation = conf->getFormacion();
-            connectionManager->sendMessage("use:" + std::to_string(seleccion)+"-"+std::to_string(formation));
+            connectionManager->sendMessage("use:" + std::to_string(seleccion));
             std::string resultMessage;
             connectionManager->getMessage(resultMessage);
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
             std::string resultValue = resultMessage.substr(resultMessage.find(":") + 1, resultMessage.length());
             if (resultKey == "true") {
                 hasPickedTeam = true;
+            } else if (resultKey == "withFormation") {
+                hasPickedTeam = true;
+                hasPickedFormation = true;
             } else if (resultKey == "false") {
                 if (resultValue == "noRoom") {
                     log("Main: El servidor respondio que el equipo estaba lleno. Elegir otro.", LOG_INFO);
@@ -846,7 +849,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        if (connected && hasLoggedIn && hasPickedTeam && !hasPickedFormation) {
+        if (connected && hasLoggedIn && hasPickedTeam && !hasPickedFormation && !fullParty) {
             // Aca, esta conectado al server, y esta bien logueado
             // Tiene que elegir el equipo con el cual va a jugar
             if (mensajeError != "") {
@@ -863,10 +866,9 @@ int main(int argc, char* argv[]) {
             } else if (seleccion == 2) {
                 formacion = 321;
             }
-            hasPickedFormation = true;
             // Le aviso al servidor cual fue el equipo elegido
             log("Main: Mandandole al server: ", LOG_INFO);
-            connectionManager->sendMessage("use:" + std::to_string(formacion));
+            connectionManager->sendMessage("formation:" + std::to_string(formacion));
             std::string resultMessage;
             connectionManager->getMessage(resultMessage);
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
