@@ -7,6 +7,7 @@
 #include "util/Coordinates.h"
 #include "util/Colour.h"
 #include "util/UsersManager.h"
+#include "util/Timer.h"
 #include "model/Player.h"
 #include "model/Pitch.h"
 #include "model/Ball.h"
@@ -26,6 +27,7 @@ class GameInitializer {
         ConnectionManager* connectionManager; // Liberado aca.
         GameControllerProxy* gameControllerProxy; // Liberado aca.
         UsersManager* usersManager; // Liberado aca.
+        Timer* timer; // Liberado aca.
 
         Camera* camera; // Liberado en PitchView.
         Team* localTeam; // Liberado en Pitch.
@@ -39,6 +41,7 @@ class GameInitializer {
         Camera* getCamera();
         ConnectionManager* getConnectionManager();
         GameControllerProxy* getGameControllerProxy();
+        Timer* getTimer();
         ~GameInitializer();
         Conf* getConfiguration();
         UsersManager* getUsersManager();
@@ -50,8 +53,8 @@ class GameInitializer {
         void initializeConnectionManager(Conf* configuration);
         void initializeGameControllerProxy();
         void initializeUsersManager(Conf* configuration);
+        void initializeTimer(Conf* configuration);
         std::string getTeamString(int teamNumber);
         void setTeam(Team* team, int teamNumber);
-        int getOrientation(int teamNumber);
 };
 #endif // GAMEINITIALIZER_H

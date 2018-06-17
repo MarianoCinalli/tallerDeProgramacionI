@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <string>
 #include <fstream>
 #include <unistd.h>
@@ -36,8 +37,15 @@ bool quit = false;
 bool lostConnectionQuit = false;
 std::string CLI_PORT = "";
 std::string CLI_IP = "";
+// Music
+Mix_Music *gMusic = NULL;
+// Sound effects
+extern Mix_Chunk *gKickSound = NULL; //kick
+Mix_Chunk *gGoalSound = NULL; //goal
+Mix_Chunk *gWhistleSound = NULL; //whistle
+Mix_Chunk *gStartSound = NULL; //start
+Mix_Chunk *gCountdownSound = NULL; //countdown
 // Global variables ---------------------------------------
-
 
 void imprimir_ayuda() {
     cout << "Usage:\n";
@@ -136,6 +144,21 @@ int chequearOpciones(int argc, char* argv[]) {
 }
 
 void endProgram(int statusToExit, ConnectionManager* connectionManager) {
+    //Free the music
+    Mix_FreeMusic( gMusic );
+    gMusic = NULL;
+    //Free the sound effects
+    Mix_FreeChunk( gKickSound );
+    Mix_FreeChunk( gGoalSound );
+    Mix_FreeChunk( gWhistleSound );
+    Mix_FreeChunk( gStartSound );
+    Mix_FreeChunk( gCountdownSound );
+    gKickSound = NULL;
+    gGoalSound = NULL;
+    gWhistleSound = NULL;
+    gStartSound = NULL;
+    gCountdownSound = NULL;
+    // Cerrar la conexion
     connectionManager->closeConnection();
     delete(connectionManager);
     delete(initializer);
@@ -331,6 +354,43 @@ void openLoginUsuario(SDL_Renderer* gRenderer, std::string& servidor, std::strin
     clave = inputs[1];
 }
 
+void showLostConnectionMessage(SDL_Renderer* gRenderer, ConnectionManager* connectionManager, bool reconnect) {
+    log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
+    SDL_Event e;
+    TTF_Font* gFont = NULL;
+    gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (gFont == NULL) {
+        log("showLostConnectionMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+    }
+    Texture line1Texture;
+    if (reconnect){
+    line1Texture.loadFromRenderedText("Entablando conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
+  }else{
+    line1Texture.loadFromRenderedText("Conexion perdida con el servidor!", gRenderer, SDL_BLUE, gFont);
+  }
+    Texture line2Texture;
+    line2Texture.loadFromRenderedText("Para cancelar presionar 'escape'...", gRenderer, SDL_BLUE, gFont);
+    bool continueShowingMessage = true;
+    while (continueShowingMessage && lostConnectionQuit) {
+        if (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
+                continueShowingMessage = false;
+                endProgram(1, connectionManager);
+            }
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        //Render text textures
+        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 50, line1Texture.getWidth(), line1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 150, line2Texture.getWidth(), line2Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderPresent(gRenderer);
+        usleep(1000);
+    }
+}
+
 void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, std::string mensaje, ConnectionManager* connectionManager) {
     log("openLoginEquipo: Entra al openLoginEquipo", LOG_INFO);
     bool quit = false;
@@ -510,10 +570,6 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
                 endProgram(1, connectionManager);
             }
         }
-        mensaje += ".";
-        if (mensaje == "...........................................") {
-            mensaje = ".";
-        }
         Texture mensajeTexture;
         mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
         //Clear screen
@@ -541,6 +597,7 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             showLostConnectionMessage(gRenderer);
             endProgram(1, connectionManager);
         } else if (readBytes == 0) {
+            showLostConnectionMessage(gRenderer, connectionManager, true);
             log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
             showLostConnectionMessage(gRenderer);
             endProgram(1, connectionManager);
@@ -548,6 +605,8 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
             if (beginMessage == "gameBegins:") {
                 log("Main: Se recibio el mensaje de comienzo del partido.", LOG_INFO);
                 gameBegins = true;
+                // Silbato
+                Mix_PlayChannel( -1, gWhistleSound, 0 );
             } else {
                 log("Main: Esperando el mensaje de comienzo de partido, se recibio otra cosa: ", beginMessage, LOG_INFO);
                 gameBegins = false;
@@ -597,6 +656,7 @@ int main(int argc, char* argv[]) {
     log("Main: Cargando configuracion...", LOG_INFO);
     Conf* configuration = new Conf(defaultConfFileName, defaultSpritesFileName);
     configuration->loadConf(confFileName);
+    int formation = configuration->getFormacion();
     log("Main: Configuracion cargada: ", configuration, LOG_INFO);
     int cliLogLevelInt = LOG_WRONGLEVEL;
     LOG_MIN_LEVEL = configuration->getDebugLevel();
@@ -616,6 +676,40 @@ int main(int argc, char* argv[]) {
     float sleepTime = (float)200000 / (float)frameRate;
     log("Main: Frame rate: ", frameRate, LOG_INFO);
     delete(configuration);
+
+    // Cargar archivos de audio
+    gMusic = Mix_LoadMUS( "sounds/beat.wav" );
+    if( gMusic == NULL ){
+        printf( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gKickSound = Mix_LoadWAV( "sounds/kick.wav" );
+    if( gKickSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gGoalSound = Mix_LoadWAV( "sounds/goal.wav" );
+    if( gGoalSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gWhistleSound = Mix_LoadWAV( "sounds/whistle.wav" );
+    if( gWhistleSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gStartSound = Mix_LoadWAV( "sounds/start.wav" );
+    if( gStartSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    gCountdownSound = Mix_LoadWAV( "sounds/countdown.wav" );
+    if( gCountdownSound == NULL ){
+        printf( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        log( "Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR );
+    }
+    // Comenzar a reproducir la musica
+    Mix_PlayMusic( gMusic, -1 );
 
     ConnectionManager* connectionManager = new ConnectionManager();
 
@@ -730,7 +824,8 @@ int main(int argc, char* argv[]) {
             }
             // Le aviso al servidor cual fue el equipo elegido
             log("Main: Mandandole al server: ", LOG_INFO);
-            connectionManager->sendMessage("use:" + std::to_string(seleccion));
+            // int formation = conf->getFormacion();
+            connectionManager->sendMessage("use:" + std::to_string(seleccion)+"-"+std::to_string(formation));
             std::string resultMessage;
             connectionManager->getMessage(resultMessage);
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
@@ -832,16 +927,20 @@ int main(int argc, char* argv[]) {
                         lostConnectionQuit = true;
                         setQuit(true);
                     }
+
                     delete(action);
                 }
             }
         }
-        usleep(sleepTime);
+        if (lostConnectionQuit) {
+            showLostConnectionMessage(renderer, connectionManager, true);
+        }
+        usleep(sleepTime/8);
     }
 
     // Si se sale por pedida de conexion mostrar mensaje.
-    if (lostConnectionQuit) {
-        showLostConnectionMessage(renderer);
+    if (quit) {
+        showLostConnectionMessage(renderer, connectionManager, false);
     }
 
     // threads->terminateSpawnedThreads(); // signalea a los threads para que terminen.

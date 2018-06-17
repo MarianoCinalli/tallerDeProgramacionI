@@ -97,6 +97,20 @@ int choosePort(YAML::Node nod) {
     }
 }
 
+int chooseTimePerHalf(YAML::Node nod) {
+    try {
+        if (!nod["juego"]["minutosPorTiempo"]) {
+            return VALOR_INVALIDO;
+        }
+        int str = nod["juego"]["minutosPorTiempo"].as<int>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<int> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
 string parametroInvalido(string par) {
     return "Conf: parametro: " + par + " invalido, usando valor por default";
 }
@@ -169,6 +183,8 @@ int Conf::loadConf(string file) {
     log("Conf: Cargado la cantidad maxima de jugadores con valor: ", this->maxClients, LOG_INFO);
     this->port = cargarParametro("puerto", &choosePort);
     log("Conf: Cargado el puerto con valor: ", this->port, LOG_INFO);
+    this->timePerHalf = cargarParametro("minutosPorTiempo", &chooseTimePerHalf);
+    log("Conf: Cargado la duracion de cada mitad con valor: ", this->timePerHalf, LOG_INFO);
     cargarParametro("usuarios", &this->usuarios, &chooseUsuarios);
     return 0;
 }
@@ -187,6 +203,10 @@ int Conf::getMaxClients() {
 
 int Conf::getPort() {
     return this->port;
+}
+
+int Conf::getTimePerHalf() {
+    return this->timePerHalf;
 }
 
 map<string, string> Conf::getUsuarios(){

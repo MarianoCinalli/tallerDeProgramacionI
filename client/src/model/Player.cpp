@@ -39,7 +39,9 @@ void Player::parseYaml(YAML::Node node){
     this->position->setX(node["cx"].as<int>());
   }
   if (node["cy"]){
-    this->position->setY(node["cy"].as<int>());
+    // this->position->setY(node["cy"].as<int>() + CAMERA_OFFSET);
+    this->position->setY(node["cy"].as<int>()); //offset cuando dibuja
+
   }
   if (node["nm"]){
     this->userName = node["nm"].as<std::string>();
@@ -54,6 +56,10 @@ int Player::getOrientation() {
     return this->orientation;
 }
 
+int Player::getTeam() {
+    return this->team;
+}
+
 bool Player::getIsSelected() {
     return this->isSelected;
 }
@@ -65,6 +71,7 @@ bool Player::isStill(){
 bool Player::isRunningFast() {
     return this->runningFast;
 }
+
 bool Player::isKicking() {
     return this->kicking;
 }

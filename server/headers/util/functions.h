@@ -1,7 +1,6 @@
 #ifndef CONNECTION_FUNCTIONS_H
 #define CONNECTION_FUNCTIONS_H
 
-#include <unistd.h> // para el usleep.
 #include <string>
 #include "GameInitializer.h"
 #include "util/Constants.h"

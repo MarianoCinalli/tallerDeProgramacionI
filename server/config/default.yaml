@@ -11,3 +11,7 @@ usuarios:
 server:
   maxClients: 1
   port: 8080
+performance:
+  margenes: 180
+juego:
+  minutosPorTiempo: 5

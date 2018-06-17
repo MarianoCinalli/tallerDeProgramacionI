@@ -1,4 +1,5 @@
 #include "util/functions.h"
+#include <ctime>
 
 extern GameInitializer* initializer;
 extern pthread_barrier_t players_ready_barrier;
@@ -12,7 +13,11 @@ void* read_client(void* argument) {
     int readBytes;
     bool continueReading = true;
     bool firstBroadcastRead = true;
+    bool firstError = false;
+    double timeDifference = 0;
     socket = *((int*) argument);
+    time_t firstTimeError;
+    time_t currentErrorTime;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     User* user = new User(initializer, socket);
@@ -28,7 +33,7 @@ void* read_client(void* argument) {
             }
             log("read_client: Sincronizacion terminada.", LOG_INFO);
             connectionManager->sendMessage(socket, "gameBegins:");
-            sleep(3);
+            sleep(2);
             connectionManager->ready(pthread_self(), socket);
             firstBroadcastRead = false;
         }
@@ -40,9 +45,27 @@ void* read_client(void* argument) {
         } else if (readBytes == 0) {
             // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
-            log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
-            continueReading = false;
+            // log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
+            if (!firstError){
+              firstError = true;
+              time(&firstTimeError);
+              log("read_client: first time error", LOG_DEBUG);
+            }else {
+              time(&currentErrorTime);
+              timeDifference = difftime(currentErrorTime, firstTimeError);
+              log("read_client: diferencia de tiempo:",timeDifference, LOG_SPAM);
+              if (timeDifference > 25){
+                log("read_client: superados tiempo maximo de socket: esperando ", socket, LOG_INFO);
+                continueReading = false;
+              }
+            }
+
         } else {
+          if (firstError){
+            log("read_client: limpiado first time error", LOG_DEBUG);
+            firstError = false;
+            timeDifference = 0;
+          }
             log("read_client: Mensaje recibido: ", message, LOG_SPAM);
             if (!user->hasLogedIn()) {
                 // No se logeo.
@@ -75,16 +98,20 @@ void* broadcast_to_clients(void* argument) {
     log("broadcast_to_clients: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("broadcast_to_clients: Sincronizacion terminada.", LOG_INFO);
+    GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     Broadcaster* broadcaster = new Broadcaster(
-        initializer->getPitch(),
+        gameControllerProxy,
         initializer->getConnectionManager()
     );
-    GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     // Termino la espera
-    sleep(3); //HACK time to get your shit together
+    sleep(2); //HACK time to get your shit together
+    broadcaster->broadcast(true);
+    int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
-        broadcaster->broadcast();
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
+      if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
+        timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+        broadcaster->broadcast(true);
+      }
     }
     // Termino el juego
     broadcaster->broadcastGameEnded();
@@ -99,12 +126,14 @@ void* game_updater(void* argument) {
     log("game_updater: Esperando para sincronizar...", LOG_INFO);
     pthread_barrier_wait(&players_ready_barrier);
     log("game_updater: Sincronizacion terminada.", LOG_INFO);
-    Camera* camera = initializer->getCamera();
+    int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     gameControllerProxy->startGame();
     while (!gameControllerProxy->shouldGameEnd() && !quit) {
-        gameControllerProxy->updateModel(camera);
-        usleep(MICROSECONDS_BETWEEEN_BROADCAST);
+        if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
+          timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+          gameControllerProxy->updateModel();
+        }
     }
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;

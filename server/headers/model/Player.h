@@ -13,6 +13,8 @@ class Player {
         int team;
         int orientation;
         int maxVelocity;
+        int kickPower;
+        bool highPass;
         bool isSelected;
         bool isReturning;
         Velocity* velocity;
@@ -21,32 +23,39 @@ class Player {
         bool sliding;
         bool wasSliding;
         bool kicking;
-        bool wasKicking;
+        bool kicked;
         bool canMove;
         bool runningFast;
         bool withBall;
         int kickCount;
         int slideCount;
         std::string userName;
+        int fieldPosition;
+        int stealCoef;
 
     public:
         static int ID;
-        Player(int orientation, Coordinates* position, int team);
+        Player(Coordinates* position, int team);
 
         // Getters
         Coordinates* getPosition();
         Velocity* getVelocity();
+        int getTeam();
         int getCurrentSpeed();
         int getOrientation();
+        int getKickPower();
+        int getId();
+        bool isAHighPass();
         bool wasSlidingYet();
-        bool wasKickingYet();
+        bool hasKicked();
         bool isSliding();
         bool isKicking();
         bool getIsSelected();
         bool isRunningDiagonaly();
         bool isRunningFast();
         bool isStill();
-
+        std::string getUsername();
+        int getStealCoef();
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
@@ -55,11 +64,14 @@ class Player {
         void stopRunningInDirection(int direction);
         void toggleIsSelected(std::string name);
         void copyStats(Player* copyTo);
+        void setFieldPosition(int formation);
         void setTrayectory(Velocity* trayectory);
-        void isWithBall(bool dominated);
+        void setWithBall(bool dominated);
+        bool isWithBall();
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition();
         void updateKicking();
+        void setKicked(bool);
         void updateSliding();
         void updateState();
         void setOrientation(int orientation);
@@ -72,7 +84,7 @@ class Player {
         void startsSliding();
         void stopSliding();
         void isAlreadySliding();   //TODO mejorar nombres de slide!
-        void startsKicking();
+        void startsKicking(int power, bool highPass);
         void stopKicking();
         void isAlreadyKicking();
 

@@ -1,5 +1,9 @@
 #include "GameInitializer.h"
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+
+const int CAMERA_WIDTH = (800)*0.8;
+const int CAMERA_HEIGHT = (600)*0.8;
 
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
@@ -43,7 +47,6 @@ Team* GameInitializer::getTeam(int teamNumber) {
     }
 }
 
-
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
     log("GameInitializer: Liberando gameController.", LOG_INFO);
@@ -83,11 +86,13 @@ void GameInitializer::initializeBall(){
 
 void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Creando equipo local...", LOG_INFO);
-    int shirtColour = 0;
+    Colour* shirt;
     if (teamNumber == CASACA_PRINCIPAL) {
-        shirtColour = 255;
+        shirt = new Colour(100, 190, 240, 0);
     }
-    Colour* shirt = new Colour(shirtColour, 0, 0, 0);
+    else{
+      shirt = new Colour(255, 255, 0, 0);
+    }
     log("GameInitializer: Creando sprites para el equipo local.", LOG_INFO);
     this->initializeTeamSprites(conf->getSpritesPath(),shirt, teamNumber);
     delete(shirt);
@@ -140,8 +145,8 @@ void GameInitializer::initializeTeamSprites(std::string shirtsPath, Colour* shir
 
 void GameInitializer::initializePitch(Conf* conf) {
     log("GameInitializer: Creando la cancha...", LOG_INFO);
-    Coordinates* cameraPosition = new Coordinates(400, 200);
-    this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf->getMargen());
+    Coordinates* cameraPosition = new Coordinates(400, 300);
+    this->camera = new Camera(cameraPosition, CAMERA_WIDTH, CAMERA_HEIGHT);
     this->pitch = new Pitch(this->camera);
 }
 
@@ -157,14 +162,13 @@ void GameInitializer::initializeActionsManager() {
 
 void GameInitializer::initializeCommonSdlResources() {
     //Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
         log("SDL could not initialize! SDL Error: %s\n", SDL_GetError(), LOG_ERROR);
     } else {
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
             printf("Warning: Linear texture filtering not enabled!");
             log("Warning: Linear texture filtering not enabled!", LOG_ERROR);
-
         }
         this->window = SDL_CreateWindow("ZIDANE", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (this->window == NULL) {
@@ -182,8 +186,15 @@ void GameInitializer::initializeCommonSdlResources() {
                     log("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError(), LOG_ERROR);
                 }
             }
-            if( TTF_Init() == -1 ) {
-    					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+            //Initialize SDL_mixer
+            if (Mix_OpenAudio( MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024 ) < 0) {
+                printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+                log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR);
+            }
+            //Initialize SDL_ttf
+            if ( TTF_Init() == -1 ) {
+    				  	printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+                log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError(), LOG_ERROR);
     				}
         }
     }
@@ -198,8 +209,9 @@ void GameInitializer::cleanCommonSdlResources() {
     SDL_DestroyWindow(this->window);
     this->window = NULL;
     //Quit SDL subsystems
-    log("GameInitializer: Saliendo de SDL_IMG.", LOG_INFO);
-    IMG_Quit();
     log("GameInitializer: Saliendo de SDL.", LOG_INFO);
+    IMG_Quit();
+    TTF_Quit();
+    Mix_Quit();
     SDL_Quit();
 }

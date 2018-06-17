@@ -133,27 +133,72 @@ int ConnectionManager::getMessage(int socket, std::string & readMessage) {
     int bufferSize = sizeof(char) * bufferLength;
     char buffer[bufferLength] = {0};
     memset(buffer, 0x00, bufferSize);
+
+    struct timeval timeout;
+    timeout.tv_sec = 2;
+    timeout.tv_usec = 0; //HACK, timeout en microsegundos
+
+    fd_set rfds;
+    FD_ZERO(&rfds);
+    FD_SET(socket, &rfds);
+    int rv = select(socket + 1,  &rfds,NULL, NULL, &timeout);
+    if (rv<0){
+      log("Connection Manager: socket no disponible, error:", strerror(errno), LOG_ERROR);
+      return rv;
+    } else if (rv == 0){
+      log("Connection Manager: timeout, 0 bytes recieved. ",strerror(errno), LOG_SPAM); //no es propiamente un error si es timeout
+      // log("Connection Manager: segundos ", timeout.tv_sec, LOG_SPAM);
+      // log("Connection Manager: microsegundos ", timeout.tv_usec, LOG_SPAM);
+    } else {
+    // log("Connection Manager: select retorna > 0", LOG_SPAM);
     readBytes = read(socket, buffer, bufferSize);
     // Cuidado aca con strerror que no es thread safe:
     // Otro thread puede setear el errno, y este escribirlo.
     // Ver de usar strerror_r que es thread safe.
+
     if (readBytes < 0) {
         log("ConnectionManager: Lectura fallida: ", strerror(errno), LOG_ERROR);
         readMessage = "";
     } else if (readBytes == 0) {
-        log("ConnectionManager: Lectura igual a 0. ", LOG_ERROR);
+        log("ConnectionManager: Lectura igual a 0. ", LOG_SPAM);
         readMessage = "";
     } else {
         log("ConnectionManager: Recibidos ", readBytes, LOG_SPAM);
         readMessage = buffer;
+
     }
     return readBytes;
+  }
+    return rv;
+
 }
 
 void ConnectionManager::sendMessage(int socket, std::string message) {
     log("ConnectionManager: Enviando " + message + " a ", socket, LOG_SPAM);
     const char* constantMessage = (message).c_str();
-    send(socket, constantMessage, strlen(constantMessage), 0);
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 100000/12; //HACK, timeout en microsegundos
+    fd_set wfds;
+    FD_ZERO(&wfds);
+    FD_SET(socket, &wfds);
+    int writeable = select(socket + 1, NULL, &wfds, NULL, &timeout);
+    if(writeable < 0) {
+        log("Connection Manager: error en socket al escribir", strerror(errno), LOG_DEBUG);
+    }else if(writeable == 0){
+      log("Connection Manager: timeout de broadcast. error:",strerror(errno), LOG_SPAM);
+    }
+    else {
+        int res = send(socket, constantMessage, strlen(constantMessage), MSG_NOSIGNAL); //necesario para que no tire SIGPIPE y salga
+        if (res<0){
+          log("Error en write: ", strerror(errno), LOG_ERROR);
+          close(socket);  //sirve para cerrar a la fuerza el socket y que lo cierre propiamente el read_server
+        }
+        else{
+        log("Connection Manager: enviado correctamente, res:",res, LOG_SPAM);
+      }
+    }
+
 }
 
 void ConnectionManager::sendToAll(std::string message) {

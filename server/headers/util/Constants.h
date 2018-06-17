@@ -34,15 +34,25 @@ enum PlayerStandedActions {
     KICK_ACTION = 6,
 };
 
+enum states {
+  NORMAL_STATE = 1,
+  HALF_START_STATE = 2,
+  GOAL_STATE = 3,
+  THROWIN_STATE = 4,
+  GOALKICK_STATE = 5,
+};
+
+
+const int KEEPER_POSITION = 0;
+const int DEFENSE_POSITION = 1;
+const int MIDFIELD_POSITION = 2;
+const int STRIKER_POSITION = 3;
+
 const int SALIDA_LINEA_COMANDOS = 4;
 
 // The dimensions of the level
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
-
-// Screen dimension constants
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
 
 // Necesario para la camara
 const int SPRITE_SIZE = 63;
@@ -58,21 +68,39 @@ const int CASACA_ALTERNATIVA = 3;
 const int PLAYERS_PER_TEAM = 7;
 
 //Velocidad
-const int NORMAL_VELOCITY = 3;
-const float FAST_SPEED_COEF = 1.7;
+const int NORMAL_VELOCITY = 2;
+const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
-const int PASS_SPEED = 25;
+const int BALL_DECELERATE_CONST = 3;
+const int PASS_SPEED = 5;
 
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;
-const int STEAL_VALUE = 90;
+const int STEAL_DISTANCE = 90;
+const int KEEPER_STEAL_COEF = 90;
+const int DEFENSE_STEAL_COEF = 80;
+const int MIDFIELD_STEAL_COEF = 70;
+const int STRIKER_STEAL_COEF = 50;
 const int TIME_BALL_NO_INTERCEPT = 4;
 
 
 //counts
 const int KICK_COUNT = 35;
 const int SLIDE_COUNT = 35;
+const int MILISECONDS_TIMEOUT = 12;
 
+//state vars
+const int CENTER_LEFT_START = 0;
+const int CENTER_RIGHT_START = 1;
+const int LEFT_START = 2;
+const int RIGHT_START = 3;
+
+const int TEAM_LEFT = 0;
+const int TEAM_RIGHT = 1;
+
+const int MAX_ERRORS = 50000;
+
+const int MINUTES_PER_HALF = 45;
 //
 // const int FRAME_WINDOW=1024;
 #endif // CONSTANTS_H_

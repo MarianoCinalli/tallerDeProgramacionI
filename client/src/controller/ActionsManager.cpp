@@ -1,4 +1,7 @@
 #include "controller/ActionsManager.h"
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Music *gMusic;
 
 ActionsManager::ActionsManager() {
     log("ActionsManager: Creando actionsManager.", LOG_INFO);
@@ -20,6 +23,22 @@ bool anyKeyPressed(bool* keys) {
     return false;
 }
 
+
+int customMap(int val){   //funcion para mapear la potencia del tiro, superhardcode
+  if (val<150){
+    return 3;
+  }
+  else if (val <250){
+    return 4;   //de 1 a 5
+  }
+  else if (val <350){
+    return 5;   //de 1 a 5
+  }
+  else{
+    return 6;
+  }
+}
+
 // Devuelve la accion correspondiente a un evento.
 Action* ActionsManager::getAction(SDL_Event event) {
     Action* action = NULL;
@@ -28,6 +47,19 @@ Action* ActionsManager::getAction(SDL_Event event) {
         // Actions for pressed keys.
         log("ActionsManager: Se registro una tecla presionada.", LOG_SPAM);
         switch (event.key.keysym.sym) {
+            case SDLK_m:
+                //If there is no music playing
+                if ( Mix_PlayingMusic() == 0 ) {
+                    Mix_PlayMusic( gMusic, -1 ); //Play the music
+                } else {
+                    //If music is being played
+                    if ( Mix_PausedMusic() == 1 ) {
+                        Mix_ResumeMusic(); //Resume the music
+                    } else {
+                        Mix_PauseMusic(); //Pause the music
+                    }
+                }
+                break;
             case SDLK_w:
                 action = new RunningFastAction();
                 break;
@@ -35,8 +67,15 @@ Action* ActionsManager::getAction(SDL_Event event) {
                 action = new SlidingAction();
                 break;
             case SDLK_s:
-                action = new KickingAction();
+            {
+                this->kickTime = SDL_GetTicks();
                 break;
+            }
+            case SDLK_d:
+            {
+                this->kickTime = SDL_GetTicks();
+                break;
+            }
             case SDLK_SPACE:
                 action = new ChangeActivePlayer();
                 break;
@@ -86,8 +125,28 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     keys[KRIGHT] = false;
                     action = new Accelerate(PLAYER_ORIENTATION_LEFT);
                     break;
+                case SDLK_s:
+                {
+                    int currentTime = SDL_GetTicks();
+                    currentTime = currentTime - this->kickTime;
+                    int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
+                    action = new KickingAction(passPower);
+                    log("poder de pase", passPower, LOG_DEBUG);
+                    log("tiempo de pase", currentTime, LOG_DEBUG);
+                    break;
+                }
+                case SDLK_d:
+                {
+                    int currentTime = SDL_GetTicks();
+                    currentTime = currentTime - this->kickTime;
+                    int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
+                    action = new HighKickingAction(passPower);
+                    log("poder de pase", passPower, LOG_DEBUG);
+                    log("tiempo de pase", currentTime, LOG_DEBUG);
+                    break;
+                  }
             }
-            if (!anyKeyPressed(keys)) {
+            if (!(event.key.keysym.sym == SDLK_s) & !(event.key.keysym.sym == SDLK_d) & !anyKeyPressed(keys)) {
                 if (action != NULL) {
                     delete(action);
                 }

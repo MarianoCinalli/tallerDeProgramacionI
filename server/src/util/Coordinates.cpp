@@ -17,19 +17,29 @@ int Coordinates::getY() {
     return this->y;
 }
 
-void Coordinates::setX(int otherX) {
+int Coordinates::setX(int otherX) {
     this->x = otherX;
-    validatePositionInBounds();
+    if (validatePositionInBounds()){
+      return -1;
+    }
+    return 0;
+
 }
 
-void Coordinates::setY(int otherY) {
+int Coordinates::setY(int otherY) {
     this->y = otherY;
-    validatePositionInBounds();
+    if(validatePositionInBounds()){
+    return -1;
+  }
+  return 0;
 }
 
-void Coordinates::addX(int amount) {
+int Coordinates::addX(int amount) {
     this->x += amount;
-    validatePositionInBounds();
+    if (validatePositionInBounds()){
+      return -1;
+    }
+    return 0;
 }
 
 void Coordinates::subtractX(int amount) {
@@ -37,9 +47,12 @@ void Coordinates::subtractX(int amount) {
     validatePositionInBounds();
 }
 
-void Coordinates::addY(int amount) {
+int Coordinates::addY(int amount) {
     this->y += amount;
-    validatePositionInBounds();
+    if (validatePositionInBounds()){
+      return -1;
+    }
+    return 0;
 }
 
 void Coordinates::subtractY(int amount) {
@@ -47,7 +60,7 @@ void Coordinates::subtractY(int amount) {
     validatePositionInBounds();
 }
 
-void Coordinates::setCoord(Coordinates other){
+void Coordinates::set(Coordinates other){
     this->x = other.x;
     this->y = other.y;
     validatePositionInBounds();
@@ -57,21 +70,26 @@ int Coordinates::distanceTo(Coordinates* other){
     return sqrt(pow(this->x-other->x,2) + pow(this->y-other->y,2));
 }
 
-void Coordinates::validatePositionInBounds() {
+int Coordinates::validatePositionInBounds() {
     // log("Coordinates: Validate in bounds", LOG_DEBUG);
     //Keep in bounds
     if (this->x < 0) {
         this->x = 0;
+        return true;
     }
     if (this->x + SPRITE_SIZE > LEVEL_WIDTH) {
         this->x = LEVEL_WIDTH - SPRITE_SIZE;
+        return true;
     }
     if (this->y < 0) {
         this->y = 0;
+        return true;
     }
     if (this->y + SPRITE_SIZE > LEVEL_HEIGHT) {
         this->y = LEVEL_HEIGHT - SPRITE_SIZE;
+        return true;
     }
+    return false;
 }
 
 std::string Coordinates::toString() {

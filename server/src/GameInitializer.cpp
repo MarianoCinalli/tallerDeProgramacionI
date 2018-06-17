@@ -1,5 +1,10 @@
 #include "GameInitializer.h"
 
+// Screen dimension constants
+const int SCREEN_WIDTH = (800) * 0.8;
+const int SCREEN_HEIGHT = (600) * 0.8;
+
+
 GameInitializer::GameInitializer(Conf* configuration) {
     log("GameInitializer: Inicializando juego...", LOG_INFO);
     this->initializePitch(configuration);
@@ -8,6 +13,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     // this->pitch->setUserTeam(0,0);  //inicializacion de usuarios
     // this->pitch->setUserTeam(1,1);
     this->initializeBall();
+    this->initializeTimer(configuration); // arriba de initializeGameController
     this->initializeGameController();
     this->initializeGameControllerProxy(); // abajo de initializeGameController
     this->initializeConnectionManager(configuration);
@@ -41,6 +47,10 @@ UsersManager* GameInitializer::getUsersManager() {
     return this->usersManager;
 }
 
+Timer* GameInitializer::getTimer() {
+    return this->timer;
+}
+
 GameInitializer::~GameInitializer() {
     log("GameInitializer: Liberando memoria...", LOG_INFO);
     log("GameInitializer: Liberando gameControllerProxy.", LOG_INFO);
@@ -51,6 +61,8 @@ GameInitializer::~GameInitializer() {
     delete(this->connectionManager);
     log("GameInitializer: Liberando vista de la cancha.", LOG_INFO);
     delete(this->usersManager);
+    log("GameController: Borrando timer...", LOG_INFO);
+    delete(this->timer);
     log("GameInitializer: Liberando usersManager.", LOG_INFO);
 }
 
@@ -60,20 +72,19 @@ GameInitializer::~GameInitializer() {
 
 
 void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
-    std::map<int,std::string> nombresEquipos;
+    std::map<int, std::string> nombresEquipos;
     nombresEquipos[0] = "Argentina";
     nombresEquipos[1] = "Brasil";
     log("GameInitializer: Creando equipo.", LOG_INFO);
     Team* team = new Team(teamNumber, nombresEquipos[teamNumber]);
     log("GameInitializer: Seteando formacion.", LOG_INFO);
-    team->setFormacion(33); //TODO formacion default, despues le pregunta al usuario
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
-        int orientation = this->getOrientation(teamNumber);
-        Player* player = new Player(orientation, coordinates, teamNumber);
+        Player* player = new Player(coordinates, teamNumber);
         team->addPlayer(player);
     }
+    team->setFormacion(33); //TODO formacion default, despues le pregunta al usuario
     log("GameInitializer: Ordenando equipo local.", LOG_INFO);
     team->order();
     log("GameInitializer: Agregando el equipo a la cancha: ", this->getTeamString(teamNumber), LOG_INFO);
@@ -83,10 +94,11 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
 
 void GameInitializer::initializeBall() {
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
-    // Player* player = this->pitch->getActivePlayer(0); //TODO user 0 es el dueño del balon al ppio
     Coordinates* coords = new Coordinates(800, 600);
     Ball* ball = new Ball(coords);  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
+    Player* jugador = this->pitch->getTeam(0)->getPlayers().back();
+    ball->isIntercepted(jugador); //darle la pelota al jugador mas cerca
     log("GameInitializer: Pelota inicializada", LOG_INFO);
 }
 
@@ -106,28 +118,20 @@ void GameInitializer::setTeam(Team* team, int teamNumber) {
     }
 }
 
-int GameInitializer::getOrientation(int teamNumber) {
-    if (teamNumber == 0) {
-        return PLAYER_ORIENTATION_RIGHT;
-    } else {
-        return PLAYER_ORIENTATION_LEFT;
-    }
-}
-
 Conf*  GameInitializer::getConfiguration() {
-  return configuration;
+    return configuration;
 }
 
 void GameInitializer::initializePitch(Conf* conf) {
     log("GameInitializer: Creando la cancha...", LOG_INFO);
-    Coordinates* cameraPosition = new Coordinates(400, 200);
+    Coordinates* cameraPosition = new Coordinates(400, 300);
     this->camera = new Camera(cameraPosition, SCREEN_WIDTH, SCREEN_HEIGHT, conf->getMargen());
     this->pitch = new Pitch(this->camera);
 }
 
 void GameInitializer::initializeGameController() {
     log("GameInitializer: Creando GameController...", LOG_INFO);
-    this->gameController = new GameController(this->pitch);
+    this->gameController = new GameController(this->pitch, this->camera, this->timer);
 }
 
 void GameInitializer::initializeConnectionManager(Conf* configuration) {
@@ -143,4 +147,9 @@ void GameInitializer::initializeGameControllerProxy() {
 void GameInitializer::initializeUsersManager(Conf* configuration) {
     log("GameInitializer: Creando UsersManager...", LOG_INFO);
     this->usersManager = new UsersManager(configuration->getUsuarios(), this->getGameControllerProxy());
+}
+
+void GameInitializer::initializeTimer(Conf* configuration) {
+    log("GameInitializer: Creando timer...", LOG_INFO);
+    this->timer = new Timer(configuration->getTimePerHalf());
 }

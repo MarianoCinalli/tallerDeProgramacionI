@@ -7,24 +7,23 @@ Camera::Camera(Coordinates* position, int width, int height, int margen) {
     this->height = height;
     this->margin_size = margen;
     //The margin area
-    this->margin = { position->getX() + margin_size, position->getY() + margin_size, width - margin_size * 2, height - margin_size * 2 };
+    this->margin = { position->getX() + margin_size, position->getY() + margin_size , width - margin_size*2 , height - margin_size*2};
     log("Camera: Camara creada.", LOG_INFO);
+}
+
+Coordinates Camera::getCenter(){
+  int x = this->position->getX() + this->width/2;
+  int y = this->position->getY() + this->height/2;
+  return Coordinates(x, y);
 }
 
 std::string Camera::getAsYaml() {
     std::string message = "";
+    Coordinates center = getCenter();
     message += "cam:\n";
-    message += " cx: " + std::to_string(this->position->getX()) + "\n";
-    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " cx: " + std::to_string(center.getX()) + "\n";
+    message += " cy: " + std::to_string(center.getY()) + "\n";
     return message;
-}
-
-Coordinates* Camera::getRelativeCoordinates(Coordinates* absolutePosition) {
-    Coordinates* relativePosition = new Coordinates(
-        absolutePosition->getX() - position->getX(),
-        absolutePosition->getY() - position->getY()
-    );
-    return relativePosition;
 }
 
 void Camera::calculateNewPosition(Coordinates* objPosition) {
@@ -32,20 +31,19 @@ void Camera::calculateNewPosition(Coordinates* objPosition) {
     int x = objPosition->getX();
     int y = objPosition->getY();
     int difference;
-    int xCorrection = 40;
     // Margen derecho
-    difference = x + SPRITE_SIZE - (margin.x - xCorrection + margin.w);
+    difference = x + SPRITE_SIZE - (margin.x + margin.w);
     if (difference > 0) {
         log("Camera: Jugador activo a la derecha del margen derecho", LOG_SPAM);
         this->position->addX(difference);
-        margin.x = this->position->getX() + margin_size + xCorrection;
+        margin.x = this->position->getX() + margin_size ;
     }
     // Margen izquierdo
-    difference = x - (margin.x + xCorrection);
+    difference = x - margin.x;
     if (difference < 0) {
         log("Camera: Jugador activo a la izquierda del margen izquierdo", LOG_SPAM);
         this->position->addX(difference);
-        margin.x = this->position->getX() + margin_size + xCorrection;
+        margin.x = this->position->getX() + margin_size ;
     }
     // Margen inferior
     difference = (y + SPRITE_SIZE) - (margin.y + margin.h);

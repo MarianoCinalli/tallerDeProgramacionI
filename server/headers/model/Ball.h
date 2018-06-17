@@ -15,10 +15,13 @@ class Ball {
         int maxVelocity;
         Coordinates* position;
         int passPower;
+        int initialPassPower;
         int height;
+        int heightLevel;
         int orientation;
         bool dominated;
         bool isInAPass;
+        bool isInAHighPass;
         bool interceptable;
         int passDirection;
         Coordinates* startingPassPosition;
@@ -31,19 +34,22 @@ class Ball {
         Ball(Coordinates* position);
 
         Coordinates* getPosition();
+        void setPosition(Coordinates* pos);
         Velocity* getVelocity();
+        int getHeight();
         Player* getPlayer();
         void setPlayer(Player* player);
         bool isDominated();
         bool isInterceptable();
-
+        void restart(int position);
         void isIntercepted(Player* player);
-        void isPassed(int direction, int passPower);
+        void isPassed(int direction, int passPower, bool highPass);
         void updatePosition();
 
         Coordinates* calculateDominatedPosition();
         void progressiveDecelerate(float passDistance);
         void stopRolling();
+        void calculateHeight();
 
         std::string getAsYaml();
 

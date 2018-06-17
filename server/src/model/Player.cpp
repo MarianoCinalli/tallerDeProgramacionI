@@ -2,20 +2,27 @@
 
 int Player::ID = 0;
 
-Player::Player(int orientation, Coordinates* position, int team) {
+Player::Player(Coordinates* position, int team) {
+
     log("Player: Creando jugador...", LOG_INFO);
     this->id = ++ID;
-    this->orientation = orientation;
+    if (team == 0) {
+        this->orientation =  PLAYER_ORIENTATION_RIGHT;
+    } else {
+        this->orientation = PLAYER_ORIENTATION_LEFT;
+    }
     this->position = position;
     this->team = team;
     this->basePosition = new Coordinates(800, 500);
     this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
-    this->wasSliding = false;   //Deberia estar en PlayerSpriteManager
+    this->wasSliding = false; //Deberia estar en PlayerSpriteManager
     this->kicking = false;
-    this->wasKicking = false;
+    this->kicked = false;
     this->canMove = true;
+    this->kickPower = 1;    //inicializacion default?
+    this->highPass = false;
     this->isSelected = false;
     this->isReturning = false;
     this->runningFast = false;
@@ -23,6 +30,7 @@ Player::Player(int orientation, Coordinates* position, int team) {
     this->slideCount = 0;
     this->withBall = false;
     this->userName = "NONE";
+    this->stealCoef = DEFENSE_STEAL_COEF;
     log("Player: Jugador creado.", LOG_INFO);
 }
 
@@ -30,12 +38,35 @@ Coordinates* Player::getPosition() {
     return this->position;
 }
 
-void Player::isWithBall(bool dominated) {
+int Player::getTeam() {
+    return this->team;
+}
+
+int Player::getId(){
+  return this->id;
+}
+int Player::getStealCoef() {
+    return this->stealCoef;
+}
+
+void Player::setWithBall(bool dominated) {
     this->withBall = dominated;
+}
+
+bool Player::isWithBall() {
+    return this->withBall;
+}
+
+bool Player::isAHighPass() {
+    return this->highPass;
 }
 
 int Player::getOrientation() {
     return this->orientation;
+}
+
+int Player::getKickPower() {
+    return this->kickPower;
 }
 
 Velocity* Player::getVelocity() {
@@ -50,6 +81,28 @@ int Player::getCurrentSpeed() {
     }
 }
 
+void Player::setFieldPosition(int formation) {
+    int number = this->id;
+    if (number > 7) {
+        number -= 7;
+    }
+    int defense = formation / 1 % 10;
+    int midfield = formation / 10 % 10;
+    if (number == 1) {
+        this->fieldPosition = KEEPER_POSITION;
+        this->stealCoef = KEEPER_STEAL_COEF;
+    } else if (number <= (1 + defense)) {
+        this->fieldPosition = DEFENSE_POSITION;
+        this->stealCoef = DEFENSE_STEAL_COEF;
+    } else if (number <= (1 + defense + midfield)) {
+        this->fieldPosition = MIDFIELD_POSITION;
+        this->stealCoef = MIDFIELD_STEAL_COEF;
+    } else {
+        this->fieldPosition = STRIKER_POSITION;
+        this->stealCoef = STRIKER_STEAL_COEF;
+    }
+    log("Player: posicion en cancha: ", this->fieldPosition, LOG_DEBUG);
+}
 // Setea la orientacion del jugador (a donde mira).
 void Player::setOrientation(int orientation) {
     // Para el caso en que el vector trayectoria sea nulo
@@ -73,6 +126,10 @@ void Player::toggleIsSelected(std::string name) {
     }
     this->isSelected = !this->isSelected;
     this->isReturning = true;
+}
+
+std::string Player::getUsername() {
+    return this->userName;
 }
 
 bool Player::getIsSelected() {
@@ -180,11 +237,11 @@ void Player::updatePosition() {
 }
 
 void Player::setPosition(Coordinates pos) {
-    this->position->setCoord(pos);
+    this->position->set(pos);
 }
 
 void Player::setBasePosition(Coordinates pos) {
-    this->basePosition->setCoord(pos);
+    this->basePosition->set(pos);
 }
 
 void Player::returnToBasePosition() {
@@ -254,16 +311,19 @@ bool Player::isRunningFast() {
 
 //SLIDE AND KICK FUNCTIONS
 
-void Player::startsKicking() {
+void Player::startsKicking(int power, bool highPass) {
     if (!this->sliding) {
+        this->kickPower = power;
+        this->highPass = highPass;
         this->kicking = true;
+        this->kicked = false;
         this->canMove = false;
     }
 }
 
 void Player::stopKicking() {
     this->kicking = false;
-    this->wasKicking = false;
+    this->kicked = false;
     this->canMove = true;
 }
 
@@ -271,12 +331,13 @@ bool Player::isKicking() {
     return this->kicking;
 }
 
-bool Player::wasKickingYet() {
-    return this->wasKicking;
+
+bool Player::hasKicked() {
+    return this->kicked;
 }
 
-void Player::isAlreadyKicking() {
-    this->wasKicking = true;
+void Player::setKicked(bool k){
+  this->kicked=k;
 }
 
 bool Player::isSliding() {
@@ -323,20 +384,20 @@ bool Player::isStill() {
 
 
 /*
-Convierte a YAML las propiedades necesarias para dibujar.
-Esta asi, para ahorrar caracteres.
-this->id:
- te: this->team
- cx: this->position->getX()
- cy: this->position->getY()
- se: this->isSelected
- ki: this->kicking
- sl: this->sliding
- ru: this->runningFast
- st: isStill()
- or: this->orientation
- nm: name
-*/
+   Convierte a YAML las propiedades necesarias para dibujar.
+   Esta asi, para ahorrar caracteres.
+   this->id:
+   te: this->team
+   cx: this->position->getX()
+   cy: this->position->getY()
+   se: this->isSelected
+   ki: this->kicking
+   sl: this->sliding
+   ru: this->runningFast
+   st: isStill()
+   or: this->orientation
+   nm: name
+ */
 std::string Player::getAsYaml() {
     std::string message = "";
     message += std::to_string(this->id) + ":\n";
@@ -349,6 +410,6 @@ std::string Player::getAsYaml() {
     message += " ru: " + std::to_string(this->runningFast) + "\n";
     message += " or: " + std::to_string(this->orientation) + "\n";
     message += " nm: " + this->userName + "\n";
-    message += " st: " + std::to_string(isStill()) + "\n" ;
+    message += " st: " + std::to_string(isStill()) + "\n";
     return message;
 }

@@ -1,13 +1,12 @@
 #include "model/Team.h"
 #include "util/Formaciones.h"
 
-
-
 Team::Team(int local, std::string name) {
     log("Team: Creando equipo.", LOG_INFO);
     this->players = {};
     this->local = local;
     this->name = name;
+    this->score = 0;
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -21,8 +20,23 @@ std::list<Player*> Team::getPlayers() {
     return this->players;
 }
 
+Player* Team::getPlayer(int num){
+  if (this->local==1){
+    num +=7;
+  }
+  for (Player* player : this->players){
+    if (player->getId() == num){
+      return player;
+    }
+  }
+    return NULL;
+}
+
 int Team::getAmountPlayers() {
-    return players.size();
+    return this->players.size();
+}
+int Team::getTeamNum(){
+  return this->local;
 }
 
 std::string Team::getName() {
@@ -46,6 +60,9 @@ Team::~Team() {
 
 void Team::setFormacion(int formacion) {
     this->formacion = formacion;
+    for (Player* p: players){
+      p->setFieldPosition(formacion);
+    }
 }
 
 void Team::order() {
@@ -58,4 +75,12 @@ void Team::order() {
         i++;
     }
     log("Team: Equipo ordenado.", LOG_DEBUG);
+}
+
+void Team::increaseScore() {
+    ++this->score;
+}
+
+int Team::getScore() {
+    return this->score;
 }

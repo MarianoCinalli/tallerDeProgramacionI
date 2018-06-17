@@ -25,6 +25,26 @@ extern std::mutex quit_mutex;
 //      creo que hay que guardar el valor a pisar en wasKicking porque se usa para dibujar.
 //  sl: this->sliding <- idem kicking
 //  ru: this->runningFast
+
+
+// Setea el quit de manera segura.
+void setQuit(bool newQuit) {
+    log("setQuit: Seteando salida...", LOG_INFO);
+    quit_mutex.lock();
+    quit = quit || newQuit;
+    quit_mutex.unlock();
+    log("setQuit: Salida seteada.", LOG_INFO);
+}
+
+// Setea el lost Connection de manera segura.
+void setLostConnectionQuit(bool newLostConnection){
+  log("setLostConnection: Seteando salida...", LOG_INFO);
+  quit_mutex.lock();
+  lostConnectionQuit =  newLostConnection;
+  quit_mutex.unlock();
+  log("setLostConnection: Salida seteada.", LOG_INFO);
+}
+
 void* read_server(void* argument) {
     log("read_server: Creado.", LOG_INFO);
     std::string readMessage;
@@ -34,22 +54,25 @@ void* read_server(void* argument) {
     int nroDeMensajes = 0;
     while (!quit) {
         readMessage = "";
-        readBytes = connectionManager->getMessage(readMessage);
+        readBytes = connectionManager->getMessage(readMessage, 1); //TODO 1 sec of timeout
         if (readBytes < 0) {
             log("read_client: Error en la lectura del mensaje. Saliendo...", LOG_ERROR);
-            lostConnectionQuit = true;
+            setLostConnectionQuit(true);
             setQuit(true);
         } else if (readBytes == 0) {
             // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             log("read_server: No se pudo establecer coneccion con el server. Saliendo...", LOG_INFO);
-            lostConnectionQuit = true;
-            setQuit(true);
+            setLostConnectionQuit(true);
+            // setQuit(true);
         } else {
             if (readMessage == "gameEnds:") {
                 log("read_server: Se recibio el mensaje de fin de juego. Saliendo...", LOG_INFO);
                 setQuit(true);
             } else {
+              if(lostConnectionQuit == true){
+                setLostConnectionQuit(false);
+              }
                 try {
                     std::string delimiter = ";;";
 
@@ -60,8 +83,9 @@ void* read_server(void* argument) {
                         //log("msg", LOG_SPAM);
                         Player* player;
                         Ball* ball = initializer->getGameController()->getBall();
-                        Camera* camera = initializer->getGameController()->getCamera();;
-                        // YAML::Node node = YAML::Load(readMessage);
+                        Camera* camera = initializer->getGameController()->getCamera();
+                        Clock* clock = initializer->getGameController()->getClock();
+                        Score* score = initializer->getGameController()->getScore();
                         YAML::Node node = YAML::Load(token);
                         for (YAML::const_iterator it = node.begin(); it != node.end(); ++it) {
                             YAML::Node key = it->first;
@@ -74,9 +98,16 @@ void* read_server(void* argument) {
                                 } else if ((key.as<std::string>() == "cam")) {
                                     //log("read_server: camara", key.as<std::string>(), LOG_SPAM);
                                     camera->parseYaml(value);
+                                } else if ((key.as<std::string>() == "clock")) {
+                                    //log("read_server: clock ", value.as<std::string>(), LOG_DEBUG);
+                                    //clock->parseYaml(value);
+                                    clock->value = value.as<std::string>(); // No es un YAML
+                                } else if ((key.as<std::string>() == "score")) {
+                                    //log("read_server: score ", value.as<std::string>(), LOG_DEBUG);
+                                    score->parseYaml(value);
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
-                                    player =  initializer->getGameController()->getPlayer(key.as<int>());
+                                    player = initializer->getGameController()->getPlayer(key.as<int>());
                                     player->parseYaml(value);
                                 }
                             }
@@ -95,6 +126,7 @@ void* read_server(void* argument) {
                     }
                 } catch (const std::exception& e) {
                     log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
+                    log("mensaje leido en error: ", readMessage, LOG_SPAM);
                 }
                 nroDeMensajes++;
             }
@@ -111,19 +143,26 @@ void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
     SDL_Renderer* renderer = initializer->getRenderer();
     PitchView* pitchView = initializer->getPitchView();
+    Clock* clock = initializer->getGameController()->getClock();
+    Score* score = initializer->getGameController()->getScore();
+    const int MILISECONDS_TIMEOUT = 20;
+    int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!quit) {
-        pitchView->render(renderer);
-        usleep(1000000 / DRAW_FRAME_RATE); // Frame rate.
+      if (!lostConnectionQuit){
+        if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
+          timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+          // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+          /* Clear the entire screen to our selected color. */
+          // SDL_RenderClear(renderer);
+          clock->render(renderer);
+          score->render(renderer);
+          // Dibujar el minimap
+
+          pitchView->renderMinimap(renderer);
+          pitchView->render(renderer);
+        }
+      }
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;
-}
-
-// Setea el quit de manera segura.
-void setQuit(bool newQuit) {
-    log("setQuit: Seteando salida...", LOG_INFO);
-    quit_mutex.lock();
-    quit = quit || newQuit;
-    quit_mutex.unlock();
-    log("setQuit: Salida seteada.", LOG_INFO);
 }

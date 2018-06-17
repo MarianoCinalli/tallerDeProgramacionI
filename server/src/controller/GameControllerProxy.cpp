@@ -5,13 +5,6 @@ extern std::mutex update_model_mutex;
 GameControllerProxy::GameControllerProxy(GameController* gameController) {
     log("GameControllerProxy: Creando gameControllerProxy...", LOG_INFO);
     this->gameController = gameController;
-    // ESTO ES PROVISORIO!
-    // Cuando manejemos tiempo borrar.
-    this->hasStarted = false;
-}
-
-void GameControllerProxy::addUser(std::string user, int teamNum){
-  this->gameController->addUser(user, teamNum);
 }
 
 void GameControllerProxy::removeUser(std::string user){
@@ -26,9 +19,9 @@ void GameControllerProxy::execute(Action* action, std::string team) {
     update_model_mutex.unlock();
 }
 
-void GameControllerProxy::updateModel(Camera* camera) {
+void GameControllerProxy::updateModel() {
     update_model_mutex.lock();
-    this->gameController->update(camera);
+    this->gameController->update();
     update_model_mutex.unlock();
 }
 
@@ -42,9 +35,7 @@ void GameControllerProxy::end(){
 }
 
 void GameControllerProxy::startGame() {
-    // ESTO ES PROVISORIO!
-    // Cuando manejemos tiempo borrar, y decirle al controller que comienze a contar el reloj.
-    this->hasStarted = true;
+    this->gameController->startGame();
 }
 
 std::string GameControllerProxy::getTeamStats(int numberTeam) {
@@ -52,17 +43,24 @@ std::string GameControllerProxy::getTeamStats(int numberTeam) {
 }
 
 bool GameControllerProxy::hasGameStarted() {
-    // ESTO ES PROVISORIO!
-    // Cuando manejemos tiempo borrar, y preguntarle al controller.
-    return this->hasStarted;
-}
-
-bool GameControllerProxy::joinTeam(std::string playerName, int team, int maxPlayers, std::string &errorMessage) {
     update_model_mutex.lock();
-    bool result = this->gameController->joinTeam(playerName, team, maxPlayers, errorMessage);
+    bool result = this->gameController->hasGameStarted();
     update_model_mutex.unlock();
     return result;
 }
+
+bool GameControllerProxy::joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage) {
+    update_model_mutex.lock();
+    bool result = this->gameController->joinTeam(playerName, team, formation,maxPlayers, errorMessage);
+    update_model_mutex.unlock();
+    return result;
+}
+
+std::string GameControllerProxy::getMessageToBroadcast(bool allPlayers) {
+    // No hace falta bloquear.
+    return this->gameController->getMessageToBroadcast(allPlayers);
+}
+
 
 GameControllerProxy::~GameControllerProxy() {
     log("GameControllerProxy: Eliminando gameControllerProxy...", LOG_INFO);

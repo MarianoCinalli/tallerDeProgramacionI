@@ -18,23 +18,28 @@ class Pitch {
         Team* awayTeam;
         Camera* camera;
         Ball* ball;
-        std::map<std::string, Team*> teams;
+        std::map<Team*,std::list<std::string>> teams;
         std::map<std::string, Player*> activePlayers;
     public:
         Pitch(Camera* camera);
         // Player* activePlayer;
+        void setActivePlayer(std::string user, Player* player);
         void changeActivePlayer(std::string user);
         Player* getActivePlayer(std::string user);
         void setTeam(Team* team, int teamNumber);
-        void setUserTeam(std::string user, int team);
+        void setUserTeam(std::string user, int team, int formation);
         void setBall(Ball* ball);
         std::list<Player*> getPlayersInsideCamera();
+        std::list<Player*> getPlayers();
         Ball* getBall();
         Camera* getCamera();
+        int goalkick();
+        void setStart(int position);
         void checkSteals();
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
-        Team* getTeam(int user);
+        Team* getTeam(int teamNumber);
+        std::string getScoresYAML();
         ~Pitch();
     private:
         std::string getUsersWithActivePlayersAsString();

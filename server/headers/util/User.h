@@ -6,6 +6,7 @@
 #include "controller/actions/ChangeActivePlayer.h"
 #include "controller/actions/SlidingAction.h"
 #include "controller/actions/KickingAction.h"
+#include "controller/actions/HighKickingAction.h"
 #include "controller/actions/RunningFastAction.h"
 #include "controller/actions/StopRunningFastAction.h"
 
@@ -23,6 +24,7 @@ class User {
     private:
         bool hasLoged;
         bool hasPicked;
+        int formation;
         int userSocket;
         int teamNumber;
         std::string user;

@@ -1,4 +1,8 @@
 #include "view/PlayerSpriteManager.h"
+#include <SDL2/SDL_mixer.h>
+#include "util/Constants.h"
+
+extern Mix_Chunk *gKickSound;
 
 PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
     log("PlayerSpriteManager: Creando vista...", LOG_INFO);
@@ -49,7 +53,7 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
 
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
     SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
-    // SDL_RenderSetScale(screen, 2,2);
+
     SDL_RenderCopy(
         screen,
         spriteSheet,
@@ -70,6 +74,10 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         );
     }
     // SDL_RenderSetScale(screen,1,1);
+}
+
+int PlayerSpriteManager::getPlayerTeam() {
+  return this->player->getTeam();
 }
 
 void PlayerSpriteManager::setSprite(bool sliding, bool kicking, bool runningFast) {
@@ -288,6 +296,8 @@ bool PlayerSpriteManager::wasKickingYet() {
 
 void PlayerSpriteManager::isAlreadyKicking() {
     this->wasKicking = true;
+    // Kick sound
+    Mix_PlayChannel( -1, gKickSound, 0 );
 }
 
 bool PlayerSpriteManager::isSliding() {

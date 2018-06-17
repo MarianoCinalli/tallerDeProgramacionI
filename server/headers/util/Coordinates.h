@@ -9,22 +9,22 @@ class Coordinates : public Loggable {
     private:
         int x;
         int y;
-        void validatePositionInBounds();
 
     public:
         Coordinates(int x, int y);
         int getX();
         int getY();
-        void setX(int otherX);
-        void setY(int otherY);
+        int setX(int otherX);
+        int setY(int otherY);
 
-        void addX(int amount);
+        int addX(int amount);
         void subtractX(int amount);
 
-        void addY(int amount);
+        int addY(int amount);
         void subtractY(int amount);
 
-        void setCoord(Coordinates other);
+        int validatePositionInBounds();
+        void set(Coordinates other);
         int distanceTo(Coordinates* other);
         std::string toString();
 

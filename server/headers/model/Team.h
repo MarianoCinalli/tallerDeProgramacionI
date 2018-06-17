@@ -1,8 +1,10 @@
 #include <list>
+#include <string>
 #include "model/Player.h"
 
 #ifndef TEAM_H
 #define TEAM_H
+
 
 class Team {
     private:
@@ -10,17 +12,20 @@ class Team {
         int local; // 0 si es local, 1 si es visitante
         int formacion;
         std::string name;
-
+        int score;
     public:
         Team(int, std::string);
         ~Team();
         void order();
         void addPlayer(Player* player);
         std::list<Player*> getPlayers();
+        Player* getPlayer(int num);
         void setFormacion(int formacion);
+        int getTeamNum();
         int getAmountPlayers();
         std::string getName();
-        
+        void increaseScore();
+        int getScore();
 };
 #endif // TEAM_H
 

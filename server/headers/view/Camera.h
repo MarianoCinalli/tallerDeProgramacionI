@@ -19,10 +19,8 @@ class Camera {
         SDL_Rect margin;
     public:
         Camera(Coordinates* position, int width, int height, int margin);
-
+        Coordinates getCenter();
         std::string getAsYaml();
-        // transforma las coordenadas para que queden relativas a la camara.
-        Coordinates* getRelativeCoordinates(Coordinates* coordinates);
         // calcular la nueva posicion de la camara basado en la coordenada quese le pasa
         void calculateNewPosition(Coordinates* objPosition);
         // devuelve los jugadores dentro del margen.

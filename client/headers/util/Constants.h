@@ -42,7 +42,9 @@ const int LEVEL_HEIGHT = 1000;
 
 // Screen dimension constants
 const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_HEIGHT = 700;
+
+// const int SCREEN_HEIGHT = 700;
 
 // Necesario para la camara
 const int SPRITE_SIZE = 63;
@@ -51,8 +53,14 @@ const int CUERPO_JUGADOR = 15;
 const int DRAW_SIZE_PLAYER = 85;
 const int DRAW_SIZE_CORRECTION = 15;
 
+
+const int FIELD_CORRECTION = 0;
+const int FIELD_WIDTH = 800*0.8;
+const int FIELD_HEIGHT = 600*0.8;
+
 // Velocidad de desplazamiento scroll camara
 const int SCROLL_SPEED = 13;
+const int CAMERA_OFFSET = 100;
 
 const int VALOR_INVALIDO = 5;
 const int ARCHIVO_INVALIDO = 6;
@@ -63,6 +71,7 @@ const int PLAYERS_PER_TEAM = 7;
 //Velocidad
 const int NORMAL_VELOCITY = 15;
 const int BALL_DECELERATE_TIME = 15; //a numeros mas grandes, tarda mas
+const int BALL_DECELERATE_CONST = 3;
 
 //interceptar pases
 const int INTERCEPT_VALUE = 40;
@@ -71,6 +80,7 @@ const int TIME_BALL_NO_INTERCEPT = 4;
 
 //render
 const int DRAW_FRAME_RATE = 50;
+// const int MILISECONDS_TIMEOUT = 20;
 const int STANDING_DIVISOR = 10;
 const int RUNNING_DIVISOR = 10;
 const int SLIDING_DIVISOR = 7;
