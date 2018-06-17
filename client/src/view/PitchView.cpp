@@ -37,7 +37,6 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     int team = 0;
 
     // TODO pasar a Constants
-    double MINIMAP_SCALE = 0.2;
     double MINIMAP_SCALE_X = 0.13;
     double MINIMAP_SCALE_Y = 0.105;
 

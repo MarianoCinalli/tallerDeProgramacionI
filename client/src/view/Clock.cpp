@@ -27,11 +27,9 @@ void Clock::render(SDL_Renderer* screen) {
     clockViewport.h = 100;
 
     SDL_RenderSetViewport( screen, &clockViewport ); //Render texture to screen
-    // SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
-    // SDL_RenderFillRect(screen, &clockViewport);
-    // Dibujo los bordes del clockViewport
     SDL_Rect outlineRect = { 0, 0, clockViewport.w, clockViewport.h };
     SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
+    // Dibujo los bordes del clockViewport
     SDL_RenderFillRect(screen, &outlineRect);
     SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
     SDL_RenderDrawRect( screen, &outlineRect );
