@@ -43,8 +43,8 @@ int Player::getTeam() {
     return this->team;
 }
 
-int Player::getId(){
-  return this->id;
+int Player::getId() {
+    return this->id;
 }
 int Player::getStealCoef() {
     return this->stealCoef;
@@ -216,7 +216,7 @@ void Player::updatePosition(Coordinates* positionToFollow) {
 
     int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
     int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
-    if (this->canMove(amountX, amountY)) {
+    if (this->shouldMove(amountX, amountY)) {
         this->position->addX(amountX);
         this->position->addY(amountY);
         log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
@@ -246,11 +246,11 @@ void Player::updatePosition(Coordinates* positionToFollow) {
 
 bool Player::shouldMove(int amountX, int amountY) {
     return this->canMove && this->playerMovent->canMoveTo(
-        this->position->getX() + amountX,
-        this->position->getY() + amountY,
-        this->id,
-        this->isSelected
-    );
+               this->position->getX() + amountX,
+               this->position->getY() + amountY,
+               this->id,
+               this->isSelected
+           );
 }
 
 void Player::follow(Coordinates* positionToFollow) {
@@ -368,8 +368,8 @@ bool Player::hasKicked() {
     return this->kicked;
 }
 
-void Player::setKicked(bool k){
-  this->kicked=k;
+void Player::setKicked(bool k) {
+    this->kicked = k;
 }
 
 bool Player::isSliding() {

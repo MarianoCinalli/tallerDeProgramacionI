@@ -20,23 +20,23 @@ std::list<Player*> Team::getPlayers() {
     return this->players;
 }
 
-Player* Team::getPlayer(int num){
-  if (this->local==1){
-    num +=7;
-  }
-  for (Player* player : this->players){
-    if (player->getId() == num){
-      return player;
+Player* Team::getPlayer(int num) {
+    if (this->local == 1) {
+        num += 7;
     }
-  }
+    for (Player* player : this->players) {
+        if (player->getId() == num) {
+            return player;
+        }
+    }
     return NULL;
 }
 
 int Team::getAmountPlayers() {
     return this->players.size();
 }
-int Team::getTeamNum(){
-  return this->local;
+int Team::getTeamNum() {
+    return this->local;
 }
 
 std::string Team::getName() {
@@ -60,8 +60,8 @@ Team::~Team() {
 
 void Team::setFormacion(int formacion) {
     this->formacion = formacion;
-    for (Player* p: players){
-      p->setFieldPosition(formacion);
+    for (Player* p : players) {
+        p->setFieldPosition(formacion);
     }
 }
 

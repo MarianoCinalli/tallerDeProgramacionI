@@ -128,17 +128,16 @@ void GameController::checkState() {
 void GameController::checkGoal() {
     int x = this->ball->getPosition()->getX();
     if (x < 200 || x > 1400){
-      if ((this->stateOption ==CENTER_LEFT_START) || (this->stateOption ==CENTER_RIGHT_START)){
-      Team* team;
-      if (this->stateOption == CENTER_LEFT_START) {
-          team = this->pitch->getTeam(TEAM_RIGHT);
+        if ((this->stateOption ==CENTER_LEFT_START) || (this->stateOption ==CENTER_RIGHT_START)){
+            Team* team;
+            if (this->stateOption == CENTER_LEFT_START) {
+                team = this->pitch->getTeam(TEAM_RIGHT);
+            } else if (this->stateOption == CENTER_RIGHT_START) {
+                team = this->pitch->getTeam(TEAM_LEFT);
+            }
+            team->increaseScore();
         }
-      else if (this->stateOption == CENTER_RIGHT_START) {
-          team = this->pitch->getTeam(TEAM_LEFT);
-      }
-      team->increaseScore();
     }
-  }
 }
 
 void GameController::updatePlayers() {
