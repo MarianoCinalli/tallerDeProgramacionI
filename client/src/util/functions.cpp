@@ -151,13 +151,9 @@ void* drawer(void* argument) {
       if (!lostConnectionQuit){
         if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-          // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-          /* Clear the entire screen to our selected color. */
-          // SDL_RenderClear(renderer);
           clock->render(renderer);
           score->render(renderer);
           // Dibujar el minimap
-
           pitchView->renderMinimap(renderer);
           pitchView->render(renderer);
         }

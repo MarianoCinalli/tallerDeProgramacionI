@@ -411,7 +411,7 @@ void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, std::string mensaj
     Texture equipo1InputTexture;
     equipo1InputTexture.loadFromRenderedText("Argentina", gRenderer, SDL_BLUE, gFont);
     Texture equipo2InputTexture;
-    equipo2InputTexture.loadFromRenderedText("Brazil", gRenderer, SDL_BLUE, gFont);
+    equipo2InputTexture.loadFromRenderedText("Brasil", gRenderer, SDL_BLUE, gFont);
 
     int inputsIndex = 0;
     while (!quit) {
@@ -820,7 +820,7 @@ int main(int argc, char* argv[]) {
             if (seleccion == 0) {
                 equipo = "Argentina";
             } else {
-                equipo = "Brazil";
+                equipo = "Brasil";
             }
             // Le aviso al servidor cual fue el equipo elegido
             log("Main: Mandandole al server: ", LOG_INFO);

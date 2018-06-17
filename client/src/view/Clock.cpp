@@ -21,9 +21,9 @@ void Clock::parseYaml(YAML::Node node){
 void Clock::render(SDL_Renderer* screen) {
     // Este es el viewPort del Clock
     SDL_Rect clockViewport;
-    clockViewport.x = 2 * (SCREEN_WIDTH / 3);
+    clockViewport.x = 500; //2 * (SCREEN_WIDTH / 3);
     clockViewport.y = 0;
-    clockViewport.w = SCREEN_WIDTH / 3;
+    clockViewport.w = 300; //SCREEN_WIDTH / 3;
     clockViewport.h = 100;
 
     SDL_RenderSetViewport( screen, &clockViewport ); //Render texture to screen
@@ -33,7 +33,7 @@ void Clock::render(SDL_Renderer* screen) {
     SDL_Rect outlineRect = { 0, 0, clockViewport.w, clockViewport.h };
     SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
     SDL_RenderFillRect(screen, &outlineRect);
-    SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
     SDL_RenderDrawRect( screen, &outlineRect );
 
     // Colores

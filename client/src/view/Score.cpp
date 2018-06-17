@@ -29,7 +29,7 @@ void Score::render(SDL_Renderer* screen) {
     SDL_Rect scoreViewport;
     scoreViewport.x = 0;
     scoreViewport.y = 0;
-    scoreViewport.w = SCREEN_WIDTH / 3;
+    scoreViewport.w = 300; //SCREEN_WIDTH / 3;
     scoreViewport.h = 100;
 
     SDL_RenderSetViewport( screen, &scoreViewport ); //Render texture to screen
@@ -37,7 +37,7 @@ void Score::render(SDL_Renderer* screen) {
     SDL_Rect outlineRect = { 0, 0, scoreViewport.w, scoreViewport.h };
     SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
     SDL_RenderFillRect(screen, &outlineRect);
-    SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
     SDL_RenderDrawRect( screen, &outlineRect );
 
     // Colores
