@@ -43,10 +43,18 @@ void Clock::render(SDL_Renderer* screen) {
       mensaje = "00-00";
     }
     std::replace( mensaje.begin(), mensaje.end(), '-', ':');
+    int minutos = stoi(mensaje.substr(0, mensaje.find(":")));
+    //segundos = stoi(mensaje.substr(mensaje.find(":")+1,mensaje.length()));
+    std::string mensajeTime;
+    if ( minutos < 45 ) {
+      mensajeTime = "PRIMER TIEMPO";
+    } else {
+      mensajeTime = "SEGUNDO TIEMPO";
+    }
 
     Texture timeTexture;
-    timeTexture.loadFromRenderedText("TIME", screen, SDL_BLACK, this->gFont);
-    SDL_Rect posicionTime = {120, 10, 70, 25};
+    timeTexture.loadFromRenderedText(mensajeTime, screen, SDL_BLACK, this->gFont);
+    SDL_Rect posicionTime = {20, 10, 260, 25};
     SDL_RenderCopyEx(screen, timeTexture.getSpriteSheetTexture(), NULL, &posicionTime, 0.0, NULL, SDL_FLIP_NONE);
 
     Texture mensajeTexture;
