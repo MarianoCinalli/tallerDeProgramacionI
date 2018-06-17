@@ -244,7 +244,7 @@ bool GameController::joinTeam(std::string playerName, int team, int formation, i
 
 
 bool GameController::setTeamFormation(int team, int formation) {
-    this->pitch->setTeamFormation(team,formation);
+    return this->pitch->setTeamFormation(team,formation);
 }
 
 void GameController::startGame() {

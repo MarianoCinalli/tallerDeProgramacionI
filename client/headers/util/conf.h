@@ -32,6 +32,7 @@ class Conf : public Loggable {
     int getCasaca();    //principal true o alternativa false
     int getDebugLevel();
     string getAssetsCancha();
+    string getAssetsCanchaMini();
     string getNombre();
     string getSpritesPath();
     // string chooseShirtsPath(YAML::Node nod);

@@ -32,11 +32,12 @@ VistaCancha:
 class PitchView {
     private:
         Texture* pitch;
+        Texture* pitchMini;
         Camera* camera;
         std::list<PlayerSpriteManager*> playerViews;
         BallSpriteManager* ballView;
     public:
-        PitchView(Texture* pitch, Camera* camera);
+        PitchView(Texture* pitch, Texture* pitchMini, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);
         void renderMinimap(SDL_Renderer* screen);

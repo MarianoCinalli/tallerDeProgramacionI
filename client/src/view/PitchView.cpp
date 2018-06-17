@@ -1,8 +1,9 @@
 #include "view/PitchView.h"
 
-PitchView::PitchView(Texture* pitch, Camera* camera) {
+PitchView::PitchView(Texture* pitch, Texture* pitchMini, Camera* camera) {
     log("PitchView: Creando vista de la cancha...", LOG_INFO);
     this->pitch = pitch;
+    this->pitchMini = pitchMini;
     this->camera = camera;
     log("PitchView: Vista de la cancha creada...", LOG_INFO);
 }
@@ -29,7 +30,7 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     SDL_RenderFillRect(screen, &outlineRect);
 
     // Dibujar imagen de la cancha
-    SDL_RenderCopy( screen, this->pitch->getSpriteSheetTexture(), NULL, NULL );
+    SDL_RenderCopy( screen, this->pitchMini->getSpriteSheetTexture(), NULL, NULL );
 
     SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
     SDL_RenderDrawRect( screen, &outlineRect );
