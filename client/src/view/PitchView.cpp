@@ -27,11 +27,12 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     SDL_Rect outlineRect = { 0, 0, minimapViewport.w, minimapViewport.h };
     SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
     SDL_RenderFillRect(screen, &outlineRect);
-    SDL_SetRenderDrawColor( screen, 0x00, 0xFF, 0x00, 0xFF ); //VERDE
-    SDL_RenderDrawRect( screen, &outlineRect );
 
     // Dibujar imagen de la cancha
     SDL_RenderCopy( screen, this->pitch->getSpriteSheetTexture(), NULL, NULL );
+
+    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
+    SDL_RenderDrawRect( screen, &outlineRect );
 
     int team = 0;
 
