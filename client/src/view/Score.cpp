@@ -47,13 +47,24 @@ void Score::render(SDL_Renderer* screen) {
     SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
     SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
-    std::string mensaje = std::to_string(this->local) + " / " + std::to_string(this->visitante);
+    std::string mensaje = std::to_string(this->local) + "   " + std::to_string(this->visitante);
     if (mensaje.empty()) {
       mensaje = "0";
     }
+
+    Texture argTexture;
+    argTexture.loadFromRenderedText("ARG", screen, SDL_BLACK, this->gFont);
+    SDL_Rect posicionArg = {35, 10, 70, 25};
+    SDL_RenderCopyEx(screen, argTexture.getSpriteSheetTexture(), NULL, &posicionArg, 0.0, NULL, SDL_FLIP_NONE);
+
+    Texture braTexture;
+    braTexture.loadFromRenderedText("BRA", screen, SDL_BLACK, this->gFont);
+    SDL_Rect posicionBra = {195, 10, 70, 25};
+    SDL_RenderCopyEx(screen, braTexture.getSpriteSheetTexture(), NULL, &posicionBra, 0.0, NULL, SDL_FLIP_NONE);
+
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
-    SDL_Rect posicion = {0, 0, scoreViewport.w, scoreViewport.h};
+    SDL_Rect posicion = {35, 30, 230, 65};
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
 }
 
