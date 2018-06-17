@@ -27,18 +27,18 @@ int Pitch::goalkick(){
   int x = ball->getPosition()->getX();
   int y = ball->getPosition()->getY();
   int height = ball->getHeight();
-  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400)) && height<GOAL_HEIGHT){
+  if (((x < 60) || (x > 1488)) && ((y<600) && (y>400)) && height<GOAL_HEIGHT){
     // log("PITCH: altura, ", height, LOG_DEBUG);
-    if (x<30)
+    if (x<60)
       return CENTER_LEFT_START;
     else
       return CENTER_RIGHT_START;
 
   }
-  else if (x < 30){
+  else if (x < 60){
     return LEFT_START;
   }
-  else if (x > 1510){
+  else if (x > 1488){
     return RIGHT_START;
   }
   return -1;
