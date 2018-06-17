@@ -7,6 +7,7 @@ ConnectionManager::ConnectionManager() {
 ConnectionManager::ConnectionManager(std::string ip, int port) {
     this->ip = ip;
     this->port = port;
+    this->timeoutSeconds = 120; // Dos minutos de timeout.
     this->my_socket = 0;
 }
 
@@ -16,6 +17,14 @@ bool ConnectionManager::connectToServer() {
     this->my_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (this->my_socket == 0) {
         log("ConnectionManager: Creacion del socket fallida: ", strerror(errno), LOG_ERROR);
+        return false;
+    }
+
+    struct timeval tv;
+    tv.tv_sec = this->timeoutSeconds;
+    tv.tv_usec = 0;
+    if (setsockopt(this->my_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv) <0) {
+        log("ConnectionManager: Error seteando el timeout al socket. ", strerror(errno), LOG_ERROR);
         return false;
     }
 

@@ -16,6 +16,7 @@ class ConnectionManager {
         std::string ip;
         int port;
         int my_socket;
+        int timeoutSeconds;
     public:
         ConnectionManager();
         ConnectionManager(std::string ip, int port);

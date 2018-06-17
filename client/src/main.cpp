@@ -451,6 +451,95 @@ void openLoginEquipo(SDL_Renderer* gRenderer, int& seleccion, std::string mensaj
     log("openLoginEquipo: Sale de openLoginEquipo", LOG_INFO);
 }
 
+void openLoginFormacion(SDL_Renderer* gRenderer, int& seleccion, std::string mensaje, ConnectionManager* connectionManager) {
+    log("openLoginFormacion: Entra al openLoginFormacion", LOG_INFO);
+    bool quit = false;
+    SDL_Event e;
+    TTF_Font* gFont = NULL;
+    gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (gFont == NULL) {
+        log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+    }
+    Texture opc1Texture;
+    opc1Texture.loadFromRenderedText("->", gRenderer, SDL_RED, gFont);
+    Texture mensajeTexture;
+    mensajeTexture.loadFromRenderedText(mensaje, gRenderer, SDL_RED, gFont);
+    Texture formacion1InputTexture;
+    formacion1InputTexture.loadFromRenderedText("3-3", gRenderer, SDL_BLUE, gFont);
+    Texture formacion2InputTexture;
+    formacion2InputTexture.loadFromRenderedText("3-1-2", gRenderer, SDL_BLUE, gFont);
+    Texture formacion3InputTexture;
+    formacion3InputTexture.loadFromRenderedText("3-2-1", gRenderer, SDL_BLUE, gFont);
+
+    int inputsIndex = 0;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
+                endProgram(1, connectionManager);
+            } else if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_TAB) {
+                    inputsIndex++;
+                    if (inputsIndex >= 3) { inputsIndex = 0; }
+                }
+                if (e.key.keysym.sym == SDLK_RETURN) {
+                    // enviar la configuracion al servidor
+                    quit = true;
+                }
+            }
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        //Render text textures
+        SDL_Rect renderQuadOpc1 = { 250, 150 + (inputsIndex * 50), opc1Texture.getWidth(), opc1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, opc1Texture.getSpriteSheetTexture(), NULL, &renderQuadOpc1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - mensajeTexture.getWidth()) / 2, 50, mensajeTexture.getWidth(), mensajeTexture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, mensajeTexture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - formacion1InputTexture.getWidth()) / 2, 150, formacion1InputTexture.getWidth(), formacion1InputTexture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, formacion1InputTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad2 = { (SCREEN_WIDTH - formacion2InputTexture.getWidth()) / 2, 200, formacion2InputTexture.getWidth(), formacion2InputTexture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, formacion2InputTexture.getSpriteSheetTexture(), NULL, &renderQuad2, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad3 = { (SCREEN_WIDTH - formacion3InputTexture.getWidth()) / 2, 250, formacion3InputTexture.getWidth(), formacion3InputTexture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, formacion3InputTexture.getSpriteSheetTexture(), NULL, &renderQuad3, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderPresent(gRenderer);
+    }
+    seleccion = inputsIndex;
+    log("openLoginEquipo: Sale de openLoginFormacion", LOG_INFO);
+}
+
+
+void showLostConnectionMessage(SDL_Renderer* gRenderer) {
+    log("showLostConnectionMessage: Se registro la salida por perdida de conexion. Mostrando mensaje.", LOG_INFO);
+    SDL_Event e;
+    TTF_Font* gFont = NULL;
+    gFont = TTF_OpenFont("lazy.ttf", 30);
+    if (gFont == NULL) {
+        log("showLostConnectionMessage: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+    }
+    Texture line1Texture;
+    line1Texture.loadFromRenderedText("Se perdio la conexion con el servidor!", gRenderer, SDL_BLUE, gFont);
+    Texture line2Texture;
+    line2Texture.loadFromRenderedText("Presionar 'escape' para salir...", gRenderer, SDL_BLUE, gFont);
+    bool continueShowingMessage = true;
+    while (continueShowingMessage) {
+        if (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE) {
+                continueShowingMessage = false;
+            }
+        }
+        //Clear screen
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(gRenderer);
+        //Render text textures
+        SDL_Rect renderQuad0 = { (SCREEN_WIDTH - line1Texture.getWidth()) / 2, 50, line1Texture.getWidth(), line1Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line1Texture.getSpriteSheetTexture(), NULL, &renderQuad0, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_Rect renderQuad1 = { (SCREEN_WIDTH - line2Texture.getWidth()) / 2, 150, line2Texture.getWidth(), line2Texture.getHeight() };
+        SDL_RenderCopyEx(gRenderer, line2Texture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+        SDL_RenderPresent(gRenderer);
+        usleep(1000);
+    }
+}
+
 void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string servidor, std::string puerto, std::string usuario, std::string equipo, ConnectionManager* connectionManager) {
     log("openLoginEsperar: Entra al openLogin Esperar", LOG_INFO);
     SDL_Event e;
@@ -505,10 +594,12 @@ void openLoginEsperar(SDL_Renderer* gRenderer, std::string mensaje, std::string 
         readBytes = connectionManager->getMessage(beginMessage);
         if (readBytes < 0) {
             log("Main: Error esperando el mensaje de comienzo del partido. Saliendo...", LOG_ERROR);
+            showLostConnectionMessage(gRenderer);
             endProgram(1, connectionManager);
         } else if (readBytes == 0) {
             showLostConnectionMessage(gRenderer, connectionManager, true);
             log("Main: No se pudo establecer coneccion con el server. Esta el server andando?. Saliendo...", LOG_INFO);
+            showLostConnectionMessage(gRenderer);
             endProgram(1, connectionManager);
         } else {
             if (beginMessage == "gameBegins:") {
@@ -644,6 +735,7 @@ int main(int argc, char* argv[]) {
     std::string usuario = "zidane";
     std::string clave = "zidane";
     std::string equipo = " ";
+    int formacion = 0;
     std::string mensaje = " ";
     // Respuesta del server
     std::string message = "";
@@ -653,10 +745,11 @@ int main(int argc, char* argv[]) {
     bool connected = false;
     bool hasLoggedIn = false;
     bool hasPickedTeam = false;
+    bool hasPickedFormation = false;
     bool fullParty = false;
     std::string mensajeError = "";
 
-    while (!connected || !hasLoggedIn || !hasPickedTeam) {
+    while (!connected || !hasLoggedIn || !hasPickedTeam || !hasPickedFormation) {
         // Si no esta conectado, intenta:
         if (!connected) {
             openLoginServer(renderer, servidor, puerto, mensaje, connectionManager);
@@ -732,27 +825,72 @@ int main(int argc, char* argv[]) {
             // Le aviso al servidor cual fue el equipo elegido
             log("Main: Mandandole al server: ", LOG_INFO);
             // int formation = conf->getFormacion();
-            connectionManager->sendMessage("use:" + std::to_string(seleccion)+"-"+std::to_string(formation));
+            connectionManager->sendMessage("use:" + std::to_string(seleccion));
             std::string resultMessage;
             connectionManager->getMessage(resultMessage);
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
             std::string resultValue = resultMessage.substr(resultMessage.find(":") + 1, resultMessage.length());
             if (resultKey == "true") {
                 hasPickedTeam = true;
+            } else if (resultKey == "withFormation") {
+                hasPickedTeam = true;
+                hasPickedFormation = true;
             } else if (resultKey == "false") {
                 if (resultValue == "noRoom") {
                     log("Main: El servidor respondio que el equipo estaba lleno. Elegir otro.", LOG_INFO);
                     mensajeError = "Equipo lleno. Por favor, elegir otro.";
                 } else {
-                    log("Main: Que carajo paso?", LOG_INFO);
+                    log("Main: Finalizando por valor no entendido: ", resultValue, LOG_INFO);
                     endProgram(1, connectionManager);
                 }
             } else {
-                log("Main: Que carajo paso?", LOG_INFO);
+                log("Main: Finalizando por clave no entendida. ", resultKey, LOG_INFO);
                 endProgram(1, connectionManager);
             }
         }
-        if (connected && hasLoggedIn && hasPickedTeam) {
+
+        if (connected && hasLoggedIn && hasPickedTeam && !hasPickedFormation && !fullParty) {
+            // Aca, esta conectado al server, y esta bien logueado
+            // Tiene que elegir el equipo con el cual va a jugar
+            if (mensajeError != "") {
+                mensaje = mensajeError;
+            } else {
+                mensaje = "Elegir Formacion:";
+            }
+            openLoginFormacion(renderer, seleccion, mensaje, connectionManager);
+            log("Main: El cliente eligio: ", seleccion, LOG_INFO);
+            if (seleccion == 0) {
+                formacion = 33;
+            } else if (seleccion == 1) {
+                formacion = 312;
+            } else if (seleccion == 2) {
+                formacion = 321;
+            }
+            // Le aviso al servidor cual fue el equipo elegido
+            log("Main: Mandandole al server: ", LOG_INFO);
+            connectionManager->sendMessage("formation:" + std::to_string(formacion));
+            std::string resultMessage;
+            connectionManager->getMessage(resultMessage);
+            std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
+            std::string resultValue = resultMessage.substr(resultMessage.find(":") + 1, resultMessage.length());
+            if (resultKey == "true") {
+                hasPickedFormation = true;
+            } else if (resultKey == "false") {
+                if (resultValue == "noRoom") {
+                    log("Main: El servidor respondio que el equipo estaba lleno. Elegir otro.", LOG_INFO);
+                    mensajeError = "Equipo lleno. Por favor, elegir otro.";
+                } else {
+                    log("Main: Finalizando por valor no entendido: ", resultValue, LOG_INFO);
+                    endProgram(1, connectionManager);
+                }
+            } else {
+                log("Main: Finalizando por clave no entendida. ", resultKey, LOG_INFO);
+                endProgram(1, connectionManager);
+            }
+        }
+
+
+        if (connected && hasLoggedIn && hasPickedTeam && hasPickedFormation) {
             // optimus! esta conectado, logueado y con equipo ya seleccionado
             mensaje = "...";
             openLoginEsperar(renderer, mensaje, servidor, puerto, usuario, equipo, connectionManager);

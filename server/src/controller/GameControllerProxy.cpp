@@ -56,6 +56,13 @@ bool GameControllerProxy::joinTeam(std::string playerName, int team, int formati
     return result;
 }
 
+bool GameControllerProxy::setTeamFormation(int team, int formation) {
+    update_model_mutex.lock();
+    bool result = this->gameController->setTeamFormation(team, formation);
+    update_model_mutex.unlock();
+    return result;
+}
+
 std::string GameControllerProxy::getMessageToBroadcast(bool allPlayers) {
     // No hace falta bloquear.
     return this->gameController->getMessageToBroadcast(allPlayers);

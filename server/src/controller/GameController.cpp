@@ -26,6 +26,8 @@ void GameController::addUser(std::string user, int teamNum, int formation) {
 }
 
 
+
+
 void GameController::removeUser(std::string user) {
     log("GameController: Removiendo usuario...", LOG_INFO);
     this->removeUserFromTeam(user);
@@ -238,6 +240,11 @@ bool GameController::joinTeam(std::string playerName, int team, int formation, i
             return true;
         }
     }
+}
+
+
+bool GameController::setTeamFormation(int team, int formation) {
+    this->pitch->setTeamFormation(team,formation);
 }
 
 void GameController::startGame() {
