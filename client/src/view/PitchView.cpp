@@ -18,9 +18,9 @@ void PitchView::addBallView(BallSpriteManager* ballView) {
 void PitchView::renderMinimap(SDL_Renderer* screen) {
     // Este es el viewPort del Minimap
     SDL_Rect minimapViewport;
-    minimapViewport.x = SCREEN_WIDTH / 3;
+    minimapViewport.x = 300; //SCREEN_WIDTH / 3;
     minimapViewport.y = 0;
-    minimapViewport.w = SCREEN_WIDTH / 3;
+    minimapViewport.w = 200; //SCREEN_WIDTH / 3;
     minimapViewport.h = 100;
     SDL_RenderSetViewport( screen, &minimapViewport ); //Render texture to screen
     // Dibujo los bordes del minimapViewport
@@ -38,23 +38,23 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
 
     // TODO pasar a Constants
     double MINIMAP_SCALE = 0.2;
-    double MINIMAP_SCALE_X = 0.17;
-    double MINIMAP_SCALE_Y = 0.10;
+    double MINIMAP_SCALE_X = 0.13;
+    double MINIMAP_SCALE_Y = 0.105;
 
     // Dibujar la camara
     Coordinates coordinatesCam = this->camera->getPosition();
     SDL_Rect cameraRect;
     cameraRect.x = coordinatesCam.getX() * MINIMAP_SCALE_X;
     cameraRect.y = coordinatesCam.getY() * MINIMAP_SCALE_Y;
-    cameraRect.w = 102;//hacer proporcion
-    cameraRect.h = 48;//hacer proporcion
+    cameraRect.w = 76;//hacer proporcion
+    cameraRect.h = 46;//hacer proporcion
     SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
     SDL_RenderDrawRect( screen, &cameraRect );
 
     // Bibujar la pelota
     Coordinates* coordinatesBall = this->ballView->getBallCoordinates();
     SDL_Rect ballRect = { coordinatesBall->getX() * MINIMAP_SCALE_X, coordinatesBall->getY() * MINIMAP_SCALE_Y, 3, 3 };
-    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0xFF, 0xFF ); //AZUL
+    SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
     SDL_RenderFillRect( screen, &ballRect );
 
     // Obtener la posicion de todos los jugadores
@@ -68,9 +68,9 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
         team = (*viewIter)->getPlayerTeam();
         if (team==0) {
           // equipo Rojo
-          SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+          SDL_SetRenderDrawColor( screen, 0x00, 0xCC, 0xCC, 0xFF ); //CELESTE
         } else {
-          SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
+          SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0x00, 0xFF ); //AMARILLO
         }
         SDL_RenderFillRect( screen, &playerRect );
     }

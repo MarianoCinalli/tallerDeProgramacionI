@@ -29,7 +29,7 @@ void Score::render(SDL_Renderer* screen) {
     SDL_Rect scoreViewport;
     scoreViewport.x = 0;
     scoreViewport.y = 0;
-    scoreViewport.w = SCREEN_WIDTH / 3;
+    scoreViewport.w = 300; //SCREEN_WIDTH / 3;
     scoreViewport.h = 100;
 
     SDL_RenderSetViewport( screen, &scoreViewport ); //Render texture to screen

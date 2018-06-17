@@ -21,9 +21,9 @@ void Clock::parseYaml(YAML::Node node){
 void Clock::render(SDL_Renderer* screen) {
     // Este es el viewPort del Clock
     SDL_Rect clockViewport;
-    clockViewport.x = 2 * (SCREEN_WIDTH / 3);
+    clockViewport.x = 500; //2 * (SCREEN_WIDTH / 3);
     clockViewport.y = 0;
-    clockViewport.w = SCREEN_WIDTH / 3;
+    clockViewport.w = 300; //SCREEN_WIDTH / 3;
     clockViewport.h = 100;
 
     SDL_RenderSetViewport( screen, &clockViewport ); //Render texture to screen
