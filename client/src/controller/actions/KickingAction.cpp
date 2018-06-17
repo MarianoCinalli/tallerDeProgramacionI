@@ -14,5 +14,4 @@ std::string KickingAction::getParameters() {
 }
 
 KickingAction::~KickingAction() {
-	//preguntar por esto!
 }

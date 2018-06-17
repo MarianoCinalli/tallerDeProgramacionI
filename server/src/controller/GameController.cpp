@@ -1,14 +1,15 @@
 #include "controller/GameController.h"
 
-GameController::GameController(Pitch* pitch, Camera* camera) {
+GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     log("GameController: Creando gameController...", LOG_INFO);
     this->camera = camera;
     this->pitch = pitch;
     this->ball = this->pitch->getBall();
     this->end = false;
-    this->timer = new Timer();
-    this->state = GOALKICK_STATE;
-    this->stateOption=0;
+    this->timer = timer;
+    this->state = HALF_START_STATE;
+    this->stateOption = CENTER_LEFT_START;
+    this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
     log("GameController: GameController creado.", LOG_INFO);
@@ -92,34 +93,51 @@ void GameController::execute(Action* action, std::string user) {
 }
 
 void GameController::update() {
-
-      Time* elapsedTime = this->timer->getTime();
-      this->updatePlayers();
-      this->updateBall();
-      this->updateCameraPosition();
-      delete(elapsedTime);
-
-      checkState();
-
+    Time* elapsedTime = this->timer->getTime();
+    this->checkState();
+    this->updatePlayers();
+    this->updateBall();
+    this->updateCameraPosition();
+    this->checkTime(elapsedTime);
+    delete(elapsedTime);
 }
 
-void GameController::checkState(){
-  switch (this->state) {
-    case NORMAL_STATE:
-    {
-      this->stateOption=this->pitch->goalkick();
-      if (this->stateOption>=0){
-        this->state = GOALKICK_STATE;
-      }
-      break;
+void GameController::checkState() {
+    switch (this->state) {
+        case NORMAL_STATE: {
+            this->stateOption = this->pitch->goalkick();
+            if (this->stateOption >= 0) {
+                this->state = GOALKICK_STATE;
+            }
+            break;
+        }
+        case GOALKICK_STATE: {
+            this->checkGoal();
+            this->pitch->setStart(this->stateOption);
+            this->state = NORMAL_STATE;
+            break;
+        }
+        case HALF_START_STATE: {
+          this->pitch->setStart(this->stateOption);
+          this->state = NORMAL_STATE;
+          break;
+        }
     }
-    case GOALKICK_STATE:
-    {
-      this->pitch->setStart(this->stateOption);
-      this->state = NORMAL_STATE;
-      break;
-    }
+}
 
+void GameController::checkGoal() {
+    int x = this->ball->getPosition()->getX();
+    if (x < 200 || x > 1400){
+      if ((this->stateOption ==CENTER_LEFT_START) || (this->stateOption ==CENTER_RIGHT_START)){
+      Team* team;
+      if (this->stateOption == CENTER_LEFT_START) {
+          team = this->pitch->getTeam(TEAM_RIGHT);
+        }
+      else if (this->stateOption == CENTER_RIGHT_START) {
+          team = this->pitch->getTeam(TEAM_LEFT);
+      }
+      team->increaseScore();
+    }
   }
 }
 
@@ -143,7 +161,8 @@ void GameController::updateBall() {
     if (this->ball->isDominated() && this->ball->getPlayer()->isKicking() && !this->ball->getPlayer()->hasKicked()) {
         log("GameController: La pelota fue pateada.", LOG_DEBUG);
         Player* player = this->ball->getPlayer();
-        this->ball->isPassed(player->getOrientation(), player->getKickPower()*PASS_SPEED); //TODO valor de pase?
+        bool highPass = player->isAHighPass();
+        this->ball->isPassed(player->getOrientation(), player->getKickPower()*PASS_SPEED, highPass); //TODO valor de pase?
         player->setKicked(true);
     }
     this->pitch->changeBallOwnership();
@@ -157,6 +176,21 @@ void GameController::updateCameraPosition() {
     Coordinates* position = this->ball->getPosition();
     // Coordinates* position = this->pitch->getActivePlayer(0)->getPosition();
     this->camera->calculateNewPosition(position);
+}
+
+void GameController::checkTime(Time* elapsedTime) {
+    if (this->isFistHalf && this->hasHalfEnded(elapsedTime, 1)) {
+        this->isFistHalf = false;
+        log("GameController: Termino el primer tiempo.", LOG_INFO);
+        // Aca voy a invertir a las formaciones. Cuando termine con el refator.
+    } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
+        log("GameController: Termino el segundo tiempo.", LOG_INFO);
+        this->setEnd();
+    }
+}
+
+bool GameController::hasHalfEnded(Time* elapsedTime, int halfNumber) {
+    return elapsedTime->getMinutes() >= (MINUTES_PER_HALF * halfNumber);
 }
 
 // Aca deberia haber una nocion del tiempo.
@@ -254,10 +288,7 @@ std::string GameController::getGameStatsMessage() {
 }
 
 GameController::~GameController() {
-    log("GameController: Liberando memoria.", LOG_INFO);
-    log("GameController: Borrando cancha...", LOG_INFO);
+    log("GameController: Liberando memoria. Borrando cancha...", LOG_INFO);
     delete(this->pitch);
-    log("GameController: Borrando timer...", LOG_INFO);
-    delete(this->timer);
-    log("GameController: Cancha borrada.", LOG_INFO);
+    log("GameController: Cancha borrada. Memoria liberada.", LOG_INFO);
 }

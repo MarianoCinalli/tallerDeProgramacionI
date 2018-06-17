@@ -19,6 +19,7 @@ class Team {
         void order();
         void addPlayer(Player* player);
         std::list<Player*> getPlayers();
+        Player* getPlayer(int num);
         void setFormacion(int formacion);
         int getTeamNum();
         int getAmountPlayers();

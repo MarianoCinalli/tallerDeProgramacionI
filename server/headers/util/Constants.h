@@ -36,7 +36,7 @@ enum PlayerStandedActions {
 
 enum states {
   NORMAL_STATE = 1,
-  START_STATE = 2,
+  HALF_START_STATE = 2,
   GOAL_STATE = 3,
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
@@ -71,6 +71,7 @@ const int PLAYERS_PER_TEAM = 7;
 const int NORMAL_VELOCITY = 2;
 const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
+const int BALL_DECELERATE_CONST = 3;
 const int PASS_SPEED = 5;
 
 //interceptar pases
@@ -89,11 +90,17 @@ const int SLIDE_COUNT = 35;
 const int MILISECONDS_TIMEOUT = 12;
 
 //state vars
-const int CENTER_START = 0;
-const int LEFT_START = 1;
-const int RIGHT_START = 2;
+const int CENTER_LEFT_START = 0;
+const int CENTER_RIGHT_START = 1;
+const int LEFT_START = 2;
+const int RIGHT_START = 3;
+
+const int TEAM_LEFT = 0;
+const int TEAM_RIGHT = 1;
 
 const int MAX_ERRORS = 50000;
+
+const int MINUTES_PER_HALF = 45;
 //
 // const int FRAME_WINDOW=1024;
 #endif // CONSTANTS_H_

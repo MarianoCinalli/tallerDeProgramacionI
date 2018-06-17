@@ -1,6 +1,6 @@
 # configuracion
 debug:
-  level: 'spam' # 'spam' o 'debug' o "info" o "error"
+  level: 'debug' # 'spam' o 'debug' o "info" o "error"
 usuarios:
   - {name: mariano, password: mariano}
   - {name: juan, password: juan}
@@ -13,3 +13,5 @@ server:
   port: 8080
 performance:
   margenes: 180
+juego:
+  minutosPorTiempo: 5

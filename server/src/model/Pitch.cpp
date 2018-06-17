@@ -20,12 +20,20 @@ void Pitch::setTeam(Team* team, int teamNumber) {
 
 }
 
+const int GOAL_HEIGHT = 5;
+
 int Pitch::goalkick(){
   Ball* ball = this->ball;
   int x = ball->getPosition()->getX();
   int y = ball->getPosition()->getY();
-  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400))){
-    return CENTER_START;
+  int height = ball->getHeight();
+  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400)) && height<GOAL_HEIGHT){
+    // log("PITCH: altura, ", height, LOG_DEBUG);
+    if (x<30)
+      return CENTER_LEFT_START;
+    else
+      return CENTER_RIGHT_START;
+
   }
   else if (x < 30){
     return LEFT_START;
@@ -39,7 +47,28 @@ int Pitch::goalkick(){
 void Pitch::setStart(int position){
   this->localTeam->order();
   this->awayTeam->order();
+  Player* player = this->localTeam->getPlayer(6); //TODO DEFAULT
+  if (position == LEFT_START){
+    player = this->getTeam(TEAM_LEFT)->getPlayer(1);
+    player->setOrientation(PLAYER_ORIENTATION_RIGHT);
+  }
+  else if (position == RIGHT_START){
+    player = this->getTeam(TEAM_RIGHT)->getPlayer(1);
+    player->setOrientation(PLAYER_ORIENTATION_LEFT);
+
+  }
+  else if (position == CENTER_LEFT_START){
+    player = this->getTeam(TEAM_LEFT)->getPlayer(5);
+    player->setOrientation(PLAYER_ORIENTATION_RIGHT);
+
+  }
+  else if (position == CENTER_RIGHT_START){
+    player = this->getTeam(TEAM_RIGHT)->getPlayer(5);
+    player->setOrientation(PLAYER_ORIENTATION_LEFT);
+  }
+
   this->ball->restart(position);
+  this->ball->setPlayer(player);
 }
 
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
@@ -203,38 +232,39 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 
 void Pitch::checkSteals() {
     log("Pitch: Chequeando intercepciones...", LOG_DEBUG);
-
-    std::list<Player*> players = this->localTeam->getPlayers();
-    std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
-    players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
-    if (!players.empty()) {
-        int nearestDistance = 500; //max distance harcodeadeo TODO
-        Player* nearestPlayer = NULL;
-        for (Player* p : players) {
-            if (p->isSliding()) {
-                int value = p->getStealCoef();
-                int prob = rand()%100;
-                log("Pitch: probabilidad de sacar:",prob,LOG_SPAM);
-                int distance = p->getPosition()->distanceTo(this->ball->getPosition());
-                log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
-                if (prob<value && distance < nearestDistance && distance > 0 && distance < STEAL_DISTANCE) {
-                    nearestDistance = distance;
-                    nearestPlayer = p;
+    if (this->ball->getHeight() < BALL_DECELERATE_CONST) {
+        std::list<Player*> players = this->localTeam->getPlayers();
+        std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
+        players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
+        if (!players.empty()) {
+            int nearestDistance = 500; //max distance harcodeadeo TODO
+            Player* nearestPlayer = NULL;
+            for (Player* p : players) {
+                if (p->isSliding()) {
+                    int value = p->getStealCoef();
+                    int prob = rand()%100;
+                    log("Pitch: probabilidad de sacar:",prob,LOG_SPAM);
+                    int distance = p->getPosition()->distanceTo(this->ball->getPosition());
+                    log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
+                    if (prob<value && distance < nearestDistance && distance > 0 && distance < STEAL_DISTANCE) {
+                        nearestDistance = distance;
+                        nearestPlayer = p;
+                    }
                 }
             }
-        }
-        if (nearestPlayer != NULL) {
-            this->ball->isIntercepted(nearestPlayer);
-            // Team* team = this->getTeam(nearestPlayer->getTeam());
-            // std::string user = teams[team].front();
-            // this->setActivePlayer(user, nearestPlayer); //which user?
-            log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
+            if (nearestPlayer != NULL) {
+                this->ball->isIntercepted(nearestPlayer);
+                // Team* team = this->getTeam(nearestPlayer->getTeam());
+                // std::string user = teams[team].front();
+                // this->setActivePlayer(user, nearestPlayer); //which user?
+                log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
+            }
         }
     }
 }
 
 void Pitch::changeBallOwnership() {
-    if (this->ball->isInterceptable()) {
+    if (this->ball->isInterceptable() && (this->ball->getHeight() < 1)) {
         int value = CHANGE_OWNERSHIP_VALUE;
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();

@@ -76,6 +76,10 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
     // SDL_RenderSetScale(screen,1,1);
 }
 
+int PlayerSpriteManager::getPlayerTeam() {
+  return this->player->getTeam();
+}
+
 void PlayerSpriteManager::setSprite(bool sliding, bool kicking, bool runningFast) {
     if (sliding || kicking) {
         if (sliding)

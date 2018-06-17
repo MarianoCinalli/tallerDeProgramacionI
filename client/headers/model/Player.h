@@ -27,6 +27,7 @@ class Player {
         // Getters
         Coordinates* getPosition();
         int getOrientation();
+        int getTeam();
 
         bool isSliding();
         bool isKicking();

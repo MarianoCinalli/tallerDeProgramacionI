@@ -9,8 +9,10 @@
 class Time {
     private:
         std::chrono::duration<double> interval;
+        float scaleFactor;
     public:
         Time(std::chrono::duration<double> interval);
+        Time(std::chrono::duration<double> interval, float scaleFactor);
         int getSeconds();
         int getMinutes();
         std::string toString();

@@ -35,15 +35,17 @@ class GameController {
         int stateOption;
         bool end;
         int time;
+        bool isFistHalf;
         std::map<int,std::set<std::string>> users;
     public:
-        GameController(Pitch* pitch, Camera* camera);
+        GameController(Pitch* pitch, Camera* camera, Timer* timer);
         // Ejecuta la accion sobre el jugador seleccionado.
         void execute(Action* action, std::string user);
         // Para actualizar los modelos.
         void updatePlayers();
         void update();
         void checkState();
+        void checkGoal();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.
@@ -63,5 +65,7 @@ class GameController {
         void removeUserFromTeam(std::string user);
         std::string getUsersWithTeamAsString();
         std::string getGameStatsMessage();
+        void checkTime(Time* elapsedTime);
+        bool hasHalfEnded(Time* elapsedTime, int halfNumber);
 };
 #endif // GAMECONTROLLER_H

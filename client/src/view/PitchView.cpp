@@ -30,44 +30,49 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     SDL_SetRenderDrawColor( screen, 0x00, 0xFF, 0x00, 0xFF ); //VERDE
     SDL_RenderDrawRect( screen, &outlineRect );
 
+    int team = 0;
+
     // TODO pasar a Constants
     double MINIMAP_SCALE = 0.2;
+    double MINIMAP_SCALE_X = 0.17;
+    double MINIMAP_SCALE_Y = 0.10;
 
     // Dibujar la camara
     Coordinates coordinatesCam = this->camera->getPosition();
     SDL_Rect cameraRect;
-    cameraRect.x = coordinatesCam.getX() * MINIMAP_SCALE;
-    cameraRect.y = coordinatesCam.getY() * MINIMAP_SCALE;
-    cameraRect.w = 40;//hacer proporcion
-    cameraRect.h = 25;//hacer proporcion
+    cameraRect.x = coordinatesCam.getX() * MINIMAP_SCALE_X;
+    cameraRect.y = coordinatesCam.getY() * MINIMAP_SCALE_Y;
+    cameraRect.w = 102;//hacer proporcion
+    cameraRect.h = 48;//hacer proporcion
     SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
     SDL_RenderDrawRect( screen, &cameraRect );
 
     // Bibujar la pelota
-    // Coordinates* coordinatesBall = this->ballView->getBallCoordinates();
-    // SDL_Rect ballRect = { coordinatesBall->getX(), coordinatesBall->getY(), 3, 3 };
-    // SDL_RenderFillRect( screen, &ballRect );
-    // delete(coordinatesBall);
+    Coordinates* coordinatesBall = this->ballView->getBallCoordinates();
+    SDL_Rect ballRect = { coordinatesBall->getX() * MINIMAP_SCALE_X, coordinatesBall->getY() * MINIMAP_SCALE_Y, 3, 3 };
+    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0xFF, 0xFF ); //AZUL
+    SDL_RenderFillRect( screen, &ballRect );
 
     // Obtener la posicion de todos los jugadores
     std::list<PlayerSpriteManager*> views = this->camera->getPlayersInside(this->playerViews);
     // Dibujar cada uno.
     std::list<PlayerSpriteManager*>::iterator viewIter;
     for (viewIter = views.begin(); viewIter != views.end(); viewIter++) {
-        // Relativizar las coordenadas a la camara.
-        Coordinates* coordinates = this->camera->getRelativeCoordinates(
-            (*viewIter)->getPlayerCoordinates()
-        );
-        SDL_Rect playerRect = { coordinates->getX() * MINIMAP_SCALE, coordinates->getY() * MINIMAP_SCALE, 3, 3 };
-        SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
+        // Coordenadas absolutas
+        Coordinates* coordinates = (*viewIter)->getPlayerCoordinates();
+        SDL_Rect playerRect = { coordinates->getX() * MINIMAP_SCALE_X, coordinates->getY() * MINIMAP_SCALE_Y, 3, 3 };
+        team = (*viewIter)->getPlayerTeam();
+        if (team==0) {
+          // equipo Rojo
+          SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+        } else {
+          SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
+        }
         SDL_RenderFillRect( screen, &playerRect );
-        delete(coordinates);
     }
 }
 
 void PitchView::render(SDL_Renderer* screen) {
-
-
     //log("PitchView: Comienza la renderizacion...", LOG_SPAM);
     // Dibujar cancha vista por camara.
     SDL_Rect cancha;
@@ -97,9 +102,7 @@ void PitchView::render(SDL_Renderer* screen) {
         delete(coordinates);
     }
     //log("PitchView: Fin de renderizacion.", LOG_SPAM);
-
     SDL_RenderPresent(screen);
-
 }
 
 PitchView::~PitchView() {

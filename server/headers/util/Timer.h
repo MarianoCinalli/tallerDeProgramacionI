@@ -10,8 +10,9 @@ class Timer {
     private:
         std::chrono::system_clock::time_point startTimePoint;
         bool started;
+        float scaleFactor;
     public:
-        Timer();
+        Timer(int timePerHalf);
         void start();
         bool hasStarted();
         Time* getTime();

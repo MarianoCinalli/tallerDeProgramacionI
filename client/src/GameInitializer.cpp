@@ -86,11 +86,13 @@ void GameInitializer::initializeBall(){
 
 void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     log("GameInitializer: Creando equipo local...", LOG_INFO);
-    int shirtColour = 0;
+    Colour* shirt;
     if (teamNumber == CASACA_PRINCIPAL) {
-        shirtColour = 255;
+        shirt = new Colour(100, 190, 240, 0);
     }
-    Colour* shirt = new Colour(shirtColour, 0, 0, 0);
+    else{
+      shirt = new Colour(255, 255, 0, 0);
+    }
     log("GameInitializer: Creando sprites para el equipo local.", LOG_INFO);
     this->initializeTeamSprites(conf->getSpritesPath(),shirt, teamNumber);
     delete(shirt);
@@ -185,7 +187,7 @@ void GameInitializer::initializeCommonSdlResources() {
                 }
             }
             //Initialize SDL_mixer
-            if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0) {
+            if (Mix_OpenAudio( MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024 ) < 0) {
                 printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
                 log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError(), LOG_ERROR);
             }

@@ -21,7 +21,8 @@ Player::Player(Coordinates* position, int team, PlayerMovent* playerMovent) {
     this->kicking = false;
     this->kicked = false;
     this->canMove = true;
-    this->kickPower = 1; //inicializacion default?
+    this->kickPower = 1;    //inicializacion default?
+    this->highPass = false;
     this->isSelected = false;
     this->isReturning = false;
     this->runningFast = false;
@@ -42,6 +43,9 @@ int Player::getTeam() {
     return this->team;
 }
 
+int Player::getId(){
+  return this->id;
+}
 int Player::getStealCoef() {
     return this->stealCoef;
 }
@@ -52,6 +56,10 @@ void Player::setWithBall(bool dominated) {
 
 bool Player::isWithBall() {
     return this->withBall;
+}
+
+bool Player::isAHighPass() {
+    return this->highPass;
 }
 
 int Player::getOrientation() {
@@ -261,11 +269,11 @@ void Player::follow(Coordinates* positionToFollow) {
 }
 
 void Player::setPosition(Coordinates pos) {
-    this->position->setCoord(pos);
+    this->position->set(pos);
 }
 
 void Player::setBasePosition(Coordinates pos) {
-    this->basePosition->setCoord(pos);
+    this->basePosition->set(pos);
 }
 
 void Player::returnToBasePosition() {
@@ -335,9 +343,10 @@ bool Player::isRunningFast() {
 
 //SLIDE AND KICK FUNCTIONS
 
-void Player::startsKicking(int power) {
+void Player::startsKicking(int power, bool highPass) {
     if (!this->sliding) {
         this->kickPower = power;
+        this->highPass = highPass;
         this->kicking = true;
         this->kicked = false;
         this->canMove = false;
