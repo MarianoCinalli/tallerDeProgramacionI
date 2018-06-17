@@ -2,7 +2,7 @@
 
 int Player::ID = 0;
 
-Player::Player(Coordinates* position, int team, PlayerMovent* playerMovent) {
+Player::Player(Coordinates* position, int team) {
 
     log("Player: Creando jugador...", LOG_INFO);
     this->id = ++ID;
@@ -31,7 +31,7 @@ Player::Player(Coordinates* position, int team, PlayerMovent* playerMovent) {
     this->withBall = false;
     this->userName = "NONE";
     this->stealCoef = DEFENSE_STEAL_COEF;
-    this->playerMovent = playerMovent;
+    this->playerMovement = new PlayerMovement(); // Lo deja moverse sin restricciones.
     log("Player: Jugador creado.", LOG_INFO);
 }
 
@@ -82,6 +82,10 @@ int Player::getCurrentSpeed() {
     }
 }
 
+void Player::setMovement(int formation) {
+    this->playerMovement->setFormation(formation);
+}
+
 void Player::setFieldPosition(int formation) {
     int number = this->id;
     if (number > 7) {
@@ -104,6 +108,7 @@ void Player::setFieldPosition(int formation) {
     }
     log("Player: posicion en cancha: ", this->fieldPosition, LOG_DEBUG);
 }
+
 // Setea la orientacion del jugador (a donde mira).
 void Player::setOrientation(int orientation) {
     // Para el caso en que el vector trayectoria sea nulo
@@ -245,12 +250,12 @@ void Player::updatePosition(Coordinates* positionToFollow) {
 }
 
 bool Player::shouldMove(int amountX, int amountY) {
-    return this->canMove && this->playerMovent->canMoveTo(
-               this->position->getX() + amountX,
-               this->position->getY() + amountY,
-               this->id,
-               this->isSelected
-           );
+    return this->canMove && this->playerMovement->canMoveTo(
+       this->position->getX() + amountX,
+       this->position->getY() + amountY,
+       this->id,
+       this->isSelected
+    );
 }
 
 void Player::follow(Coordinates* positionToFollow) {

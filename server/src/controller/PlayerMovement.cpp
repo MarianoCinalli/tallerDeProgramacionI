@@ -6,7 +6,7 @@ PlayerMovement::PlayerMovement() {
     this->attackers = 0;
 }
 
-PlayerMovement::setFormation(int formation) {
+void PlayerMovement::setFormation(int formation) {
     this->defenders = (formation / 100) % 10;
     this->midfielders = (formation / 10) % 10;
     this->attackers = formation % 10;
@@ -15,15 +15,17 @@ PlayerMovement::setFormation(int formation) {
 bool PlayerMovement::canMoveTo(int x, int y, int playerNumber, bool isSelected) {
     bool canMove = false;
     if (!isSelected) {
+        /*
         Rectangle* rectangle = this->getAreaForPlayer(playerNumber);
         canMove = rectangle->isInside(x, y);
+        */
     }
     return canMove;
 }
-
+/*
 Rectangle* PlayerMovement::getAreaForPlayer(int playerNumber) {
 }
-
+*/
 PlayerMovement::~PlayerMovement() {
 }
 

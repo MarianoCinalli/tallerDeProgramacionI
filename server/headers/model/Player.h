@@ -2,7 +2,7 @@
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
 #include "util/logger.h"
-#include "contoller/PlayerMovent.h"
+#include "controller/PlayerMovement.h"
 #include <SDL2/SDL.h>
 
 #ifndef PLAYER_H
@@ -33,10 +33,10 @@ class Player {
         std::string userName;
         int fieldPosition;
         int stealCoef;
-        PlayerMovent* playerMovent;
+        PlayerMovement* playerMovement;
     public:
         static int ID;
-        Player(Coordinates* position, int team, PlayerMovent* playerMovent);
+        Player(Coordinates* position, int team);
 
         // Getters
         Coordinates* getPosition();
@@ -79,6 +79,7 @@ class Player {
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);
         void returnToBasePosition();
+        void setMovement(int formation);
         // Acciones
         void startsRunningFast();
         void stopsRunningFast();
@@ -94,5 +95,6 @@ class Player {
         ~Player();
     private:
         void follow(Coordinates* positionToFollow);
+        bool shouldMove(int amountX, int amountY);
 };
 #endif // PLAYER_H
