@@ -37,9 +37,6 @@ void Clock::render(SDL_Renderer* screen) {
     // Colores
     SDL_Color SDL_BLACK = { 0, 0, 0, 0xFF };
     SDL_Color SDL_RED = { 0xFF, 0, 0, 0xFF };
-    SDL_Color SDL_GREEN = { 0, 0xFF, 0, 0xFF };
-    SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
-    SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
     std::string mensaje = this->value;
     if (mensaje.empty()) {
@@ -49,7 +46,7 @@ void Clock::render(SDL_Renderer* screen) {
 
     Texture timeTexture;
     timeTexture.loadFromRenderedText("TIME", screen, SDL_BLACK, this->gFont);
-    SDL_Rect posicionTime = {160, 10, 70, 25};
+    SDL_Rect posicionTime = {120, 10, 70, 25};
     SDL_RenderCopyEx(screen, timeTexture.getSpriteSheetTexture(), NULL, &posicionTime, 0.0, NULL, SDL_FLIP_NONE);
 
     Texture mensajeTexture;

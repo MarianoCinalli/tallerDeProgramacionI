@@ -43,9 +43,6 @@ void Score::render(SDL_Renderer* screen) {
     // Colores
     SDL_Color SDL_BLACK = { 0, 0, 0, 0xFF };
     SDL_Color SDL_RED = { 0xFF, 0, 0, 0xFF };
-    SDL_Color SDL_GREEN = { 0, 0xFF, 0, 0xFF };
-    SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
-    SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
     std::string mensaje = std::to_string(this->local) + "   " + std::to_string(this->visitante);
     if (mensaje.empty()) {
