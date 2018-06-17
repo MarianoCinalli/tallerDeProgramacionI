@@ -45,9 +45,16 @@ void Clock::render(SDL_Renderer* screen) {
     if (mensaje.empty()) {
       mensaje = "00-00";
     }
+    std::replace( mensaje.begin(), mensaje.end(), '-', ':');
+
+    Texture timeTexture;
+    timeTexture.loadFromRenderedText("TIME", screen, SDL_BLACK, this->gFont);
+    SDL_Rect posicionTime = {160, 10, 70, 25};
+    SDL_RenderCopyEx(screen, timeTexture.getSpriteSheetTexture(), NULL, &posicionTime, 0.0, NULL, SDL_FLIP_NONE);
+
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
-    SDL_Rect posicion = {0, 0, clockViewport.w, clockViewport.h};
+    SDL_Rect posicion = {35, 30, 230, 65};
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
 }
 
