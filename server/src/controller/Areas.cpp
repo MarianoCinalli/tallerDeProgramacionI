@@ -42,7 +42,32 @@ void Areas::insertUnrestricted(int position) {
 }
 
 Rectangle* Areas::get(int playerNumber) {
-    return this->areasForPlayers[playerNumber];
+    // Povisorio. Por ahora soporto un solo equipo.
+    int number = 0;
+    if (playerNumber > 7) {
+        number = playerNumber - 7;
+    } else {
+        number = playerNumber;
+    }
+    // --------------------------------------------
+    Rectangle* area = NULL;
+    auto search = this->areasForPlayers.find(number);
+    if(search != this->areasForPlayers.end()) {
+        area = this->areasForPlayers[number];
+    } else {
+        log("Areas: No se encontro un area para el jugador: ", number, LOG_ERROR);
+        log("Areas: Jugadores con areas: ", this->getPlayerWithAreasAsString(), LOG_DEBUG);
+    }
+    return area;
+}
+
+// Metodo para debugear.
+std::string Areas::getPlayerWithAreasAsString() {
+    std::string areasForPlayersString = "";
+    for (auto const& areaForPlayer : this->areasForPlayers) {
+        areasForPlayersString += areaForPlayer.first + " - ";
+    }
+    return areasForPlayersString;
 }
 
 Areas::~Areas() {

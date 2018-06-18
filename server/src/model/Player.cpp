@@ -31,7 +31,6 @@ Player::Player(Coordinates* position, int team) {
     this->withBall = false;
     this->userName = "NONE";
     this->stealCoef = DEFENSE_STEAL_COEF;
-    this->playerMovement = new PlayerMovement(); // Lo deja moverse sin restricciones.
     log("Player: Jugador creado.", LOG_INFO);
 }
 
@@ -82,8 +81,8 @@ int Player::getCurrentSpeed() {
     }
 }
 
-void Player::setMovement(int formation) {
-    this->playerMovement->setFormation(formation);
+void Player::setMovement(PlayerMovement* playerMovement) {
+    this->playerMovement = playerMovement;
 }
 
 void Player::setFieldPosition(int formation) {

@@ -14,6 +14,7 @@ class Areas {
         Rectangle* get(int playerNumber);
         ~Areas();
     protected:
+        std::string getPlayerWithAreasAsString();
         void loadAreas();
         void loadGoalkeeperArea();
         void loadDefendersAreas();

@@ -1,5 +1,7 @@
-#include "controller/PlayerAreas.h"
+#include "util/Constants.h"
+#include "util/logger.h"
 #include "util/Rectangle.h"
+#include "controller/PlayerAreas.h"
 
 #ifndef PLAYERMOVEMENT_H
 #define PLAYERMOVEMENT_H

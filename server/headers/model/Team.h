@@ -1,5 +1,6 @@
 #include <list>
 #include <string>
+#include "controller/PlayerMovement.h"
 #include "model/Player.h"
 
 #ifndef TEAM_H
@@ -13,6 +14,7 @@ class Team {
         int formacion;
         std::string name;
         int score;
+        PlayerMovement* playerMovement;
     public:
         Team(int, std::string);
         ~Team();

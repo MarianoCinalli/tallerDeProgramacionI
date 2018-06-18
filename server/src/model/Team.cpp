@@ -7,6 +7,7 @@ Team::Team(int local, std::string name) {
     this->local = local;
     this->name = name;
     this->score = 0;
+    this->playerMovement = new PlayerMovement(); // Lo deja moverse sin restricciones.
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -55,14 +56,17 @@ Team::~Team() {
     }
     // Como la lista sigue llena, de punteros borrados, la vacio.
     this->players.clear();
+    log("Team: Borrando el controlador de jugadores...", LOG_INFO);
+    delete(this->playerMovement);
     log("Team: Jugadores borrados. Memoria liberada.", LOG_INFO);
 }
 
 void Team::setFormacion(int formacion) {
     this->formacion = formacion;
+    this->playerMovement->setFormation(formacion);
     for (Player* player : players) {
         player->setFieldPosition(formacion);
-        player->setMovement(formacion);
+        player->setMovement(this->playerMovement);
     }
 }
 

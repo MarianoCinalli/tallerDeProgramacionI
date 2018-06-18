@@ -79,7 +79,7 @@ class Player {
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);
         void returnToBasePosition();
-        void setMovement(int formation);
+        void setMovement(PlayerMovement* playerMovement);
         // Acciones
         void startsRunningFast();
         void stopsRunningFast();

@@ -24,6 +24,10 @@ PlayerAreas::PlayerAreas(int formation) {
 }
 
 Rectangle* PlayerAreas::getForPlayer(int playerNumber) {
+    if (this->areas == NULL) {
+        log("PlayerAreas: Las areas son nulas. ", LOG_ERROR);
+        return NULL;
+    }
     return this->areas->get(playerNumber);
 }
 
