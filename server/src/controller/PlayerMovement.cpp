@@ -1,8 +1,8 @@
 #include "controller/PlayerMovement.h"
 
 PlayerMovement::PlayerMovement() {
-    log("PlayerMovement: No se especifica una formacion. Creando areas...", LOG_DEBUG);
-    this->playerAreas = new PlayerAreas();
+    log("PlayerMovement: Creando movimientos para los jugadores. Si no se especifica una formacion, no voy a tener areas...", LOG_DEBUG);
+    this->playerAreas = NULL;
 }
 
 void PlayerMovement::setFormation(int formation) {
@@ -16,6 +16,10 @@ void PlayerMovement::setFormation(int formation) {
 
 bool PlayerMovement::canMoveTo(int x, int y, int playerNumber, bool isSelected) {
     bool canMove = true;
+    if (this->playerAreas == NULL) {
+        log("PlayerMovement: Las areas son nulas.", LOG_ERROR);
+        return false;
+    }
     if (!isSelected) {
         Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber);
         if (rectangle == NULL) {

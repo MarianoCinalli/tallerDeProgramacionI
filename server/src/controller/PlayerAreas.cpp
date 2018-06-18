@@ -32,6 +32,6 @@ Rectangle* PlayerAreas::getForPlayer(int playerNumber) {
 }
 
 PlayerAreas::~PlayerAreas() {
-    log("PlayerAreas: Liberando memoria. Borranda areas...", LOG_INFO);
+    log("PlayerAreas: Liberando memoria. Borrando areas...", LOG_INFO);
     delete(this->areas);
 }

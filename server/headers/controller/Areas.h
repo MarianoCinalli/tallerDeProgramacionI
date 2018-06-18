@@ -12,14 +12,14 @@ class Areas {
     public:
         Areas();
         Rectangle* get(int playerNumber);
-        ~Areas();
+        virtual ~Areas();
     protected:
         std::string getPlayerWithAreasAsString();
-        void loadAreas();
-        void loadGoalkeeperArea();
-        void loadDefendersAreas();
-        void loadMidFildersAreas();
-        void loadAtackersAreas();
+        virtual void loadAreas();
+        virtual void loadGoalkeeperArea();
+        virtual void loadDefendersAreas();
+        virtual void loadMidFildersAreas();
+        virtual void loadAtackersAreas();
         void insertUnrestricted(int position);
 };
 #endif // AREAS_H
