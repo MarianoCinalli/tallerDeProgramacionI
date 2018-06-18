@@ -35,6 +35,7 @@ Player* Team::getPlayer(int num){
 int Team::getAmountPlayers() {
     return this->players.size();
 }
+
 int Team::getTeamNum(){
   return this->local;
 }
@@ -61,7 +62,7 @@ Team::~Team() {
 void Team::setFormacion(int formacion) {
     this->formacion = formacion;
     for (Player* p: players){
-      p->setFieldPosition(formacion);
+        p->setFieldPosition(formacion);
     }
 }
 

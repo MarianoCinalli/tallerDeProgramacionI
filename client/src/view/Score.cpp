@@ -1,6 +1,10 @@
 #include "view/Score.h"
 #include "view/Texture.h"
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Music *gMusic;
+extern Mix_Chunk *gGoalSound;
 
 Score::Score() {
     log("Score: Creando score...", LOG_INFO);
@@ -15,13 +19,43 @@ Score::Score() {
 
 void Score::parseYaml(YAML::Node node){
     // Local
+    int gl;
     if (node["gl"]){
-        this->local = node["gl"].as<int>();
+        gl = node["gl"].as<int>();
+        if (this->local != gl) {
+            golLocal();
+            this->local = gl;
+        }
     }
     // Visitante
+    int gv;
     if (node["gv"]){
-        this->visitante = node["gv"].as<int>();
+        gv = node["gv"].as<int>();
+        if (this->visitante != gv) {
+            golVisitante();
+            this->visitante = gv;
+        }
     }
+}
+
+void Score::gol() {
+    if ( Mix_PlayingMusic() != 0 ) {
+        while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
+          SDL_Delay(100);
+        }
+        Mix_PlayChannel( -1, gGoalSound, 0 );
+        Mix_FadeInMusic(gMusic, -1, 1000);
+    } else {
+        Mix_PlayChannel( -1, gGoalSound, 0 );
+    }
+}
+
+void Score::golLocal() {
+    gol();
+}
+
+void Score::golVisitante() {
+    gol();
 }
 
 void Score::render(SDL_Renderer* screen) {

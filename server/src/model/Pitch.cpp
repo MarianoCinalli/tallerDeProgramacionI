@@ -102,24 +102,25 @@ void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
     log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);
 }
 
-void Pitch::setTeamFormation(int teamNum, int formation){
-  Team* team;
-  if (teamNum == 0) {
-      if (this->localTeam != NULL) {
-          team = this->localTeam;
-      } else {
-          log("Pitch: El equpo local es nulo.", LOG_ERROR);
-      }
-  } else if (teamNum == 1) {
-      if (this->awayTeam != NULL) {
-          team = this->awayTeam;
-      } else {
-          log("Pitch: El equpo visitante es nulo.", LOG_ERROR);
-      }
-  } else {
-      log("Pitch: Error numero de equipo desconocido: ", teamNum, LOG_ERROR);
-  }
-  team->setFormacion(formation);
+bool Pitch::setTeamFormation(int teamNum, int formation){
+    Team* team;
+    if (teamNum == 0) {
+        if (this->localTeam != NULL) {
+            team = this->localTeam;
+        } else {
+            log("Pitch: El equpo local es nulo.", LOG_ERROR);
+        }
+    } else if (teamNum == 1) {
+        if (this->awayTeam != NULL) {
+            team = this->awayTeam;
+        } else {
+            log("Pitch: El equpo visitante es nulo.", LOG_ERROR);
+        }
+    } else {
+        log("Pitch: Error numero de equipo desconocido: ", teamNum, LOG_ERROR);
+    }
+    team->setFormacion(formation);
+    return true; //HACK
 }
 
 void Pitch::setBall(Ball* ball) {

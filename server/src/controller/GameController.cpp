@@ -25,9 +25,6 @@ void GameController::addUser(std::string user, int teamNum, int formation) {
     log("GameController: Usuario agregado.", LOG_INFO);
 }
 
-
-
-
 void GameController::removeUser(std::string user) {
     log("GameController: Removiendo usuario...", LOG_INFO);
     this->removeUserFromTeam(user);
@@ -130,11 +127,11 @@ void GameController::checkState() {
 void GameController::checkGoal() {
     int x = this->ball->getPosition()->getX();
     if (x < 200 || x > 1400){
-      if ((this->stateOption ==CENTER_LEFT_START) || (this->stateOption ==CENTER_RIGHT_START)){
+      if ((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)) {
       Team* team;
       if (this->stateOption == CENTER_LEFT_START) {
           team = this->pitch->getTeam(TEAM_RIGHT);
-        }
+      }
       else if (this->stateOption == CENTER_RIGHT_START) {
           team = this->pitch->getTeam(TEAM_LEFT);
       }
@@ -241,7 +238,6 @@ bool GameController::joinTeam(std::string playerName, int team, int formation, i
         }
     }
 }
-
 
 bool GameController::setTeamFormation(int team, int formation) {
     return this->pitch->setTeamFormation(team,formation);

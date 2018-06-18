@@ -38,10 +38,10 @@ bool lostConnectionQuit = false;
 std::string CLI_PORT = "";
 std::string CLI_IP = "";
 // Music
-Mix_Music *gMusic = NULL;
+extern Mix_Music *gMusic = NULL;
 // Sound effects
 extern Mix_Chunk *gKickSound = NULL; //kick
-Mix_Chunk *gGoalSound = NULL; //goal
+extern Mix_Chunk *gGoalSound = NULL; //goal
 Mix_Chunk *gWhistleSound = NULL; //whistle
 Mix_Chunk *gStartSound = NULL; //start
 Mix_Chunk *gCountdownSound = NULL; //countdown
