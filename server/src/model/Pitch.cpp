@@ -250,10 +250,11 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
     return this->camera->getPlayersInsideMargin(teamPlayers, 1);
 }
 
+const int BALL_STEAL_HEIGHT = 3;
 
 void Pitch::checkSteals() {
     log("Pitch: Chequeando intercepciones...", LOG_DEBUG);
-    if (this->ball->getHeight() < BALL_DECELERATE_CONST) {
+    if (this->ball->getHeight() < BALL_STEAL_HEIGHT) {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
         players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());

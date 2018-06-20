@@ -14,8 +14,8 @@ class Ball {
         Velocity* velocity;
         int maxVelocity;
         Coordinates* position;
-        int passPower;
-        int initialPassPower;
+        float passPower;
+        float initialPassPower;
         int height;
         int heightLevel;
         int orientation;
@@ -43,7 +43,7 @@ class Ball {
         bool isInterceptable();
         void restart(int position);
         void isIntercepted(Player* player);
-        void isPassed(int direction, int passPower, bool highPass);
+        void isPassed(int direction, float passPower, bool highPass);
         void updatePosition();
 
         Coordinates* calculateDominatedPosition();

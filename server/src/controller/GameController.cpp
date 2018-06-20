@@ -161,7 +161,7 @@ void GameController::updateBall() {
         log("GameController: La pelota fue pateada.", LOG_DEBUG);
         Player* player = this->ball->getPlayer();
         bool highPass = player->isAHighPass();
-        this->ball->isPassed(player->getOrientation(), player->getKickPower()*PASS_SPEED, highPass); //TODO valor de pase?
+        this->ball->isPassed(player->getOrientation(), player->getKickPower(), highPass); //TODO valor de pase?
         player->setKicked(true);
     }
     this->pitch->changeBallOwnership();

@@ -85,8 +85,9 @@ void Ball::isIntercepted(Player* player) {
     this->orientation = player->getOrientation();
     log("Ball: Pelota interceptada por jugador.", LOG_DEBUG);
 }
+const float PASS_SPEED = 3.3;
 
-void Ball::isPassed(int direction, int passPower, bool highPass) {
+void Ball::isPassed(int direction, float passPower, bool highPass) {
     if (this->isDominated()) {
         this->interceptable = false;
         Velocity* passDirection = new Velocity(0,0);
@@ -104,11 +105,28 @@ void Ball::isPassed(int direction, int passPower, bool highPass) {
         this->isInAPass = true;
         if(highPass) {
             this->isInAHighPass = true;
+            this->passPower = passPower*PASS_SPEED*1.4; //para que sea mas sensible el pase elevado
+            this->initialPassPower = this->passPower;
         }
-        this->passPower = passPower;
-        this->initialPassPower = passPower;
+        else{
+          this->passPower = passPower*PASS_SPEED;
+          this->initialPassPower = this->passPower;
+        }
         this->startingPassPosition = this->position;
     }
+}
+const float BALL_DECELERATE_CONST = 1.7;
+
+float calculatePassPower(float passPower){
+  float finalPassPower;
+  if (passPower >  3){
+    finalPassPower = passPower -BALL_DECELERATE_CONST;
+  }
+  else{
+    finalPassPower = passPower -BALL_DECELERATE_CONST/2;
+
+  }
+  return finalPassPower;
 }
 
 void Ball::updatePosition() {
@@ -138,7 +156,8 @@ void Ball::updatePosition() {
     }
     if ((this->isInAPass) && (!this->velocity->isZero())) {
         if (this->timePassing % BALL_DECELERATE_TIME == 0) {
-            this->passPower -= BALL_DECELERATE_CONST;
+            // this->passPower -= BALL_DECELERATE_CONST;
+            this->passPower = calculatePassPower(this->passPower);
             if (this->passPower< 0){
               this->timePassing = 0;
               this->stopRolling();
