@@ -267,6 +267,7 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     message += ball->getAsYaml();
     message += camera->getAsYaml();
     message += this->getGameStatsMessage();
+    //message += this->getDebugLines();
     return message + ";;";
 }
 
@@ -285,6 +286,13 @@ std::string GameController::getGameStatsMessage() {
     message += this->pitch->getScoresYAML();
     return message;
 }
+
+std::string GameController::getDebugLines() {
+    std::string message = "";
+    message += this->pitch->getDebugLines();
+    return message;
+}
+
 
 GameController::~GameController() {
     log("GameController: Liberando memoria. Borrando cancha...", LOG_INFO);

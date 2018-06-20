@@ -54,6 +54,7 @@ class Player {
         bool getIsSelected();
         bool isRunningDiagonaly();
         bool isRunningFast();
+        bool isGoalkeeper();
         bool isStill();
         std::string getUsername();
         int getStealCoef();
@@ -78,6 +79,8 @@ class Player {
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);
+        void setPosition(Coordinates* coord);
+        void setBasePosition(Coordinates* coord);
         void returnToBasePosition();
         void setMovement(PlayerMovement* playerMovement);
         // Acciones
@@ -94,7 +97,7 @@ class Player {
 
         ~Player();
     private:
-        void follow(Coordinates* positionToFollow);
+        void changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY);
         bool shouldMove(int amountX, int amountY);
 };
 #endif // PLAYER_H

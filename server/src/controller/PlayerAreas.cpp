@@ -31,6 +31,14 @@ Rectangle* PlayerAreas::getForPlayer(int playerNumber) {
     return this->areas->get(playerNumber);
 }
 
+std::string PlayerAreas::getDebugLines() {
+    std::string message = "";
+    if (this->areas != NULL) {
+        message += this->areas->getDebugLines();
+    }
+    return message;
+}
+
 PlayerAreas::~PlayerAreas() {
     log("PlayerAreas: Liberando memoria. Borrando areas...", LOG_INFO);
     delete(this->areas);

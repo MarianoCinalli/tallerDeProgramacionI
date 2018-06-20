@@ -40,6 +40,7 @@ class Pitch {
         void removeActivePlayer(std::string user);
         Team* getTeam(int teamNumber);
         std::string getScoresYAML();
+        std::string getDebugLines();
         ~Pitch();
     private:
         std::string getUsersWithActivePlayersAsString();

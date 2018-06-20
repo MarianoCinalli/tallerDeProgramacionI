@@ -32,6 +32,30 @@ bool PlayerMovement::canMoveTo(int x, int y, int playerNumber, bool isSelected) 
     return canMove;
 }
 
+bool PlayerMovement::isInsideArea(int x, int y, int playerNumber) {
+    bool canMove = true;
+    if (this->playerAreas == NULL) {
+        log("PlayerMovement: Las areas son nulas.", LOG_ERROR);
+        return false;
+    }
+    Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber);
+    if (rectangle == NULL) {
+        log("PlayerMovement: El area es nula, para el jugador: ", playerNumber, LOG_ERROR);
+        canMove = false;
+    } else {
+        canMove = rectangle->isInside(x, y);
+    }
+    return canMove;
+}
+
+std::string PlayerMovement::getDebugLines() {
+    std::string message = "";
+    if (this->playerAreas != NULL) {
+        message += this->playerAreas->getDebugLines();
+    }
+    return message;
+}
+
 PlayerMovement::~PlayerMovement() {
     log("PlayerMovement: Borrando PlayerMovement...", LOG_DEBUG);
 }

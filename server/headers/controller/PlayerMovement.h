@@ -13,6 +13,8 @@ class PlayerMovement {
         PlayerMovement();
         void setFormation(int formation);
         bool canMoveTo(int x, int y, int playerNumber, bool isSelected);
+        bool isInsideArea(int x, int y, int playerNumber);
+        std::string getDebugLines();
         ~PlayerMovement();
 };
 #endif // PLAYERMOVEMENT_H

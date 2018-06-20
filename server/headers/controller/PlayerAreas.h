@@ -16,6 +16,7 @@ class PlayerAreas {
         PlayerAreas();
         PlayerAreas(int formation);
         Rectangle* getForPlayer(int playerNumber);
+        std::string getDebugLines();
         ~PlayerAreas();
 };
 #endif // PLAYERAREAS_H

@@ -213,18 +213,23 @@ void Player::updatePosition(Coordinates* positionToFollow) {
     if (this->runningFast) {
         speed = FAST_SPEED_COEF; //TODO hardcode
     }
-
     if (!this->isSelected) {
-        this->follow(positionToFollow);
+        if (this->playerMovement->isInsideArea(this->position->getX(), this->position->getY(), this->id)) {
+            if (this->isGoalkeeper()) {
+                // El arquero solo se mueve en Y.
+                this->changeVelocityTo(positionToFollow, false, true);
+            } else {
+                this->changeVelocityTo(positionToFollow, false, false);
+            }
+        } else {
+            // Si no vuelve a la posicion original.
+            this->changeVelocityTo(this->basePosition, false, false);
+        }
     }
-
     int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
     int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
-    if (this->shouldMove(amountX, amountY)) {
-        this->position->addX(amountX);
-        this->position->addY(amountY);
-        log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
-    }
+    this->position->addY(amountY);
+    this->position->addX(amountX);
     /*
     // Si selecciona un jugador que estaba regresando lo detengo
     if (this->isSelected && this->isReturning) {
@@ -257,7 +262,7 @@ bool Player::shouldMove(int amountX, int amountY) {
     );
 }
 
-void Player::follow(Coordinates* positionToFollow) {
+void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY) {
     int deltaX = positionToFollow->getX() - this->position->getX();
     int deltaY = positionToFollow->getY() - this->position->getY();
     // Normalizacion.
@@ -268,8 +273,17 @@ void Player::follow(Coordinates* positionToFollow) {
         deltaY = deltaY / abs(deltaY);
     }
     this->stop();
+    if (onlyX) {
+        deltaY = 0;
+    } else if (onlyY) {
+        deltaX = 0;
+    }
     this->velocity->setComponentX(deltaX);
     this->velocity->setComponentY(deltaY);
+}
+
+bool Player::isGoalkeeper() {
+    return this->id == 1 || this->id == 8;
 }
 
 void Player::setPosition(Coordinates pos) {
@@ -278,6 +292,16 @@ void Player::setPosition(Coordinates pos) {
 
 void Player::setBasePosition(Coordinates pos) {
     this->basePosition->set(pos);
+}
+
+void Player::setPosition(Coordinates* pos) {
+    this->position->setX(pos->getX());
+    this->position->setY(pos->getY());
+}
+
+void Player::setBasePosition(Coordinates* pos) {
+    this->basePosition->setX(pos->getX());
+    this->basePosition->setY(pos->getY());
 }
 
 void Player::returnToBasePosition() {

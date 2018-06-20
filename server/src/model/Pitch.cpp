@@ -305,3 +305,11 @@ std::string Pitch::getScoresYAML() {
     }
     return message;
 }
+
+std::string Pitch::getDebugLines() {
+    std::string message = "";
+    if (this->localTeam != NULL) {
+        message += this->localTeam->getDebugLines();
+    }
+    return message;
+}

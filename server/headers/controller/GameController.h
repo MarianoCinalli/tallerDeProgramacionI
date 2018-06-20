@@ -60,6 +60,7 @@ class GameController {
         bool shouldGameEnd();
         void setEnd();
         std::string getMessageToBroadcast(bool allPlayers);
+        std::string getDebugLines();
         ~GameController();
     private:
         void removeUserFromTeam(std::string user);
