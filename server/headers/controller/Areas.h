@@ -12,6 +12,7 @@ class Areas {
     public:
         Areas();
         Rectangle* get(int playerNumber);
+        std::string getDebugLines();
         virtual ~Areas();
     protected:
         std::string getPlayerWithAreasAsString();

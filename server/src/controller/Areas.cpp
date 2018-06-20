@@ -16,7 +16,7 @@ void Areas::loadAreas() {
 
 void Areas::loadGoalkeeperArea() {
     log("Areas: Cargando areas para el arquero...", LOG_DEBUG);
-    this->areasForPlayers[1] = new Rectangle(84, 236, 40, 237);
+    this->areasForPlayers[1] = new Rectangle(85, 434, 40, 134);
 }
 
 void Areas::loadDefendersAreas() {
@@ -68,6 +68,21 @@ std::string Areas::getPlayerWithAreasAsString() {
         areasForPlayersString += areaForPlayer.first + " - ";
     }
     return areasForPlayersString;
+}
+
+std::string Areas::getDebugLines() {
+    std::string message = "[";
+    bool first = true;
+    for (auto const& areaForPlayer : this->areasForPlayers) {
+        if (first) {
+            first = false;
+        } else {
+            message += ", ";
+        }
+        message += "[" + (areaForPlayer.second)->getAsString() + "]";
+    }
+    message += "]";
+    return message;
 }
 
 Areas::~Areas() {

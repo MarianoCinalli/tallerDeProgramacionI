@@ -28,8 +28,8 @@ void Areas312::loadMidFildersAreas() {
 
 void Areas312::loadAtackersAreas() {
     log("Areas312: Cargando areas para los atacantes...", LOG_DEBUG);
-    this->areasForPlayers[6] = new Rectangle(1037, 500, 443, 529);
-    this->areasForPlayers[7] = new Rectangle(1037, 236, 443, 529);
+    this->areasForPlayers[6] = new Rectangle(1037, 500, 443, 265);
+    this->areasForPlayers[7] = new Rectangle(1037, 236, 443, 265);
 }
 
 Areas312::~Areas312() {
