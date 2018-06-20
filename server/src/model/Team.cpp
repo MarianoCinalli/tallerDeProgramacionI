@@ -85,3 +85,8 @@ void Team::increaseScore() {
 int Team::getScore() {
     return this->score;
 }
+
+void Team::addScoreInfo(std::string message) {
+    log("Team: GOOOOOL ", message, LOG_INFO);
+    this->scoreInfo.push_back(message);
+}
