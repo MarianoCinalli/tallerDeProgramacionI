@@ -12,11 +12,15 @@ bool Rectangle::isInside(int pointX, int pointY) {
 }
 
 bool Rectangle::isXInside(int pointX) {
-    return ((this->x + this->width) - pointX) >= 0;
+    return pointX > this->x && ((this->x + this->width) - pointX) >= 0;
 }
 
 bool Rectangle::isYInside(int pointY) {
-    return ((this->y + this->height) - pointY) >= 0;
+    return pointY > this->y && ((this->y + this->height) - pointY) >= 0;
+}
+
+std::string Rectangle::getAsString() {
+    return std::to_string(this->x) + ", " + std::to_string(this->y) + ", " + std::to_string(this->width) + ", " + std::to_string(this->height);
 }
 
 Rectangle::~Rectangle() {
