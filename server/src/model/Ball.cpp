@@ -131,7 +131,7 @@ float calculatePassPower(float passPower){
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
-        this->position = this->calculateDominatedPosition();
+        this->calculateDominatedPosition();
         this->orientation = player->getOrientation();
     }
     if (this->isInAPass) {
@@ -211,7 +211,7 @@ void Ball::calculateHeight() {
     }
 }
 
-Coordinates* Ball::calculateDominatedPosition() {
+void Ball::calculateDominatedPosition() {
     int x = this->player->getPosition()->getX(); // TODO: ver q no viole independencia
     int y = this->player->getPosition()->getY();
     switch (this->player->getOrientation()) {
@@ -228,8 +228,10 @@ Coordinates* Ball::calculateDominatedPosition() {
             y = (y - CUERPO_JUGADOR);
             break;
     }
-    Coordinates* newPosition = new Coordinates(x, y);
-    return newPosition;
+    this->position->setX(x);
+    this->position->setY(y);
+    // Coordinates* newPosition = new Coordinates(x, y);
+    // return newPosition;
 }
 
 

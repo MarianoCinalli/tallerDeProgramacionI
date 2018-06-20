@@ -46,7 +46,7 @@ class Ball {
         void isPassed(int direction, float passPower, bool highPass);
         void updatePosition();
 
-        Coordinates* calculateDominatedPosition();
+        void calculateDominatedPosition();
         void progressiveDecelerate(float passDistance);
         void stopRolling();
         void calculateHeight();
