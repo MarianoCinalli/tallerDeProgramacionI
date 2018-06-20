@@ -1,0 +1,125 @@
+#include "model/Formation.h"
+
+Formation::Formation(int formation, bool isLocal) {
+    this->formation = formation;
+    this->isLocal = isLocal;
+}
+
+void Formation::setFormation(int formation) {
+    this->formation = formation;
+}
+
+Coordinates* Formation::getCoordinatesForPlayer(int playerNumber) {
+    Coordinates* coordinates;
+    if (this->formation == 321) {
+        coordinates = getCoordinatesForPlayer321(playerNumber);
+    } else if (this->formation == 33) {
+        coordinates = getCoordinatesForPlayer33(playerNumber);
+    } else if (this->formation == 312) {
+        coordinates = getCoordinatesForPlayer312(playerNumber);
+    } else {
+        log("Formation: Fomacion no reconocida: ", this->formation, LOG_ERROR);
+    }
+    if (coordinates == NULL) {
+        log("Formation: Las coordenadas son nulas. Usando defaults.", LOG_ERROR);
+        coordinates = getDefaultCoordinates();
+    }
+    return coordinates;
+}
+
+Coordinates* Formation::getCoordinatesForPlayer321(int playerNumber) {
+    Coordinates* coordinates = NULL;
+    switch(playerNumber) {
+        case 1:
+            coordinates = new Coordinates(104, 354);
+            break;
+        case 2:
+            coordinates = new Coordinates(802, 873);
+            break;
+        case 3:
+            coordinates = new Coordinates(345, 501);
+            break;
+        case 4:
+            coordinates = new Coordinates(802, 129);
+            break;
+        case 5:
+            coordinates = new Coordinates(802, 501);
+            break;
+        case 6:
+            coordinates = new Coordinates(1258, 764);
+            break;
+        case 7:
+            coordinates = new Coordinates(1258, 500);
+            break;
+        default:
+            log("Formation: Numero de jugador no entendido: ", playerNumber, LOG_ERROR);
+    }
+    return coordinates;
+}
+
+Coordinates* Formation::getCoordinatesForPlayer33(int playerNumber) {
+    Coordinates* coordinates = NULL;
+    switch(playerNumber) {
+        case 1:
+            coordinates = new Coordinates(104, 354);
+            break;
+        case 2:
+            coordinates = new Coordinates(802, 873);
+            break;
+        case 3:
+            coordinates = new Coordinates(345, 501);
+            break;
+        case 4:
+            coordinates = new Coordinates(802, 129);
+            break;
+        case 5:
+            coordinates = new Coordinates(802, 501);
+            break;
+        case 6:
+            coordinates = new Coordinates(1258, 764);
+            break;
+        case 7:
+            coordinates = new Coordinates(1258, 500);
+            break;
+        default:
+            log("Formation: Numero de jugador no entendido: ", playerNumber, LOG_ERROR);
+    }
+    return coordinates;
+}
+
+Coordinates* Formation::getCoordinatesForPlayer312(int playerNumber) {
+    Coordinates* coordinates = NULL;
+    switch(playerNumber) {
+        case 1:
+            coordinates = new Coordinates(104, 354);
+            break;
+        case 2:
+            coordinates = new Coordinates(802, 873);
+            break;
+        case 3:
+            coordinates = new Coordinates(345, 501);
+            break;
+        case 4:
+            coordinates = new Coordinates(802, 129);
+            break;
+        case 5:
+            coordinates = new Coordinates(802, 501);
+            break;
+        case 6:
+            coordinates = new Coordinates(1258, 764);
+            break;
+        case 7:
+            coordinates = new Coordinates(1258, 500);
+            break;
+        default:
+            log("Formation: Numero de jugador no entendido: ", playerNumber, LOG_ERROR);
+    }
+    return coordinates;
+}
+
+Coordinates* Formation::getDefaultCoordinates() {
+    return new Coordinates(800, 600);
+}
+
+Formation::~Formation() {
+}
