@@ -126,18 +126,38 @@ void GameController::checkState() {
 
 void GameController::checkGoal() {
     int x = this->ball->getPosition()->getX();
-    if (x < 200 || x > 1400){
-      if ((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)) {
-        Team* team;
-        if (this->stateOption == CENTER_LEFT_START) {
-            team = this->pitch->getTeam(TEAM_RIGHT);
+    if (x < 200 || x > 1400) {
+        if ((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)) {
+            Team* team;
+            if (this->stateOption == CENTER_LEFT_START) {
+                team = this->pitch->getTeam(TEAM_RIGHT);
+            }
+            else if (this->stateOption == CENTER_RIGHT_START) {
+                team = this->pitch->getTeam(TEAM_LEFT);
+            }
+            // Incrementa contador de goles del equipo
+            team->increaseScore();
+            // Para la estadistica, quien hizo el gol?
+            std::string message = "";
+            Time* time = this->timer->getTime();
+            if (time != NULL) {
+                message += time->toString();
+                delete(time);
+            } else {
+                log("GameController: El tiempo es null.", LOG_ERROR);
+                message += "00-00";
+            }
+            Player* player = this->ball->getPlayer();
+            if (player != NULL) {
+                message += " " + player->getUsername();
+            } else {
+                log("GameController: El player es null.", LOG_ERROR);
+                message += " Alguien";
+            }
+            std::replace(message.begin(), message.end(), '-', ':');
+            team->addScoreInfo(message);
         }
-        else if (this->stateOption == CENTER_RIGHT_START) {
-            team = this->pitch->getTeam(TEAM_LEFT);
-      }
-      team->increaseScore();
     }
-  }
 }
 
 void GameController::updatePlayers() {
