@@ -98,6 +98,5 @@ class Player {
         ~Player();
     private:
         void changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY);
-        bool shouldMove(int amountX, int amountY);
 };
 #endif // PLAYER_H

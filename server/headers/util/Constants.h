@@ -101,6 +101,8 @@ const int TEAM_RIGHT = 1;
 const int MAX_ERRORS = 50000;
 
 const int MINUTES_PER_HALF = 45;
+
+const int AREAS_MARGIN = 5;
 //
 // const int FRAME_WINDOW=1024;
 #endif // CONSTANTS_H_

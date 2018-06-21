@@ -214,12 +214,13 @@ void Player::updatePosition(Coordinates* positionToFollow) {
         speed = FAST_SPEED_COEF; //TODO hardcode
     }
     if (!this->isSelected) {
-        if (this->playerMovement->isInsideArea(this->position->getX(), this->position->getY(), this->id)) {
+        if (this->playerMovement->isInsideArea(this->position, this->id)) {
             if (this->isGoalkeeper()) {
                 // El arquero solo se mueve en Y.
                 this->changeVelocityTo(positionToFollow, false, true);
             } else {
                 this->changeVelocityTo(positionToFollow, false, false);
+                this->playerMovement->cleanVelocity(this->velocity, this->position, this->id);
             }
         } else {
             // Si no vuelve a la posicion original.
@@ -230,36 +231,6 @@ void Player::updatePosition(Coordinates* positionToFollow) {
     int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
     this->position->addY(amountY);
     this->position->addX(amountX);
-    /*
-    // Si selecciona un jugador que estaba regresando lo detengo
-    if (this->isSelected && this->isReturning) {
-        this->isReturning = false;
-        log("Player: jugador deja de volver, a la posicion original, por ser seleccionado.", LOG_DEBUG);
-    }
-
-    // Detener si el jugador no seleccionado regresando llego a su posicion inicial
-    if (this->isReturning) {
-        int abs_delta_x = 0;
-        int abs_delta_y = 0;
-        abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
-        abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-        if ((abs_delta_x < 30) && (abs_delta_y < 30)) { //TODO hardcode valores
-            this->stop();
-            this->isReturning = false;
-            log("Player: jugador llega a la posicion original.", LOG_DEBUG);
-        } else {
-            this->returnToBasePosition();
-        }
-    }*/
-}
-
-bool Player::shouldMove(int amountX, int amountY) {
-    return this->canMove && this->playerMovement->canMoveTo(
-       this->position->getX() + amountX,
-       this->position->getY() + amountY,
-       this->id,
-       this->isSelected
-    );
 }
 
 void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY) {
