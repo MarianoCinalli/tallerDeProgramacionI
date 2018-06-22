@@ -7,10 +7,10 @@
 
 class Areas312 : public Areas {
     protected:
-       virtual void loadAreas();
-       virtual void loadDefendersAreas();
-       virtual void loadMidFildersAreas();
-       virtual void loadAtackersAreas();
+        virtual void loadAreas();
+        virtual void loadDefendersAreas();
+        virtual void loadMidFildersAreas();
+        virtual void loadAtackersAreas();
     public:
         Areas312();
         ~Areas312();
