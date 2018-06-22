@@ -1,7 +1,9 @@
 #include "controller/Areas321.h"
 
-Areas321::Areas321(): Areas()  {
+Areas321::Areas321() {
     log("Areas321: Inicializando...", LOG_INFO);
+    this->areasForPlayers = std::map<int, Rectangle*>();
+    this->loadAreas();
 }
 
 void Areas321::loadAreas() {

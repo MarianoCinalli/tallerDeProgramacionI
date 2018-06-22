@@ -2,6 +2,8 @@
 
 Areas33::Areas33() {
     log("Areas33: Inicializando...", LOG_INFO);
+    this->areasForPlayers = std::map<int, Rectangle*>();
+    this->loadAreas();
 }
 
 void Areas33::loadAreas() {
@@ -25,8 +27,8 @@ void Areas33::loadMidFildersAreas() {
 
 void Areas33::loadAtackersAreas() {
     log("Areas33: Cargando areas para los atacantes...", LOG_DEBUG);
-    this->areasForPlayers[6] = new Rectangle(800, 21, 715, 321);
-    this->areasForPlayers[7] = new Rectangle(800, 342, 689, 320);
+    this->areasForPlayers[5] = new Rectangle(800, 21, 715, 321);
+    this->areasForPlayers[6] = new Rectangle(800, 342, 689, 320);
     this->areasForPlayers[7] = new Rectangle(800, 661, 715, 321);
 }
 
