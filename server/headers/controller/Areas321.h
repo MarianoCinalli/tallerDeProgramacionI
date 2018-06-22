@@ -6,7 +6,11 @@
 #define AREAS321_H
 
 class Areas321 : public Areas {
-    private:
+    protected:
+        virtual void loadAreas();
+        virtual void loadDefendersAreas();
+        virtual void loadMidFildersAreas();
+        virtual void loadAtackersAreas();
     public:
         Areas321();
         ~Areas321();
