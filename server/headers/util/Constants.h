@@ -71,8 +71,8 @@ const int PLAYERS_PER_TEAM = 7;
 const int NORMAL_VELOCITY = 2;
 const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
-const int BALL_DECELERATE_CONST = 3;
-const int PASS_SPEED = 5;
+const float BALL_DECELERATE_CONST = 1.7;
+const float PASS_SPEED = 3.3;
 
 const int PASS_HELPING_CONST = 500;
 
