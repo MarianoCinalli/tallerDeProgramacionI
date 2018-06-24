@@ -25,6 +25,7 @@ class Coordinates : public Loggable {
 
         int validatePositionInBounds();
         void set(Coordinates other);
+        void normalize();
         int distanceTo(Coordinates* other);
         std::string toString();
 

@@ -46,6 +46,7 @@ class Player {
         int getKickPower();
         int getId();
         bool isAHighPass();
+        bool isThisPlayer(Player* player);
         bool wasSlidingYet();
         bool hasKicked();
         bool isSliding();

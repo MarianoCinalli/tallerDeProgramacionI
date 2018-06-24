@@ -181,13 +181,119 @@ void GameController::updateBall() {
         log("GameController: La pelota fue pateada.", LOG_DEBUG);
         Player* player = this->ball->getPlayer();
         bool highPass = player->isAHighPass();
-        this->ball->isPassed(player->getOrientation(), player->getKickPower(), highPass); //TODO valor de pase?
+        Velocity* velocity = new Velocity (0,0);
+        if(!highPass) {
+            log("GameController(joako): Entro a calculatePassVelocity: ", LOG_DEBUG); //SACAR
+            velocity->set(this->calculatePassVelocity(player));
+        }
+        else {
+            log("GameController(joako): pase alto sin ayuda ", LOG_DEBUG);
+            velocity->set(player->getVelocity());
+        }
+        this->ball->isPassed(velocity, player->getKickPower()*PASS_SPEED, highPass); //TODO valor de pase?
         player->setKicked(true);
     }
     this->pitch->changeBallOwnership();
     this->ball->updatePosition();
 }
 
+Velocity* GameController::calculatePassVelocity(Player* player){
+    int orientation = player->getOrientation();
+    int teamNumber = player->getTeam();
+    int distance = 0;
+    Coordinates* passPosition = player->getPosition();
+    int x = passPosition->getX();
+    int y = passPosition->getY();
+    Coordinates* newPos = new Coordinates(0,0);
+    Team* team = this->pitch->getTeam(teamNumber);
+    std::list<Player*> players = team->getPlayers();
+    log("GameController: entro a switch: ", LOG_DEBUG);
+    switch(orientation) {
+        case PLAYER_ORIENTATION_DOWN:
+            for(Player* p: players){
+                int newX = (p->getPosition()->getX());
+                int newY = (p->getPosition()->getY());
+                int failingFor = abs(x-newX);
+                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (y < newY)){
+                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    int newDistance = passPosition->distanceTo(p->getPosition());
+                    if (distance > newDistance || distance == 0){
+                        int xPass = (newX - x);
+                        int yPass = (newY - y);
+                        newPos->setX(xPass);
+                        newPos->setY(yPass);
+                        newPos->normalize();
+                        distance = newDistance;
+                    }
+                }
+            }
+            break;
+        case PLAYER_ORIENTATION_UP:
+            for(Player* p: players){
+                int newX = (p->getPosition()->getX());
+                int newY = (p->getPosition()->getY());
+                int failingFor = abs(x-newX);
+                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (y > newY)){
+                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    int newDistance = passPosition->distanceTo(p->getPosition());
+                    if (distance > newDistance || distance == 0){
+                        int xPass = (newX - x);
+                        int yPass = (newY - y);
+                        newPos->setX(xPass);
+                        newPos->setY(yPass);
+                        newPos->normalize();
+                        distance = newDistance;
+                    }
+                }
+            }
+            break;
+        case PLAYER_ORIENTATION_RIGHT:
+            for(Player* p: players){
+                int newY = (p->getPosition()->getY());
+                int newX = (p->getPosition()->getY());
+                int failingFor = abs(y-newY);
+                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x < newX)){
+                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    int newDistance = passPosition->distanceTo(p->getPosition());
+                    if (distance > newDistance || distance == 0){
+                        int xPass = (newX - x);
+                        int yPass = (newY - y);
+                        newPos->setX(xPass);
+                        newPos->setY(yPass);
+                        newPos->normalize();
+                        distance = newDistance;
+                    }
+                }
+            }
+            break;
+        case PLAYER_ORIENTATION_LEFT:
+            for(Player* p: players){
+                int newY = (p->getPosition()->getY());
+                int newX = (p->getPosition()->getX());
+                int failingFor = abs(y-newY);
+                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x > newX)){
+                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    int newDistance = passPosition->distanceTo(p->getPosition());
+                    if (distance > newDistance || distance == 0){
+                        int xPass = (newX - x);
+                        int yPass = (newY - y);
+                        newPos->setX(xPass);
+                        newPos->setY(yPass);
+                        newPos->normalize();
+                        distance = newDistance;
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    Velocity* velocity = new Velocity(newPos->getX(), newPos->getY());
+    if (velocity->isZero()){
+        velocity->accelerate(player->getOrientation());
+    }
+    return velocity;
+}
 
 // Cuando el jugador pise el borde mueve la camara.
 // En este punto las coordenadas de el jugador son validas.

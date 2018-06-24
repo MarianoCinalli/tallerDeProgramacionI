@@ -129,6 +129,23 @@ float calculatePassPower(float passPower){
   return finalPassPower;
 }
 
+void Ball::isPassed(Velocity* velocity, int passPower, bool highPass) {
+    if (this->isDominated()) {
+        this->interceptable = false;
+        this->velocity = velocity;
+        log(this->velocity->toString(),LOG_DEBUG);
+        dominated = false;
+        this->player->setWithBall(this->dominated);
+        this->isInAPass = true;
+        if(highPass) {
+            this->isInAHighPass = true;
+        }
+        this->passPower = passPower;
+        this->initialPassPower = passPower;
+        this->startingPassPosition = this->position;
+    }
+}
+
 void Ball::updatePosition() {
     if (this->isDominated()) {
         this->calculateDominatedPosition();

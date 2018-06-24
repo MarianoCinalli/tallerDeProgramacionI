@@ -81,6 +81,15 @@ int Player::getCurrentSpeed() {
     }
 }
 
+bool Player::isThisPlayer(Player* player){
+    if (this->position == player->getPosition()){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 void Player::cantMoveUntilPass(){
   this->canMove = false;
 }

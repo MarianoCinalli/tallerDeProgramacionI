@@ -2,6 +2,7 @@
 #include "controller/actions/Action.h"
 #include "view/Camera.h"
 #include "util/Timer.h"
+#include "util/Constants.h"
 #include <set>
 
 /*
@@ -50,6 +51,7 @@ class GameController {
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.
         void updateBall();
+        Velocity* calculatePassVelocity(Player* player);
         void addUser(std::string user, int teamNum, int formation);
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);

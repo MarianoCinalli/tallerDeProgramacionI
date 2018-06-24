@@ -40,7 +40,6 @@ void Velocity::decelerate(int direction, int amount) {
     }
 }
 
-
 int sign(int num){
   if (num>0)
   return 1;

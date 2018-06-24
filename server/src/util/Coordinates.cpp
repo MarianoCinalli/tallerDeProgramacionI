@@ -23,7 +23,6 @@ int Coordinates::setX(int otherX) {
       return -1;
     }
     return 0;
-
 }
 
 int Coordinates::setY(int otherY) {
@@ -64,6 +63,16 @@ void Coordinates::set(Coordinates other){
     this->x = other.x;
     this->y = other.y;
     validatePositionInBounds();
+}
+
+void Coordinates::normalize(){
+    log("Coordinates(joako): entro a normalizar ", LOG_DEBUG); //SACAR
+    float div = (sqrt(pow(this->x,2) + pow(this->y,2)));
+    float normalX = (x / div);
+    float normalY = (y / div);
+    this->x = (int)normalX;
+    this->y = (int)normalY;
+    log("Coordinates(joako):salgo de normalizar ", LOG_DEBUG); //SACAR
 }
 
 int Coordinates::distanceTo(Coordinates* other){
