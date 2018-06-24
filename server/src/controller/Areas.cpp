@@ -1,8 +1,10 @@
 #include "controller/Areas.h"
 
+
 Areas::Areas() {
     log("Areas: Inicializando...", LOG_INFO);
-    this->areasForPlayers = std::map<int, Rectangle*>();
+    this->areasForPlayersLeftSide = std::map<int, Rectangle*>();
+    this->areasForPlayersRightSide = std::map<int, Rectangle*>();
     this->loadAreas();
 }
 
@@ -16,7 +18,8 @@ void Areas::loadAreas() {
 
 void Areas::loadGoalkeeperArea() {
     log("Areas: Cargando areas para el arquero...", LOG_DEBUG);
-    this->areasForPlayers[1] = new Rectangle(85, 434, 40, 134);
+    this->areasForPlayersLeftSide[1] = new Rectangle(85, 434, 40, 134);
+    this->areasForPlayersRightSide[1] = new Rectangle(1476, 434, 40, 134);
 }
 
 void Areas::loadDefendersAreas() {
@@ -38,10 +41,11 @@ void Areas::loadAtackersAreas() {
 }
 
 void Areas::insertUnrestricted(int position) {
-    this->areasForPlayers[position] = new Rectangle(0, 0, LEVEL_WIDTH, LEVEL_HEIGHT);
+    this->areasForPlayersLeftSide[position] = new Rectangle(0, 0, LEVEL_WIDTH, LEVEL_HEIGHT);
+    this->areasForPlayersRightSide[position] = new Rectangle(0, 0, LEVEL_WIDTH, LEVEL_HEIGHT);
 }
 
-Rectangle* Areas::get(int playerNumber) {
+Rectangle* Areas::get(int playerNumber, bool isLeftsideTeam) {
     // Povisorio. Por ahora soporto un solo equipo.
     int number = 0;
     if (playerNumber > 7) {
@@ -51,21 +55,37 @@ Rectangle* Areas::get(int playerNumber) {
     }
     // --------------------------------------------
     Rectangle* area = NULL;
-    auto search = this->areasForPlayers.find(number);
-    if(search != this->areasForPlayers.end()) {
-        area = this->areasForPlayers[number];
+    if (isLeftsideTeam) {
+        auto search = this->areasForPlayersLeftSide.find(number);
+        if(search != this->areasForPlayersLeftSide.end()) {
+            area = this->areasForPlayersLeftSide[number];
+        } else {
+            log("Areas: No se encontro un area para el jugador: ", number, LOG_ERROR);
+            log("Areas: Jugadores con areas: ", this->getPlayerWithAreasAsString(isLeftsideTeam), LOG_DEBUG);
+        }
     } else {
-        log("Areas: No se encontro un area para el jugador: ", number, LOG_ERROR);
-        log("Areas: Jugadores con areas: ", this->getPlayerWithAreasAsString(), LOG_DEBUG);
+        auto search = this->areasForPlayersRightSide.find(number);
+        if(search != this->areasForPlayersRightSide.end()) {
+            area = this->areasForPlayersRightSide[number];
+        } else {
+            log("Areas: No se encontro un area para el jugador: ", number, LOG_ERROR);
+            log("Areas: Jugadores con areas: ", this->getPlayerWithAreasAsString(isLeftsideTeam), LOG_DEBUG);
+        }
     }
     return area;
 }
 
 // Metodo para debugear.
-std::string Areas::getPlayerWithAreasAsString() {
+std::string Areas::getPlayerWithAreasAsString(bool isLeftsideTeam) {
     std::string areasForPlayersString = "";
-    for (auto const& areaForPlayer : this->areasForPlayers) {
-        areasForPlayersString += areaForPlayer.first + " - ";
+    if (isLeftsideTeam) {
+        for (auto const& areaForPlayer : this->areasForPlayersLeftSide) {
+            areasForPlayersString += areaForPlayer.first + " - ";
+        }
+    } else {
+        for (auto const& areaForPlayer : this->areasForPlayersRightSide) {
+            areasForPlayersString += areaForPlayer.first + " - ";
+        }
     }
     return areasForPlayersString;
 }
@@ -73,7 +93,7 @@ std::string Areas::getPlayerWithAreasAsString() {
 std::string Areas::getDebugLines() {
     std::string message = "[";
     bool first = true;
-    for (auto const& areaForPlayer : this->areasForPlayers) {
+    for (auto const& areaForPlayer : this->areasForPlayersLeftSide) {
         if (first) {
             first = false;
         } else {
@@ -87,9 +107,15 @@ std::string Areas::getDebugLines() {
 
 Areas::~Areas() {
     log("Areas: Liberando memoria...", LOG_INFO);
-    for (auto const& areaForPlayer : this->areasForPlayers) {
-        log("Areas: Borrando area para jugador: ", areaForPlayer.first, LOG_DEBUG);
-        delete(areaForPlayer.second);
+    log("Areas: Borrando areas para jugadores en lado izquierdo...", LOG_INFO);
+    for (auto const& areaForPlayerLeftSide : this->areasForPlayersLeftSide) {
+        log("Areas: Borrando area para jugador: ", areaForPlayerLeftSide.first, LOG_DEBUG);
+        delete(areaForPlayerLeftSide.second);
+    }
+    log("Areas: Borrando areas para jugadores en lado derecho...", LOG_INFO);
+    for (auto const& areaForPlayerRightSide : this->areasForPlayersRightSide) {
+        log("Areas: Borrando area para jugador: ", areaForPlayerRightSide.first, LOG_DEBUG);
+        delete(areaForPlayerRightSide.second);
     }
     log("Areas: Memoria liberada.", LOG_INFO);
 }

@@ -2,7 +2,8 @@
 
 Areas312::Areas312() {
     log("Areas312: Inicializando...", LOG_INFO);
-    this->areasForPlayers = std::map<int, Rectangle*>();
+    this->areasForPlayersLeftSide = std::map<int, Rectangle*>();
+    this->areasForPlayersRightSide = std::map<int, Rectangle*>();
     this->loadAreas();
 }
 
@@ -15,21 +16,33 @@ void Areas312::loadAreas() {
 }
 
 void Areas312::loadDefendersAreas() {
-    log("Areas312: Cargando areas para los defensores...", LOG_DEBUG);
-    this->areasForPlayers[2] = new Rectangle(84, 766, 1437, 214);
-    this->areasForPlayers[3] = new Rectangle(124, 236, 443, 531);
-    this->areasForPlayers[4] = new Rectangle(84, 22, 1437, 214);
+    log("Areas312: Cargando areas, del lado izquierdo, para los defensores...", LOG_DEBUG);
+    this->areasForPlayersLeftSide[2] = new Rectangle(84, 766, 1437, 214);
+    this->areasForPlayersLeftSide[3] = new Rectangle(124, 236, 443, 531);
+    this->areasForPlayersLeftSide[4] = new Rectangle(84, 22, 1437, 214);
+
+    log("Areas312: Cargando areas, del lado derecho, para los defensores...", LOG_DEBUG);
+    this->areasForPlayersRightSide[2] = new Rectangle(84, 766, 1437, 214);
+    this->areasForPlayersRightSide[3] = new Rectangle(1132, 236, 344, 531);
+    this->areasForPlayersRightSide[4] = new Rectangle(84, 22, 1437, 214);
 }
 
 void Areas312::loadMidFildersAreas() {
-    log("Areas312: Cargando areas para los mediocampistas...", LOG_DEBUG);
-    this->areasForPlayers[5] = new Rectangle(568, 236, 469, 530);
+    log("Areas312: Cargando areas, del lado izquierdo, para los mediocampistas...", LOG_DEBUG);
+    this->areasForPlayersLeftSide[5] = new Rectangle(568, 236, 469, 530);
+
+    log("Areas312: Cargando areas, del lado derecho, para los mediocampistas...", LOG_DEBUG);
+    this->areasForPlayersRightSide[5] = new Rectangle(450, 236, 469, 530);
 }
 
 void Areas312::loadAtackersAreas() {
-    log("Areas312: Cargando areas para los atacantes...", LOG_DEBUG);
-    this->areasForPlayers[6] = new Rectangle(1037, 500, 443, 265);
-    this->areasForPlayers[7] = new Rectangle(1037, 236, 443, 265);
+    log("Areas312: Cargando areas, del lado izquierdo, para los atacantes...", LOG_DEBUG);
+    this->areasForPlayersLeftSide[6] = new Rectangle(1037, 500, 443, 265);
+    this->areasForPlayersLeftSide[7] = new Rectangle(1037, 236, 443, 265);
+
+    log("Areas312: Cargando areas, del lado derecho, para los atacantes...", LOG_DEBUG);
+    this->areasForPlayersRightSide[7] = new Rectangle(106, 236, 443, 265);
+    this->areasForPlayersRightSide[6] = new Rectangle(106, 500, 443, 265);
 }
 
 Areas312::~Areas312() {

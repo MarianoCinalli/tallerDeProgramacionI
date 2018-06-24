@@ -3,6 +3,7 @@
 PlayerMovement::PlayerMovement() {
     log("PlayerMovement: Creando movimientos para los jugadores. Si no se especifica una formacion, no voy a tener areas...", LOG_DEBUG);
     this->playerAreas = NULL;
+    this->isLeftsideTeam = true;
 }
 
 void PlayerMovement::setFormation(int formation) {
@@ -14,13 +15,17 @@ void PlayerMovement::setFormation(int formation) {
     this->playerAreas = new PlayerAreas(formation);
 }
 
+void PlayerMovement::setSide(bool isLeftsideTeam) {
+    this->isLeftsideTeam = isLeftsideTeam;
+}
+
 bool PlayerMovement::isInsideArea(Coordinates* coordinates, int playerNumber) {
     bool canMove = true;
     if (this->playerAreas == NULL) {
         log("PlayerMovement: Las areas son nulas.", LOG_ERROR);
         return false;
     }
-    Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber);
+    Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber, this->isLeftsideTeam);
     if (rectangle == NULL) {
         log("PlayerMovement: El area es nula, para el jugador: ", playerNumber, LOG_ERROR);
         canMove = false;
@@ -35,7 +40,7 @@ void PlayerMovement::cleanVelocity(Velocity* velocity, Coordinates* coordinates,
     if (this->playerAreas == NULL) {
         log("PlayerMovement: Las areas son nulas.", LOG_ERROR);
     }
-    Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber);
+    Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber, this->isLeftsideTeam);
     if (rectangle == NULL) {
         log("PlayerMovement: El area es nula, para el jugador: ", playerNumber, LOG_ERROR);
     } else {

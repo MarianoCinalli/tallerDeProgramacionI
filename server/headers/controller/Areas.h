@@ -8,14 +8,15 @@
 
 class Areas {
     protected:
-        std::map<int, Rectangle*> areasForPlayers;
+        std::map<int, Rectangle*> areasForPlayersLeftSide;
+        std::map<int, Rectangle*> areasForPlayersRightSide;
     public:
         Areas();
-        Rectangle* get(int playerNumber);
+        Rectangle* get(int playerNumber, bool isLeftsideTeam);
         std::string getDebugLines();
         virtual ~Areas();
     protected:
-        std::string getPlayerWithAreasAsString();
+        std::string getPlayerWithAreasAsString(bool isLeftsideTeam);
         virtual void loadAreas();
         virtual void loadGoalkeeperArea();
         virtual void loadDefendersAreas();

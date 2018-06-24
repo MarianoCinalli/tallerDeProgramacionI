@@ -15,7 +15,7 @@ class PlayerAreas {
     public:
         PlayerAreas();
         PlayerAreas(int formation);
-        Rectangle* getForPlayer(int playerNumber);
+        Rectangle* getForPlayer(int playerNumber, bool isLeftsideTeam);
         std::string getDebugLines();
         ~PlayerAreas();
 };

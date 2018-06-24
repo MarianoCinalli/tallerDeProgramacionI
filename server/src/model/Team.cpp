@@ -67,6 +67,7 @@ void Team::setFormacion(int formacion) {
     this->formacion = formacion;
     this->formation->setFormation(formacion);
     this->playerMovement->setFormation(formacion);
+    this->playerMovement->setSide(this->local == 0);
     for (Player* player : players) {
         player->setFieldPosition(formacion);
         player->setMovement(this->playerMovement);

@@ -23,12 +23,12 @@ PlayerAreas::PlayerAreas(int formation) {
     }
 }
 
-Rectangle* PlayerAreas::getForPlayer(int playerNumber) {
+Rectangle* PlayerAreas::getForPlayer(int playerNumber, bool isLeftsideTeam) {
     if (this->areas == NULL) {
         log("PlayerAreas: Las areas son nulas. ", LOG_ERROR);
         return NULL;
     }
-    return this->areas->get(playerNumber);
+    return this->areas->get(playerNumber, isLeftsideTeam);
 }
 
 std::string PlayerAreas::getDebugLines() {
