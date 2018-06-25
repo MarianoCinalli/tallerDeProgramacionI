@@ -120,26 +120,25 @@ void GameController::checkState() {
                 break;
             }
         case HALF_START_STATE: {
-          this->timer->stop();
-          int seconds = 2;
-          usleep(seconds*1000000);
-          this->pitch->setStart(this->stateOption);
-          this->timer->resume();
-          this->state = NORMAL_STATE;
-          break;
-        }
+                this->timer->stop();
+                int seconds = 2;
+                usleep(seconds * 1000000);
+                this->pitch->setStart(this->stateOption);
+                this->timer->resume();
+                this->state = NORMAL_STATE;
+                break;
+            }
         case GAME_START_STATE: {
-          this->stateOption = this->realTimer->getTime()->getSeconds();
-          log("GAME CONTROLLER: segundos desde que empieza el partido: ",this->stateOption,LOG_SPAM);
-          if (this->stateOption >5)
-          {
-            this->end = false;
-            this->timer->start();
-            this->state = GOALKICK_STATE;
-            this->stateOption = CENTER_LEFT_START;
-          }
-          break;
-        }
+                this->stateOption = this->realTimer->getTime()->getSeconds();
+                log("GAME CONTROLLER: segundos desde que empieza el partido: ", this->stateOption, LOG_SPAM);
+                if (this->stateOption > 5) {
+                    this->end = false;
+                    this->timer->start();
+                    this->state = GOALKICK_STATE;
+                    this->stateOption = CENTER_LEFT_START;
+                }
+                break;
+            }
     }
 }
 
