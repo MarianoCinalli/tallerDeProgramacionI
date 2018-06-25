@@ -20,6 +20,15 @@ enum PlayerOrientations {
     PLAYER_ORIENTATION_INVALID = 5
 };
 
+enum states {
+  NORMAL_STATE = 1,
+  HALF_START_STATE = 2,
+  GOAL_STATE = 3,
+  THROWIN_STATE = 4,
+  GOALKICK_STATE = 5,
+  GAME_START_STATE = 6,
+};
+
 enum KeyboardBools {
     KUP = 0,
     KDOWN = 1,

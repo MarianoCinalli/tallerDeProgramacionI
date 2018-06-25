@@ -21,35 +21,45 @@ void Clock::parseYaml(YAML::Node node){
 void Clock::render(SDL_Renderer* screen) {
     // Este es el viewPort del Clock
     SDL_Rect clockViewport;
-    clockViewport.x = 2 * (SCREEN_WIDTH / 3);
+    clockViewport.x = 500; //2 * (SCREEN_WIDTH / 3);
     clockViewport.y = 0;
-    clockViewport.w = SCREEN_WIDTH / 3;
+    clockViewport.w = 300; //SCREEN_WIDTH / 3;
     clockViewport.h = 100;
 
     SDL_RenderSetViewport( screen, &clockViewport ); //Render texture to screen
-    // SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
-    // SDL_RenderFillRect(screen, &clockViewport);
-    // Dibujo los bordes del clockViewport
     SDL_Rect outlineRect = { 0, 0, clockViewport.w, clockViewport.h };
     SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
+    // Dibujo los bordes del clockViewport
     SDL_RenderFillRect(screen, &outlineRect);
-    SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
     SDL_RenderDrawRect( screen, &outlineRect );
 
     // Colores
     SDL_Color SDL_BLACK = { 0, 0, 0, 0xFF };
     SDL_Color SDL_RED = { 0xFF, 0, 0, 0xFF };
-    SDL_Color SDL_GREEN = { 0, 0xFF, 0, 0xFF };
-    SDL_Color SDL_BLUE = { 0, 0, 0xFF, 0xFF };
-    SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
 
     std::string mensaje = this->value;
     if (mensaje.empty()) {
       mensaje = "00-00";
     }
+    std::replace( mensaje.begin(), mensaje.end(), '-', ':');
+    int minutos = stoi(mensaje.substr(0, mensaje.find(":")));
+    //segundos = stoi(mensaje.substr(mensaje.find(":")+1,mensaje.length()));
+    std::string mensajeTime;
+    if ( minutos < 45 ) {
+      mensajeTime = "PRIMER TIEMPO";
+    } else {
+      mensajeTime = "SEGUNDO TIEMPO";
+    }
+
+    Texture timeTexture;
+    timeTexture.loadFromRenderedText(mensajeTime, screen, SDL_BLACK, this->gFont);
+    SDL_Rect posicionTime = {20, 10, 260, 25};
+    SDL_RenderCopyEx(screen, timeTexture.getSpriteSheetTexture(), NULL, &posicionTime, 0.0, NULL, SDL_FLIP_NONE);
+
     Texture mensajeTexture;
     mensajeTexture.loadFromRenderedText(mensaje, screen, SDL_RED, this->gFont);
-    SDL_Rect posicion = {0, 0, clockViewport.w, clockViewport.h};
+    SDL_Rect posicion = {35, 30, 230, 65};
     SDL_RenderCopyEx(screen, mensajeTexture.getSpriteSheetTexture(), NULL, &posicion, 0.0, NULL, SDL_FLIP_NONE);
 }
 

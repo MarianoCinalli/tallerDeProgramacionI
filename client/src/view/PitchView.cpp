@@ -1,8 +1,9 @@
 #include "view/PitchView.h"
 
-PitchView::PitchView(Texture* pitch, Camera* camera) {
+PitchView::PitchView(Texture* pitch, Texture* pitchMini, Camera* camera) {
     log("PitchView: Creando vista de la cancha...", LOG_INFO);
     this->pitch = pitch;
+    this->pitchMini = pitchMini;
     this->camera = camera;
     log("PitchView: Vista de la cancha creada...", LOG_INFO);
 }
@@ -18,39 +19,42 @@ void PitchView::addBallView(BallSpriteManager* ballView) {
 void PitchView::renderMinimap(SDL_Renderer* screen) {
     // Este es el viewPort del Minimap
     SDL_Rect minimapViewport;
-    minimapViewport.x = SCREEN_WIDTH / 3;
+    minimapViewport.x = 300; //SCREEN_WIDTH / 3;
     minimapViewport.y = 0;
-    minimapViewport.w = SCREEN_WIDTH / 3;
+    minimapViewport.w = 200; //SCREEN_WIDTH / 3;
     minimapViewport.h = 100;
     SDL_RenderSetViewport( screen, &minimapViewport ); //Render texture to screen
     // Dibujo los bordes del minimapViewport
     SDL_Rect outlineRect = { 0, 0, minimapViewport.w, minimapViewport.h };
     SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
     SDL_RenderFillRect(screen, &outlineRect);
-    SDL_SetRenderDrawColor( screen, 0x00, 0xFF, 0x00, 0xFF ); //VERDE
+
+    // Dibujar imagen de la cancha
+    SDL_RenderCopy( screen, this->pitchMini->getSpriteSheetTexture(), NULL, NULL );
+
+    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
     SDL_RenderDrawRect( screen, &outlineRect );
 
     int team = 0;
 
     // TODO pasar a Constants
-    double MINIMAP_SCALE = 0.2;
-    double MINIMAP_SCALE_X = 0.17;
-    double MINIMAP_SCALE_Y = 0.10;
+    double MINIMAP_SCALE_X = 0.13;
+    double MINIMAP_SCALE_Y = 0.105;
 
     // Dibujar la camara
     Coordinates coordinatesCam = this->camera->getPosition();
     SDL_Rect cameraRect;
     cameraRect.x = coordinatesCam.getX() * MINIMAP_SCALE_X;
     cameraRect.y = coordinatesCam.getY() * MINIMAP_SCALE_Y;
-    cameraRect.w = 102;//hacer proporcion
-    cameraRect.h = 48;//hacer proporcion
+    cameraRect.w = 76;//hacer proporcion
+    cameraRect.h = 46;//hacer proporcion
     SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
     SDL_RenderDrawRect( screen, &cameraRect );
 
     // Bibujar la pelota
     Coordinates* coordinatesBall = this->ballView->getBallCoordinates();
     SDL_Rect ballRect = { coordinatesBall->getX() * MINIMAP_SCALE_X, coordinatesBall->getY() * MINIMAP_SCALE_Y, 3, 3 };
-    SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0xFF, 0xFF ); //AZUL
+    SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0xFF, 0xFF ); //BLANCO
     SDL_RenderFillRect( screen, &ballRect );
 
     // Obtener la posicion de todos los jugadores
@@ -64,12 +68,35 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
         team = (*viewIter)->getPlayerTeam();
         if (team==0) {
           // equipo Rojo
-          SDL_SetRenderDrawColor( screen, 0xFF, 0x00, 0x00, 0xFF ); //ROJO
+          SDL_SetRenderDrawColor( screen, 0x00, 0xCC, 0xCC, 0xFF ); //CELESTE
         } else {
-          SDL_SetRenderDrawColor( screen, 0x00, 0x00, 0x00, 0xFF ); //NEGRO
+          SDL_SetRenderDrawColor( screen, 0xFF, 0xFF, 0x00, 0xFF ); //AMARILLO
         }
         SDL_RenderFillRect( screen, &playerRect );
     }
+}
+
+void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
+  SDL_Rect cancha;
+  cancha.x = 0;
+  cancha.y = CAMERA_OFFSET;
+  cancha.w = SCREEN_WIDTH;
+  cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
+  SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
+  TTF_Font* gFont = NULL;
+  gFont = TTF_OpenFont("lazy.ttf", 30);
+  if (gFont == NULL) {
+      log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+  }
+  std::string message = "EL juego empieza en ";
+  message += std::to_string(5-countdown);
+  SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
+  Texture countdownTexture;
+  countdownTexture.loadFromRenderedText(message, screen, SDL_WHITE, gFont);
+  SDL_Rect renderQuad1 = { (SCREEN_WIDTH - countdownTexture.getWidth()) / 2, 150, countdownTexture.getWidth(), countdownTexture.getHeight() };
+  SDL_RenderCopyEx(screen, countdownTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+  // SDL_RenderPresent(screen);
+
 }
 
 void PitchView::render(SDL_Renderer* screen) {
@@ -102,7 +129,7 @@ void PitchView::render(SDL_Renderer* screen) {
         delete(coordinates);
     }
     //log("PitchView: Fin de renderizacion.", LOG_SPAM);
-    SDL_RenderPresent(screen);
+    // SDL_RenderPresent(screen);
 }
 
 PitchView::~PitchView() {

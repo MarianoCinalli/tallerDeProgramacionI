@@ -31,6 +31,7 @@ class GameController {
         Ball* ball;
         Player* activePlayer;
         Timer* timer;
+        Timer* realTimer;
         int state;
         int stateOption;
         bool end;
@@ -53,7 +54,9 @@ class GameController {
         void addUser(std::string user, int teamNum, int formation);
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);
+        std::string getStateAsYaml();
         bool joinTeam(std::string playerName, int team,int formation, int maxPlayers, std::string & errorMessage);
+        bool setTeamFormation(int team, int formation);
         void removeUser(std::string user);
         void startGame();
         bool hasGameStarted();

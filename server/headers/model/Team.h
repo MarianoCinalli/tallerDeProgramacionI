@@ -31,7 +31,8 @@ class Team {
         void increaseScore();
         std::string getDebugLines();
         int getScore();
-        Coordinates* getPositionPiola(int isLocal, int playerNumber);
+        std::list<std::string> scoreInfo;
+        void addScoreInfo(std::string);
 };
 #endif // TEAM_H
 

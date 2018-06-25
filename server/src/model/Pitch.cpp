@@ -27,18 +27,18 @@ int Pitch::goalkick(){
   int x = ball->getPosition()->getX();
   int y = ball->getPosition()->getY();
   int height = ball->getHeight();
-  if (((x < 30) || (x > 1510)) && ((y<600) && (y>400)) && height<GOAL_HEIGHT){
-    // log("PITCH: altura, ", height, LOG_DEBUG);
-    if (x<30)
+  if (((x < 60) || (x > 1488)) && ((y<600) && (y>400)) && (height<GOAL_HEIGHT)){
+    log("PITCH: x, ", x, LOG_DEBUG);
+    log("PITCH: y, ", y, LOG_DEBUG);
+    if (x<60)
       return CENTER_LEFT_START;
-    else
+    else if (x>1488)
       return CENTER_RIGHT_START;
-
   }
-  else if (x < 30){
+  else if (x < 60){
     return LEFT_START;
   }
-  else if (x > 1510){
+  else if (x > 1488){
     return RIGHT_START;
   }
   return -1;
@@ -66,7 +66,7 @@ void Pitch::setStart(int position){
     player = this->getTeam(TEAM_RIGHT)->getPlayer(5);
     player->setOrientation(PLAYER_ORIENTATION_LEFT);
   }
-
+  player->cantMoveUntilPass();
   this->ball->restart(position);
   this->ball->setPlayer(player);
 }
@@ -100,6 +100,27 @@ void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
     this->activePlayers[user] = team->getPlayers().back();
     this->activePlayers[user]->toggleIsSelected(user);
     log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);
+}
+
+bool Pitch::setTeamFormation(int teamNum, int formation){
+    Team* team;
+    if (teamNum == 0) {
+        if (this->localTeam != NULL) {
+            team = this->localTeam;
+        } else {
+            log("Pitch: El equpo local es nulo.", LOG_ERROR);
+        }
+    } else if (teamNum == 1) {
+        if (this->awayTeam != NULL) {
+            team = this->awayTeam;
+        } else {
+            log("Pitch: El equpo visitante es nulo.", LOG_ERROR);
+        }
+    } else {
+        log("Pitch: Error numero de equipo desconocido: ", teamNum, LOG_ERROR);
+    }
+    team->setFormacion(formation);
+    return true; //HACK
 }
 
 void Pitch::setBall(Ball* ball) {
@@ -229,10 +250,11 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
     return this->camera->getPlayersInsideMargin(teamPlayers, 1);
 }
 
+const int BALL_STEAL_HEIGHT = 3;
 
 void Pitch::checkSteals() {
     log("Pitch: Chequeando intercepciones...", LOG_DEBUG);
-    if (this->ball->getHeight() < BALL_DECELERATE_CONST) {
+    if (this->ball->getHeight() < BALL_STEAL_HEIGHT) {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
         players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());

@@ -70,6 +70,8 @@ class Player {
         void setTrayectory(Velocity* trayectory);
         void setWithBall(bool dominated);
         bool isWithBall();
+        void cantMoveUntilPass();
+
         // Cambia la posicion con respecto a su velocidad.
         void updatePosition(Coordinates* positionToFollow);
         void updateKicking();

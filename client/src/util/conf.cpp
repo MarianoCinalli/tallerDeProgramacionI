@@ -228,6 +228,10 @@ string Conf::getAssetsCancha() {
     return "images/cancha.png"; //TODO
 }
 
+string Conf::getAssetsCanchaMini() {
+    return "images/minimap.png"; //TODO
+}
+
 int Conf::getFormacion() {
     return formacion;
 }

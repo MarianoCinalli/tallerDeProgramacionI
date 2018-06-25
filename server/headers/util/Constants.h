@@ -40,6 +40,7 @@ enum states {
   GOAL_STATE = 3,
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
+  GAME_START_STATE = 6,
 };
 
 
@@ -71,8 +72,6 @@ const int PLAYERS_PER_TEAM = 7;
 const int NORMAL_VELOCITY = 2;
 const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
-const int BALL_DECELERATE_CONST = 3;
-const int PASS_SPEED = 5;
 
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;

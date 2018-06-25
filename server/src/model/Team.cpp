@@ -36,6 +36,7 @@ Player* Team::getPlayer(int num) {
 int Team::getAmountPlayers() {
     return this->players.size();
 }
+
 int Team::getTeamNum() {
     return this->local;
 }
@@ -103,10 +104,16 @@ int Team::getScore() {
     return this->score;
 }
 
+
 std::string Team::getDebugLines() {
     std::string message = "";
     if (this->playerMovement != NULL) {
         message = "debug: " + this->playerMovement->getDebugLines() + "\n";
     }
     return message;
+}
+
+void Team::addScoreInfo(std::string message) {
+    log("Team: GOOOOOL ", message, LOG_INFO);
+    this->scoreInfo.push_back(message);
 }

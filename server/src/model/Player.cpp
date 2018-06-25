@@ -85,6 +85,10 @@ void Player::setMovement(PlayerMovement* playerMovement) {
     this->playerMovement = playerMovement;
 }
 
+void Player::cantMoveUntilPass() {
+    this->canMove = false;
+}
+
 void Player::setFieldPosition(int formation) {
     int number = this->id;
     if (number > 7) {

@@ -12,6 +12,8 @@
 class Score {
     private:
         TTF_Font* gFont;
+        SDL_Renderer* renderer;
+        SDL_Rect scoreViewport;
     public:
         int local;
         int visitante;
@@ -19,6 +21,9 @@ class Score {
         // parsea YAML
         void parseYaml(YAML::Node node);
         void render(SDL_Renderer* screen);
+        void gol();
+        void golLocal();
+        void golVisitante();
         ~Score();
 };
 #endif // SCORE_H
