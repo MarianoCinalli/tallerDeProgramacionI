@@ -1,8 +1,7 @@
 #include "model/Formation.h"
 
-Formation::Formation(int formation, bool isLocal) {
+Formation::Formation(int formation) {
     this->formation = formation;
-    this->isLocal = isLocal;
 }
 
 void Formation::setFormation(int formation) {

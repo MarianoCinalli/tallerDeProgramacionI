@@ -17,6 +17,7 @@ class Team {
         int score;
         Formation* formation;
         PlayerMovement* playerMovement;
+        bool isOnTheLeftside;
     public:
         Team(int, std::string);
         ~Team();
@@ -34,6 +35,7 @@ class Team {
         void resetScore();
         std::list<std::string> scoreInfo;
         void addScoreInfo(std::string);
+        void changeSide();
 };
 #endif // TEAM_H
 

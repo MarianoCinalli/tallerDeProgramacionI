@@ -6,8 +6,9 @@ Team::Team(int local, std::string name) {
     this->local = local; // 1 visitante - 0 local
     this->name = name;
     this->score = 0;
-    this->formation = new Formation(312, local == 0);
+    this->formation = new Formation(312);
     this->playerMovement = new PlayerMovement(); // Lo deja moverse sin restricciones.
+    this->isOnTheLeftside = this->local == 0;
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -68,7 +69,7 @@ void Team::setFormacion(int formacion) {
     this->formacion = formacion;
     this->formation->setFormation(formacion);
     this->playerMovement->setFormation(formacion);
-    this->playerMovement->setSide(this->local == 0);
+    this->playerMovement->setSide(this->isOnTheLeftside);
     for (Player* player : players) {
         player->setFieldPosition(formacion);
         player->setMovement(this->playerMovement);
@@ -81,11 +82,11 @@ void Team::order() {
     for (Player* p : players) {
         Coordinates* startingCoordinates = this->formation->getCoordinatesForPlayerBehindMiddle(
             p->getId(),
-            this->local == 0
+            this->isOnTheLeftside
         );
         Coordinates* baseCoordinates = this->formation->getCoordinatesForPlayer(
             p->getId(),
-            this->local == 0
+            this->isOnTheLeftside
         );
         p->setPosition(startingCoordinates);
         p->setBasePosition(baseCoordinates);
@@ -94,6 +95,11 @@ void Team::order() {
         i++;
     }
     log("Team: Equipo ordenado.", LOG_DEBUG);
+}
+
+void Team::changeSide() {
+    this->isOnTheLeftside = !this->isOnTheLeftside;
+    this->playerMovement->setSide(this->isOnTheLeftside);
 }
 
 void Team::increaseScore() {

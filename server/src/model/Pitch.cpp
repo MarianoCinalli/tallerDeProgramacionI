@@ -43,6 +43,13 @@ int Pitch::goalkick() {
     return -1;
 }
 
+void Pitch::changeSides() {
+    this->localTeam->changeSide();
+    this->localTeam->order();
+    this->awayTeam->changeSide();
+    this->awayTeam->order();
+}
+
 void Pitch::setStart(int position) {
     this->localTeam->order();
     this->awayTeam->order();

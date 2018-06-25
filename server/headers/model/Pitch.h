@@ -42,6 +42,7 @@ class Pitch {
         Team* getTeam(int teamNumber);
         std::string getScoresYAML();
         std::string getDebugLines();
+        void changeSides();
         ~Pitch();
     private:
         std::string getUsersWithActivePlayersAsString();

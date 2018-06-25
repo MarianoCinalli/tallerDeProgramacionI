@@ -10,7 +10,7 @@ class Formation {
         int formation;
         bool isLocal;
     public:
-        Formation(int formation, bool isLocal);
+        Formation(int formation);
         void setFormation(int formation);
         // Para que el juego en marcha.
         Coordinates* getCoordinatesForPlayer(int playerNumber, bool leftsideOfThePitch);

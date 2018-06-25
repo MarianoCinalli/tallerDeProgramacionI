@@ -123,6 +123,7 @@ void GameController::checkState() {
                 this->timer->stop();
                 int seconds = 2;
                 usleep(seconds * 1000000);
+                this->pitch->changeSides();
                 this->pitch->setStart(this->stateOption);
                 this->timer->resume();
                 this->state = NORMAL_STATE;
