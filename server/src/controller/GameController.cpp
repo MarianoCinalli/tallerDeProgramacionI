@@ -9,7 +9,7 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->timer = timer;
     this->realTimer = new Timer(45);
     this->state = GAME_START_STATE;
-    this->stateOption = 5;  //5 seconds to start in game start
+    this->stateOption = 0;  //5 seconds to start in game start
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -130,7 +130,8 @@ void GameController::checkState() {
           if (this->stateOption >5)
           {
             this->timer->start();
-            this->state = NORMAL_STATE;
+            this->state = GOALKICK_STATE;
+            this->stateOption = CENTER_LEFT_START;
           }
           break;
         }
