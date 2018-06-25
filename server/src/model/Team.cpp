@@ -78,13 +78,18 @@ void Team::order() {
     log("Team: Ordenando equipo...", LOG_DEBUG);
     int i = 0;
     for (Player* p : players) {
-        Coordinates* coordinates = this->formation->getCoordinatesForPlayer(
+        Coordinates* startingCoordinates = this->formation->getCoordinatesForPlayerBehindMiddle(
             p->getId(),
             this->local == 0
         );
-        p->setPosition(coordinates);
-        p->setBasePosition(coordinates);
-        delete(coordinates);
+        Coordinates* baseCoordinates = this->formation->getCoordinatesForPlayer(
+            p->getId(),
+            this->local == 0
+        );
+        p->setPosition(startingCoordinates);
+        p->setBasePosition(baseCoordinates);
+        delete(startingCoordinates);
+        delete(baseCoordinates);
         i++;
     }
     log("Team: Equipo ordenado.", LOG_DEBUG);
