@@ -102,7 +102,7 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
         }
         dominated = false; //HACK? para que sirve?
         this->player->setWithBall(this->dominated);
-        this->player = NULL;
+        // this->player = NULL;
         this->isInAPass = true;
         if(highPass) {
             this->isInAHighPass = true;
