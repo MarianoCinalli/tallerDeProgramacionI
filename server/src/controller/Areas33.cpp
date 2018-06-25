@@ -34,13 +34,13 @@ void Areas33::loadMidFildersAreas() {
 void Areas33::loadAtackersAreas() {
     log("Areas33: Cargando areas, del lado izquierdo, para los atacantes...", LOG_DEBUG);
     this->areasForPlayersLeftSide[5] = new Rectangle(800, 21, 715, 321);
-    this->areasForPlayersLeftSide[6] = new Rectangle(800, 342, 689, 320);
-    this->areasForPlayersLeftSide[7] = new Rectangle(800, 661, 715, 321);
+    this->areasForPlayersLeftSide[6] = new Rectangle(800, 661, 715, 321);
+    this->areasForPlayersLeftSide[7] = new Rectangle(800, 342, 689, 320);
 
     log("Areas33: Cargando areas, del lado derecho, para los atacantes...", LOG_DEBUG);
     this->areasForPlayersRightSide[5] = new Rectangle(85, 21, 715, 321);
-    this->areasForPlayersRightSide[6] = new Rectangle(111, 342, 689, 320);
-    this->areasForPlayersRightSide[7] = new Rectangle(85, 661, 715, 319);
+    this->areasForPlayersRightSide[6] = new Rectangle(85, 661, 715, 319);
+    this->areasForPlayersRightSide[7] = new Rectangle(111, 342, 689, 320);
 }
 
 Areas33::~Areas33() {
