@@ -257,13 +257,13 @@ Coordinates* Formation::getCoordinatesForPlayerOnTheLeftBehindMiddle(int playerN
             coordinates = new Coordinates(105, 501);
             break;
         case 2:
-            coordinates = new Coordinates(350, 156);
+            coordinates = new Coordinates(300, 501);
             break;
         case 3:
             coordinates = new Coordinates(350, 800);
             break;
         case 4:
-            coordinates = new Coordinates(300, 501);
+            coordinates = new Coordinates(350, 156);
             break;
         case 5:
             coordinates = new Coordinates(600, 200);
@@ -272,7 +272,7 @@ Coordinates* Formation::getCoordinatesForPlayerOnTheLeftBehindMiddle(int playerN
             coordinates = new Coordinates(600, 650);
             break;
         case 7:
-            coordinates = new Coordinates(800, 500);
+            coordinates = new Coordinates(750, 470);
             break;
         default:
             log("Formation: Numero de jugador no entendido: ", playerNumber, LOG_ERROR);
@@ -287,13 +287,13 @@ Coordinates* Formation::getCoordinatesForPlayerOnTheRightsideBehindMiddle(int pl
             coordinates = new Coordinates(1450, 500);
             break;
         case 2:
-            coordinates = new Coordinates(1150, 156);
+            coordinates = new Coordinates(1200, 501);
             break;
         case 3:
             coordinates = new Coordinates(1150, 800);
             break;
         case 4:
-            coordinates = new Coordinates(1200, 501);
+            coordinates = new Coordinates(1150, 156);
             break;
         case 5:
             coordinates = new Coordinates(900, 200);
@@ -302,7 +302,7 @@ Coordinates* Formation::getCoordinatesForPlayerOnTheRightsideBehindMiddle(int pl
             coordinates = new Coordinates(900, 650);
             break;
         case 7:
-            coordinates = new Coordinates(700, 500);
+            coordinates = new Coordinates(830, 470);
             break;
         default:
             log("Formation: Numero de jugador no entendido: ", playerNumber, LOG_ERROR);
