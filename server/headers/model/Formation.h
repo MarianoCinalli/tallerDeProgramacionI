@@ -12,10 +12,13 @@ class Formation {
     public:
         Formation(int formation, bool isLocal);
         void setFormation(int formation);
-        Coordinates* getCoordinatesForPlayer(int playerNumber);
+        Coordinates* getCoordinatesForPlayer(int playerNumber, bool leftsideOfThePitch);
         Coordinates* getCoordinatesForPlayer321(int playerNumber);
         Coordinates* getCoordinatesForPlayer33(int playerNumber);
         Coordinates* getCoordinatesForPlayer312(int playerNumber);
+        Coordinates* getCoordinatesForPlayerOnTheRightside321(int playerNumber);
+        Coordinates* getCoordinatesForPlayerOnTheRightside33(int playerNumber);
+        Coordinates* getCoordinatesForPlayerOnTheRightside312(int playerNumber);
         Coordinates* getDefaultCoordinates();
         ~Formation();
 };

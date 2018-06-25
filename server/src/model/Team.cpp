@@ -78,7 +78,10 @@ void Team::order() {
     log("Team: Ordenando equipo...", LOG_DEBUG);
     int i = 0;
     for (Player* p : players) {
-        Coordinates* coordinates = this->formation->getCoordinatesForPlayer(p->getId());
+        Coordinates* coordinates = this->formation->getCoordinatesForPlayer(
+            p->getId(),
+            this->local == 0
+        );
         p->setPosition(coordinates);
         p->setBasePosition(coordinates);
         delete(coordinates);
