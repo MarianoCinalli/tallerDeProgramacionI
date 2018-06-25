@@ -29,6 +29,7 @@ bool Timer::hasStarted() {
 }
 
 void Timer::stop() {
+    this->started = false;
     log("Timer: Frenando el timer.", LOG_INFO);
 }
 

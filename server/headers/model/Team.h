@@ -26,6 +26,7 @@ class Team {
         std::string getName();
         void increaseScore();
         int getScore();
+        void resetScore();
         std::list<std::string> scoreInfo;
         void addScoreInfo(std::string);
 };

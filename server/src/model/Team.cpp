@@ -86,6 +86,10 @@ int Team::getScore() {
     return this->score;
 }
 
+void Team::resetScore(){
+  this->score = 0;
+}
+
 void Team::addScoreInfo(std::string message) {
     log("Team: GOOOOOL ", message, LOG_INFO);
     this->scoreInfo.push_back(message);

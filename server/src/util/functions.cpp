@@ -107,7 +107,9 @@ void* broadcast_to_clients(void* argument) {
     sleep(2); //HACK time to get your shit together
     broadcaster->broadcast(true);
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-    while (!gameControllerProxy->shouldGameEnd() && !quit) {
+    // while (!gameControllerProxy->shouldGameEnd() && !quit) {
+    //Viendo que cuando termine el juego vuelva a empezar
+    while (!quit) {
       if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
         timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
         broadcaster->broadcast(true);
@@ -129,7 +131,8 @@ void* game_updater(void* argument) {
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     gameControllerProxy->startGame();
-    while (!gameControllerProxy->shouldGameEnd() && !quit) {
+    // while (!gameControllerProxy->shouldGameEnd() && !quit) {
+    while (!quit) {
         if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
           gameControllerProxy->updateModel();
