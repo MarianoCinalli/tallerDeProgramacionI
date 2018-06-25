@@ -5,6 +5,7 @@ PitchView::PitchView(Texture* pitch, Texture* pitchMini, Camera* camera) {
     this->pitch = pitch;
     this->pitchMini = pitchMini;
     this->camera = camera;
+    this->messageTime = -1;
     log("PitchView: Vista de la cancha creada...", LOG_INFO);
 }
 
@@ -90,6 +91,27 @@ void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
   }
   std::string message = "EL juego empieza en ";
   message += std::to_string(5-countdown);
+  SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
+  Texture countdownTexture;
+  countdownTexture.loadFromRenderedText(message, screen, SDL_WHITE, gFont);
+  SDL_Rect renderQuad1 = { (SCREEN_WIDTH - countdownTexture.getWidth()) / 2, 150, countdownTexture.getWidth(), countdownTexture.getHeight() };
+  SDL_RenderCopyEx(screen, countdownTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+  // SDL_RenderPresent(screen);
+
+}
+
+void PitchView::renderMessage(SDL_Renderer* screen, std::string message){
+  SDL_Rect cancha;
+  cancha.x = 0;
+  cancha.y = CAMERA_OFFSET;
+  cancha.w = SCREEN_WIDTH;
+  cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
+  SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
+  TTF_Font* gFont = NULL;
+  gFont = TTF_OpenFont("lazy.ttf", 30);
+  if (gFont == NULL) {
+      log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+  }
   SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
   Texture countdownTexture;
   countdownTexture.loadFromRenderedText(message, screen, SDL_WHITE, gFont);

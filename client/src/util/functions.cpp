@@ -166,6 +166,10 @@ void* drawer(void* argument) {
             // pitchView->render(renderer);
             pitchView->renderCountdown(renderer, gameController->stateOption);
           }
+          if(gameController->state == HALF_START_STATE){
+            std::string msg = "Cambio de Lado";
+            pitchView->renderMessage(renderer, msg);
+          }
 
         //renderea la cancha de cualquier modo
         SDL_RenderPresent(renderer);

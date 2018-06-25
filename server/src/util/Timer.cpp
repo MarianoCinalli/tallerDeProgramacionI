@@ -4,6 +4,7 @@ Timer::Timer(int timePerHalf) {
     log("Timer: Creando el timer...", LOG_INFO);
     this->started = false;
     this->startTimePoint = std::chrono::system_clock::now();
+    this->stopTimePoint = std::chrono::system_clock::now();
     this->scaleFactor = MINUTES_PER_HALF / timePerHalf;
 }
 
@@ -11,6 +12,12 @@ void Timer::start() {
     log("Timer: Iniciando el timer.", LOG_INFO);
     this->startTimePoint = std::chrono::system_clock::now();
     this->started = true;
+}
+
+void Timer::resume(){
+  this->started = true;
+  this->startTimePoint -= this->stopTimePoint - std::chrono::system_clock::now();
+  log("Timer: Resumiendo el timer.", LOG_INFO);
 }
 
 // Devuelve el tiempo pasado desde que se inicio el timer.
@@ -29,6 +36,8 @@ bool Timer::hasStarted() {
 }
 
 void Timer::stop() {
+    this->started = false;
+    this->stopTimePoint = std::chrono::system_clock::now();
     log("Timer: Frenando el timer.", LOG_INFO);
 }
 

@@ -38,11 +38,14 @@ class PitchView {
         Camera* camera;
         std::list<PlayerSpriteManager*> playerViews;
         BallSpriteManager* ballView;
+        int messageTime;
     public:
         PitchView(Texture* pitch, Texture* pitchMini, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);
         void renderMinimap(SDL_Renderer* screen);
+        void renderMessage(SDL_Renderer* screen, std::string msg);
+
         void renderCountdown(SDL_Renderer* screen, int countdown);
 
         void render(SDL_Renderer* screen);

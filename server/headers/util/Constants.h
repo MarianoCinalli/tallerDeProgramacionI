@@ -80,7 +80,6 @@ const int KEEPER_STEAL_COEF = 90;
 const int DEFENSE_STEAL_COEF = 80;
 const int MIDFIELD_STEAL_COEF = 70;
 const int STRIKER_STEAL_COEF = 50;
-const int TIME_BALL_NO_INTERCEPT = 4;
 
 
 //counts

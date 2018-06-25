@@ -31,6 +31,7 @@ class Team {
         void increaseScore();
         std::string getDebugLines();
         int getScore();
+        void resetScore();
         std::list<std::string> scoreInfo;
         void addScoreInfo(std::string);
 };

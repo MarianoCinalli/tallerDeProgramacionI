@@ -9,7 +9,7 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->timer = timer;
     this->realTimer = new Timer(45);
     this->state = GAME_START_STATE;
-    this->stateOption = 5;  //5 seconds to start in game start
+    this->stateOption = 0;  //5 seconds to start in game start
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -120,19 +120,26 @@ void GameController::checkState() {
                 break;
             }
         case HALF_START_STATE: {
-                this->pitch->setStart(this->stateOption);
-                this->state = NORMAL_STATE;
-                break;
-            }
+          this->timer->stop();
+          int seconds = 2;
+          usleep(seconds*1000000);
+          this->pitch->setStart(this->stateOption);
+          this->timer->resume();
+          this->state = NORMAL_STATE;
+          break;
+        }
         case GAME_START_STATE: {
-                this->stateOption = this->realTimer->getTime()->getSeconds();
-                log("GAME CONTROLLER: segundos desde que empieza el partido: ", this->stateOption, LOG_SPAM);
-                if (this->stateOption > 5) {
-                    this->timer->start();
-                    this->state = NORMAL_STATE;
-                }
-                break;
-            }
+          this->stateOption = this->realTimer->getTime()->getSeconds();
+          log("GAME CONTROLLER: segundos desde que empieza el partido: ",this->stateOption,LOG_SPAM);
+          if (this->stateOption >5)
+          {
+            this->end = false;
+            this->timer->start();
+            this->state = GOALKICK_STATE;
+            this->stateOption = CENTER_LEFT_START;
+          }
+          break;
+        }
     }
 }
 
@@ -195,8 +202,8 @@ void GameController::updateBall() {
         this->ball->isPassed(player->getOrientation(), player->getKickPower(), highPass); //TODO valor de pase?
         player->setKicked(true);
     }
-    this->pitch->changeBallOwnership();
     this->ball->updatePosition();
+    this->pitch->changeBallOwnership();
 }
 
 
@@ -212,10 +219,13 @@ void GameController::checkTime(Time* elapsedTime) {
     if (this->isFistHalf && this->hasHalfEnded(elapsedTime, 1)) {
         this->isFistHalf = false;
         log("GameController: Termino el primer tiempo.", LOG_INFO);
+        this->state = HALF_START_STATE;
+        this->stateOption = CENTER_RIGHT_START;
         // Aca voy a invertir a las formaciones. Cuando termine con el refator.
     } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
         log("GameController: Termino el segundo tiempo.", LOG_INFO);
         this->setEnd();
+
     }
 }
 
@@ -239,6 +249,12 @@ std::string GameController::getTeamStats(int numberTeam) {
 
 void GameController::setEnd() {
     log("GameController: Seteando que el juego termine...", LOG_INFO);
+    this->state = GAME_START_STATE;
+    this->timer->stop();
+    this->realTimer->start();
+    this->stateOption = 0;
+    this->pitch->getTeam(TEAM_LEFT)->resetScore();
+    this->pitch->getTeam(TEAM_RIGHT)->resetScore();
     this->end = true;
     log("GameController: Terminacion de juego seteada.", LOG_INFO);
 }

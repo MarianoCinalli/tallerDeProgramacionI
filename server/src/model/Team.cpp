@@ -104,13 +104,16 @@ int Team::getScore() {
     return this->score;
 }
 
-
 std::string Team::getDebugLines() {
     std::string message = "";
     if (this->playerMovement != NULL) {
         message = "debug: " + this->playerMovement->getDebugLines() + "\n";
     }
     return message;
+}
+
+void Team::resetScore(){
+  this->score = 0;
 }
 
 void Team::addScoreInfo(std::string message) {
