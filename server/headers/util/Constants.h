@@ -40,6 +40,7 @@ enum states {
   GOAL_STATE = 3,
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
+  GAME_START_STATE = 6,
 };
 
 

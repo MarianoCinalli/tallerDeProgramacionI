@@ -76,6 +76,29 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
     }
 }
 
+void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
+  SDL_Rect cancha;
+  cancha.x = 0;
+  cancha.y = CAMERA_OFFSET;
+  cancha.w = SCREEN_WIDTH;
+  cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
+  SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
+  TTF_Font* gFont = NULL;
+  gFont = TTF_OpenFont("lazy.ttf", 30);
+  if (gFont == NULL) {
+      log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
+  }
+  std::string message = "EL juego empieza en ";
+  message += std::to_string(5-countdown);
+  SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
+  Texture countdownTexture;
+  countdownTexture.loadFromRenderedText(message, screen, SDL_WHITE, gFont);
+  SDL_Rect renderQuad1 = { (SCREEN_WIDTH - countdownTexture.getWidth()) / 2, 150, countdownTexture.getWidth(), countdownTexture.getHeight() };
+  SDL_RenderCopyEx(screen, countdownTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
+  // SDL_RenderPresent(screen);
+
+}
+
 void PitchView::render(SDL_Renderer* screen) {
     //log("PitchView: Comienza la renderizacion...", LOG_SPAM);
     // Dibujar cancha vista por camara.
@@ -106,7 +129,7 @@ void PitchView::render(SDL_Renderer* screen) {
         delete(coordinates);
     }
     //log("PitchView: Fin de renderizacion.", LOG_SPAM);
-    SDL_RenderPresent(screen);
+    // SDL_RenderPresent(screen);
 }
 
 PitchView::~PitchView() {

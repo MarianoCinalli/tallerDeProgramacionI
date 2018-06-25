@@ -7,8 +7,9 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->timer = timer;
-    this->state = HALF_START_STATE;
-    this->stateOption = CENTER_LEFT_START;
+    this->realTimer = new Timer(45);
+    this->state = GAME_START_STATE;
+    this->stateOption = 5;  //5 seconds to start in game start
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -94,10 +95,12 @@ void GameController::execute(Action* action, std::string user) {
 void GameController::update() {
     Time* elapsedTime = this->timer->getTime();
     this->checkState();
-    this->updatePlayers();
-    this->updateBall();
-    this->updateCameraPosition();
-    this->checkTime(elapsedTime);
+    if (this->state ==  NORMAL_STATE){
+      this->updatePlayers();
+      this->updateBall();
+      this->updateCameraPosition();
+      this->checkTime(elapsedTime);
+    }
     delete(elapsedTime);
 }
 
@@ -119,6 +122,16 @@ void GameController::checkState() {
         case HALF_START_STATE: {
           this->pitch->setStart(this->stateOption);
           this->state = NORMAL_STATE;
+          break;
+        }
+        case GAME_START_STATE: {
+          this->stateOption = this->realTimer->getTime()->getSeconds();
+          log("GAME CONTROLLER: segundos desde que empieza el partido: ",this->stateOption,LOG_SPAM);
+          if (this->stateOption >5)
+          {
+            this->timer->start();
+            this->state = NORMAL_STATE;
+          }
           break;
         }
     }
@@ -264,7 +277,8 @@ bool GameController::setTeamFormation(int team, int formation) {
 }
 
 void GameController::startGame() {
-    this->timer->start();
+  this->realTimer->start();
+
 }
 
 bool GameController::hasGameStarted() {
@@ -290,8 +304,17 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     }
     message += ball->getAsYaml();
     message += camera->getAsYaml();
+    message += this->getStateAsYaml();
     message += this->getGameStatsMessage();
     return message + ";;";
+}
+
+std::string GameController::getStateAsYaml(){
+  std::string message = "";
+  message += "st:\n";
+  message += " t: " + std::to_string(this->state) + "\n";
+  message += " op: " + std::to_string(this->stateOption) + "\n";
+  return  message;
 }
 
 std::string GameController::getGameStatsMessage() {

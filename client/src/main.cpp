@@ -922,7 +922,7 @@ int main(int argc, char* argv[]) {
                 // Devuelve acciones que modifican modelos.
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
-                if (action != NULL) {
+                if ((action != NULL) && (initializer->getGameController()->state != GAME_START_STATE) ) {
                     sendSuccess = connectionManager->sendMessage(action->toString());
                     if (!sendSuccess) {
                         log("Main: Se detecto error en el envio del mensaje. Saliendo...", LOG_ERROR);

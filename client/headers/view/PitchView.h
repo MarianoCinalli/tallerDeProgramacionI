@@ -7,6 +7,8 @@
 #include "view/Texture.h"
 #include "view/Camera.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 
 
 /*
@@ -41,6 +43,7 @@ class PitchView {
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);
         void renderMinimap(SDL_Renderer* screen);
+        void renderCountdown(SDL_Renderer* screen, int countdown);
 
         void render(SDL_Renderer* screen);
         ~PitchView();
