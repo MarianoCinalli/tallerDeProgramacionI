@@ -51,6 +51,7 @@ int Player::getStealCoef() {
 
 void Player::setWithBall(bool dominated) {
     this->withBall = dominated;
+
 }
 
 bool Player::isWithBall() {
@@ -342,6 +343,7 @@ bool Player::hasKicked() {
 
 void Player::setKicked(bool k){
   this->kicked=k;
+
 }
 
 bool Player::isSliding() {

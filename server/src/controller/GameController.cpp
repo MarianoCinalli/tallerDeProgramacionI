@@ -120,8 +120,11 @@ void GameController::checkState() {
             break;
         }
         case HALF_START_STATE: {
-          usleep(1000000);
+          this->timer->stop();
+          int seconds = 2;
+          usleep(seconds*1000000);
           this->pitch->setStart(this->stateOption);
+          this->timer->resume();
           this->state = NORMAL_STATE;
           break;
         }
@@ -200,8 +203,8 @@ void GameController::updateBall() {
         this->ball->isPassed(player->getOrientation(), player->getKickPower(), highPass); //TODO valor de pase?
         player->setKicked(true);
     }
-    this->pitch->changeBallOwnership();
     this->ball->updatePosition();
+    this->pitch->changeBallOwnership();
 }
 
 
