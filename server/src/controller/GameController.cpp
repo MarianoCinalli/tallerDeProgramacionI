@@ -221,7 +221,6 @@ void GameController::checkTime(Time* elapsedTime) {
         log("GameController: Termino el primer tiempo.", LOG_INFO);
         this->state = HALF_START_STATE;
         this->stateOption = CENTER_RIGHT_START;
-        // Aca voy a invertir a las formaciones. Cuando termine con el refator.
     } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
         log("GameController: Termino el segundo tiempo.", LOG_INFO);
         this->setEnd();
