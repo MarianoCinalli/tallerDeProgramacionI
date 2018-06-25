@@ -22,9 +22,9 @@ void Areas33::loadDefendersAreas() {
     this->areasForPlayersLeftSide[4] = new Rectangle(85, 661, 715, 319);
 
     log("Areas33: Cargando areas, del lado derecho, para los defensores...", LOG_DEBUG);
-    this->areasForPlayersLeftSide[2] = new Rectangle(800, 21, 715, 321);
-    this->areasForPlayersLeftSide[3] = new Rectangle(800, 342, 689, 320);
-    this->areasForPlayersLeftSide[4] = new Rectangle(800, 661, 715, 321);
+    this->areasForPlayersRightSide[2] = new Rectangle(800, 21, 715, 321);
+    this->areasForPlayersRightSide[3] = new Rectangle(800, 342, 689, 320);
+    this->areasForPlayersRightSide[4] = new Rectangle(800, 661, 715, 321);
 }
 
 void Areas33::loadMidFildersAreas() {
@@ -38,9 +38,9 @@ void Areas33::loadAtackersAreas() {
     this->areasForPlayersLeftSide[7] = new Rectangle(800, 661, 715, 321);
 
     log("Areas33: Cargando areas, del lado derecho, para los atacantes...", LOG_DEBUG);
-    this->areasForPlayersLeftSide[5] = new Rectangle(85, 21, 715, 321);
-    this->areasForPlayersLeftSide[6] = new Rectangle(111, 342, 689, 320);
-    this->areasForPlayersLeftSide[7] = new Rectangle(85, 661, 715, 319);
+    this->areasForPlayersRightSide[5] = new Rectangle(85, 21, 715, 321);
+    this->areasForPlayersRightSide[6] = new Rectangle(111, 342, 689, 320);
+    this->areasForPlayersRightSide[7] = new Rectangle(85, 661, 715, 319);
 }
 
 Areas33::~Areas33() {
