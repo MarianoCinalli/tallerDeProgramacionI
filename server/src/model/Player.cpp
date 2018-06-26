@@ -86,8 +86,8 @@ void Player::setMovement(PlayerMovement* playerMovement) {
     this->playerMovement = playerMovement;
 }
 
-void Player::cantMoveUntilPass() {
-    this->canMove = false;
+void Player::setCanMove(bool move) {
+    this->canMove = move;
 }
 
 void Player::setFieldPosition(int formation) {

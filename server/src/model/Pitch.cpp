@@ -87,7 +87,7 @@ void Pitch::setStart(int position) {
     }
     this->ball->restart(position);
     this->ball->setPlayer(player);
-    player->cantMoveUntilPass();
+    player->setCanMove(false);
 }
 
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
@@ -294,6 +294,7 @@ void Pitch::checkSteals() {
                 }
             }
             if (nearestPlayer != NULL) {
+                this->ball->getPlayer()->setCanMove(true);
                 this->ball->isIntercepted(nearestPlayer);
                 // Team* team = this->getTeam(nearestPlayer->getTeam());
                 // std::string user = teams[team].front();

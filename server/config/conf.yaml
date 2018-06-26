@@ -9,7 +9,7 @@ usuarios:
   - {name: claudio, password: claudio}
   - {name: zidane, password: zidane}
 server:
-  maxClients: 1
+  maxClients: 2
   port: 8080
 performance:
   margenes: 180
