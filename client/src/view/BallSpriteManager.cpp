@@ -64,51 +64,51 @@ void BallSpriteManager::setStillBall() {
 void BallSpriteManager::setMovingBallSprite() {
     if (rollingCount == 1024) { //TODO hardcode value
         rollingCount = 0;
-    } 
+    }
     int height = this->ball->getHeight();
     int level = 0;
-    if (height == 0) {
-        int orientation = (this->ball->getOrientation());
-        int orientationOffset = 0;
-        if (this->dibujoConOffset) {      //Para que dibuje una con offset y una no
-            switch (orientation) {
-                case PLAYER_ORIENTATION_UP: 
-                    orientationOffset = 1;
-                    break;
-                case PLAYER_ORIENTATION_RIGHT: 
-                    orientationOffset = 2;
-                    break;
-                case PLAYER_ORIENTATION_DOWN: 
-                    orientationOffset = 3;
-                    break;
-                case PLAYER_ORIENTATION_LEFT: 
-                    orientationOffset = 4;
-                    break;
-            }
-        }
-        if ((rollingCount % ROLLING_DIVISOR) == 0) {
-            log("BallSpriteManager: Creando el sprite del balon.", LOG_SPAM);
-            if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 21 + orientationOffset) * SPRITE_SIZE)) {
-                this->sprite.x = 0; // Reinicio la secuencia.
-                this->sprite.y = ((21 + orientationOffset) * SPRITE_SIZE);
-                this->cambioOffset();
-            } else {
-                this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-            }
-        }
-    }
-    else {
+    // if (height == 0) {
+    //     int orientation = (this->ball->getOrientation());
+    //     int orientationOffset = 0;
+    //     if (this->dibujoConOffset) {      //Para que dibuje una con offset y una no
+    //         switch (orientation) {
+    //             case PLAYER_ORIENTATION_UP:
+    //                 orientationOffset = 1;
+    //                 break;
+    //             case PLAYER_ORIENTATION_RIGHT:
+    //                 orientationOffset = 2;
+    //                 break;
+    //             case PLAYER_ORIENTATION_DOWN:
+    //                 orientationOffset = 3;
+    //                 break;
+    //             case PLAYER_ORIENTATION_LEFT:
+    //                 orientationOffset = 4;
+    //                 break;
+    //         }
+    //     }
+    //     if ((rollingCount % ROLLING_DIVISOR) == 0) {
+    //         log("BallSpriteManager: Creando el sprite del balon.", LOG_SPAM);
+    //         if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 21 + orientationOffset) * SPRITE_SIZE)) {
+    //             this->sprite.x = 0; // Reinicio la secuencia.
+    //             this->sprite.y = ((21 + orientationOffset) * SPRITE_SIZE);
+    //             this->cambioOffset();
+    //         } else {
+    //             this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+    //         }
+    //     }
+    // }
+    // else {
         if ((rollingCount % ROLLING_DIVISOR) == 0) {
             log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
             level = (height / BALL_DECELERATE_CONST);
             if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (25 + level) * SPRITE_SIZE)) {
                 this->sprite.x = 0; // Reinicio la secuencia.
                 this->sprite.y = ((25 + level) * SPRITE_SIZE);
-            } 
+            }
             else {
                 this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
             }
-        }
+        // }
     }
     rollingCount ++;
 }
