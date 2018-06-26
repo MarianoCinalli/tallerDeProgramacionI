@@ -231,11 +231,12 @@ void Player::updatePosition(Coordinates* positionToFollow) {
             // Si no vuelve a la posicion original.
             this->changeVelocityTo(this->basePosition, false, false);
         }
+    } if (this->canMove){
+      int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
+      int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
+      this->position->addY(amountY);
+      this->position->addX(amountX);
     }
-    int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
-    int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
-    this->position->addY(amountY);
-    this->position->addX(amountX);
 }
 
 void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY) {

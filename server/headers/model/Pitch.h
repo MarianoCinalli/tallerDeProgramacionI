@@ -18,6 +18,7 @@ class Pitch {
         Team* awayTeam;
         Camera* camera;
         Ball* ball;
+        int initialSides;
         std::map<Team*,std::list<std::string>> teams;
         std::map<std::string, Player*> activePlayers;
     public:

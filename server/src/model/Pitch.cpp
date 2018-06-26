@@ -8,6 +8,7 @@ Pitch::Pitch(Camera* camera) {
     this->localTeam = NULL;
     this->awayTeam = NULL;
     this->camera = camera;
+    this->initialSides = true;
     // teams();
 }
 
@@ -30,20 +31,25 @@ int Pitch::goalkick() {
     if (((x < 60) || (x > 1488)) && ((y < 600) && (y > 400)) && (height < GOAL_HEIGHT)) {
         log("PITCH: x, ", x, LOG_DEBUG);
         log("PITCH: y, ", y, LOG_DEBUG);
+        // freezePlayersUntilKick()
         if (x < 60) {
             return CENTER_LEFT_START;
         } else if (x > 1488) {
             return CENTER_RIGHT_START;
         }
-    } else if (x < 60) {
+    } else{
+
+    if (x < 60) {
         return LEFT_START;
     } else if (x > 1488) {
         return RIGHT_START;
     }
+  }
     return -1;
 }
 
 void Pitch::changeSides() {
+    this->initialSides = false;
     this->localTeam->changeSide();
     this->localTeam->order();
     this->awayTeam->changeSide();
@@ -53,25 +59,35 @@ void Pitch::changeSides() {
 void Pitch::setStart(int position) {
     this->localTeam->order();
     this->awayTeam->order();
+    Team* leftTeam;
+    Team* rightTeam;
+    if (initialSides){
+      leftTeam = this->localTeam;
+      rightTeam = this->awayTeam;
+    }else{
+        rightTeam = this->localTeam;
+        leftTeam = this->awayTeam;
+    }
+
     Player* player = this->localTeam->getPlayer(7); //TODO DEFAULT
     if (position == LEFT_START) {
-        player = this->getTeam(TEAM_LEFT)->getPlayer(1);
+        player = leftTeam->getPlayer(1);
         player->setOrientation(PLAYER_ORIENTATION_RIGHT);
     } else if (position == RIGHT_START) {
-        player = this->getTeam(TEAM_RIGHT)->getPlayer(1);
+        player = rightTeam->getPlayer(1);
         player->setOrientation(PLAYER_ORIENTATION_LEFT);
 
     } else if (position == CENTER_LEFT_START) {
-        player = this->getTeam(TEAM_LEFT)->getPlayer(7);
+        player = leftTeam->getPlayer(7);
         player->setOrientation(PLAYER_ORIENTATION_RIGHT);
 
     } else if (position == CENTER_RIGHT_START) {
-        player = this->getTeam(TEAM_RIGHT)->getPlayer(7);
+        player = rightTeam->getPlayer(7);
         player->setOrientation(PLAYER_ORIENTATION_LEFT);
     }
-    player->cantMoveUntilPass();
     this->ball->restart(position);
     this->ball->setPlayer(player);
+    player->cantMoveUntilPass();
 }
 
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
