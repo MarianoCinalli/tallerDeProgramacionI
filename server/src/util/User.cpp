@@ -80,7 +80,7 @@ void User::processTeamAndFormationMessage(std::string message) {
         }
     } else if (action == "formation") {
         formation = stoi(value);
-        bool couldSelectFormation = this->gameControllerProxy->setTeamFormation(
+        this->gameControllerProxy->setTeamFormation(
             this->getTeam(),
             formation
         );
