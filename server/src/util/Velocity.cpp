@@ -21,7 +21,15 @@ float Velocity::getFloatY() {
     return this->y;
 }
 
-void Velocity::setComponentX(float x) {
+void Velocity::setComponentX(int x) {
+    this->x = x;
+}
+
+void Velocity::setFloatY(float y) {
+    this->y = y;
+}
+
+void Velocity::setFloatX(float x) {
     this->x = x;
 }
 
@@ -30,14 +38,14 @@ void Velocity::set(Velocity* vel) {
   this->y = vel -> y;
 }
 
-void Velocity::setComponentY(float y) {
+void Velocity::setComponentY(int y) {
     this->y = y;
 }
 
-void Velocity::normalize(){
-    float div = (sqrt(pow(this->x,2) + pow(this->y,2)));
-    float x = this->x;
-    float y = this->y;
+void Velocity::normalize() {
+    double x = this->x;
+    double y = this->y;
+    double div = (sqrt((x*x) + (y*y)));
     this->x = (x / div);
     this->y = (y / div);
     //log("Velocity: vector normalizado ", LOG_DEBUG);
@@ -84,6 +92,18 @@ void Velocity::scale(int num){
 void Velocity::scaleY(int num){
   this->y *= num;
 }
+
+void Velocity::scaleX(int num){
+  this->x *= num;
+}
+/*
+void Velocity::scaleY(float num){
+  this->y *= num;
+}
+
+void Velocity::scaleX(float num){
+  this->x *= num;
+}*/
 
 void Velocity::stop(){
   this->x = 0;

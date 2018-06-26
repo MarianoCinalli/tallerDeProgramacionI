@@ -74,7 +74,7 @@ const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 const float BALL_DECELERATE_CONST = 1.7;
 const float PASS_SPEED = 3.3;
 
-const int PASS_HELPING_CONST = 500;
+const int PASS_HELPING_CONST = 100;
 
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;

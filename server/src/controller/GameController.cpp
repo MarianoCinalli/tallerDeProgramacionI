@@ -185,6 +185,9 @@ void GameController::updateBall() {
         if(!highPass) {
             log("GameController(joako): Entro a calculatePassVelocity: ", LOG_DEBUG); //SACAR
             velocity->set(this->calculatePassVelocity(player));
+            if (velocity->isZero()){
+                velocity->set(player->getVelocity());
+            }
         }
         else {
             log("GameController(joako): pase alto sin ayuda ", LOG_DEBUG);
@@ -205,7 +208,9 @@ Velocity* GameController::calculatePassVelocity(Player* player){
     Coordinates* passPosition = player->getPosition();
     int x = passPosition->getX();
     int y = passPosition->getY();
-    Coordinates* newPos = new Coordinates(0,0);
+    float finalX = 0;
+    float finalY = 0;
+    bool setted = false;
     Team* team = this->pitch->getTeam(teamNumber);
     std::list<Player*> players = team->getPlayers();
     switch(orientation) {
@@ -218,11 +223,10 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                     log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
                     if (distance > newDistance || distance == 0){
-                        int xPass = (newX - x);
-                        int yPass = (newY - y);
-                        newPos->setX(xPass);
-                        newPos->setY(yPass);
+                        finalX = (newX - x);
+                        finalY = (newY - y);
                         distance = newDistance;
+                        setted = true;
                     }
                 }
             }
@@ -236,36 +240,26 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                     log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
                     if (distance > newDistance || distance == 0){
-                        int xPass = (newX - x);
-                        int yPass = (newY - y);
-                        newPos->setX(xPass);
-                        newPos->setY(yPass);
+                        finalX = (newX - x);
+                        finalY = (newY - y);
                         distance = newDistance;
+                        setted = true;
                     }
                 }
             }
             break;
         case PLAYER_ORIENTATION_RIGHT:
-            log("pase a derecha con ayuda", LOG_DEBUG);
             for(Player* p: players){
                 int newY = (p->getPosition()->getY());
                 int newX = (p->getPosition()->getY());
                 int failingFor = abs(y-newY);
                 if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x < newX)){
-                    log("GameController: Pase con ayuda, JUGADOR CERCA, a: ", abs(y-newY), LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
-                    log("distance: ", distance, LOG_DEBUG);
-                    log("new distance: ", newDistance, LOG_DEBUG);
                     if (distance > newDistance){
-                        log("jugador mas cerca que otro", newDistance, LOG_DEBUG);
-                        int xPass = (newX - x);
-                        int yPass = (newY - y);
-                        newPos->setX(xPass);
-                        log("newX: ", xPass, LOG_DEBUG);
-                        newPos->setY(yPass);
-                        log("newY: ", yPass, LOG_DEBUG);
+                        finalX = (newX - x);
+                        finalY = (newY - y);
                         distance = newDistance;
-                        log("dist: ", newDistance, LOG_DEBUG);
+                        setted = true;
                     }
                 }
             }
@@ -279,11 +273,10 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                     log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
                     if (distance > newDistance || distance == 0){
-                        int xPass = (newX - x);
-                        int yPass = (newY - y);
-                        newPos->setX(xPass);
-                        newPos->setY(yPass);
+                        finalX = (newX - x);
+                        finalY = (newY - y);
                         distance = newDistance;
+                        setted = true;
                     }
                 }
             }
@@ -291,15 +284,20 @@ Velocity* GameController::calculatePassVelocity(Player* player){
         default:
             break;
     }
-    Velocity* velocity = new Velocity(newPos->getX(), newPos->getY());
-    log("quedo: x ", velocity->getFloatX(), LOG_DEBUG);
-    log("quedo: y ", velocity->getFloatY(), LOG_DEBUG);
-    velocity->normalize();
-    log("dps de normalizar: x ", velocity->getFloatX(), LOG_DEBUG);
-    log("dps de normalizar: y ", velocity->getFloatY(), LOG_DEBUG);
-    if (velocity->isZero()){
-        log("tomo como vel cero", LOG_DEBUG);
-        velocity->accelerate(player->getOrientation());
+    Velocity* velocity = new Velocity(0,0);
+    if(setted) {
+        log("GameController: Pase con ayuda, componentes", LOG_DEBUG);
+        log("x = ", finalX, LOG_DEBUG);
+        log("y = ", finalY, LOG_DEBUG);
+        velocity->setFloatX(finalX);
+        velocity->setFloatY(finalY);
+        velocity->normalize();
+        log("GameController: Y normal = ", velocity->getFloatY(), LOG_DEBUG);
+        log("GameController: X normal = ", velocity->getFloatX(), LOG_DEBUG);
+        log("GameController: velocidad de pase normalizada ", LOG_DEBUG);
+    }
+    else{
+        log("GameController:Pase sin ayuda. ", LOG_DEBUG);
     }
     return velocity;
 }

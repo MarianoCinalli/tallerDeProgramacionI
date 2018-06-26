@@ -20,10 +20,13 @@ class Velocity : public Loggable {
         float getFloatX();
         float getFloatY();
         void set(Velocity* velocity);
-        void setComponentX(float x);
-        void setComponentY(float y);
+        void setComponentX(int x);
+        void setComponentY(int y);
+        void setFloatX(float x);
+        void setFloatY(float y);
         void scale(int num);
         void scaleY(int num);
+        void scaleX(int num);
         void decelerate(float amount);
         bool isZero();
         int getAsOrientation();

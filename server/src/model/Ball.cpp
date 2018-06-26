@@ -149,11 +149,11 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     if (this->isDominated()) {
         this->interceptable = false;
         this->velocity->set(velocity);
-        log("Ball: vel seteada: ", velocity->getComponentY(), LOG_DEBUG);
+        log("Ball: La velocidad del pase con ayuda es: ", LOG_DEBUG);
         log(this->velocity->toString(),LOG_DEBUG);
         // log()
         if (velocity->isZero()) {
-            log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
+            log("Ball: jugador tiene velocidad cero o el pase es sin ayuda", LOG_DEBUG);
             int passOrientation = this->player->getOrientation();
             this->velocity->accelerate(passOrientation);
         }
@@ -191,10 +191,10 @@ void Ball::updatePosition() {
         if (!this->interceptable && timePassing > TIME_BALL_NO_INTERCEPT) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
-        if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
+        if(this->position->addX(this->velocity->getFloatX()*this->passPower)<0){
           this->velocity->scaleY(-1);
         }
-        if(this->position->addY(this->velocity->getComponentY()*this->passPower)<0){
+        if(this->position->addY(this->velocity->getFloatY()*this->passPower)<0){
           this->velocity->scaleY(-1);
         }
     }
