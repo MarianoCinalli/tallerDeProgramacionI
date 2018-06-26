@@ -91,7 +91,6 @@ void BallSpriteManager::setMovingBallSprite() {
             if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 21 + orientationOffset) * SPRITE_SIZE)) {
                 this->sprite.x = 0; // Reinicio la secuencia.
                 this->sprite.y = ((21 + orientationOffset) * SPRITE_SIZE);
-                this->cambioOffset();
             } else {
                 this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
             }
@@ -110,6 +109,7 @@ void BallSpriteManager::setMovingBallSprite() {
             }
         }
     }
+    //TODO cambiar offset aca dependiendo del rolling count
     rollingCount ++;
 }
 

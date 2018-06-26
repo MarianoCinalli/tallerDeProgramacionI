@@ -176,7 +176,7 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
 void Ball::updatePosition() {
     if (this->isDominated()) {
         this->calculateDominatedPosition();
-        this->orientation = player->getOrientation();
+        this->orientation = this->player->getOrientation();
     }
     if (this->isInAPass) {
         this->timePassing += 1;
