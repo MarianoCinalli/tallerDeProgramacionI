@@ -295,6 +295,7 @@ void Pitch::checkSteals() {
             }
             if (nearestPlayer != NULL) {
                 this->ball->getPlayer()->setCanMove(true);
+                this->ball->getPlayer()->setWithBall(false);
                 this->ball->isIntercepted(nearestPlayer);
                 // Team* team = this->getTeam(nearestPlayer->getTeam());
                 // std::string user = teams[team].front();

@@ -100,9 +100,8 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
             int passOrientation = this->player->getOrientation();
             this->velocity->accelerate(passOrientation);
         }
-        dominated = false; //HACK? para que sirve?
-        this->player->setWithBall(this->dominated);
-        // this->player = NULL;
+        this->dominated = false; //HACK? para que sirve?
+        this->player->setWithBall(false);
         this->isInAPass = true;
         if(highPass) {
             this->isInAHighPass = true;
