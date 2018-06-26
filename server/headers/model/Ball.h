@@ -24,6 +24,7 @@ class Ball {
         bool isInAHighPass;
         bool interceptable;
         int passDirection;
+        bool still;
         Coordinates* startingPassPosition;
         int decelerateDistance;
         int timePassing;

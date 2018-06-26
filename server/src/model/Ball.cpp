@@ -15,6 +15,7 @@ Ball::Ball(Coordinates* position) {
     this->passDirection = 0;
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
+    this->still = true;
     this->timePassing = 0; // corrector para frames TODO
     this->startingPassPosition = new Coordinates(800, 500); // Esto esta perdiendo memoria?
     this->interceptable = true;
@@ -84,6 +85,7 @@ bool Ball::isInterceptable() {
 
 void Ball::isIntercepted(Player* player) {
     this->stopRolling();
+    this->still = false;
     this->interceptable = false;
     this->setPlayer(player);
     this->orientation = player->getOrientation();
@@ -94,6 +96,7 @@ void Ball::isIntercepted(Player* player) {
 void Ball::isPassed(int direction, float passPower, bool highPass) {
     if (this->isDominated()) {
         this->interceptable = false;
+        this->still = false;
         Velocity* passDirection = new Velocity(0,0);
         passDirection->set(this->player->getVelocity());  //direction;
         this->velocity = passDirection;
@@ -117,7 +120,6 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
           this->initialPassPower = this->passPower;
         }
         this->startingPassPosition = this->position;
-        this->removePlayer();
     }
 }
 //const float BALL_DECELERATE_CONST = 1.7;
@@ -153,6 +155,7 @@ float calculatePassPower(float passPower){
 void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     if (this->isDominated()) {
         this->interceptable = false;
+        this->still = false;
         this->velocity->set(velocity);
         log("Ball: La velocidad del pase con ayuda es: ", LOG_DEBUG);
         log(this->velocity->toString(),LOG_DEBUG);
@@ -175,7 +178,7 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
           this->initialPassPower = this->passPower;
         }
         this->startingPassPosition = this->position;
-
+        this->removePlayer();
     }
 }
 
@@ -286,6 +289,7 @@ void Ball::calculateDominatedPosition() {
 
 
 void Ball::stopRolling() {
+    this->still = true;
     this->velocity->stop();
     this->isInAPass = false;
     this->isInAHighPass = false;
@@ -309,7 +313,7 @@ std::string Ball::getAsYaml() {
     message += "ba:\n";
     message += " cx: " + std::to_string(this->position->getX()) + "\n";
     message += " cy: " + std::to_string(this->position->getY()) + "\n";
-    message += " st: " + std::to_string(this->velocity->isZero()) + "\n";
+    message += " st: " + std::to_string(this->still) + "\n";
     message += " hg: " + std::to_string(this->height) + "\n";
     message += " or: " + std::to_string(this->orientation) + "\n";
     return message;

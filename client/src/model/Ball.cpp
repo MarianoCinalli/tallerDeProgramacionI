@@ -35,7 +35,7 @@ void Ball::parseYaml(YAML::Node node){
 
   }
   if (node["st"]){
-    this->still = node["st"].as<int>();
+    this->still = node["st"].as<bool>();
   }
   if (node["hg"]){
     this->height = node["hg"].as<int>();
