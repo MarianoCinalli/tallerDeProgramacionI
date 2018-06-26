@@ -46,26 +46,26 @@ void* read_client(void* argument) {
             // Cuando ser cierra la coneccion del cliente lee 0 bytes sin control.
             // Si puede pasar que la coneccion siga viva y haya un mensaje de 0 bytes hay que buscar otra vuelta.
             // log("read_client: Se desconecto el usuario?. Saliendo...", LOG_INFO);
-            if (!firstError){
-              firstError = true;
-              time(&firstTimeError);
-              log("read_client: first time error", LOG_DEBUG);
-            }else {
-              time(&currentErrorTime);
-              timeDifference = difftime(currentErrorTime, firstTimeError);
-              log("read_client: diferencia de tiempo:",timeDifference, LOG_SPAM);
-              if (timeDifference > 25){
-                log("read_client: superados tiempo maximo de socket: esperando ", socket, LOG_INFO);
-                continueReading = false;
-              }
+            if (!firstError) {
+                firstError = true;
+                time(&firstTimeError);
+                log("read_client: first time error", LOG_DEBUG);
+            } else {
+                time(&currentErrorTime);
+                timeDifference = difftime(currentErrorTime, firstTimeError);
+                log("read_client: diferencia de tiempo:", timeDifference, LOG_SPAM);
+                if (timeDifference > 25) {
+                    log("read_client: superados tiempo maximo de socket: esperando ", socket, LOG_INFO);
+                    continueReading = false;
+                }
             }
 
         } else {
-          if (firstError){
-            log("read_client: limpiado first time error", LOG_DEBUG);
-            firstError = false;
-            timeDifference = 0;
-          }
+            if (firstError) {
+                log("read_client: limpiado first time error", LOG_DEBUG);
+                firstError = false;
+                timeDifference = 0;
+            }
             log("read_client: Mensaje recibido: ", message, LOG_SPAM);
             if (!user->hasLogedIn()) {
                 // No se logeo.
@@ -110,10 +110,10 @@ void* broadcast_to_clients(void* argument) {
     // while (!gameControllerProxy->shouldGameEnd() && !quit) {
     //Viendo que cuando termine el juego vuelva a empezar
     while (!quit) {
-      if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
-        timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-        broadcaster->broadcast(true);
-      }
+        if (SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
+            timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+            broadcaster->broadcast(true);
+        }
     }
     // Termino el juego
     broadcaster->broadcastGameEnded();
@@ -131,13 +131,15 @@ void* game_updater(void* argument) {
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     GameControllerProxy* gameControllerProxy = initializer->getGameControllerProxy();
     gameControllerProxy->startGame();
-    // while (!gameControllerProxy->shouldGameEnd() && !quit) {
-    while (!quit) {
-        if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
-          timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-          gameControllerProxy->updateModel();
+    while (!gameControllerProxy->shouldGameEnd() && !quit) {
+        if (SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
+            timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+            gameControllerProxy->updateModel();
         }
     }
+    // Enviar los resultados!
+    // Sleep para darle tiempo a que los lean los usuarios?
+    setQuit();
     log("game_updater: Finalizado.", LOG_INFO);
     return NULL;
 }
@@ -145,6 +147,7 @@ void* game_updater(void* argument) {
 // Espera y acepta conecciones.
 void* connection_listener(void* argument) {
     log("connection_listener: Creado.", LOG_INFO);
+    registerSignalHandler(SIGTSTP);
     ConnectionManager* connectionManager = initializer->getConnectionManager();
     while (!quit) {
         log("connection_listener: Esperando por una conexion...", LOG_INFO);
