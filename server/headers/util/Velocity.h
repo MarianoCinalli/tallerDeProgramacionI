@@ -1,5 +1,6 @@
 #include "util/Constants.h"
 #include <string>
+#include <cmath>
 #include "interfaces/Loggable.h"
 
 #ifndef VELOCITY_H
@@ -7,24 +8,27 @@
 
 class Velocity : public Loggable {
     private:
-        int x;
-        int y;
+        float x;
+        float y;
     public:
-        Velocity(int x, int y);
+        Velocity(float x, float y);
         void accelerate(int direction, int amount);
         void accelerate(int direction);
         void decelerate(int direction, int amount);
         int getComponentX();
         int getComponentY();
+        float getFloatX();
+        float getFloatY();
         void set(Velocity* velocity);
-        void setComponentX(int x);
-        void setComponentY(int y);
+        void setComponentX(float x);
+        void setComponentY(float y);
         void scale(int num);
         void scaleY(int num);
-        void decelerate(int amount);
+        void decelerate(float amount);
         bool isZero();
         int getAsOrientation();
 
+        void normalize();
         void stop();
         void stopDirection(int direction);
         std::string toString();

@@ -190,6 +190,7 @@ void GameController::updateBall() {
             log("GameController(joako): pase alto sin ayuda ", LOG_DEBUG);
             velocity->set(player->getVelocity());
         }
+        log("GameController: calculo de vel hecho: ", velocity->getComponentY(), LOG_DEBUG);
         this->ball->isPassed(velocity, player->getKickPower()*PASS_SPEED, highPass); //TODO valor de pase?
         player->setKicked(true);
     }
@@ -200,14 +201,13 @@ void GameController::updateBall() {
 Velocity* GameController::calculatePassVelocity(Player* player){
     int orientation = player->getOrientation();
     int teamNumber = player->getTeam();
-    int distance = 0;
+    int distance = 30000;
     Coordinates* passPosition = player->getPosition();
     int x = passPosition->getX();
     int y = passPosition->getY();
     Coordinates* newPos = new Coordinates(0,0);
     Team* team = this->pitch->getTeam(teamNumber);
     std::list<Player*> players = team->getPlayers();
-    log("GameController: entro a switch: ", LOG_DEBUG);
     switch(orientation) {
         case PLAYER_ORIENTATION_DOWN:
             for(Player* p: players){
@@ -222,7 +222,6 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                         int yPass = (newY - y);
                         newPos->setX(xPass);
                         newPos->setY(yPass);
-                        newPos->normalize();
                         distance = newDistance;
                     }
                 }
@@ -241,27 +240,32 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                         int yPass = (newY - y);
                         newPos->setX(xPass);
                         newPos->setY(yPass);
-                        newPos->normalize();
                         distance = newDistance;
                     }
                 }
             }
             break;
         case PLAYER_ORIENTATION_RIGHT:
+            log("pase a derecha con ayuda", LOG_DEBUG);
             for(Player* p: players){
                 int newY = (p->getPosition()->getY());
                 int newX = (p->getPosition()->getY());
                 int failingFor = abs(y-newY);
                 if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x < newX)){
-                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    log("GameController: Pase con ayuda, JUGADOR CERCA, a: ", abs(y-newY), LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
-                    if (distance > newDistance || distance == 0){
+                    log("distance: ", distance, LOG_DEBUG);
+                    log("new distance: ", newDistance, LOG_DEBUG);
+                    if (distance > newDistance){
+                        log("jugador mas cerca que otro", newDistance, LOG_DEBUG);
                         int xPass = (newX - x);
                         int yPass = (newY - y);
                         newPos->setX(xPass);
+                        log("newX: ", xPass, LOG_DEBUG);
                         newPos->setY(yPass);
-                        newPos->normalize();
+                        log("newY: ", yPass, LOG_DEBUG);
                         distance = newDistance;
+                        log("dist: ", newDistance, LOG_DEBUG);
                     }
                 }
             }
@@ -279,7 +283,6 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                         int yPass = (newY - y);
                         newPos->setX(xPass);
                         newPos->setY(yPass);
-                        newPos->normalize();
                         distance = newDistance;
                     }
                 }
@@ -289,7 +292,13 @@ Velocity* GameController::calculatePassVelocity(Player* player){
             break;
     }
     Velocity* velocity = new Velocity(newPos->getX(), newPos->getY());
+    log("quedo: x ", velocity->getFloatX(), LOG_DEBUG);
+    log("quedo: y ", velocity->getFloatY(), LOG_DEBUG);
+    velocity->normalize();
+    log("dps de normalizar: x ", velocity->getFloatX(), LOG_DEBUG);
+    log("dps de normalizar: y ", velocity->getFloatY(), LOG_DEBUG);
     if (velocity->isZero()){
+        log("tomo como vel cero", LOG_DEBUG);
         velocity->accelerate(player->getOrientation());
     }
     return velocity;

@@ -1,6 +1,6 @@
 #include "util/Velocity.h"
 
-Velocity::Velocity(int x, int y) {
+Velocity::Velocity(float x, float y) {
     this->x = x;
     this->y = y;
 }
@@ -13,7 +13,15 @@ int Velocity::getComponentY() {
     return this->y;
 }
 
-void Velocity::setComponentX(int x) {
+float Velocity::getFloatX() {
+    return this->x;
+}
+
+float Velocity::getFloatY() {
+    return this->y;
+}
+
+void Velocity::setComponentX(float x) {
     this->x = x;
 }
 
@@ -22,8 +30,17 @@ void Velocity::set(Velocity* vel) {
   this->y = vel -> y;
 }
 
-void Velocity::setComponentY(int y) {
+void Velocity::setComponentY(float y) {
     this->y = y;
+}
+
+void Velocity::normalize(){
+    float div = (sqrt(pow(this->x,2) + pow(this->y,2)));
+    float x = this->x;
+    float y = this->y;
+    this->x = (x / div);
+    this->y = (y / div);
+    //log("Velocity: vector normalizado ", LOG_DEBUG);
 }
 
 void Velocity::accelerate(int direction, int amount) {
@@ -40,7 +57,7 @@ void Velocity::decelerate(int direction, int amount) {
     }
 }
 
-int sign(int num){
+int sign(float num){
   if (num>0)
   return 1;
   else if (num<0)
@@ -48,7 +65,7 @@ int sign(int num){
   else return 0;
 }
 
-void Velocity::decelerate(int amount) {
+void Velocity::decelerate(float amount) {
     if (!this->isZero()) {
         if(this->x!=0){
           this->x-= sign(this->x)*amount;

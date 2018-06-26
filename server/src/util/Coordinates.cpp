@@ -65,16 +65,6 @@ void Coordinates::set(Coordinates other){
     validatePositionInBounds();
 }
 
-void Coordinates::normalize(){
-    log("Coordinates(joako): entro a normalizar ", LOG_DEBUG); //SACAR
-    float div = (sqrt(pow(this->x,2) + pow(this->y,2)));
-    float normalX = (x / div);
-    float normalY = (y / div);
-    this->x = (int)normalX;
-    this->y = (int)normalY;
-    log("Coordinates(joako):salgo de normalizar ", LOG_DEBUG); //SACAR
-}
-
 int Coordinates::distanceTo(Coordinates* other){
     return sqrt(pow(this->x-other->x,2) + pow(this->y-other->y,2));
 }
