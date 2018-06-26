@@ -72,7 +72,7 @@ const int NORMAL_VELOCITY = 2;
 const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 const float BALL_DECELERATE_CONST = 1.7;
-const float PASS_SPEED = 3.3;
+const float PASS_SPEED = 1.9;
 
 const int PASS_HELPING_CONST = 100;
 

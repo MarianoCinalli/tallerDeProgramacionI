@@ -70,6 +70,10 @@ void Ball::setPlayer(Player* player) {
     this->velocity = this->player->getVelocity();
 }
 
+void Ball::removePlayer() {  //TODO ver
+    this->player = NULL;
+}
+
 bool Ball::isDominated() {
     return this->dominated;
 }
@@ -113,6 +117,7 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
           this->initialPassPower = this->passPower;
         }
         this->startingPassPosition = this->position;
+        this->removePlayer();
     }
 }
 //const float BALL_DECELERATE_CONST = 1.7;
@@ -157,7 +162,7 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
             int passOrientation = this->player->getOrientation();
             this->velocity->accelerate(passOrientation);
         }
-        dominated = false; //HACK? para que sirve?
+        this->dominated = false; //HACK? para que sirve?
         this->player->setWithBall(this->dominated);
         this->isInAPass = true;
         if(highPass) {
@@ -170,6 +175,7 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
           this->initialPassPower = this->passPower;
         }
         this->startingPassPosition = this->position;
+
     }
 }
 
@@ -202,7 +208,7 @@ void Ball::updatePosition() {
         if (this->timePassing % BALL_DECELERATE_TIME == 0) {
             // this->passPower -= BALL_DECELERATE_CONST;
             this->passPower = calculatePassPower(this->passPower);
-            if (this->passPower< 0){
+            if (this->passPower< 1){
               this->timePassing = 0;
               this->stopRolling();
             }

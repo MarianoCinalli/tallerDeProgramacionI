@@ -39,6 +39,7 @@ class Ball {
         int getHeight();
         Player* getPlayer();
         void setPlayer(Player* player);
+        void removePlayer();
         bool isDominated();
         bool isInterceptable();
         void restart(int position);
