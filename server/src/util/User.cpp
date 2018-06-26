@@ -29,10 +29,10 @@ void User::processLogInMessage(std::string message) {
     log("User: Intentando logear a: ", parsedUser, LOG_INFO);
     std::string errorMessage = "";
     this->hasLoged = this->manager->logIn(
-                         parsedUser,
-                         parsedPassword,
-                         errorMessage
-                     );
+        parsedUser,
+        parsedPassword,
+        errorMessage
+    );
     if (this->hasLoged) {
         log("User: Usuario logeado: ", parsedUser, LOG_INFO);
         this->user = parsedUser;
@@ -73,6 +73,10 @@ void User::processTeamAndFormationMessage(std::string message) {
             log("User: El usuario se unio al equipo: ", team, LOG_INFO);
             this->teamNumber = team;
             log("User: El usuario termino de elegir.", LOG_INFO);
+            if (usersInTeam > 0) {
+                // Si no es el primero del equipo no tiene que elegir.
+                this->hasPicked = true;
+            }
             this->connectionManager->sendMessage(this->userSocket, "true:" + std::to_string(usersInTeam));
         } else {
             log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
