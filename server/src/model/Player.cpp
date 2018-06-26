@@ -177,10 +177,10 @@ void Player::stop() {
 }
 
 
-void Player::updateState(Coordinates* positionToFollow) {
-    this->updatePosition(positionToFollow);
+void Player::updateState(Coordinates* ballPosition) {
+    this->updatePosition(ballPosition); //follows this position
     this->updateKicking();
-    this->updateSliding();
+    this->updateSliding(ballPosition);
 }
 //
 // int frameDiference(int current, int last){
@@ -202,7 +202,18 @@ void Player::updateKicking() {
 
 }
 
-void Player::updateSliding() {
+const int DISTANCE_TO_STEAL = 15;
+
+void Player::updateSliding(Coordinates* ballPosition) {
+    int number = this->id;
+    if (number > 7) {
+        number -= 7;
+    }
+    if (number ==1){
+      if (this->position->distanceTo(ballPosition) < DISTANCE_TO_STEAL){
+        this->startsSliding();
+      }
+    }
     if (this->sliding) {
         slideCount++;
     }

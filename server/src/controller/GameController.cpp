@@ -92,6 +92,11 @@ void GameController::execute(Action* action, std::string user) {
     }
 }
 
+void GameController::updatePitch(){
+  this->pitch->changeBallOwnership();
+  this->pitch->checkSteals();
+}
+
 void GameController::update() {
     Time* elapsedTime = this->timer->getTime();
     this->checkState();
@@ -99,6 +104,7 @@ void GameController::update() {
         this->updatePlayers();
         this->updateBall();
         this->updateCameraPosition();
+        this->updatePitch();
         this->checkTime(elapsedTime);
     }
     delete(elapsedTime);
@@ -203,7 +209,6 @@ void GameController::updateBall() {
         player->setKicked(true);
     }
     this->ball->updatePosition();
-    this->pitch->changeBallOwnership();
 }
 
 

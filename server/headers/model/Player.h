@@ -76,7 +76,7 @@ class Player {
         void updatePosition(Coordinates* positionToFollow);
         void updateKicking();
         void setKicked(bool);
-        void updateSliding();
+        void updateSliding(Coordinates*);
         void updateState(Coordinates* positionToFollow);
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);

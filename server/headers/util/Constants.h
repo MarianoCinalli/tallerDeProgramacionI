@@ -76,10 +76,10 @@ const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;
 const int STEAL_DISTANCE = 90;
-const int KEEPER_STEAL_COEF = 90;
+const int KEEPER_STEAL_COEF = 100;
 const int DEFENSE_STEAL_COEF = 80;
 const int MIDFIELD_STEAL_COEF = 70;
-const int STRIKER_STEAL_COEF = 50;
+const int STRIKER_STEAL_COEF = 60;
 
 
 //counts

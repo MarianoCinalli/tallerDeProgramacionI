@@ -44,13 +44,14 @@ class GameController {
         void execute(Action* action, std::string user);
         // Para actualizar los modelos.
         void updatePlayers();
+        void updateBall();
+        void updatePitch();
         void update();
         void checkState();
         void checkGoal();
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.
-        void updateBall();
         void addUser(std::string user, int teamNum, int formation);
         Player* getActivePlayer(std::string user);
         std::string getTeamStats(int numberTeam);
