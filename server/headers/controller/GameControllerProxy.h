@@ -13,7 +13,7 @@ class GameControllerProxy {
 
         bool hasStarted;
     public:
-      GameController* gameController; //despues hacerlo privado
+        GameController* gameController; //despues hacerlo privado
         GameControllerProxy(GameController* gameController);
         void execute(Action* action, std::string team);
         void updateModel();
@@ -22,7 +22,7 @@ class GameControllerProxy {
         void startGame();
         void removeUser(std::string user);
         bool hasGameStarted();
-        std::string getTeamStats(int numberTeam);
+        int getUsersInTeam(int teamNumber);
         bool joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage);
         bool setTeamFormation(int team,int formation);
         std::string getMessageToBroadcast(bool allPlayers);

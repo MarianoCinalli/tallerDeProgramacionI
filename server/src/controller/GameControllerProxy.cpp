@@ -7,10 +7,10 @@ GameControllerProxy::GameControllerProxy(GameController* gameController) {
     this->gameController = gameController;
 }
 
-void GameControllerProxy::removeUser(std::string user){
-  update_model_mutex.lock();
-  this->gameController->removeUser(user);
-  update_model_mutex.unlock();
+void GameControllerProxy::removeUser(std::string user) {
+    update_model_mutex.lock();
+    this->gameController->removeUser(user);
+    update_model_mutex.unlock();
 }
 
 void GameControllerProxy::execute(Action* action, std::string team) {
@@ -30,16 +30,16 @@ bool GameControllerProxy::shouldGameEnd() {
     return this->gameController->shouldGameEnd();
 }
 
-void GameControllerProxy::end(){
-  this->gameController->setEnd();
+void GameControllerProxy::end() {
+    this->gameController->setEnd();
 }
 
 void GameControllerProxy::startGame() {
     this->gameController->startGame();
 }
 
-std::string GameControllerProxy::getTeamStats(int numberTeam) {
-  return this->gameController->getTeamStats(numberTeam);
+int GameControllerProxy::getUsersInTeam(int teamNumber) {
+    return this->gameController->getUsersInTeam(teamNumber);
 }
 
 bool GameControllerProxy::hasGameStarted() {
@@ -49,9 +49,9 @@ bool GameControllerProxy::hasGameStarted() {
     return result;
 }
 
-bool GameControllerProxy::joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string &errorMessage) {
+bool GameControllerProxy::joinTeam(std::string playerName, int team, int formation, int maxPlayers, std::string& errorMessage) {
     update_model_mutex.lock();
-    bool result = this->gameController->joinTeam(playerName, team, formation,maxPlayers, errorMessage);
+    bool result = this->gameController->joinTeam(playerName, team, formation, maxPlayers, errorMessage);
     update_model_mutex.unlock();
     return result;
 }

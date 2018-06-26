@@ -244,11 +244,8 @@ bool GameController::shouldGameEnd() {
     return this->end;
 }
 
-std::string GameController::getTeamStats(int numberTeam) {
-    Team* team = this->pitch->getTeam(numberTeam);
-    std::string name = team->getName();
-    std::string amnt = std::to_string(users[numberTeam].size());
-    return name + ":" + amnt;
+int GameController::getUsersInTeam(int teamNumber) {
+    return this->users[teamNumber].size();
 }
 
 void GameController::setEnd() {

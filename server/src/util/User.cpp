@@ -29,10 +29,10 @@ void User::processLogInMessage(std::string message) {
     log("User: Intentando logear a: ", parsedUser, LOG_INFO);
     std::string errorMessage = "";
     this->hasLoged = this->manager->logIn(
-        parsedUser,
-        parsedPassword,
-        errorMessage
-    );
+                         parsedUser,
+                         parsedPassword,
+                         errorMessage
+                     );
     if (this->hasLoged) {
         log("User: Usuario logeado: ", parsedUser, LOG_INFO);
         this->user = parsedUser;
@@ -55,6 +55,7 @@ void User::processTeamAndFormationMessage(std::string message) {
     int formation = 33;
     if (action == "use") {
         team = stoi(value);
+        int usersInTeam = this->gameControllerProxy->getUsersInTeam(team);
         //formation = stoi(value.substr(value.find("-")+1,value.length()));
         // log("User: equipo", team, LOG_DEBUG);
         // log("User: formacion", formation, LOG_DEBUG);
@@ -72,22 +73,20 @@ void User::processTeamAndFormationMessage(std::string message) {
             log("User: El usuario se unio al equipo: ", team, LOG_INFO);
             this->teamNumber = team;
             log("User: El usuario termino de elegir.", LOG_INFO);
-            this->connectionManager->sendMessage(this->userSocket, "true:");
+            this->connectionManager->sendMessage(this->userSocket, "true:" + std::to_string(usersInTeam));
         } else {
             log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
             this->connectionManager->sendMessage(this->userSocket, "false:" + errorMessage);
         }
     } else if (action == "formation") {
-      formation = stoi(value);
-      bool couldSelectFormation = this->gameControllerProxy->setTeamFormation(
-          this->getTeam(),
-          formation
-      );
-      this->hasPicked = true;
-      this->connectionManager->sendMessage(this->userSocket, "true:");
-
-    }
-    else {
+        formation = stoi(value);
+        bool couldSelectFormation = this->gameControllerProxy->setTeamFormation(
+            this->getTeam(),
+            formation
+        );
+        this->hasPicked = true;
+        this->connectionManager->sendMessage(this->userSocket, "true:");
+    } else {
         log("User: Accion no entendida: ", action, LOG_ERROR);
     }
 }

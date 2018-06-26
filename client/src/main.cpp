@@ -831,7 +831,12 @@ int main(int argc, char* argv[]) {
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
             std::string resultValue = resultMessage.substr(resultMessage.find(":") + 1, resultMessage.length());
             if (resultKey == "true") {
+                log("Main: El jugador entro al equipo.", LOG_INFO);
                 hasPickedTeam = true;
+                if (resultValue != "0") {
+                    log("Main: El jugador no es el primero en el equipo no tiene que elegir formacion.", LOG_INFO);
+                    hasPickedFormation = true;
+                }
             } else if (resultKey == "withFormation") {
                 hasPickedTeam = true;
                 hasPickedFormation = true;

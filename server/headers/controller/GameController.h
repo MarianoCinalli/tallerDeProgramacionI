@@ -54,7 +54,7 @@ class GameController {
         // Dependiendo del estado del juego devuelve si termino o no.
         void addUser(std::string user, int teamNum, int formation);
         Player* getActivePlayer(std::string user);
-        std::string getTeamStats(int numberTeam);
+        int getUsersInTeam(int teamNumber);
         std::string getStateAsYaml();
         bool joinTeam(std::string playerName, int team,int formation, int maxPlayers, std::string & errorMessage);
         bool setTeamFormation(int team, int formation);
