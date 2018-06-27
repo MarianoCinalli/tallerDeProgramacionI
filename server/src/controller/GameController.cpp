@@ -39,12 +39,12 @@ void GameController::removeUser(std::string user) {
 void GameController::removeUserFromTeam(std::string user) {
     log("GameController: Original: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
     log("GameController: Buscando al jugador:", user, LOG_DEBUG);
-    bool errased = false;
+    bool erased = false;
     log("GameController: En el equipo local...", LOG_DEBUG);
     for (auto it = this->users[0].begin(); it != this->users[0].end();) {
         if (*it == user) {
             it = this->users[0].erase(it);
-            errased = true;
+            erased = true;
         } else {
             ++it;
         }
@@ -53,12 +53,12 @@ void GameController::removeUserFromTeam(std::string user) {
     for (auto it = this->users[1].begin(); it != this->users[1].end();) {
         if (*it == user) {
             it = this->users[1].erase(it);
-            errased = true;
+            erased = true;
         } else {
             ++it;
         }
     }
-    if (errased) {
+    if (erased) {
         log("GameController: Jugador removido: ", user, LOG_DEBUG);
         log("GameController: Despues: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
     } else {
@@ -120,7 +120,10 @@ void GameController::checkState() {
                   this->state = GOAL_STATE;
                 }else
                 if (this->stateOption >= 0) {
-                    this->state = GOALKICK_STATE;
+                    // hack para forzar fin de juego
+                    // this->state = GOALKICK_STATE;
+                    this->state = GAME_END_STATE;
+
                 }
                 break;
             }
@@ -178,7 +181,7 @@ void GameController::checkState() {
                 this->stateTime = SDL_GetTicks();
                   this->timer->stop();
                 }
-                  if ((SDL_GetTicks() - this->stateTime) > 10000){//10 seconds for stats
+                  if ((SDL_GetTicks() - this->stateTime) > 10000){//1 seconds for stats
                     this->stateTime = -1;
                   this->setEnd();
                 }
@@ -284,6 +287,13 @@ bool GameController::shouldGameEnd() {
     return this->end;
 }
 
+bool GameController::gameEnd() {
+  if (this->state == GAME_END_STATE){
+    return true;
+  }
+  return false;
+}
+
 int GameController::getUsersInTeam(int teamNumber) {
     return this->users[teamNumber].size();
 }
@@ -361,25 +371,32 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     message += this->getStateAsYaml();
     message += this->getGameStatsMessage();
     //message += this->getDebugLines();
-    return message + ";;";
+    return message;
 }
 
-std::string GameController::getStatsToBroadcast() {
+std::string GameController::getStatsToBroadcast(bool allMessage) {
     std::string message = "";
+    message += this->getMessageToBroadcast(true);
+    message += "stats:\n";
+    message += " val: ";
     Team* team;
     // Estadisticas del equipo local
     team = this->pitch->getTeam(0);
-    message += team->getName() + "|";
+    message += team->getName() + " ";
     for(std::string s : team->scoreInfo){
-      message += s + "|"; // Separardor
+      message += s + " "; // Separarador
     }
     // Estadisticas del equipo visitante
     team = this->pitch->getTeam(1);
-    message += team->getName() + "|";
+    message += team->getName() + " ";
     for(std::string s : team->scoreInfo){
-      message += s + "|"; // Separardor
+      message += s + " "; // Separarador
     }
-    return message + ";;";
+      message += "\n";
+    if (allMessage){
+      // message += this->getStateAsYaml();
+    }
+    return message ;
 }
 
 std::string GameController::getStateAsYaml() {

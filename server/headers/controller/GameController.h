@@ -63,9 +63,10 @@ class GameController {
         void startGame();
         bool hasGameStarted();
         bool shouldGameEnd();
+        bool gameEnd();
         void setEnd();
         std::string getMessageToBroadcast(bool allPlayers);
-        std::string getStatsToBroadcast();
+        std::string getStatsToBroadcast(bool allMessage);
         std::string getDebugLines();
         ~GameController();
     private:

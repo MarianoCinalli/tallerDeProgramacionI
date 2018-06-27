@@ -16,6 +16,7 @@ GameController::GameController(Pitch* pitch) {
     this->clock = new Clock();
     this->score = new Score();
     this->state = GAME_START_STATE;
+    this->stats = " ";
     this->stateOption = 0;
     log("ActionsManager: GameController creado.", LOG_INFO);
 }

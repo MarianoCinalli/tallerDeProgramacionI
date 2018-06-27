@@ -18,6 +18,7 @@ class GameControllerProxy {
         void execute(Action* action, std::string team);
         void updateModel();
         bool shouldGameEnd();
+        bool gameEnd();
         void end();
         void startGame();
         void removeUser(std::string user);

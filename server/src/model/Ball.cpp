@@ -144,8 +144,8 @@ void Ball::updatePosition() {
             if(this->height > BALL_DECELERATE_CONST){
                 this->interceptable = false;
             }
-            log("Ball: altura del balon: ", this->height, LOG_DEBUG);
-            log("Ball: poder de pase: ", this->passPower, LOG_DEBUG);
+            log("Ball: altura del balon: ", this->height, LOG_SPAM);
+            log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
         }
         log("Ball: paso este tiempo:", timePassing, LOG_SPAM);
         if (!this->interceptable && (timePassing > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
