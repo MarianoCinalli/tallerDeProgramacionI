@@ -105,7 +105,7 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
         this->isInAPass = true;
         if(highPass) {
             this->isInAHighPass = true;
-            this->passPower = passPower*PASS_SPEED*1.4; //para que sea mas sensible el pase elevado
+            this->passPower = passPower*PASS_SPEED*1.3; //para que sea mas sensible el pase elevado
             this->initialPassPower = this->passPower;
         }
         else{
@@ -152,7 +152,7 @@ void Ball::updatePosition() {
             this->interceptable = true;
         }
         if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
-          this->velocity->scaleY(-1);
+          this->velocity->scaleX(-1);
         }
         if(this->position->addY(this->velocity->getComponentY()*this->passPower)<0){
           this->velocity->scaleY(-1);

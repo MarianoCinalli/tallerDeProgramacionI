@@ -56,8 +56,10 @@ const int SALIDA_LINEA_COMANDOS = 4;
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
 
-const int TOP_POST_POSITION = 592;
-const int BOTTOM_POST_POSITION = 358;
+const int BOTTOM_POST_POSITION = 592;
+const int TOP_POST_POSITION = 349;
+const int OUT_FIELD_VALIDATE = 1;
+const int POST_BOUNCE_VALIDATE = 2;
 
 // Necesario para la camara
 const int SPRITE_SIZE = 63;

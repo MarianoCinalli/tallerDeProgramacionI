@@ -197,8 +197,8 @@ void* drawer(void* argument) {
             }
             pitchView->renderMessage(renderer, msg);
             // para debug
-            // std::string ballPos = gameController->getBall()->getPosition()->toString();
-            // pitchView->renderDebug(renderer, ballPos);
+            std::string ballPos = gameController->getBall()->getPosition()->toString();
+            pitchView->renderDebug(renderer, ballPos);
           }
 
         //renderea la cancha de cualquier modo

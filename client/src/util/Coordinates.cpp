@@ -19,45 +19,45 @@ int Coordinates::getY() {
 
 void Coordinates::setX(int otherX) {
     this->x = otherX;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 void Coordinates::setY(int otherY) {
     this->y = otherY;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 void Coordinates::addX(int amount) {
     this->x += amount;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 void Coordinates::subtractX(int amount) {
     this->x -= amount;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 void Coordinates::addY(int amount) {
     this->y += amount;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 void Coordinates::subtractY(int amount) {
     this->y -= amount;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 void Coordinates::set(Coordinates other){
     this->x = other.x;
     this->y = other.y;
-    validatePositionInBounds();
+    validatePositionInBoundsY();
 }
 
 int Coordinates::distanceTo(Coordinates* other){
     return sqrt(pow(this->x-other->x,2) + pow(this->y-other->y,2));
 }
 
-void Coordinates::validatePositionInBounds() {
+void Coordinates::validatePositionInBoundsY() {
     // log("Coordinates: Validate in bounds", LOG_DEBUG);
     //Keep in bounds
     if (this->x < 0) {
