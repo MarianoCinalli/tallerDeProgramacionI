@@ -169,6 +169,23 @@ Team* Pitch::getTeam(int teamNumber) {
     }
 }
 
+Team* Pitch::getTeamBySide(int teamNum){
+  Team* leftTeam;
+  Team* rightTeam;
+  if (initialSides){
+    leftTeam = this->localTeam;
+    rightTeam = this->awayTeam;
+  }else{
+      rightTeam = this->localTeam;
+      leftTeam = this->awayTeam;
+  }
+  if (teamNum==TEAM_LEFT){
+    return leftTeam;
+  }
+  else
+    return rightTeam;
+}
+
 Pitch::~Pitch() {
     if (this->localTeam != NULL) {
         delete(this->localTeam);

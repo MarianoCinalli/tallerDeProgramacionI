@@ -155,10 +155,11 @@ void GameController::checkGoal() {
     if (x < 200 || x > 1400) {
         if ((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)) {
             Team* team;
+
             if (this->stateOption == CENTER_LEFT_START) {
-                team = this->pitch->getTeam(TEAM_RIGHT);
+                team = this->pitch->getTeamBySide(TEAM_RIGHT);
             } else if (this->stateOption == CENTER_RIGHT_START) {
-                team = this->pitch->getTeam(TEAM_LEFT);
+                team = this->pitch->getTeamBySide(TEAM_LEFT);
             }
             // Incrementa contador de goles del equipo
             team->increaseScore();
