@@ -86,37 +86,13 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
 }
 
 void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
-<<<<<<< HEAD
-  SDL_Rect cancha;
-  cancha.x = 0;
-  cancha.y = CAMERA_OFFSET;
-  cancha.w = SCREEN_WIDTH;
-  cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
-  SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
-  TTF_Font* gFont = NULL;
-  gFont = TTF_OpenFont("lazy.ttf", 30);
-  if (gFont == NULL) {
-      log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
-  }
-  std::string message = "El juego empieza en ";
-  message += std::to_string(5-countdown);
-  SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
-  Texture countdownTexture;
-  countdownTexture.loadFromRenderedText(message, screen, SDL_WHITE, gFont);
-  SDL_Rect renderQuad1 = { (SCREEN_WIDTH - countdownTexture.getWidth()) / 2, 150, countdownTexture.getWidth(), countdownTexture.getHeight() };
-  SDL_RenderCopyEx(screen, countdownTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
-  // SDL_RenderPresent(screen);
-  if (countdown >= 5) {
-    Mix_PlayChannel( -1, gWhistleSound, 0 );
-  }
-=======
         SDL_Rect cancha;
         cancha.x = 0;
         cancha.y = CAMERA_OFFSET;
         cancha.w = SCREEN_WIDTH;
         cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
         SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
-        std::string message = "EL juego empieza en ";
+        std::string message = "El juego empieza en ";
         message += std::to_string(5-countdown);
         SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
         Texture countdownTexture;
@@ -130,7 +106,6 @@ void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
                         Mix_PlayChannel( -1, gWhistleSound, 0 );
                 }
         }
->>>>>>> 4352a460b2c0c3468821c51b8cc4ffdeeea4b903
 
 }
 

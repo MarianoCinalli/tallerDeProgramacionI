@@ -273,10 +273,6 @@ int GameController::getUsersInTeam(int teamNumber) {
 
 void GameController::setEnd() {
     log("GameController: Seteando que el juego termine...", LOG_INFO);
-<<<<<<< HEAD
-    this->state = GAME_END_STATE;
-=======
->>>>>>> 4352a460b2c0c3468821c51b8cc4ffdeeea4b903
     this->timer->stop();
     this->realTimer->start();
     this->stateOption = 0;

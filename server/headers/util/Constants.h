@@ -41,11 +41,7 @@ enum states {
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
   GAME_START_STATE = 6,
-<<<<<<< HEAD
-  GAME_END_STATE = 7
-=======
   GAME_END_STATE = 7,
->>>>>>> 4352a460b2c0c3468821c51b8cc4ffdeeea4b903
 };
 
 
