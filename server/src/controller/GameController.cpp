@@ -120,10 +120,9 @@ void GameController::checkState() {
                   this->state = GOAL_STATE;
                 }else
                 if (this->stateOption >= 0) {
-                    // hack para forzar fin de juego
-                    // this->state = GOALKICK_STATE;
-                    this->state = GAME_END_STATE;
-
+                    this->state = GOALKICK_STATE;
+                    //HACK para forzar fin de juego
+                    //this->state = GAME_END_STATE;
                 }
                 break;
             }
