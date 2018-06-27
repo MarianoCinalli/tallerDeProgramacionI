@@ -7,6 +7,8 @@
 #include "view/Texture.h"
 #include "view/Camera.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 
 
 /*
@@ -36,11 +38,18 @@ class PitchView {
         Camera* camera;
         std::list<PlayerSpriteManager*> playerViews;
         BallSpriteManager* ballView;
+        int messageTime;
+        TTF_Font* font;
     public:
         PitchView(Texture* pitch, Texture* pitchMini, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);
         void renderMinimap(SDL_Renderer* screen);
+        void renderMessage(SDL_Renderer* screen, std::string msg);
+        void renderStats(SDL_Renderer* screen, std::string msg);
+        void renderDebug(SDL_Renderer* screen, std::string msg);
+
+        void renderCountdown(SDL_Renderer* screen, int countdown);
 
         void render(SDL_Renderer* screen);
         ~PitchView();

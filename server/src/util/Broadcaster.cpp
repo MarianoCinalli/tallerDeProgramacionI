@@ -7,7 +7,7 @@ Broadcaster::Broadcaster(GameControllerProxy* gameControllerProxy, ConnectionMan
 }
 
 void Broadcaster::broadcast(bool first = false) {
-    std::string message = this->gameControllerProxy->getMessageToBroadcast(first);
+    std::string message = this->gameControllerProxy->getMessageToBroadcast(first)+ ";;";
     if (message != "") {
         connectionManager->sendToAll(message);
     } else {
@@ -23,4 +23,15 @@ void Broadcaster::broadcastGameEnded() {
     log("broadcast_to_clients: Broadcasteando fin de partido...", LOG_INFO);
     std::string message = "gameEnds:";
     connectionManager->sendToAll(message);
+}
+
+void Broadcaster::broadcastGameStats() {
+    log("broadcast_to_clients: Broadcasteando estadisticas del partido...", LOG_SPAM);
+    std::string message = this->gameControllerProxy->getStatsToBroadcast() + ";;";
+    if (message != "") {
+        connectionManager->sendToAll(message);
+        log("broadcast_to_clients: Broadcasteando: ", message, LOG_INFO);
+    } else {
+        log("Broadcaster: Mensaje vacio, no se broadcastea.", LOG_ERROR);
+    }
 }

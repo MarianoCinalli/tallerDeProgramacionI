@@ -66,7 +66,7 @@ void BallSpriteManager::setStillBall() {
 void BallSpriteManager::setMovingBallSprite() {
     if (rollingCount == 1024) { //TODO hardcode value
         rollingCount = 0;
-    } 
+    }
     int height = this->ball->getHeight();
     int level = 0;
     if (height == 0) {
@@ -122,9 +122,9 @@ void BallSpriteManager::setMovingBallSprite() {
                 }
             }
         }
+        //TODO cambiar offset aca dependiendo del rolling count
+        rollingCount ++;
     }
-    //TODO cambiar offset aca dependiendo del rolling count
-    rollingCount ++;
 }
 
 bool BallSpriteManager::orientationChange() {

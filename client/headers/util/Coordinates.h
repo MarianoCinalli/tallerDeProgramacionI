@@ -9,7 +9,7 @@ class Coordinates : public Loggable {
     private:
         int x;
         int y;
-        void validatePositionInBounds();
+        void validatePositionInBoundsY();
 
     public:
         Coordinates(int x, int y);

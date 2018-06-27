@@ -1,5 +1,7 @@
 #include <list>
 #include <string>
+#include "controller/PlayerMovement.h"
+#include "model/Formation.h"
 #include "model/Player.h"
 
 #ifndef TEAM_H
@@ -13,6 +15,9 @@ class Team {
         int formacion;
         std::string name;
         int score;
+        Formation* formation;
+        PlayerMovement* playerMovement;
+        bool isOnTheLeftside;
     public:
         Team(int, std::string);
         ~Team();
@@ -25,9 +30,12 @@ class Team {
         int getAmountPlayers();
         std::string getName();
         void increaseScore();
+        std::string getDebugLines();
         int getScore();
+        void resetScore();
         std::list<std::string> scoreInfo;
         void addScoreInfo(std::string);
+        void changeSide();
 };
 #endif // TEAM_H
 

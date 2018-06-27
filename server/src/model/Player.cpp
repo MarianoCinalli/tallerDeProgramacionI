@@ -17,7 +17,7 @@ Player::Player(Coordinates* position, int team) {
     this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
-    this->wasSliding = false; //Deberia estar en PlayerSpriteManager
+    this->slided = false; //Deberia estar en PlayerSpriteManager
     this->kicking = false;
     this->kicked = false;
     this->canMove = true;
@@ -42,8 +42,8 @@ int Player::getTeam() {
     return this->team;
 }
 
-int Player::getId(){
-  return this->id;
+int Player::getId() {
+    return this->id;
 }
 int Player::getStealCoef() {
     return this->stealCoef;
@@ -51,6 +51,7 @@ int Player::getStealCoef() {
 
 void Player::setWithBall(bool dominated) {
     this->withBall = dominated;
+
 }
 
 bool Player::isWithBall() {
@@ -94,6 +95,14 @@ void Player::cantMoveUntilPass(){
   this->canMove = false;
 }
 
+void Player::setMovement(PlayerMovement* playerMovement) {
+    this->playerMovement = playerMovement;
+}
+
+void Player::setCanMove(bool move) {
+    this->canMove = move;
+}
+
 void Player::setFieldPosition(int formation) {
     int number = this->id;
     if (number > 7) {
@@ -116,6 +125,7 @@ void Player::setFieldPosition(int formation) {
     }
     log("Player: posicion en cancha: ", this->fieldPosition, LOG_DEBUG);
 }
+
 // Setea la orientacion del jugador (a donde mira).
 void Player::setOrientation(int orientation) {
     // Para el caso en que el vector trayectoria sea nulo
@@ -180,10 +190,10 @@ void Player::stop() {
 }
 
 
-void Player::updateState() {
-    this->updatePosition();
+void Player::updateState(Coordinates* ballPosition) {
+    this->updatePosition(ballPosition); //follows this position
     this->updateKicking();
-    this->updateSliding();
+    this->updateSliding(ballPosition);
 }
 //
 // int frameDiference(int current, int last){
@@ -205,7 +215,18 @@ void Player::updateKicking() {
 
 }
 
-void Player::updateSliding() {
+const int DISTANCE_TO_STEAL = 15;
+
+void Player::updateSliding(Coordinates* ballPosition) {
+    int number = this->id;
+    if (number > 7) {
+        number -= 7;
+    }
+    if (number ==1){
+      if (this->position->distanceTo(ballPosition) < DISTANCE_TO_STEAL){
+        this->startsSliding();
+      }
+    }
     if (this->sliding) {
         slideCount++;
     }
@@ -215,38 +236,55 @@ void Player::updateSliding() {
     }
 
 }
-void Player::updatePosition() {
+
+void Player::updatePosition(Coordinates* positionToFollow) {
     float speed = 1;
     if (this->runningFast) {
         speed = FAST_SPEED_COEF; //TODO hardcode
     }
-    int maxSpeed = this->maxVelocity;
-    if (this->canMove) {
-        this->position->addX(this->velocity->getComponentX()*speed * maxSpeed);
-        this->position->addY(this->velocity->getComponentY()*speed * maxSpeed);
-        log("Player: Actualizando la posicion del jugador, posicion actual: ", this->position, LOG_SPAM);
-    }
-
-    // Si selecciona un jugador que estaba regresando lo detengo
-    if (this->isSelected && this->isReturning) {
-        this->isReturning = false;
-        log("Player: jugador deja de volver, a la posicion original, por ser seleccionado.", LOG_DEBUG);
-    }
-
-    // Detener si el jugador no seleccionado regresando llego a su posicion inicial
-    if (this->isReturning) {
-        int abs_delta_x = 0;
-        int abs_delta_y = 0;
-        abs_delta_x = abs(this->position->getX() - this->basePosition->getX());
-        abs_delta_y = abs(this->position->getY() - this->basePosition->getY());
-        if ((abs_delta_x < 30) && (abs_delta_y < 30)) { //TODO hardcode valores
-            this->stop();
-            this->isReturning = false;
-            log("Player: jugador llega a la posicion original.", LOG_DEBUG);
+    if (!this->isSelected) {
+        if (this->playerMovement->isInsideArea(this->position, this->id)) {
+            if (this->isGoalkeeper()) {
+                // El arquero solo se mueve en Y.
+                this->changeVelocityTo(positionToFollow, false, true);
+            } else {
+                this->changeVelocityTo(positionToFollow, false, false);
+                this->playerMovement->cleanVelocity(this->velocity, this->position, this->id);
+            }
         } else {
-            this->returnToBasePosition();
+            // Si no vuelve a la posicion original.
+            this->changeVelocityTo(this->basePosition, false, false);
         }
+    } if (this->canMove){
+      int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
+      int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
+      this->position->addY(amountY);
+      this->position->addX(amountX);
     }
+}
+
+void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY) {
+    int deltaX = positionToFollow->getX() - this->position->getX();
+    int deltaY = positionToFollow->getY() - this->position->getY();
+    // Normalizacion.
+    if (deltaX != 0) {
+        deltaX = deltaX / abs(deltaX);
+    }
+    if (deltaY != 0) {
+        deltaY = deltaY / abs(deltaY);
+    }
+    this->stop();
+    if (onlyX) {
+        deltaY = 0;
+    } else if (onlyY) {
+        deltaX = 0;
+    }
+    this->velocity->setComponentX(deltaX);
+    this->velocity->setComponentY(deltaY);
+}
+
+bool Player::isGoalkeeper() {
+    return this->id == 1 || this->id == 8;
 }
 
 void Player::setPosition(Coordinates pos) {
@@ -255,6 +293,16 @@ void Player::setPosition(Coordinates pos) {
 
 void Player::setBasePosition(Coordinates pos) {
     this->basePosition->set(pos);
+}
+
+void Player::setPosition(Coordinates* pos) {
+    this->position->setX(pos->getX());
+    this->position->setY(pos->getY());
+}
+
+void Player::setBasePosition(Coordinates* pos) {
+    this->basePosition->setX(pos->getX());
+    this->basePosition->setY(pos->getY());
 }
 
 void Player::returnToBasePosition() {
@@ -349,31 +397,32 @@ bool Player::hasKicked() {
     return this->kicked;
 }
 
-void Player::setKicked(bool k){
-  this->kicked=k;
+void Player::setKicked(bool k) {
+    this->kicked = k;
 }
 
 bool Player::isSliding() {
     return this->sliding;
 }
 
-bool Player::wasSlidingYet() {
-    return this->wasSliding;
+bool Player::slidedYet() {
+    return this->slided;
 }
 
 void Player::startsSliding() {
     if (!this->kicking && !this->withBall) {
         this->sliding = true;
+        this->slided = false;
     }
 }
 
-void Player::isAlreadySliding() {
-    this->wasSliding = true;
+void Player::setSlided(bool s) {
+    this->slided = s;
 }
 
 void Player::stopSliding() {
     this->sliding = false;
-    this->wasSliding = false;
+    this->slided = false;
 }
 
 void Player::copyStats(Player* copyTo) {

@@ -12,6 +12,7 @@
 class UsersManager {
     private:
         std::map<std::string, std::string> usersAndPasswords;
+        std::map<std::string, int> usersAndTeams;
         std::set<std::string> loggedInUsers;
         std::set<std::string> loggedOffUsers;
         GameControllerProxy* gameControllerProxy;
@@ -23,6 +24,9 @@ class UsersManager {
         bool isLoggedIn(std::string user);
         bool isLoggedOff(std::string user);
         void logOff(std::string user);
+        // Para la reconeccion de usuarios.
+        void setTeamNumberForUser(std::string user, int team);
+        int getTeamNumberForUser(std::string user);
         ~UsersManager();
 };
 #endif // USERSMANAGER_H

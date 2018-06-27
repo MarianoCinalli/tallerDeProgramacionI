@@ -42,9 +42,9 @@ extern Mix_Music *gMusic = NULL;
 // Sound effects
 extern Mix_Chunk *gKickSound = NULL; //kick
 extern Mix_Chunk *gGoalSound = NULL; //goal
-Mix_Chunk *gWhistleSound = NULL; //whistle
-Mix_Chunk *gStartSound = NULL; //start
-Mix_Chunk *gCountdownSound = NULL; //countdown
+extern Mix_Chunk *gWhistleSound = NULL; //whistle
+extern Mix_Chunk *gStartSound = NULL; //start
+extern Mix_Chunk *gCountdownSound = NULL; //countdown
 // Global variables ---------------------------------------
 
 void imprimir_ayuda() {
@@ -798,6 +798,11 @@ int main(int argc, char* argv[]) {
                     std::string resultValue = message.substr(message.find(":") + 1, message.length());
                     if (resultKey == "true") {
                         hasLoggedIn = true;
+                        if (resultValue == "gameStarted") {
+                            log("Main: Reconeccion, no es necesario elegir equipo y formacion.", LOG_INFO);
+                            hasPickedTeam = true;
+                            hasPickedFormation = true;
+                        }
                         log("Main: Credenciales validas. Logeo aceptado.", LOG_INFO);
                     } else if (resultKey == "false") {
                         log("Main: No se pudo logear con usuario = " + usuario + " y clave = " + clave + ". Server error: " + resultValue, LOG_INFO);
@@ -831,7 +836,12 @@ int main(int argc, char* argv[]) {
             std::string resultKey = resultMessage.substr(0, resultMessage.find(":"));
             std::string resultValue = resultMessage.substr(resultMessage.find(":") + 1, resultMessage.length());
             if (resultKey == "true") {
+                log("Main: El jugador entro al equipo.", LOG_INFO);
                 hasPickedTeam = true;
+                if (resultValue != "0") {
+                    log("Main: El jugador no es el primero en el equipo no tiene que elegir formacion.", LOG_INFO);
+                    hasPickedFormation = true;
+                }
             } else if (resultKey == "withFormation") {
                 hasPickedTeam = true;
                 hasPickedFormation = true;
@@ -922,7 +932,7 @@ int main(int argc, char* argv[]) {
                 // Devuelve acciones que modifican modelos.
                 // Se puede optimizar para que deje de hacer actions todo el tiempo.
                 Action* action = actionsManager->getAction(e);
-                if (action != NULL) {
+                if ((action != NULL) && (initializer->getGameController()->state != GAME_START_STATE) ) {
                     sendSuccess = connectionManager->sendMessage(action->toString());
                     if (!sendSuccess) {
                         log("Main: Se detecto error en el envio del mensaje. Saliendo...", LOG_ERROR);

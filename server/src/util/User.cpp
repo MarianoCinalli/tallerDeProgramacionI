@@ -36,7 +36,33 @@ void User::processLogInMessage(std::string message) {
     if (this->hasLoged) {
         log("User: Usuario logeado: ", parsedUser, LOG_INFO);
         this->user = parsedUser;
-        connectionManager->sendMessage(this->userSocket, "true:");
+        if (this->gameControllerProxy->hasGameStarted()) {
+            log("User: Usuario reconectado: ", this->user, LOG_INFO);
+            this->hasPicked = true;
+            this->teamNumber = this->manager->getTeamNumberForUser(this->user);
+            if (this->teamNumber < 0) {
+                log("User: No se pudo encontrar el equipo usado previamente por: ", user, LOG_ERROR);
+            } else {
+                log("User: Intentando reunir al equipo: ", this->teamNumber, LOG_INFO);
+                bool couldJoin = this->gameControllerProxy->joinTeam(
+                    this->user,
+                    this->teamNumber,
+                    -1,
+                    this->connectionManager->getMaxClients(),
+                    errorMessage
+                );
+                if (couldJoin) {
+                    log("User: Se reconecta el usuario: ", this->user, LOG_INFO);
+                    connectionManager->sendMessage(this->userSocket, "true:gameStarted");
+                    sleep(2); // Sino empieza a leer varios mensajes.
+                } else {
+                    log("User: No se pudo reconectar el usuario " + this->user + " al equipo ", errorMessage, LOG_INFO);
+                    connectionManager->sendMessage(this->userSocket, "true:");
+                }
+            }
+        } else {
+            connectionManager->sendMessage(this->userSocket, "true:");
+        }
     } else {
         log("User: No se pudo logear el usuario.", LOG_INFO);
         connectionManager->sendMessage(this->userSocket, "false:" + errorMessage);
@@ -55,6 +81,7 @@ void User::processTeamAndFormationMessage(std::string message) {
     int formation = 33;
     if (action == "use") {
         team = stoi(value);
+        int usersInTeam = this->gameControllerProxy->getUsersInTeam(team);
         //formation = stoi(value.substr(value.find("-")+1,value.length()));
         // log("User: equipo", team, LOG_DEBUG);
         // log("User: formacion", formation, LOG_DEBUG);
@@ -72,22 +99,25 @@ void User::processTeamAndFormationMessage(std::string message) {
             log("User: El usuario se unio al equipo: ", team, LOG_INFO);
             this->teamNumber = team;
             log("User: El usuario termino de elegir.", LOG_INFO);
-            this->connectionManager->sendMessage(this->userSocket, "true:");
+            if (usersInTeam > 0) {
+                // Si no es el primero del equipo no tiene que elegir.
+                this->hasPicked = true;
+            }
+            this->connectionManager->sendMessage(this->userSocket, "true:" + std::to_string(usersInTeam));
         } else {
             log("User: El usuario no se pudo unir al equipo: ", team, LOG_INFO);
             this->connectionManager->sendMessage(this->userSocket, "false:" + errorMessage);
         }
     } else if (action == "formation") {
-      formation = stoi(value);
-      bool couldSelectFormation = this->gameControllerProxy->setTeamFormation(
-          this->getTeam(),
-          formation
-      );
-      this->hasPicked = true;
-      this->connectionManager->sendMessage(this->userSocket, "true:");
-
-    }
-    else {
+        formation = stoi(value);
+        this->gameControllerProxy->setTeamFormation(
+            this->getTeam(),
+            formation
+        );
+        this->hasPicked = true;
+        this->manager->setTeamNumberForUser(this->user, this->getTeam());
+        this->connectionManager->sendMessage(this->userSocket, "true:");
+    } else {
         log("User: Accion no entendida: ", action, LOG_ERROR);
     }
 }

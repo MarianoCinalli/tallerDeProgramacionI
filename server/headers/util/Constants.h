@@ -40,6 +40,8 @@ enum states {
   GOAL_STATE = 3,
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
+  GAME_START_STATE = 6,
+  GAME_END_STATE = 7,
 };
 
 
@@ -53,6 +55,11 @@ const int SALIDA_LINEA_COMANDOS = 4;
 // The dimensions of the level
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
+
+const int BOTTOM_POST_POSITION = 592;
+const int TOP_POST_POSITION = 349;
+const int OUT_FIELD_VALIDATE = 1;
+const int POST_BOUNCE_VALIDATE = 2;
 
 // Necesario para la camara
 const int SPRITE_SIZE = 63;
@@ -79,11 +86,10 @@ const int PASS_HELPING_CONST = 100;
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;
 const int STEAL_DISTANCE = 90;
-const int KEEPER_STEAL_COEF = 90;
+const int KEEPER_STEAL_COEF = 100;
 const int DEFENSE_STEAL_COEF = 80;
 const int MIDFIELD_STEAL_COEF = 70;
-const int STRIKER_STEAL_COEF = 50;
-const int TIME_BALL_NO_INTERCEPT = 4;
+const int STRIKER_STEAL_COEF = 60;
 
 
 //counts
@@ -103,6 +109,8 @@ const int TEAM_RIGHT = 1;
 const int MAX_ERRORS = 50000;
 
 const int MINUTES_PER_HALF = 45;
+
+const int AREAS_MARGIN = 5;
 //
 // const int FRAME_WINDOW=1024;
 #endif // CONSTANTS_H_

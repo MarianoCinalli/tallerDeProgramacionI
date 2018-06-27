@@ -34,7 +34,10 @@ class GameController {
         Score* score;
         map<int, Player*> players;
 
+
     public:
+        int state;
+        int stateOption;
         GameController(Pitch* pitch);
         // Para actualizar los modelos.
         Player* getPlayer(int num);
@@ -42,6 +45,8 @@ class GameController {
         Camera* getCamera();
         Clock* getClock();
         Score* getScore();
+        void parseYaml(YAML::Node node);
+        std::string stats;
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

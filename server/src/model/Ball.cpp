@@ -95,13 +95,13 @@ void Ball::isIntercepted(Player* player) {
 
 void Ball::isPassed(int direction, float passPower, bool highPass) {
     if (this->isDominated()) {
+        this->timePassing = 0;
         this->interceptable = false;
         this->still = false;
         Velocity* passDirection = new Velocity(0,0);
         passDirection->set(this->player->getVelocity());  //direction;
         this->velocity = passDirection;
-        log(this->velocity->toString(),LOG_DEBUG);
-        // log()
+        log("BALL: velocidad ", this->velocity, LOG_DEBUG);
         if (passDirection->isZero()) {
             log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
             int passOrientation = this->player->getOrientation();
@@ -112,7 +112,7 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
         this->isInAPass = true;
         if(highPass) {
             this->isInAHighPass = true;
-            this->passPower = passPower*PASS_SPEED*1.4; //para que sea mas sensible el pase elevado
+            this->passPower = passPower*PASS_SPEED*1.3; //para que sea mas sensible el pase elevado
             this->initialPassPower = this->passPower;
         }
         else{
@@ -165,6 +165,7 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
         this->removePlayer();
     }
 }
+const int TIME_BALL_NO_INTERCEPT = 6;
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
@@ -178,15 +179,18 @@ void Ball::updatePosition() {
             if(this->height > BALL_DECELERATE_CONST){
                 this->interceptable = false;
             }
-            log("Ball: altura del balon: ", this->height, LOG_DEBUG);
-            log("Ball: poder de pase: ", this->passPower, LOG_DEBUG);
+            log("Ball: altura del balon: ", this->height, LOG_SPAM);
+            log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
         }
-        if (!this->interceptable && timePassing > TIME_BALL_NO_INTERCEPT) { //TODO numero harcodeado tiempo de pase
+        log("Ball: paso este tiempo:", timePassing, LOG_SPAM);
+        if (!this->interceptable && (timePassing > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
         if(this->position->addX(this->velocity->getFloatX()*this->passPower)<0){
           this->velocity->scaleY(-1);
         }
+//        if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
+//          this->velocity->scaleX(-1);
         if(this->position->addY(this->velocity->getFloatY()*this->passPower)<0){
           this->velocity->scaleY(-1);
         }

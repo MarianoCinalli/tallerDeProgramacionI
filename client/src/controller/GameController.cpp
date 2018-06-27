@@ -15,6 +15,9 @@ GameController::GameController(Pitch* pitch) {
     }
     this->clock = new Clock();
     this->score = new Score();
+    this->state = GAME_START_STATE;
+    this->stats = " ";
+    this->stateOption = 0;
     log("ActionsManager: GameController creado.", LOG_INFO);
 }
 
@@ -37,6 +40,16 @@ Clock* GameController::getClock() {
 Score* GameController::getScore() {
   return this->score;
 }
+
+void GameController::parseYaml(YAML::Node node){
+  if (node["t"]){
+    this->state = node["t"].as<int>();
+  }
+  if (node["op"]){
+    this->stateOption = node["op"].as<int>();
+}
+}
+
 
 GameController::~GameController() {
     log("ActionsManager: Liberando memoria. Borrando cancha...", LOG_INFO);

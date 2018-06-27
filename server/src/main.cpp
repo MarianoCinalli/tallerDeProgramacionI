@@ -13,6 +13,7 @@
 #include "util/ConnectionManager.h"
 #include <mutex>
 #include <pthread.h>
+#include <signal.h>
 
 // Global variables ---------------------------------------
 std::ofstream LOG_FILE_POINTER;
@@ -160,28 +161,38 @@ int main(int argc, char* argv[]) {
     }
     ThreadSpawner* threads = new ThreadSpawner();
     log("Main: Juego inicializado correctamente.", LOG_INFO);
-
     // Se queda esperando por conexiones.
-    threads->spawn(
+    pthread_t listenerId = threads->spawn(
         connection_listener,
         NULL
     );
     // Cuando todos se conecten, actualiza el modelo.
-    threads->spawn(
+    pthread_t updaterId = threads->spawn(
         game_updater,
         NULL
     );
     // Cuando todos se conecten, envia el modelo a los players.
-    threads->spawn(
+    pthread_t broadcastId = threads->spawn(
         broadcast_to_clients,
         NULL
     );
     // End ------------------------------------------------
     // Espero a que terminen los threads de arriba.
-    threads->joinSpawnedThreads();
+    log("Main: Esperando a que finalizen los procesos...", LOG_INFO);
+    log("Main: Esperando a game_updater...", LOG_INFO);
+    threads->join(updaterId);
+    log("Main: Esperando a broadcast_to_clients...", LOG_INFO);
+    threads->join(broadcastId);
+    log("Main: Matando a connection_listener...", LOG_INFO);
+    threads->signal(listenerId, SIGTSTP);
+    log("Main: Esperando a connection_listener...", LOG_INFO);
+    threads->join(listenerId);
+    log("Main: Procesos finalizados.", LOG_INFO);
     // Espero a que terminen todos los threads de clientes.
+    log("Main: Esperando que terminen los procesos que escuchan a los clientes.", LOG_INFO);
     connectionManager->waitForAllConnectionsToFinish();
     connectionManager->closeOpenedSockets();
+    log("Main: Eliminando barrera y liberando memoria.", LOG_INFO);
     pthread_barrier_destroy(&players_ready_barrier);
     delete(configuration);
     delete(threads);

@@ -15,6 +15,7 @@ class Broadcaster {
         Broadcaster(GameControllerProxy* gameControllerProxy, ConnectionManager* connectionManager);
         void broadcast(bool);
         void broadcastGameEnded();
+        void broadcastGameStats();
         ~Broadcaster();
 };
 #endif // BROADCASTER_H

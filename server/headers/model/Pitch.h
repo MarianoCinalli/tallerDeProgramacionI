@@ -18,6 +18,7 @@ class Pitch {
         Team* awayTeam;
         Camera* camera;
         Ball* ball;
+        int initialSides;
         std::map<Team*,std::list<std::string>> teams;
         std::map<std::string, Player*> activePlayers;
     public:
@@ -40,7 +41,10 @@ class Pitch {
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
         Team* getTeam(int teamNumber);
+        Team* getTeamBySide(int teamNum);
         std::string getScoresYAML();
+        std::string getDebugLines();
+        void changeSides();
         ~Pitch();
     private:
         std::string getUsersWithActivePlayersAsString();

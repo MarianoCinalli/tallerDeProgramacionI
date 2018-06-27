@@ -96,14 +96,6 @@ void Velocity::scaleY(int num){
 void Velocity::scaleX(int num){
   this->x *= num;
 }
-/*
-void Velocity::scaleY(float num){
-  this->y *= num;
-}
-
-void Velocity::scaleX(float num){
-  this->x *= num;
-}*/
 
 void Velocity::stop(){
   this->x = 0;

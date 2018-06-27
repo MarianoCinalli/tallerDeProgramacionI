@@ -2,6 +2,7 @@
 #include "util/Coordinates.h"
 #include "util/Velocity.h"
 #include "util/logger.h"
+#include "controller/PlayerMovement.h"
 #include <SDL2/SDL.h>
 
 #ifndef PLAYER_H
@@ -21,7 +22,7 @@ class Player {
         Coordinates* position;
         Coordinates* basePosition;
         bool sliding;
-        bool wasSliding;
+        bool slided;
         bool kicking;
         bool kicked;
         bool canMove;
@@ -32,7 +33,7 @@ class Player {
         std::string userName;
         int fieldPosition;
         int stealCoef;
-
+        PlayerMovement* playerMovement;
     public:
         static int ID;
         Player(Coordinates* position, int team);
@@ -47,13 +48,14 @@ class Player {
         int getId();
         bool isAHighPass();
         bool isThisPlayer(Player* player);
-        bool wasSlidingYet();
+        bool slidedYet();
         bool hasKicked();
         bool isSliding();
         bool isKicking();
         bool getIsSelected();
         bool isRunningDiagonaly();
         bool isRunningFast();
+        bool isGoalkeeper();
         bool isStill();
         std::string getUsername();
         int getStealCoef();
@@ -70,23 +72,27 @@ class Player {
         void setWithBall(bool dominated);
         bool isWithBall();
         void cantMoveUntilPass();
+        void setCanMove(bool canMove);
 
         // Cambia la posicion con respecto a su velocidad.
-        void updatePosition();
+        void updatePosition(Coordinates* positionToFollow);
         void updateKicking();
         void setKicked(bool);
-        void updateSliding();
-        void updateState();
+        void setSlided(bool s);   //TODO mejorar nombres de slide!
+        void updateSliding(Coordinates*);
+        void updateState(Coordinates* positionToFollow);
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);
+        void setPosition(Coordinates* coord);
+        void setBasePosition(Coordinates* coord);
         void returnToBasePosition();
+        void setMovement(PlayerMovement* playerMovement);
         // Acciones
         void startsRunningFast();
         void stopsRunningFast();
         void startsSliding();
         void stopSliding();
-        void isAlreadySliding();   //TODO mejorar nombres de slide!
         void startsKicking(int power, bool highPass);
         void stopKicking();
         void isAlreadyKicking();
@@ -94,5 +100,7 @@ class Player {
         std::string getAsYaml();
 
         ~Player();
+    private:
+        void changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool onlyY);
 };
 #endif // PLAYER_H

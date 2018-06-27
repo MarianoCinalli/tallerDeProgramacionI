@@ -32,8 +32,10 @@ class GameController {
         Ball* ball;
         Player* activePlayer;
         Timer* timer;
+        Timer* realTimer;
         int state;
         int stateOption;
+        int stateTime;
         bool end;
         int time;
         bool isFistHalf;
@@ -44,6 +46,7 @@ class GameController {
         void execute(Action* action, std::string user);
         // Para actualizar los modelos.
         void updatePlayers();
+        void updatePitch();
         void update();
         void checkState();
         void checkGoal();
@@ -54,15 +57,19 @@ class GameController {
         Velocity* calculatePassVelocity(Player* player);
         void addUser(std::string user, int teamNum, int formation);
         Player* getActivePlayer(std::string user);
-        std::string getTeamStats(int numberTeam);
+        int getUsersInTeam(int teamNumber);
+        std::string getStateAsYaml();
         bool joinTeam(std::string playerName, int team,int formation, int maxPlayers, std::string & errorMessage);
         bool setTeamFormation(int team, int formation);
         void removeUser(std::string user);
         void startGame();
         bool hasGameStarted();
         bool shouldGameEnd();
+        bool gameEnd();
         void setEnd();
         std::string getMessageToBroadcast(bool allPlayers);
+        std::string getStatsToBroadcast(bool allMessage);
+        std::string getDebugLines();
         ~GameController();
     private:
         void removeUserFromTeam(std::string user);

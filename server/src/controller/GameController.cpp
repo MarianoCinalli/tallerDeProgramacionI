@@ -7,8 +7,10 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->ball = this->pitch->getBall();
     this->end = false;
     this->timer = timer;
-    this->state = HALF_START_STATE;
-    this->stateOption = CENTER_LEFT_START;
+    this->realTimer = new Timer(45);
+    this->state = GAME_START_STATE;
+    this->stateOption = 0;  //5 seconds to start in game start
+    this->stateTime = -1;
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -37,12 +39,12 @@ void GameController::removeUser(std::string user) {
 void GameController::removeUserFromTeam(std::string user) {
     log("GameController: Original: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
     log("GameController: Buscando al jugador:", user, LOG_DEBUG);
-    bool errased = false;
+    bool erased = false;
     log("GameController: En el equipo local...", LOG_DEBUG);
     for (auto it = this->users[0].begin(); it != this->users[0].end();) {
         if (*it == user) {
             it = this->users[0].erase(it);
-            errased = true;
+            erased = true;
         } else {
             ++it;
         }
@@ -51,12 +53,12 @@ void GameController::removeUserFromTeam(std::string user) {
     for (auto it = this->users[1].begin(); it != this->users[1].end();) {
         if (*it == user) {
             it = this->users[1].erase(it);
-            errased = true;
+            erased = true;
         } else {
             ++it;
         }
     }
-    if (errased) {
+    if (erased) {
         log("GameController: Jugador removido: ", user, LOG_DEBUG);
         log("GameController: Despues: ", this->getUsersWithTeamAsString(), LOG_DEBUG);
     } else {
@@ -91,36 +93,99 @@ void GameController::execute(Action* action, std::string user) {
     }
 }
 
+void GameController::updatePitch(){
+  this->pitch->changeBallOwnership();
+  // if
+  this->pitch->checkSteals();
+}
+
 void GameController::update() {
     Time* elapsedTime = this->timer->getTime();
     this->checkState();
-    this->updatePlayers();
-    this->updateBall();
-    this->updateCameraPosition();
-    this->checkTime(elapsedTime);
+    if (this->state ==  NORMAL_STATE) {
+        this->updatePlayers();
+        this->updateBall();
+        this->updateCameraPosition();
+        this->updatePitch();
+        this->checkTime(elapsedTime);
+    }
     delete(elapsedTime);
 }
 
 void GameController::checkState() {
     switch (this->state) {
         case NORMAL_STATE: {
-            this->stateOption = this->pitch->goalkick();
-            if (this->stateOption >= 0) {
-                this->state = GOALKICK_STATE;
+                this->stateOption = this->pitch->goalkick();
+                if((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)){
+                  this->state = GOAL_STATE;
+                }else
+                if (this->stateOption >= 0) {
+                    this->state = GOALKICK_STATE;
+                    //HACK para forzar fin de juego
+                    //this->state = GAME_END_STATE;
+                }
+                break;
             }
-            break;
-        }
+          case GOAL_STATE: {
+                  if (this->stateTime < 0){
+                    this->stateTime = SDL_GetTicks();
+                    this->checkGoal();
+                  }
+                  if ((SDL_GetTicks() - this->stateTime) > 1000){ //1000 miliseconds
+                    // this->pitch->setStart(this->stateOption);
+                    this->stateTime = -1;
+                    this->state = GOALKICK_STATE;
+                  }
+                  break;
+              }
         case GOALKICK_STATE: {
-            this->checkGoal();
-            this->pitch->setStart(this->stateOption);
-            this->state = NORMAL_STATE;
-            break;
-        }
+                if (this->stateTime < 0){
+                  this->stateTime = SDL_GetTicks();
+                }
+                if ((SDL_GetTicks() - this->stateTime) > 800){ //1000 miliseconds
+                  this->pitch->setStart(this->stateOption);
+                  this->stateTime = -1;
+                  this->state = NORMAL_STATE;
+                }
+                break;
+            }
         case HALF_START_STATE: {
-          this->pitch->setStart(this->stateOption);
-          this->state = NORMAL_STATE;
-          break;
-        }
+            if (this->stateTime < 0){
+              this->stateTime = SDL_GetTicks();
+                this->timer->stop();
+              }
+                if ((SDL_GetTicks() - this->stateTime) > 2000){
+                this->pitch->changeSides();
+                this->pitch->setStart(this->stateOption);
+                this->timer->resume();
+                this->stateTime = -1;
+                this->state = NORMAL_STATE;
+              }
+                break;
+            }
+        case GAME_START_STATE: {
+                this->stateOption = this->realTimer->getTime()->getSeconds();
+                log("GAME CONTROLLER: segundos desde que empieza el partido: ", this->stateOption, LOG_SPAM);
+                if (this->stateOption > 5) {
+                    this->end = false;
+                    this->timer->start();
+                    this->state = GOALKICK_STATE;
+                    this->stateOption = CENTER_LEFT_START;
+                }
+                this->stateTime = -1;
+                break;
+            }
+          case GAME_END_STATE: {
+              if (this->stateTime < 0){
+                this->stateTime = SDL_GetTicks();
+                  this->timer->stop();
+                }
+                  if ((SDL_GetTicks() - this->stateTime) > 10000){//1 seconds for stats
+                    this->stateTime = -1;
+                  this->setEnd();
+                }
+                  break;
+              }
     }
 }
 
@@ -129,11 +194,11 @@ void GameController::checkGoal() {
     if (x < 200 || x > 1400) {
         if ((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)) {
             Team* team;
+
             if (this->stateOption == CENTER_LEFT_START) {
-                team = this->pitch->getTeam(TEAM_RIGHT);
-            }
-            else if (this->stateOption == CENTER_RIGHT_START) {
-                team = this->pitch->getTeam(TEAM_LEFT);
+                team = this->pitch->getTeamBySide(TEAM_RIGHT);
+            } else if (this->stateOption == CENTER_RIGHT_START) {
+                team = this->pitch->getTeamBySide(TEAM_LEFT);
             }
             // Incrementa contador de goles del equipo
             team->increaseScore();
@@ -154,7 +219,7 @@ void GameController::checkGoal() {
                 log("GameController: El player es null.", LOG_ERROR);
                 message += " Alguien";
             }
-            std::replace(message.begin(), message.end(), '-', ':');
+            //std::replace(message.begin(), message.end(), '-', ':');
             team->addScoreInfo(message);
         }
     }
@@ -169,7 +234,7 @@ void GameController::updatePlayers() {
     teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
-            p->updateState();
+            p->updateState(this->ball->getPosition());
         }
     }
     log("GameController: se actualizaron los jugadores.", LOG_SPAM);
@@ -197,7 +262,6 @@ void GameController::updateBall() {
         this->ball->isPassed(velocity, player->getKickPower()*PASS_SPEED, highPass); //TODO valor de pase?
         player->setKicked(true);
     }
-    this->pitch->changeBallOwnership();
     this->ball->updatePosition();
 }
 
@@ -314,10 +378,13 @@ void GameController::checkTime(Time* elapsedTime) {
     if (this->isFistHalf && this->hasHalfEnded(elapsedTime, 1)) {
         this->isFistHalf = false;
         log("GameController: Termino el primer tiempo.", LOG_INFO);
-        // Aca voy a invertir a las formaciones. Cuando termine con el refator.
+        this->state = HALF_START_STATE;
+        this->stateOption = CENTER_RIGHT_START;
     } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
         log("GameController: Termino el segundo tiempo.", LOG_INFO);
-        this->setEnd();
+        this->state = GAME_END_STATE;
+        // this->setEnd();
+
     }
 }
 
@@ -332,15 +399,24 @@ bool GameController::shouldGameEnd() {
     return this->end;
 }
 
-std::string GameController::getTeamStats(int numberTeam) {
-    Team* team = this->pitch->getTeam(numberTeam);
-    std::string name = team->getName();
-    std::string amnt = std::to_string(users[numberTeam].size());
-    return name + ":" + amnt;
+bool GameController::gameEnd() {
+  if (this->state == GAME_END_STATE){
+    return true;
+  }
+  return false;
+}
+
+int GameController::getUsersInTeam(int teamNumber) {
+    return this->users[teamNumber].size();
 }
 
 void GameController::setEnd() {
     log("GameController: Seteando que el juego termine...", LOG_INFO);
+    this->timer->stop();
+    this->realTimer->start();
+    this->stateOption = 0;
+    this->pitch->getTeam(TEAM_LEFT)->resetScore();
+    this->pitch->getTeam(TEAM_RIGHT)->resetScore();
     this->end = true;
     log("GameController: Terminacion de juego seteada.", LOG_INFO);
 }
@@ -373,11 +449,12 @@ bool GameController::joinTeam(std::string playerName, int team, int formation, i
 }
 
 bool GameController::setTeamFormation(int team, int formation) {
-    return this->pitch->setTeamFormation(team,formation);
+    return this->pitch->setTeamFormation(team, formation);
 }
 
 void GameController::startGame() {
-    this->timer->start();
+    this->realTimer->start();
+
 }
 
 bool GameController::hasGameStarted() {
@@ -403,8 +480,43 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     }
     message += ball->getAsYaml();
     message += camera->getAsYaml();
+    message += this->getStateAsYaml();
     message += this->getGameStatsMessage();
-    return message + ";;";
+    //message += this->getDebugLines();
+    return message;
+}
+
+std::string GameController::getStatsToBroadcast(bool allMessage) {
+    std::string message = "";
+    message += this->getMessageToBroadcast(true);
+    message += "stats:\n";
+    message += " val: ";
+    Team* team;
+    // Estadisticas del equipo local
+    team = this->pitch->getTeam(0);
+    message += team->getName() + "|";
+    for(std::string s : team->scoreInfo){
+      message += s + "|"; // Separarador
+    }
+    // Estadisticas del equipo visitante
+    team = this->pitch->getTeam(1);
+    message += team->getName() + "|";
+    for(std::string s : team->scoreInfo){
+      message += s + "|"; // Separarador
+    }
+    message += "\n";
+    if (allMessage){
+      // message += this->getStateAsYaml();
+    }
+    return message ;
+}
+
+std::string GameController::getStateAsYaml() {
+    std::string message = "";
+    message += "st:\n";
+    message += " t: " + std::to_string(this->state) + "\n";
+    message += " op: " + std::to_string(this->stateOption) + "\n";
+    return  message;
 }
 
 std::string GameController::getGameStatsMessage() {
@@ -422,6 +534,13 @@ std::string GameController::getGameStatsMessage() {
     message += this->pitch->getScoresYAML();
     return message;
 }
+
+std::string GameController::getDebugLines() {
+    std::string message = "";
+    message += this->pitch->getDebugLines();
+    return message;
+}
+
 
 GameController::~GameController() {
     log("GameController: Liberando memoria. Borrando cancha...", LOG_INFO);

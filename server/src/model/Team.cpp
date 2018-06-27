@@ -1,12 +1,14 @@
 #include "model/Team.h"
-#include "util/Formaciones.h"
 
 Team::Team(int local, std::string name) {
     log("Team: Creando equipo.", LOG_INFO);
     this->players = {};
-    this->local = local;
+    this->local = local; // 1 visitante - 0 local
     this->name = name;
     this->score = 0;
+    this->formation = new Formation(312);
+    this->playerMovement = new PlayerMovement(); // Lo deja moverse sin restricciones.
+    this->isOnTheLeftside = this->local == 0;
     log("Team: Equipo creado.", LOG_INFO);
 }
 
@@ -20,15 +22,15 @@ std::list<Player*> Team::getPlayers() {
     return this->players;
 }
 
-Player* Team::getPlayer(int num){
-  if (this->local==1){
-    num +=7;
-  }
-  for (Player* player : this->players){
-    if (player->getId() == num){
-      return player;
+Player* Team::getPlayer(int num) {
+    if (this->local == 1) {
+        num += 7;
     }
-  }
+    for (Player* player : this->players) {
+        if (player->getId() == num) {
+            return player;
+        }
+    }
     return NULL;
 }
 
@@ -36,8 +38,8 @@ int Team::getAmountPlayers() {
     return this->players.size();
 }
 
-int Team::getTeamNum(){
-  return this->local;
+int Team::getTeamNum() {
+    return this->local;
 }
 
 std::string Team::getName() {
@@ -56,13 +58,21 @@ Team::~Team() {
     }
     // Como la lista sigue llena, de punteros borrados, la vacio.
     this->players.clear();
+    log("Team: Borrando el controlador de jugadores...", LOG_INFO);
+    delete(this->playerMovement);
+    log("Team: Borrando la formacion...", LOG_INFO);
+    delete(this->formation);
     log("Team: Jugadores borrados. Memoria liberada.", LOG_INFO);
 }
 
 void Team::setFormacion(int formacion) {
     this->formacion = formacion;
-    for (Player* p: players){
-        p->setFieldPosition(formacion);
+    this->formation->setFormation(formacion);
+    this->playerMovement->setFormation(formacion);
+    this->playerMovement->setSide(this->isOnTheLeftside);
+    for (Player* player : players) {
+        player->setFieldPosition(formacion);
+        player->setMovement(this->playerMovement);
     }
 }
 
@@ -70,12 +80,32 @@ void Team::order() {
     log("Team: Ordenando equipo...", LOG_DEBUG);
     int i = 0;
     for (Player* p : players) {
-        p->setPosition(getFormation(this->local, this->formacion)[i]);
-        // Coloca la posicion base de regreso
-        p->setBasePosition(getFormation(this->local, this->formacion)[i]);
+        Coordinates* startingCoordinates = this->formation->getCoordinatesForPlayerBehindMiddle(
+            p->getId(),
+            this->isOnTheLeftside
+        );
+        Coordinates* baseCoordinates = this->formation->getCoordinatesForPlayer(
+            p->getId(),
+            this->isOnTheLeftside
+        );
+        p->setPosition(startingCoordinates);
+        p->setBasePosition(baseCoordinates);
+        if(this->isOnTheLeftside){
+          p->setOrientation(PLAYER_ORIENTATION_RIGHT);
+        }else{
+          p->setOrientation(PLAYER_ORIENTATION_LEFT);
+        }
+        delete(startingCoordinates);
+        delete(baseCoordinates);
         i++;
     }
     log("Team: Equipo ordenado.", LOG_DEBUG);
+}
+
+void Team::changeSide() {
+    this->isOnTheLeftside = !this->isOnTheLeftside;
+    this->playerMovement->setSide(this->isOnTheLeftside);
+
 }
 
 void Team::increaseScore() {
@@ -84,6 +114,18 @@ void Team::increaseScore() {
 
 int Team::getScore() {
     return this->score;
+}
+
+std::string Team::getDebugLines() {
+    std::string message = "";
+    if (this->playerMovement != NULL) {
+        message = "debug: " + this->playerMovement->getDebugLines() + "\n";
+    }
+    return message;
+}
+
+void Team::resetScore(){
+  this->score = 0;
 }
 
 void Team::addScoreInfo(std::string message) {

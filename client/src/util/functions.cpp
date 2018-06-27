@@ -1,4 +1,7 @@
 #include "util/functions.h"
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Chunk *gWhistleSound;
 
 extern GameInitializer* initializer;
 extern bool quit;
@@ -82,6 +85,7 @@ void* read_server(void* argument) {
                         token = readMessage.substr(0, pos);
                         //log("msg", LOG_SPAM);
                         Player* player;
+                        GameController* gameController = initializer->getGameController();
                         Ball* ball = initializer->getGameController()->getBall();
                         Camera* camera = initializer->getGameController()->getCamera();
                         Clock* clock = initializer->getGameController()->getClock();
@@ -105,6 +109,18 @@ void* read_server(void* argument) {
                                 } else if ((key.as<std::string>() == "score")) {
                                     //log("read_server: score ", value.as<std::string>(), LOG_DEBUG);
                                     score->parseYaml(value);
+                                } else if ((key.as<std::string>() == "st")) {
+                                    //log("read_server: state ", value.as<std::string>(), LOG_DEBUG);
+                                    gameController->parseYaml(value);
+                                } else if ((key.as<std::string>() == "gameEnds")) {
+                                    //log("read_server: gameEnds ", value.as<std::string>(), LOG_DEBUG);
+                                    Mix_PlayChannel( -1, gWhistleSound, 0 );
+                                    gameController->state = GAME_END_STATE;
+                                } else if ((key.as<std::string>() == "stats")) {
+                                    if (value["val"]){
+                                      gameController->stats = value["val"].as<std::string>();
+                                      log("read_server: stats ", gameController->stats, LOG_DEBUG);
+                                    }
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
                                     player = initializer->getGameController()->getPlayer(key.as<int>());
@@ -126,7 +142,7 @@ void* read_server(void* argument) {
                     }
                 } catch (const std::exception& e) {
                     log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
-                    log("mensaje leido en error: ", readMessage, LOG_SPAM);
+                    log("mensaje leido en error:\n", readMessage, LOG_INFO);
                 }
                 nroDeMensajes++;
             }
@@ -143,8 +159,9 @@ void* drawer(void* argument) {
     log("drawer: Creado.", LOG_INFO);
     SDL_Renderer* renderer = initializer->getRenderer();
     PitchView* pitchView = initializer->getPitchView();
-    Clock* clock = initializer->getGameController()->getClock();
-    Score* score = initializer->getGameController()->getScore();
+    GameController* gameController = initializer->getGameController();
+    Clock* clock = gameController->getClock();
+    Score* score = gameController->getScore();
     const int MILISECONDS_TIMEOUT = 20;
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
     while (!quit) {
@@ -153,9 +170,43 @@ void* drawer(void* argument) {
           timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
           clock->render(renderer);
           score->render(renderer);
-          // Dibujar el minimap
           pitchView->renderMinimap(renderer);
           pitchView->render(renderer);
+          if (gameController->state == GAME_START_STATE){
+            //renderea el countdown para que inicie el partido
+            // pitchView->render(renderer);
+            pitchView->renderCountdown(renderer, gameController->stateOption);
+          }
+          if (gameController->state == HALF_START_STATE) {
+            std::string msg = "Cambio de Lado";
+            pitchView->renderMessage(renderer, msg);
+            Mix_PlayChannel( -1, gWhistleSound, 0 );
+          }
+          if (gameController->state == GAME_END_STATE) {
+            std::string msg = "Fin del partido";
+            log("DRAWER: game end state: ",gameController->stats, LOG_INFO);
+            pitchView->renderMessage(renderer, msg);
+            pitchView->renderStats(renderer, gameController->stats);
+          }
+          if (gameController->state == GOAL_STATE) {
+            std::string msg = "GOOOOOOOOOOL!!!";
+            pitchView->renderMessage(renderer, msg);
+          }
+          if (gameController->state == GOALKICK_STATE) {
+            std::string msg;
+            if((gameController->stateOption == CENTER_LEFT_START) || (gameController->stateOption == CENTER_RIGHT_START)){
+                msg = "Saque del medio";
+            }else{
+                msg = "Saque de arco";
+            }
+            pitchView->renderMessage(renderer, msg);
+            // para debug
+            //std::string ballPos = gameController->getBall()->getPosition()->toString();
+            //pitchView->renderDebug(renderer, ballPos);
+          }
+
+        //renderea la cancha de cualquier modo
+        SDL_RenderPresent(renderer);
         }
       }
     }
