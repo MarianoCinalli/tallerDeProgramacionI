@@ -169,6 +169,23 @@ Team* Pitch::getTeam(int teamNumber) {
     }
 }
 
+Team* Pitch::getTeamBySide(int teamNum){
+  Team* leftTeam;
+  Team* rightTeam;
+  if (initialSides){
+    leftTeam = this->localTeam;
+    rightTeam = this->awayTeam;
+  }else{
+      rightTeam = this->localTeam;
+      leftTeam = this->awayTeam;
+  }
+  if (teamNum==TEAM_LEFT){
+    return leftTeam;
+  }
+  else
+    return rightTeam;
+}
+
 Pitch::~Pitch() {
     if (this->localTeam != NULL) {
         delete(this->localTeam);
@@ -287,7 +304,7 @@ void Pitch::checkSteals() {
             int nearestDistance = 500; //max distance harcodeadeo TODO
             Player* nearestPlayer = NULL;
             for (Player* p : players) {
-                if (p->isSliding()) {
+                if (p->isSliding() && !p->slidedYet()) {
                     int value = p->getStealCoef();
                     int prob = rand() % 100;
                     log("Pitch: probabilidad de sacar:", prob, LOG_SPAM);
@@ -303,6 +320,7 @@ void Pitch::checkSteals() {
                 this->ball->getPlayer()->setCanMove(true);
                 this->ball->getPlayer()->setWithBall(false);
                 this->ball->isIntercepted(nearestPlayer);
+                nearestPlayer->setSlided(true);
                 // Team* team = this->getTeam(nearestPlayer->getTeam());
                 // std::string user = teams[team].front();
                 // this->setActivePlayer(user, nearestPlayer); //which user?

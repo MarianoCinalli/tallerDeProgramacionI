@@ -41,6 +41,7 @@ class Pitch {
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
         Team* getTeam(int teamNumber);
+        Team* getTeamBySide(int teamNum);
         std::string getScoresYAML();
         std::string getDebugLines();
         void changeSides();
