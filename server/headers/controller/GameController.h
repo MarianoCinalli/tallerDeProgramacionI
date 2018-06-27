@@ -34,6 +34,7 @@ class GameController {
         Timer* realTimer;
         int state;
         int stateOption;
+        int stateTime;
         bool end;
         int time;
         bool isFistHalf;

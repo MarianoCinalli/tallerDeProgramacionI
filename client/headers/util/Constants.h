@@ -30,6 +30,13 @@ enum states {
   GAME_END_STATE = 7
 };
 
+//state vars
+const int CENTER_LEFT_START = 0;
+const int CENTER_RIGHT_START = 1;
+const int LEFT_START = 2;
+const int RIGHT_START = 3;
+
+
 enum KeyboardBools {
     KUP = 0,
     KDOWN = 1,

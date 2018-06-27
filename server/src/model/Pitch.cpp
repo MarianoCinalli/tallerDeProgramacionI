@@ -38,7 +38,6 @@ int Pitch::goalkick() {
             return CENTER_RIGHT_START;
         }
     } else{
-
     if (x < 60) {
         return LEFT_START;
     } else if (x > 1488) {

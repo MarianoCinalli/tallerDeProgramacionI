@@ -10,6 +10,7 @@ GameController::GameController(Pitch* pitch, Camera* camera, Timer* timer) {
     this->realTimer = new Timer(45);
     this->state = GAME_START_STATE;
     this->stateOption = 0;  //5 seconds to start in game start
+    this->stateTime = -1;
     this->isFistHalf = true;
     this->users[0] = std::set<std::string>();
     this->users[1] = std::set<std::string>();
@@ -121,9 +122,15 @@ void GameController::checkState() {
                 break;
             }
         case GOALKICK_STATE: {
-                this->checkGoal();
-                this->pitch->setStart(this->stateOption);
-                this->state = NORMAL_STATE;
+                if (this->stateTime < 0){
+                  this->stateTime = SDL_GetTicks();
+                  this->checkGoal();
+                }
+                if ((SDL_GetTicks() - this->stateTime) > 1000){ //1000 miliseconds
+                  this->pitch->setStart(this->stateOption);
+                  this->stateTime = -1;
+                  this->state = NORMAL_STATE;
+                }
                 break;
             }
         case HALF_START_STATE: {
