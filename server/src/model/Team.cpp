@@ -90,6 +90,11 @@ void Team::order() {
         );
         p->setPosition(startingCoordinates);
         p->setBasePosition(baseCoordinates);
+        if(this->isOnTheLeftside){
+          p->setOrientation(PLAYER_ORIENTATION_RIGHT);
+        }else{
+          p->setOrientation(PLAYER_ORIENTATION_LEFT);
+        }
         delete(startingCoordinates);
         delete(baseCoordinates);
         i++;
@@ -100,6 +105,7 @@ void Team::order() {
 void Team::changeSide() {
     this->isOnTheLeftside = !this->isOnTheLeftside;
     this->playerMovement->setSide(this->isOnTheLeftside);
+
 }
 
 void Team::increaseScore() {
