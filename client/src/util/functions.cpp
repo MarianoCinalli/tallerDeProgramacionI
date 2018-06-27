@@ -169,7 +169,6 @@ void* drawer(void* argument) {
           clock->render(renderer);
           score->render(renderer);
           pitchView->renderMinimap(renderer);
-
           pitchView->render(renderer);
           if (gameController->state == GAME_START_STATE){
             //renderea el countdown para que inicie el partido
@@ -189,6 +188,18 @@ void* drawer(void* argument) {
             std::string msg = "Fin del partido";
             pitchView->renderMessage(renderer, msg);
             pitchView->renderMessage(renderer, gameController->stats);
+          }
+          if (gameController->state == GOALKICK_STATE) {
+            std::string msg;
+            if((gameController->stateOption == CENTER_LEFT_START) || (gameController->stateOption == CENTER_RIGHT_START)){
+                msg = "GOOOOOOOOOOL!!!";
+            }else{
+                msg = "Saque de arco";
+            }
+            pitchView->renderMessage(renderer, msg);
+            // para debug
+            // std::string ballPos = gameController->getBall()->getPosition()->toString();
+            // pitchView->renderDebug(renderer, ballPos);
           }
 
         //renderea la cancha de cualquier modo

@@ -28,7 +28,7 @@ int Pitch::goalkick() {
     int x = ball->getPosition()->getX();
     int y = ball->getPosition()->getY();
     int height = ball->getHeight();
-    if (((x < 60) || (x > 1488)) && ((y < 600) && (y > 400)) && (height < GOAL_HEIGHT)) {
+    if (((x < 60) || (x > 1488)) && ((y < TOP_POST_POSITION) && (y > BOTTOM_POST_POSITION)) && (height < GOAL_HEIGHT)) {
         log("PITCH: x, ", x, LOG_DEBUG);
         log("PITCH: y, ", y, LOG_DEBUG);
         // freezePlayersUntilKick()
@@ -38,7 +38,6 @@ int Pitch::goalkick() {
             return CENTER_RIGHT_START;
         }
     } else{
-
     if (x < 60) {
         return LEFT_START;
     } else if (x > 1488) {
