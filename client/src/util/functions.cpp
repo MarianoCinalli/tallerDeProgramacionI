@@ -186,8 +186,9 @@ void* drawer(void* argument) {
             std::string msg = "Fin del partido";
             log("DRAWER: game end state: ",gameController->stats, LOG_INFO);
             pitchView->renderMessage(renderer, msg);
-            pitchView->renderMessage(renderer, gameController->stats);
-          } if (gameController->state == GOAL_STATE) {
+            pitchView->renderStats(renderer, gameController->stats);
+          }
+          if (gameController->state == GOAL_STATE) {
             std::string msg = "GOOOOOOOOOOL!!!";
             pitchView->renderMessage(renderer, msg);
           }
@@ -200,8 +201,8 @@ void* drawer(void* argument) {
             }
             pitchView->renderMessage(renderer, msg);
             // para debug
-            std::string ballPos = gameController->getBall()->getPosition()->toString();
-            pitchView->renderDebug(renderer, ballPos);
+            //std::string ballPos = gameController->getBall()->getPosition()->toString();
+            //pitchView->renderDebug(renderer, ballPos);
           }
 
         //renderea la cancha de cualquier modo

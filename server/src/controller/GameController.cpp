@@ -382,17 +382,17 @@ std::string GameController::getStatsToBroadcast(bool allMessage) {
     Team* team;
     // Estadisticas del equipo local
     team = this->pitch->getTeam(0);
-    message += team->getName() + " ";
+    message += team->getName() + "|";
     for(std::string s : team->scoreInfo){
-      message += s + " "; // Separarador
+      message += s + "|"; // Separarador
     }
     // Estadisticas del equipo visitante
     team = this->pitch->getTeam(1);
-    message += team->getName() + " ";
+    message += team->getName() + "|";
     for(std::string s : team->scoreInfo){
-      message += s + " "; // Separarador
+      message += s + "|"; // Separarador
     }
-      message += "\n";
+    message += "\n";
     if (allMessage){
       // message += this->getStateAsYaml();
     }
