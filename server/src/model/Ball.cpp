@@ -107,7 +107,7 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
             int passOrientation = this->player->getOrientation();
             this->velocity->accelerate(passOrientation);
         }
-        dominated = false; //HACK? para que sirve?
+        this->dominated = false; //HACK? para que sirve?
         this->player->setWithBall(this->dominated);
         this->isInAPass = true;
         if(highPass) {
@@ -136,22 +136,6 @@ float calculatePassPower(float passPower){
   return finalPassPower;
 }
 
-/*void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
-    if (this->isDominated()) {
-        this->interceptable = false;
-        this->velocity = velocity;
-        log(this->velocity->toString(),LOG_DEBUG);
-        dominated = false;
-        this->player->setWithBall(this->dominated);
-        this->isInAPass = true;
-        if(highPass) {
-            this->isInAHighPass = true;
-        }
-        this->passPower = passPower;
-        this->initialPassPower = passPower;
-        this->startingPassPosition = this->position;
-    }
-}*/
 void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     if (this->isDominated()) {
         this->interceptable = false;
@@ -184,8 +168,8 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
-        this->calculateDominatedPosition();
         this->orientation = this->player->getOrientation();
+        this->calculateDominatedPosition();
     }
     if (this->isInAPass) {
         this->timePassing += 1;
@@ -267,7 +251,7 @@ void Ball::calculateHeight() {
 void Ball::calculateDominatedPosition() {
     int x = this->player->getPosition()->getX(); // TODO: ver q no viole independencia
     int y = this->player->getPosition()->getY();
-    switch (this->player->getOrientation()) {
+    switch (this->orientation) {
         case PLAYER_ORIENTATION_RIGHT:
             x = (x + CUERPO_JUGADOR);
             break;

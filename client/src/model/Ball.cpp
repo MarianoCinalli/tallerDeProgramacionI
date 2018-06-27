@@ -39,7 +39,7 @@ void Ball::parseYaml(YAML::Node node){
   }
   if (node["hg"]){
     this->height = node["hg"].as<int>();
-  }
+  } 
   if (node["or"]){
     this->orientation = node["or"].as<int>();
   }
