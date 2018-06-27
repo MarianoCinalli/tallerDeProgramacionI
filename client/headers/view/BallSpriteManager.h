@@ -11,8 +11,6 @@
 class BallSpriteManager {
     private:
         Ball* ball;
-        int ballOrientation;
-        bool highPassInProgress;
         Texture* spriteSheet;
         SDL_Rect sprite;
         int rollingCount;
@@ -25,7 +23,6 @@ class BallSpriteManager {
     private:
         SDL_Rect getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates);
         void cambioOffset();
-        bool orientationChange();
         void setMovingBallSprite();
         void setStillBall();
 };

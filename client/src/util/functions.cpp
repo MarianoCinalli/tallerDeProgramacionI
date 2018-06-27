@@ -117,10 +117,8 @@ void* read_server(void* argument) {
                                     Mix_PlayChannel( -1, gWhistleSound, 0 );
                                     gameController->state = GAME_END_STATE;
                                 } else if ((key.as<std::string>() == "stats")) {
-                                    if (value["val"]){
-                                      gameController->stats = value["val"].as<std::string>();
-                                      log("read_server: stats ", gameController->stats, LOG_DEBUG);
-                                    }
+                                    log("read_server: stats ", value.as<std::string>(), LOG_DEBUG);
+                                    gameController->stats = value.as<std::string>();
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
                                     player = initializer->getGameController()->getPlayer(key.as<int>());
@@ -142,7 +140,7 @@ void* read_server(void* argument) {
                     }
                 } catch (const std::exception& e) {
                     log("read_client: yaml error .what() = ", e.what(), LOG_ERROR);
-                    log("mensaje leido en error:\n", readMessage, LOG_INFO);
+                    log("mensaje leido en error: ", readMessage, LOG_SPAM);
                 }
                 nroDeMensajes++;
             }
@@ -184,11 +182,9 @@ void* drawer(void* argument) {
           }
           if (gameController->state == GAME_END_STATE) {
             std::string msg = "Fin del partido";
-            log("DRAWER: game end state: ",gameController->stats, LOG_INFO);
             pitchView->renderMessage(renderer, msg);
-            pitchView->renderStats(renderer, gameController->stats);
-          }
-          if (gameController->state == GOAL_STATE) {
+            pitchView->renderMessage(renderer, gameController->stats);
+          } if (gameController->state == GOAL_STATE) {
             std::string msg = "GOOOOOOOOOOL!!!";
             pitchView->renderMessage(renderer, msg);
           }
@@ -201,8 +197,8 @@ void* drawer(void* argument) {
             }
             pitchView->renderMessage(renderer, msg);
             // para debug
-            //std::string ballPos = gameController->getBall()->getPosition()->toString();
-            //pitchView->renderDebug(renderer, ballPos);
+            std::string ballPos = gameController->getBall()->getPosition()->toString();
+            pitchView->renderDebug(renderer, ballPos);
           }
 
         //renderea la cancha de cualquier modo

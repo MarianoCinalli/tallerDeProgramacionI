@@ -46,7 +46,6 @@ class PitchView {
         void addBallView(BallSpriteManager* ballView);
         void renderMinimap(SDL_Renderer* screen);
         void renderMessage(SDL_Renderer* screen, std::string msg);
-        void renderStats(SDL_Renderer* screen, std::string msg);
         void renderDebug(SDL_Renderer* screen, std::string msg);
 
         void renderCountdown(SDL_Renderer* screen, int countdown);

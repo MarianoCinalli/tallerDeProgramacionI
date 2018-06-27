@@ -78,10 +78,6 @@ const int PLAYERS_PER_TEAM = 7;
 const int NORMAL_VELOCITY = 2;
 const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
-const float BALL_DECELERATE_CONST = 1.7;
-const float PASS_SPEED = 1.9;
-
-const int PASS_HELPING_CONST = 100;
 
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;
@@ -90,7 +86,8 @@ const int KEEPER_STEAL_COEF = 100;
 const int DEFENSE_STEAL_COEF = 80;
 const int MIDFIELD_STEAL_COEF = 70;
 const int STRIKER_STEAL_COEF = 60;
-
+const int PASS_HELPING_CONST = 100;
+const int PASS_SPEED = 1.9;
 
 //counts
 const int KICK_COUNT = 35;

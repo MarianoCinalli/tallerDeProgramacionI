@@ -3,9 +3,7 @@
 BallSpriteManager::BallSpriteManager(Texture* spriteSheet, Ball* ball) {
     log("BallSpriteManager: Creando vista...", LOG_INFO);
     this->ball = ball;
-    this->ballOrientation = 0;
     this->dibujoConOffset = false;
-    this->highPassInProgress = false;
     this->rollingCount = 0;
     this->spriteSheet = spriteSheet;
     this->sprite = {
@@ -69,66 +67,18 @@ void BallSpriteManager::setMovingBallSprite() {
     }
     int height = this->ball->getHeight();
     int level = 0;
-    if (height == 0) {
-        if (this->highPassInProgress) {
-            this->highPassInProgress = false;
-        }
-        int orientationOffset = 0;
-        if (this->orientationChange()) {
-            this->ballOrientation = (this->ball->getOrientation());
-            switch (this->ballOrientation) {
-                case PLAYER_ORIENTATION_UP: 
-                    orientationOffset = 1;
-                    break;
-                case PLAYER_ORIENTATION_RIGHT: 
-                    orientationOffset = 2;
-                    break;
-                case PLAYER_ORIENTATION_DOWN: 
-                    orientationOffset = 3;
-                    break;
-                case PLAYER_ORIENTATION_LEFT: 
-                    orientationOffset = 4;
-                    break;
-            }
-            this->sprite.y = ( ( 21 + orientationOffset ) * SPRITE_SIZE );
-            this->sprite.x = 0;
-        }
         if ((rollingCount % ROLLING_DIVISOR) == 0) {
-            log("BallSpriteManager: Creando el sprite del balon.", LOG_SPAM);
-            if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != ( 21 + orientationOffset) * SPRITE_SIZE)) {
+            log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
+            level = (height / BALL_DECELERATE_CONST);
+            if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (25 + level) * SPRITE_SIZE)) {
                 this->sprite.x = 0; // Reinicio la secuencia.
-                this->sprite.y = ((21 + orientationOffset) * SPRITE_SIZE);
-            } else {
-                this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-            }
-        } 
-    }
-    else {
-        if ((rollingCount % ROLLING_DIVISOR) == 0) {
-            if (!this->highPassInProgress) {
                 this->sprite.y = ((25 + level) * SPRITE_SIZE);
-                this->sprite.x = 0;
-                this->highPassInProgress = true;
             }
             else {
-                log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
-                level = (height / BALL_DECELERATE_CONST);
-                if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (25 + level) * SPRITE_SIZE)) {
-                    this->sprite.x = 0; // Reinicio la secuencia.
-                    this->sprite.y = ((25 + level) * SPRITE_SIZE);
-                } 
-                else {
-                    this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-                }
+                this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
             }
-        }
-        //TODO cambiar offset aca dependiendo del rolling count
-        rollingCount ++;
     }
-}
-
-bool BallSpriteManager::orientationChange() {
-    return (this->ballOrientation != this->ball->getOrientation());
+    rollingCount ++;
 }
 
 void BallSpriteManager::cambioOffset() {

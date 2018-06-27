@@ -13,13 +13,6 @@ void GameControllerProxy::removeUser(std::string user) {
     update_model_mutex.unlock();
 }
 
-bool GameControllerProxy::gameEnd(){
-  update_model_mutex.lock();
-  bool result = this->gameController->gameEnd();
-  update_model_mutex.unlock();
-  return result;
-}
-
 void GameControllerProxy::execute(Action* action, std::string team) {
     update_model_mutex.lock();
     this->gameController->execute(action, team);
@@ -77,7 +70,7 @@ std::string GameControllerProxy::getMessageToBroadcast(bool allPlayers) {
 
 std::string GameControllerProxy::getStatsToBroadcast() {
     // No hace falta bloquear.
-    return this->gameController->getStatsToBroadcast(true);
+    return this->gameController->getStatsToBroadcast();
 }
 
 GameControllerProxy::~GameControllerProxy() {

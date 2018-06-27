@@ -35,11 +35,11 @@ void Ball::parseYaml(YAML::Node node){
 
   }
   if (node["st"]){
-    this->still = node["st"].as<bool>();
+    this->still = node["st"].as<int>();
   }
   if (node["hg"]){
     this->height = node["hg"].as<int>();
-  } 
+  }
   if (node["or"]){
     this->orientation = node["or"].as<int>();
   }

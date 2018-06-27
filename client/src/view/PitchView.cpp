@@ -122,43 +122,12 @@ void PitchView::renderMessage(SDL_Renderer* screen, std::string message){
                 log("No se pudo mostrar el texto", LOG_ERROR);
         }
         else{
-                SDL_Rect renderQuad1 = { (SCREEN_WIDTH - messageTexture.getWidth()) / 2, 100, messageTexture.getWidth(), messageTexture.getHeight() };
+                SDL_Rect renderQuad1 = { (SCREEN_WIDTH - messageTexture.getWidth()) / 2, 150, messageTexture.getWidth(), messageTexture.getHeight() };
                 SDL_RenderCopyEx(screen, messageTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
                 // SDL_RenderPresent(screen);
         }
 }
 
-void PitchView::renderStats(SDL_Renderer* screen, std::string message){
-    SDL_Rect cancha;
-    cancha.x = 0;
-    cancha.y = CAMERA_OFFSET;
-    cancha.w = SCREEN_WIDTH;
-    cancha.h = SCREEN_HEIGHT - CAMERA_OFFSET;
-    SDL_RenderSetViewport( screen, &cancha ); //Render texture to screen
-    SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
-    Texture messageTexture;
-    int altura = 150;
-
-    std::string s = message;
-    std::string delimiter = "|";
-
-    size_t pos = 0;
-    std::string token;
-    while ((pos = s.find(delimiter)) != std::string::npos) {
-        token = s.substr(0, pos);
-        std::replace(token.begin(), token.end(), '-', ':');
-        
-        if (!messageTexture.loadFromRenderedText(token, screen, SDL_WHITE, this->font)) {
-            log("No se pudo mostrar el texto", LOG_ERROR);
-        } else {
-            SDL_Rect renderQuad1 = { (SCREEN_WIDTH - messageTexture.getWidth()) / 2, altura, messageTexture.getWidth(), messageTexture.getHeight() };
-            SDL_RenderCopyEx(screen, messageTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
-        }
-
-        altura += 50;
-        s.erase(0, pos + delimiter.length());
-    }
-}
 
 void PitchView::renderDebug(SDL_Renderer* screen, std::string message){
         SDL_Rect cancha;

@@ -21,10 +21,10 @@ class Ball {
         int orientation;
         bool dominated;
         bool isInAPass;
+        bool still;
         bool isInAHighPass;
         bool interceptable;
         int passDirection;
-        bool still;
         Coordinates* startingPassPosition;
         int decelerateDistance;
         int timePassing;
@@ -38,15 +38,14 @@ class Ball {
         void setPosition(Coordinates* pos);
         Velocity* getVelocity();
         int getHeight();
+        void isPassed(Velocity* velocity, float passPower, bool highPass);
         Player* getPlayer();
         void setPlayer(Player* player);
-        void removePlayer();
         bool isDominated();
         bool isInterceptable();
         void restart(int position);
         void isIntercepted(Player* player);
         void isPassed(int direction, float passPower, bool highPass);
-        void isPassed(Velocity* velocity, float passPower, bool highPass);
         void updatePosition();
 
         void calculateDominatedPosition();

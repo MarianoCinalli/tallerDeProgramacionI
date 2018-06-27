@@ -46,8 +46,8 @@ class Player {
         int getOrientation();
         int getKickPower();
         int getId();
-        bool isAHighPass();
         bool isThisPlayer(Player* player);
+        bool isAHighPass();
         bool slidedYet();
         bool hasKicked();
         bool isSliding();
@@ -71,7 +71,6 @@ class Player {
         void setTrayectory(Velocity* trayectory);
         void setWithBall(bool dominated);
         bool isWithBall();
-        void cantMoveUntilPass();
         void setCanMove(bool canMove);
 
         // Cambia la posicion con respecto a su velocidad.

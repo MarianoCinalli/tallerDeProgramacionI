@@ -6,6 +6,7 @@ Ball::Ball(Coordinates* position) {
     this->passPower = 0;
     this->initialPassPower = 0;
     this->height = 0;
+    this->still = true;
     this->heightLevel = 0;
     this->orientation = 0;
     this->dominated = true;
@@ -15,7 +16,6 @@ Ball::Ball(Coordinates* position) {
     this->passDirection = 0;
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
-    this->still = true;
     this->timePassing = 0; // corrector para frames TODO
     this->startingPassPosition = new Coordinates(800, 500); // Esto esta perdiendo memoria?
     this->interceptable = true;
@@ -71,10 +71,6 @@ void Ball::setPlayer(Player* player) {
     this->velocity = this->player->getVelocity();
 }
 
-void Ball::removePlayer() {  //TODO ver
-    this->player = NULL;
-}
-
 bool Ball::isDominated() {
     return this->dominated;
 }
@@ -85,56 +81,12 @@ bool Ball::isInterceptable() {
 
 void Ball::isIntercepted(Player* player) {
     this->stopRolling();
-    this->still = false;
     this->interceptable = false;
     this->setPlayer(player);
     this->orientation = player->getOrientation();
     log("Ball: Pelota interceptada por jugador.", LOG_DEBUG);
 }
 //const float PASS_SPEED = 3.3;
-
-void Ball::isPassed(int direction, float passPower, bool highPass) {
-    if (this->isDominated()) {
-        this->timePassing = 0;
-        this->interceptable = false;
-        this->still = false;
-        Velocity* passDirection = new Velocity(0,0);
-        passDirection->set(this->player->getVelocity());  //direction;
-        this->velocity = passDirection;
-        log("BALL: velocidad ", this->velocity, LOG_DEBUG);
-        if (passDirection->isZero()) {
-            log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
-            int passOrientation = this->player->getOrientation();
-            this->velocity->accelerate(passOrientation);
-        }
-        this->dominated = false; //HACK? para que sirve?
-        this->player->setWithBall(this->dominated);
-        this->isInAPass = true;
-        if(highPass) {
-            this->isInAHighPass = true;
-            this->passPower = passPower*PASS_SPEED*1.3; //para que sea mas sensible el pase elevado
-            this->initialPassPower = this->passPower;
-        }
-        else{
-          this->passPower = passPower*PASS_SPEED;
-          this->initialPassPower = this->passPower;
-        }
-        this->startingPassPosition = this->position;
-    }
-}
-//const float BALL_DECELERATE_CONST = 1.7;
-
-float calculatePassPower(float passPower){
-  float finalPassPower;
-  if (passPower >  3){
-    finalPassPower = passPower -BALL_DECELERATE_CONST;
-  }
-  else{
-    finalPassPower = passPower -BALL_DECELERATE_CONST/2;
-
-  }
-  return finalPassPower;
-}
 
 void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     if (this->isDominated()) {
@@ -162,15 +114,58 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
           this->initialPassPower = this->passPower;
         }
         this->startingPassPosition = this->position;
-        this->removePlayer();
     }
 }
+
+void Ball::isPassed(int direction, float passPower, bool highPass) {
+    if (this->isDominated()) {
+        this->timePassing = 0;
+        this->interceptable = false;
+        Velocity* passDirection = new Velocity(0,0);
+        passDirection->set(this->player->getVelocity());  //direction;
+        this->velocity = passDirection;
+        log("BALL: velocidad ", this->velocity, LOG_DEBUG);
+        if (passDirection->isZero()) {
+            log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
+            int passOrientation = this->player->getOrientation();
+            this->velocity->accelerate(passOrientation);
+        }
+        this->dominated = false; //HACK? para que sirve?
+        this->player->setWithBall(false);
+        this->isInAPass = true;
+        if(highPass) {
+            this->isInAHighPass = true;
+            this->passPower = passPower*PASS_SPEED*1.3; //para que sea mas sensible el pase elevado
+            this->initialPassPower = this->passPower;
+        }
+        else{
+          this->passPower = passPower*PASS_SPEED;
+          this->initialPassPower = this->passPower;
+        }
+        this->startingPassPosition = this->position;
+    }
+}
+const float BALL_DECELERATE_CONST = 1.7;
+
+float calculatePassPower(float passPower){
+  float finalPassPower;
+  if (passPower >  3){
+    finalPassPower = passPower -BALL_DECELERATE_CONST;
+  }
+  else{
+    finalPassPower = passPower -BALL_DECELERATE_CONST/2;
+
+  }
+  return finalPassPower;
+}
+
 const int TIME_BALL_NO_INTERCEPT = 6;
+
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
-        this->orientation = this->player->getOrientation();
         this->calculateDominatedPosition();
+        this->orientation = player->getOrientation();
     }
     if (this->isInAPass) {
         this->timePassing += 1;
@@ -179,19 +174,17 @@ void Ball::updatePosition() {
             if(this->height > BALL_DECELERATE_CONST){
                 this->interceptable = false;
             }
-            log("Ball: altura del balon: ", this->height, LOG_SPAM);
-            log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
+            log("Ball: altura del balon: ", this->height, LOG_DEBUG);
+            log("Ball: poder de pase: ", this->passPower, LOG_DEBUG);
         }
         log("Ball: paso este tiempo:", timePassing, LOG_SPAM);
         if (!this->interceptable && (timePassing > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
-        if(this->position->addX(this->velocity->getFloatX()*this->passPower)<0){
-          this->velocity->scaleY(-1);
+        if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
+          this->velocity->scaleX(-1);
         }
-//        if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
-//          this->velocity->scaleX(-1);
-        if(this->position->addY(this->velocity->getFloatY()*this->passPower)<0){
+        if(this->position->addY(this->velocity->getComponentY()*this->passPower)<0){
           this->velocity->scaleY(-1);
         }
     }
@@ -199,7 +192,7 @@ void Ball::updatePosition() {
         if (this->timePassing % BALL_DECELERATE_TIME == 0) {
             // this->passPower -= BALL_DECELERATE_CONST;
             this->passPower = calculatePassPower(this->passPower);
-            if (this->passPower< 1){
+            if (this->passPower< 0){
               this->timePassing = 0;
               this->stopRolling();
             }
@@ -255,7 +248,7 @@ void Ball::calculateHeight() {
 void Ball::calculateDominatedPosition() {
     int x = this->player->getPosition()->getX(); // TODO: ver q no viole independencia
     int y = this->player->getPosition()->getY();
-    switch (this->orientation) {
+    switch (this->player->getOrientation()) {
         case PLAYER_ORIENTATION_RIGHT:
             x = (x + CUERPO_JUGADOR);
             break;
@@ -277,7 +270,6 @@ void Ball::calculateDominatedPosition() {
 
 
 void Ball::stopRolling() {
-    this->still = true;
     this->velocity->stop();
     this->isInAPass = false;
     this->isInAHighPass = false;
@@ -301,7 +293,7 @@ std::string Ball::getAsYaml() {
     message += "ba:\n";
     message += " cx: " + std::to_string(this->position->getX()) + "\n";
     message += " cy: " + std::to_string(this->position->getY()) + "\n";
-    message += " st: " + std::to_string(this->still) + "\n";
+    message += " st: " + std::to_string(this->velocity->isZero()) + "\n";
     message += " hg: " + std::to_string(this->height) + "\n";
     message += " or: " + std::to_string(this->orientation) + "\n";
     return message;

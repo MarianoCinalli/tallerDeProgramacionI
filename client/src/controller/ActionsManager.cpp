@@ -131,8 +131,8 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     currentTime = currentTime - this->kickTime;
                     int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
                     action = new KickingAction(passPower);
-                    log("poder de pase", passPower, LOG_SPAM);
-                    log("tiempo de pase", currentTime, LOG_SPAM);
+                    log("poder de pase", passPower, LOG_DEBUG);
+                    log("tiempo de pase", currentTime, LOG_DEBUG);
                     break;
                 }
                 case SDLK_d:
@@ -141,8 +141,8 @@ Action* ActionsManager::getAction(SDL_Event event) {
                     currentTime = currentTime - this->kickTime;
                     int passPower = customMap(currentTime);    //TODO constante a definir, cuanto pass power
                     action = new HighKickingAction(passPower);
-                    log("poder de pase", passPower, LOG_SPAM);
-                    log("tiempo de pase", currentTime, LOG_SPAM);
+                    log("poder de pase", passPower, LOG_DEBUG);
+                    log("tiempo de pase", currentTime, LOG_DEBUG);
                     break;
                   }
             }

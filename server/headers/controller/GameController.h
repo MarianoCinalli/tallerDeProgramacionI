@@ -2,7 +2,6 @@
 #include "controller/actions/Action.h"
 #include "view/Camera.h"
 #include "util/Timer.h"
-#include "util/Constants.h"
 #include <set>
 
 /*
@@ -46,6 +45,7 @@ class GameController {
         void execute(Action* action, std::string user);
         // Para actualizar los modelos.
         void updatePlayers();
+        void updateBall();
         void updatePitch();
         void update();
         void checkState();
@@ -53,8 +53,6 @@ class GameController {
         // Dependiendo de la posicion del active player, mueve la camara.
         void updateCameraPosition();
         // Dependiendo del estado del juego devuelve si termino o no.
-        void updateBall();
-        Velocity* calculatePassVelocity(Player* player);
         void addUser(std::string user, int teamNum, int formation);
         Player* getActivePlayer(std::string user);
         int getUsersInTeam(int teamNumber);
@@ -65,10 +63,10 @@ class GameController {
         void startGame();
         bool hasGameStarted();
         bool shouldGameEnd();
-        bool gameEnd();
         void setEnd();
+        Velocity* calculatePassVelocity(Player* player);
         std::string getMessageToBroadcast(bool allPlayers);
-        std::string getStatsToBroadcast(bool allMessage);
+        std::string getStatsToBroadcast();
         std::string getDebugLines();
         ~GameController();
     private:

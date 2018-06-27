@@ -23,6 +23,7 @@ int Coordinates::setX(int otherX) {
       return -1;
     }
     return 0;
+
 }
 
 int Coordinates::setY(int otherY) {
