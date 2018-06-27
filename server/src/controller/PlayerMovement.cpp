@@ -2,7 +2,6 @@
 
 PlayerMovement::PlayerMovement() {
     log("PlayerMovement: Creando movimientos para los jugadores. Si no se especifica una formacion, no voy a tener areas...", LOG_DEBUG);
-
     this->playerAreas = NULL;
     this->isLeftsideTeam = true;
 }
