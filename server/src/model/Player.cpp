@@ -17,7 +17,7 @@ Player::Player(Coordinates* position, int team) {
     this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
-    this->wasSliding = false; //Deberia estar en PlayerSpriteManager
+    this->slided = false; //Deberia estar en PlayerSpriteManager
     this->kicking = false;
     this->kicked = false;
     this->canMove = true;
@@ -392,23 +392,24 @@ bool Player::isSliding() {
     return this->sliding;
 }
 
-bool Player::wasSlidingYet() {
-    return this->wasSliding;
+bool Player::slidedYet() {
+    return this->slided;
 }
 
 void Player::startsSliding() {
     if (!this->kicking && !this->withBall) {
         this->sliding = true;
+        this->slided = false;
     }
 }
 
-void Player::isAlreadySliding() {
-    this->wasSliding = true;
+void Player::setSlided(bool s) {
+    this->slided = s;
 }
 
 void Player::stopSliding() {
     this->sliding = false;
-    this->wasSliding = false;
+    this->slided = false;
 }
 
 void Player::copyStats(Player* copyTo) {

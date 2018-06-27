@@ -94,6 +94,7 @@ void GameController::execute(Action* action, std::string user) {
 
 void GameController::updatePitch(){
   this->pitch->changeBallOwnership();
+  // if
   this->pitch->checkSteals();
 }
 

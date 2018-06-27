@@ -22,7 +22,7 @@ class Player {
         Coordinates* position;
         Coordinates* basePosition;
         bool sliding;
-        bool wasSliding;
+        bool slided;
         bool kicking;
         bool kicked;
         bool canMove;
@@ -47,7 +47,7 @@ class Player {
         int getKickPower();
         int getId();
         bool isAHighPass();
-        bool wasSlidingYet();
+        bool slidedYet();
         bool hasKicked();
         bool isSliding();
         bool isKicking();
@@ -76,6 +76,7 @@ class Player {
         void updatePosition(Coordinates* positionToFollow);
         void updateKicking();
         void setKicked(bool);
+        void setSlided(bool s);   //TODO mejorar nombres de slide!
         void updateSliding(Coordinates*);
         void updateState(Coordinates* positionToFollow);
         void setOrientation(int orientation);
@@ -90,7 +91,6 @@ class Player {
         void stopsRunningFast();
         void startsSliding();
         void stopSliding();
-        void isAlreadySliding();   //TODO mejorar nombres de slide!
         void startsKicking(int power, bool highPass);
         void stopKicking();
         void isAlreadyKicking();
