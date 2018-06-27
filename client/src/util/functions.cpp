@@ -180,10 +180,6 @@ void* drawer(void* argument) {
             pitchView->renderMessage(renderer, msg);
             Mix_PlayChannel( -1, gWhistleSound, 0 );
           }
-          if (gameController->state == GOAL_STATE) {
-            std::string msg = "GOOOOOOOOOOL!!!";
-            pitchView->renderMessage(renderer, msg);
-          }
           if (gameController->state == GAME_END_STATE) {
             std::string msg = "Fin del partido";
             pitchView->renderMessage(renderer, msg);
