@@ -116,17 +116,31 @@ void GameController::checkState() {
     switch (this->state) {
         case NORMAL_STATE: {
                 this->stateOption = this->pitch->goalkick();
+                if((this->stateOption == CENTER_LEFT_START) || (this->stateOption == CENTER_RIGHT_START)){
+                  this->state = GOAL_STATE;
+                }else
                 if (this->stateOption >= 0) {
                     this->state = GOALKICK_STATE;
                 }
                 break;
             }
+          case GOAL_STATE: {
+                  if (this->stateTime < 0){
+                    this->stateTime = SDL_GetTicks();
+                    this->checkGoal();
+                  }
+                  if ((SDL_GetTicks() - this->stateTime) > 1000){ //1000 miliseconds
+                    // this->pitch->setStart(this->stateOption);
+                    this->stateTime = -1;
+                    this->state = GOALKICK_STATE;
+                  }
+                  break;
+              }
         case GOALKICK_STATE: {
                 if (this->stateTime < 0){
                   this->stateTime = SDL_GetTicks();
-                  this->checkGoal();
                 }
-                if ((SDL_GetTicks() - this->stateTime) > 1000){ //1000 miliseconds
+                if ((SDL_GetTicks() - this->stateTime) > 800){ //1000 miliseconds
                   this->pitch->setStart(this->stateOption);
                   this->stateTime = -1;
                   this->state = NORMAL_STATE;
@@ -142,6 +156,7 @@ void GameController::checkState() {
                 this->pitch->changeSides();
                 this->pitch->setStart(this->stateOption);
                 this->timer->resume();
+                this->stateTime = -1;
                 this->state = NORMAL_STATE;
               }
                 break;
@@ -155,6 +170,7 @@ void GameController::checkState() {
                     this->state = GOALKICK_STATE;
                     this->stateOption = CENTER_LEFT_START;
                 }
+                this->stateTime = -1;
                 break;
             }
           case GAME_END_STATE: {
@@ -163,6 +179,7 @@ void GameController::checkState() {
                   this->timer->stop();
                 }
                   if ((SDL_GetTicks() - this->stateTime) > 10000){//10 seconds for stats
+                    this->stateTime = -1;
                   this->setEnd();
                 }
                   break;
