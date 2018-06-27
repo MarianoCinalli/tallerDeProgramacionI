@@ -117,6 +117,8 @@ void* broadcast_to_clients(void* argument) {
     }
     // Termino el juego
     broadcaster->broadcastGameEnded();
+    sleep(2); //HACK time to get your shit together
+    broadcaster->broadcastGameStats();
     delete(broadcaster);
     log("broadcast_to_clients: Finalizado.", LOG_INFO);
     return NULL;

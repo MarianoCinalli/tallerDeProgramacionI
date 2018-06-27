@@ -24,3 +24,9 @@ void Broadcaster::broadcastGameEnded() {
     std::string message = "gameEnds:";
     connectionManager->sendToAll(message);
 }
+
+void Broadcaster::broadcastGameStats() {
+    log("broadcast_to_clients: Broadcasteando estadisticas del partido...", LOG_INFO);
+    std::string message = "stats:";
+    connectionManager->sendToAll(message);
+}

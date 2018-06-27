@@ -112,6 +112,12 @@ void* read_server(void* argument) {
                                 } else if ((key.as<std::string>() == "st")) {
                                     //log("read_server: state ", value.as<std::string>(), LOG_DEBUG);
                                     gameController->parseYaml(value);
+                                } else if ((key.as<std::string>() == "gameEnds")) {
+                                    //log("read_server: gameEnds ", value.as<std::string>(), LOG_DEBUG);
+                                    Mix_PlayChannel( -1, gWhistleSound, 0 );
+                                    gameController->state = GAME_END_STATE;
+                                } else if ((key.as<std::string>() == "stats")) {
+                                    //log("read_server: stats ", value.as<std::string>(), LOG_DEBUG);
                                 } else {
                                     //log("read_server: jugador", key.as<std::string>(), LOG_SPAM);
                                     player = initializer->getGameController()->getPlayer(key.as<int>());
@@ -169,10 +175,18 @@ void* drawer(void* argument) {
             // pitchView->render(renderer);
             pitchView->renderCountdown(renderer, gameController->stateOption);
           }
-          if(gameController->state == HALF_START_STATE){
+          if (gameController->state == HALF_START_STATE) {
             std::string msg = "Cambio de Lado";
             pitchView->renderMessage(renderer, msg);
             Mix_PlayChannel( -1, gWhistleSound, 0 );
+          }
+          if (gameController->state == GAME_END_STATE) {
+            std::string msg = "Fin del partido";
+            pitchView->renderMessage(renderer, msg);
+          }
+          if (gameController->state == GOALKICK_STATE) {
+            std::string msg = "GOOOOOOOOOOL!!!";
+            pitchView->renderMessage(renderer, msg);
           }
 
         //renderea la cancha de cualquier modo

@@ -27,6 +27,7 @@ enum states {
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
   GAME_START_STATE = 6,
+  GAME_END_STATE = 7
 };
 
 enum KeyboardBools {
