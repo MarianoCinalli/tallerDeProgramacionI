@@ -41,6 +41,7 @@ enum states {
   THROWIN_STATE = 4,
   GOALKICK_STATE = 5,
   GAME_START_STATE = 6,
+  GAME_END_STATE = 7,
 };
 
 
@@ -54,6 +55,9 @@ const int SALIDA_LINEA_COMANDOS = 4;
 // The dimensions of the level
 const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
+
+const int TOP_POST_POSITION = 592;
+const int BOTTOM_POST_POSITION = 358;
 
 // Necesario para la camara
 const int SPRITE_SIZE = 63;

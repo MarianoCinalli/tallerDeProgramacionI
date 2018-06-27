@@ -168,7 +168,6 @@ void* drawer(void* argument) {
           clock->render(renderer);
           score->render(renderer);
           pitchView->renderMinimap(renderer);
-          std::string msg;
           pitchView->render(renderer);
           if (gameController->state == GAME_START_STATE){
             //renderea el countdown para que inicie el partido
@@ -176,21 +175,26 @@ void* drawer(void* argument) {
             pitchView->renderCountdown(renderer, gameController->stateOption);
           }
           if (gameController->state == HALF_START_STATE) {
-            msg = "Cambio de Lado";
+            std::string msg = "Cambio de Lado";
             pitchView->renderMessage(renderer, msg);
             Mix_PlayChannel( -1, gWhistleSound, 0 );
           }
           if (gameController->state == GAME_END_STATE) {
-            msg = "Fin del partido";
+            std::string msg = "Fin del partido";
             pitchView->renderMessage(renderer, msg);
+
           }
           if (gameController->state == GOALKICK_STATE) {
+            std::string msg;
             if((gameController->stateOption == CENTER_LEFT_START) || (gameController->stateOption == CENTER_RIGHT_START)){
              msg = "GOOOOOOOOOOL!!!";
            }else{
             msg = "Saque de arco";
           }
             pitchView->renderMessage(renderer, msg);
+            // para debug
+            // std::string ballPos = gameController->getBall()->getPosition()->toString();
+            // pitchView->renderDebug(renderer, ballPos);
           }
 
         //renderea la cancha de cualquier modo

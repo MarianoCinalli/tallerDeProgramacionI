@@ -134,13 +134,16 @@ void GameController::checkState() {
                 break;
             }
         case HALF_START_STATE: {
+            if (this->stateTime < 0){
+              this->stateTime = SDL_GetTicks();
                 this->timer->stop();
-                int seconds = 2;
-                usleep(seconds * 1000000);
+              }
+                if ((SDL_GetTicks() - this->stateTime) > 2000){
                 this->pitch->changeSides();
                 this->pitch->setStart(this->stateOption);
                 this->timer->resume();
                 this->state = NORMAL_STATE;
+              }
                 break;
             }
         case GAME_START_STATE: {
@@ -154,6 +157,16 @@ void GameController::checkState() {
                 }
                 break;
             }
+          case GAME_END_STATE: {
+              if (this->stateTime < 0){
+                this->stateTime = SDL_GetTicks();
+                  this->timer->stop();
+                }
+                  if ((SDL_GetTicks() - this->stateTime) > 10000){//10 seconds for stats
+                  this->setEnd();
+                }
+                  break;
+              }
     }
 }
 
@@ -237,7 +250,8 @@ void GameController::checkTime(Time* elapsedTime) {
         this->stateOption = CENTER_RIGHT_START;
     } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
         log("GameController: Termino el segundo tiempo.", LOG_INFO);
-        this->setEnd();
+        this->state = GAME_END_STATE;
+        // this->setEnd();
 
     }
 }
@@ -259,7 +273,6 @@ int GameController::getUsersInTeam(int teamNumber) {
 
 void GameController::setEnd() {
     log("GameController: Seteando que el juego termine...", LOG_INFO);
-    this->state = GAME_START_STATE;
     this->timer->stop();
     this->realTimer->start();
     this->stateOption = 0;
