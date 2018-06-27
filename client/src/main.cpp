@@ -798,6 +798,11 @@ int main(int argc, char* argv[]) {
                     std::string resultValue = message.substr(message.find(":") + 1, message.length());
                     if (resultKey == "true") {
                         hasLoggedIn = true;
+                        if (resultValue == "gameStarted") {
+                            log("Main: Reconeccion, no es necesario elegir equipo y formacion.", LOG_INFO);
+                            hasPickedTeam = true;
+                            hasPickedFormation = true;
+                        }
                         log("Main: Credenciales validas. Logeo aceptado.", LOG_INFO);
                     } else if (resultKey == "false") {
                         log("Main: No se pudo logear con usuario = " + usuario + " y clave = " + clave + ". Server error: " + resultValue, LOG_INFO);

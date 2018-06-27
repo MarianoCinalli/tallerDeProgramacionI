@@ -9,6 +9,7 @@ UsersManager::UsersManager(std::map<std::string, std::string> usersAndPasswords,
         this->usersAndPasswords[userAndPassword.first] = userAndPassword.second;
     }
     this->gameControllerProxy = gameControllerProxy;
+    this->usersAndTeams = std::map<std::string, int>();
     log("UsersManager: UsersManager creado.", LOG_INFO);
 }
 
@@ -116,6 +117,30 @@ void UsersManager::logOff(std::string user) {
         }
     }
     users_mutex.unlock();
+}
+
+void UsersManager::setTeamNumberForUser(std::string user, int team) {
+    users_mutex.lock();
+    auto search = this->usersAndTeams.find(user);
+    if(search != this->usersAndTeams.end()) {
+        log("UsersManager: Warning! Estoy pisando el equipo, porque " + user + " ya tenia al equipo: ", this->usersAndTeams[user], LOG_ERROR);
+    }
+    this->usersAndTeams[user] = team;
+    users_mutex.unlock();
+}
+
+int UsersManager::getTeamNumberForUser(std::string user) {
+    users_mutex.lock();
+    int teamNumber;
+    auto search = this->usersAndTeams.find(user);
+    if(search != this->usersAndTeams.end()) {
+        teamNumber = this->usersAndTeams[user];
+    } else {
+        log("UsersManager: No hay entrada de equipo usado anteriormente por: ", user, LOG_ERROR);
+        teamNumber = -1;
+    }
+    users_mutex.unlock();
+    return teamNumber;
 }
 
 UsersManager::~UsersManager() {

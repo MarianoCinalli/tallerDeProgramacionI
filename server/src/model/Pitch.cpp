@@ -90,6 +90,7 @@ void Pitch::setStart(int position) {
     player->setCanMove(false);
 }
 
+// Si la formacion es menor que 0, se ignora.
 void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
     log("Pitch: Intentando agregar al usuario " + user + " al equipo: ", teamNum, LOG_DEBUG);
     Team* team;
@@ -113,9 +114,14 @@ void Pitch::setUserTeam(std::string user, int teamNum, int formation) {
         log("Pitch: Error numero de equipo desconocido: ", teamNum, LOG_ERROR);
     }
     log("Pitch: Se le asignaron jugador al usuario: ", user, LOG_DEBUG);
-    team->setFormacion(formation);
-    team->order();
-    log("Pitch: formacion: ", formation, LOG_DEBUG);
+    if (formation > 0) {
+        log("Pitch: Seteando formacion: ", formation, LOG_DEBUG);
+        team->setFormacion(formation);
+        team->order();
+        log("Pitch: Formacion seteada.", LOG_DEBUG);
+    } else {
+        log("Pitch: Se ignora la formacion negativa.", LOG_INFO);
+    }
     this->activePlayers[user] = team->getPlayers().back();
     this->activePlayers[user]->toggleIsSelected(user);
     log("Pitch: Se le asignaron equipo y jugador al usuario: ", user, LOG_DEBUG);
@@ -272,7 +278,7 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 const int BALL_STEAL_HEIGHT = 3;
 
 void Pitch::checkSteals() {
-    log("Pitch: Chequeando intercepciones...", LOG_DEBUG);
+    log("Pitch: Chequeando intercepciones...", LOG_SPAM);
     if (this->ball->getHeight() < BALL_STEAL_HEIGHT) {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
