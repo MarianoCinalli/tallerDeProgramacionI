@@ -64,6 +64,7 @@ class GameController {
         bool shouldGameEnd();
         void setEnd();
         std::string getMessageToBroadcast(bool allPlayers);
+        std::string getStatsToBroadcast();
         std::string getDebugLines();
         ~GameController();
     private:

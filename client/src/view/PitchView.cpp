@@ -93,7 +93,7 @@ void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
   if (gFont == NULL) {
       log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
   }
-  std::string message = "EL juego empieza en ";
+  std::string message = "El juego empieza en ";
   message += std::to_string(5-countdown);
   SDL_Color SDL_WHITE = { 0xFF, 0xFF, 0xFF, 0xFF };
   Texture countdownTexture;

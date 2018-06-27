@@ -68,6 +68,10 @@ std::string GameControllerProxy::getMessageToBroadcast(bool allPlayers) {
     return this->gameController->getMessageToBroadcast(allPlayers);
 }
 
+std::string GameControllerProxy::getStatsToBroadcast() {
+    // No hace falta bloquear.
+    return this->gameController->getStatsToBroadcast();
+}
 
 GameControllerProxy::~GameControllerProxy() {
     log("GameControllerProxy: Eliminando gameControllerProxy...", LOG_INFO);

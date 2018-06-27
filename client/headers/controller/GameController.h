@@ -46,6 +46,7 @@ class GameController {
         Clock* getClock();
         Score* getScore();
         void parseYaml(YAML::Node node);
+        std::string stats;
         ~GameController();
 };
 #endif // GAMECONTROLLER_H

@@ -180,7 +180,7 @@ void GameController::checkGoal() {
                 log("GameController: El player es null.", LOG_ERROR);
                 message += " Alguien";
             }
-            std::replace(message.begin(), message.end(), '-', ':');
+            //std::replace(message.begin(), message.end(), '-', ':');
             team->addScoreInfo(message);
         }
     }
@@ -252,7 +252,7 @@ int GameController::getUsersInTeam(int teamNumber) {
 
 void GameController::setEnd() {
     log("GameController: Seteando que el juego termine...", LOG_INFO);
-    this->state = GAME_START_STATE;
+    this->state = GAME_END_STATE;
     this->timer->stop();
     this->realTimer->start();
     this->stateOption = 0;
@@ -324,6 +324,24 @@ std::string GameController::getMessageToBroadcast(bool allPlayers) {
     message += this->getStateAsYaml();
     message += this->getGameStatsMessage();
     //message += this->getDebugLines();
+    return message + ";;";
+}
+
+std::string GameController::getStatsToBroadcast() {
+    std::string message = "";
+    Team* team;
+    // Estadisticas del equipo local
+    team = this->pitch->getTeam(0);
+    message += team->getName() + "|";
+    for(std::string s : team->scoreInfo){
+      message += s + "|"; // Separardor
+    }
+    // Estadisticas del equipo visitante
+    team = this->pitch->getTeam(1);
+    message += team->getName() + "|";
+    for(std::string s : team->scoreInfo){
+      message += s + "|"; // Separardor
+    }
     return message + ";;";
 }
 

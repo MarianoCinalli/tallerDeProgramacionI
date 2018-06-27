@@ -28,5 +28,8 @@ void Broadcaster::broadcastGameEnded() {
 void Broadcaster::broadcastGameStats() {
     log("broadcast_to_clients: Broadcasteando estadisticas del partido...", LOG_INFO);
     std::string message = "stats:";
+    message += this->gameControllerProxy->getStatsToBroadcast();
+    log("broadcast_to_clients: Broadcasteando: ", message, LOG_INFO);
+
     connectionManager->sendToAll(message);
 }
