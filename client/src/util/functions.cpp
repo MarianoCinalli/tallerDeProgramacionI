@@ -1,4 +1,7 @@
 #include "util/functions.h"
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Chunk *gWhistleSound;
 
 extern GameInitializer* initializer;
 extern bool quit;
@@ -169,6 +172,7 @@ void* drawer(void* argument) {
           if(gameController->state == HALF_START_STATE){
             std::string msg = "Cambio de Lado";
             pitchView->renderMessage(renderer, msg);
+            Mix_PlayChannel( -1, gWhistleSound, 0 );
           }
 
         //renderea la cancha de cualquier modo

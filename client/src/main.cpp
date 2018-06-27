@@ -42,9 +42,9 @@ extern Mix_Music *gMusic = NULL;
 // Sound effects
 extern Mix_Chunk *gKickSound = NULL; //kick
 extern Mix_Chunk *gGoalSound = NULL; //goal
-Mix_Chunk *gWhistleSound = NULL; //whistle
-Mix_Chunk *gStartSound = NULL; //start
-Mix_Chunk *gCountdownSound = NULL; //countdown
+extern Mix_Chunk *gWhistleSound = NULL; //whistle
+extern Mix_Chunk *gStartSound = NULL; //start
+extern Mix_Chunk *gCountdownSound = NULL; //countdown
 // Global variables ---------------------------------------
 
 void imprimir_ayuda() {

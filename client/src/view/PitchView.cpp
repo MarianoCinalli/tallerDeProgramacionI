@@ -1,4 +1,8 @@
 #include "view/PitchView.h"
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+
+extern Mix_Chunk *gWhistleSound;
 
 PitchView::PitchView(Texture* pitch, Texture* pitchMini, Camera* camera) {
     log("PitchView: Creando vista de la cancha...", LOG_INFO);
@@ -97,6 +101,9 @@ void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
   SDL_Rect renderQuad1 = { (SCREEN_WIDTH - countdownTexture.getWidth()) / 2, 150, countdownTexture.getWidth(), countdownTexture.getHeight() };
   SDL_RenderCopyEx(screen, countdownTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
   // SDL_RenderPresent(screen);
+  if (countdown >= 5) {
+    Mix_PlayChannel( -1, gWhistleSound, 0 );
+  }
 
 }
 
