@@ -47,11 +47,12 @@ BallSpriteManager::~BallSpriteManager() {
 
 // Devuelve el cuadrado que va a ocupar el sprite en la pantalla.
 SDL_Rect BallSpriteManager::getPositionOnScreen(SDL_Rect sprite, Coordinates* coordinates) {
+    int height = this->ball->getHeight();
     SDL_Rect renderQuad = {
         coordinates->getX(),
         coordinates->getY(),
-        SPRITE_SIZE,
-        SPRITE_SIZE
+        SPRITE_SIZE + 10*height,
+        SPRITE_SIZE + 10*height
     };
     return renderQuad;
 }
@@ -65,18 +66,14 @@ void BallSpriteManager::setMovingBallSprite() {
     if (rollingCount == 1024) { //TODO hardcode value
         rollingCount = 0;
     }
-    int height = this->ball->getHeight();
-    int level = 0;
-        if ((rollingCount % ROLLING_DIVISOR) == 0) {
-            log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
-            level = (height / BALL_DECELERATE_CONST);
-            if ((this->sprite.x == 3 * SPRITE_SIZE) || (this->sprite.y != (25 + level) * SPRITE_SIZE)) {
-                this->sprite.x = 0; // Reinicio la secuencia.
-                this->sprite.y = ((25 + level) * SPRITE_SIZE);
-            }
-            else {
-                this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
-            }
+    if ((rollingCount % ROLLING_DIVISOR) == 0) {
+        log("BallSpriteManager: Creando el sprite del balon aereo.", LOG_SPAM);
+        if ((this->sprite.x == 3 * SPRITE_SIZE)){ // || (this->sprite.y != (25 + level) * SPRITE_SIZE)) {
+            this->sprite.x = 0; // Reinicio la secuencia.
+        }
+        else {
+            this->sprite.x += SPRITE_SIZE; // Avanzo la secuencia en un frame.
+        }
     }
     rollingCount ++;
 }
