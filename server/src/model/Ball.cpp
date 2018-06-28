@@ -231,6 +231,22 @@ void Ball::calculateDominatedPosition() {
         case PLAYER_ORIENTATION_UP:
             y = (y - CUERPO_JUGADOR);
             break;
+        case PLAYER_ORIENTATION_UP_R:
+            x = (x + CUERPO_JUGADOR/2);
+            y = (y - CUERPO_JUGADOR/2);
+            break;
+        case PLAYER_ORIENTATION_DOWN_R:
+            x = (x + CUERPO_JUGADOR/2);
+            y = (y + CUERPO_JUGADOR/2);
+            break;
+        case PLAYER_ORIENTATION_DOWN_L:
+            x = (x - CUERPO_JUGADOR/2);
+            y = (y + CUERPO_JUGADOR/2);
+            break;
+        case PLAYER_ORIENTATION_UP_L:
+            x = (x - CUERPO_JUGADOR/2);
+            y = (y - CUERPO_JUGADOR/2);
+            break;
     }
     this->position->setX(x);
     this->position->setY(y);

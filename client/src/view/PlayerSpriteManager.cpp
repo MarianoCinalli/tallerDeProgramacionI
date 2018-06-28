@@ -71,6 +71,7 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
     );
     // Active player marker.
     if (this->player->getIsSelected() && (this->player->userName != "NONE")) {
+        // log("PLAYER SPRITE MANAGER: orientacion: ",this->player->getOrientation(), LOG_DEBUG);
 
         SDL_Rect markerSprite = this->getActivePlayerMarker();
         SDL_Rect markerPositionOnScreen = this->getActivePlayerMarkerPosition(coordinates);

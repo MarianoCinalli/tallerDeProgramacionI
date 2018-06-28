@@ -61,7 +61,6 @@ class Player {
         // Modifiers
         // Cambia la velocidad a su maximo, por ahora.
         void accelerate(int direction);
-        void decelerate(int direction);
         void stop();
         void stopRunningInDirection(int direction);
         void toggleIsSelected(std::string name);

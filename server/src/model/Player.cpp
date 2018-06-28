@@ -63,6 +63,9 @@ bool Player::isAHighPass() {
 }
 
 int Player::getOrientation() {
+    if (!this->velocity->isZero()){
+      this->orientation = this->velocity->getAsOrientation();
+    }
     return this->orientation;
 }
 
@@ -152,14 +155,6 @@ void Player::accelerate(int direction) {
     // Para que quede mirando para donde venia corriendo.
     this->setOrientation(this->velocity->getAsOrientation());
     log("Player: El jugador esta acelerando, direccion actual: ", this->velocity, LOG_SPAM);
-}
-
-void Player::decelerate(int direction) {
-    if (this->isRunningFast()) {
-        this->velocity->decelerate(direction, this->maxVelocity);
-        this->setOrientation(this->velocity->getAsOrientation());
-        log("Player: El jugador esta frenando, velocidad actual: ", this->velocity, LOG_SPAM);
-    }
 }
 
 void Player::stopRunningInDirection(int direction) {
@@ -264,6 +259,9 @@ void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool on
     this->velocity->setComponentX(deltaX);
     this->velocity->setComponentY(deltaY);
     this->velocity->normalize();
+    if (!this->velocity->isZero()){
+      this->orientation = this->velocity->getAsOrientation();
+    }
 }
 
 bool Player::isGoalkeeper() {
