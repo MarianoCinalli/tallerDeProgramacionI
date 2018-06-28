@@ -15,3 +15,9 @@ performance:
   margenes: 180
 juego:
   minutosPorTiempo: 1
+pelota:
+  velocidad: 2.7
+  desacelerar: 1.1
+jugador:
+  velocidad: 1.6
+  masRapido: 1.6

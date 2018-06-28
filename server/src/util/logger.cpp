@@ -109,6 +109,18 @@ int log(std::string messageToConcatenate, int integerToConcatenate, int messageL
     return log(concatenatedMessage, messageLevel);
 }
 
+int log(std::string messageToConcatenate, float floatToConcatenate, int messageLevel) {
+    std::string intToString = std::to_string(floatToConcatenate);
+    std::string concatenatedMessage = messageToConcatenate + intToString;
+    return log(concatenatedMessage, messageLevel);
+}
+
+int log(std::string messageToConcatenate, double doubleToConcatenate, int messageLevel) {
+    std::string intToString = std::to_string(doubleToConcatenate);
+    std::string concatenatedMessage = messageToConcatenate + intToString;
+    return log(concatenatedMessage, messageLevel);
+}
+
 int log(std::string messageToConcatenate, std::string stringToConcatenate, int messageLevel) {
     std::string concatenatedMessage = messageToConcatenate + stringToConcatenate;
     return log(concatenatedMessage, messageLevel);

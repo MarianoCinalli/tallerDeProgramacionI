@@ -2,6 +2,8 @@
 
 using namespace std;
 
+const int VALOR_INVALIDO = -1;
+
 string Conf::toString() {
     ostringstream str;
 
@@ -111,6 +113,63 @@ int chooseTimePerHalf(YAML::Node nod) {
     }
 }
 
+double choosePlayerSpeed(YAML::Node nod) {
+    try {
+        if (!nod["jugador"]["velocidad"]) {
+            return VALOR_INVALIDO;
+        }
+        double str = nod["jugador"]["velocidad"].as<double>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<double> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
+double choosePlayerMaxSpeed(YAML::Node nod) {
+    try {
+        if (!nod["jugador"]["masRapido"]) {
+            return VALOR_INVALIDO;
+        }
+        double str = nod["jugador"]["masRapido"].as<double>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<double> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
+double chooseBallSpeed(YAML::Node nod) {
+    try {
+        if (!nod["pelota"]["velocidad"]) {
+            return VALOR_INVALIDO;
+        }
+        double str;
+        str = nod["pelota"]["velocidad"].as<double>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<double> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
+double chooseBallDecrease(YAML::Node nod) {
+    try {
+        if (!nod["pelota"]["desacelerar"]) {
+            return VALOR_INVALIDO;
+        }
+        double str = nod["pelota"]["desacelerar"].as<double>();
+        return str;
+    } catch (YAML::BadSubscript e) {
+        return VALOR_INVALIDO;
+    } catch (YAML::TypedBadConversion<double> e) {
+        return VALOR_INVALIDO;
+    }
+}
+
 string parametroInvalido(string par) {
     return "Conf: parametro: " + par + " invalido, usando valor por default";
 }
@@ -139,8 +198,8 @@ int Conf::cargarParametro(string parametro, map<string, string>* usr, int (*fn)(
     return valor;
 }
 
-float Conf::cargarParametro(string parametro, float (*fn)(YAML::Node)) {
-    float valor = fn(config);
+double Conf::cargarParametroFl(string parametro, double (*fn)(YAML::Node)) {
+    double valor = fn(config);
 
     if (valor == VALOR_INVALIDO) {
         log(parametroInvalido(parametro), LOG_ERROR);
@@ -185,6 +244,16 @@ int Conf::loadConf(string file) {
     log("Conf: Cargado el puerto con valor: ", this->port, LOG_INFO);
     this->timePerHalf = cargarParametro("minutosPorTiempo", &chooseTimePerHalf);
     log("Conf: Cargado la duracion de cada mitad con valor: ", this->timePerHalf, LOG_INFO);
+    this->playerSpeed = cargarParametroFl("velocidadJugador", &choosePlayerSpeed);
+    log("Conf: Cargado la velocidad del jugador con valor: ", this->playerSpeed, LOG_INFO);
+    this->playerMaxSpeed = cargarParametroFl("velocidadMaximaJugador", &choosePlayerMaxSpeed);
+    log("Conf: Cargado la velocidad maxima del jugador con valor: ", this->playerMaxSpeed, LOG_INFO);
+    this->ballSpeed = cargarParametroFl("velocidadPelota", &chooseBallSpeed);
+    log("Conf: Cargado la velocidad de la pelota con valor: ", this->ballSpeed, LOG_INFO);
+    this->ballDecrease = cargarParametroFl("desacelerarPelota", &chooseBallDecrease);
+    log("Conf: Cargado la desaceleracion de la pelota con valor: ", this->ballDecrease, LOG_INFO);
+
+
     cargarParametro("usuarios", &this->usuarios, &chooseUsuarios);
     return 0;
 }
@@ -207,6 +276,22 @@ int Conf::getPort() {
 
 int Conf::getTimePerHalf() {
     return this->timePerHalf;
+}
+
+double Conf::getPlayerSpeed(){
+  return this->playerSpeed;
+}
+
+double Conf::getPlayerMaxSpeed(){
+  return this->playerMaxSpeed;
+}
+
+double Conf::getBallSpeed(){
+  return this->ballSpeed;
+}
+
+double Conf::getBallDecrease(){
+  return this->ballDecrease;
 }
 
 map<string, string> Conf::getUsuarios(){

@@ -32,6 +32,8 @@ int log(std::string message, int messageLevel);
 
 // Funciones sobrecargadas.
 int log(std::string messageToConcatenate, int integerToConcatenate, int messageLevel);
+int log(std::string messageToConcatenate, float floatToConcatenate, int messageLevel);
+int log(std::string messageToConcatenate, double doubleToConcatenate, int messageLevel);
 int log(std::string messageToConcatenate, std::string stringToConcatenate, int messageLevel);
 int log(std::string messageToConcatenate, const char* charsToConcatenate, int messageLevel);
 int log(std::string messageToConcatenate, char* charsToConcatenate, int messageLevel);

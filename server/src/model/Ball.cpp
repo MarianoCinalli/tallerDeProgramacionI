@@ -1,6 +1,6 @@
 #include "model/Ball.h"
 
-Ball::Ball(Coordinates* position) {
+Ball::Ball(Coordinates* position, float maxSpeed, float decelerate) {
     log("Pelota: Creando pelota...", LOG_INFO);
     this->position = position;
     this->passPower = 0;
@@ -10,6 +10,8 @@ Ball::Ball(Coordinates* position) {
     this->orientation = 0;
     this->dominated = true;
     this->velocity = new Velocity(0, 0);
+    this->maxSpeed = maxSpeed;
+    this->decelerate = decelerate;
     this->isInAPass = false;
     this->isInAHighPass = false;
     this->passDirection = 0;
@@ -85,7 +87,6 @@ void Ball::isIntercepted(Player* player) {
     this->orientation = player->getOrientation();
     log("Ball: Pelota interceptada por jugador.", LOG_DEBUG);
 }
-const float PASS_SPEED = 3.3;
 
 void Ball::isPassed(int direction, float passPower, bool highPass) {
     if (this->isDominated()) {
@@ -105,32 +106,33 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
         this->isInAPass = true;
         if(highPass) {
             this->isInAHighPass = true;
-            this->passPower = passPower*PASS_SPEED*1.3; //para que sea mas sensible el pase elevado
+            this->passPower = passPower*this->maxSpeed*1.2; //para que sea mas sensible el pase elevado
             this->initialPassPower = this->passPower;
         }
         else{
-          this->passPower = passPower*PASS_SPEED;
+          this->passPower = passPower*this->maxSpeed;
           this->initialPassPower = this->passPower;
         }
         this->startingPassPosition = this->position;
     }
 }
-const float BALL_DECELERATE_CONST = 1.7;
 
-float calculatePassPower(float passPower){
+float calculatePassPower(float passPower, float decel){
   float finalPassPower;
   if (passPower >  3){
-    finalPassPower = passPower -BALL_DECELERATE_CONST;
+    finalPassPower = passPower -decel;
   }
   else{
-    finalPassPower = passPower -BALL_DECELERATE_CONST/2;
-
+    finalPassPower = passPower - decel/3;
   }
   return finalPassPower;
 }
 
 const int TIME_BALL_NO_INTERCEPT = 6;
+const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 
+
+const float BALL_HEIGHT_CONST = 1.3;
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
@@ -141,13 +143,13 @@ void Ball::updatePosition() {
         this->timePassing += 1;
         if(this->isInAHighPass && !this->velocity->isZero()) {
             this->calculateHeight();
-            if(this->height > BALL_DECELERATE_CONST){
+            if(this->height > BALL_HEIGHT_CONST){
                 this->interceptable = false;
             }
             log("Ball: altura del balon: ", this->height, LOG_SPAM);
             log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
         }
-        log("Ball: paso este tiempo:", timePassing, LOG_SPAM);
+        log("Ball: paso este tiempo:", this->timePassing, LOG_SPAM);
         if (!this->interceptable && (timePassing > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
@@ -160,8 +162,7 @@ void Ball::updatePosition() {
     }
     if ((this->isInAPass) && (!this->velocity->isZero())) {
         if (this->timePassing % BALL_DECELERATE_TIME == 0) {
-            // this->passPower -= BALL_DECELERATE_CONST;
-            this->passPower = calculatePassPower(this->passPower);
+            this->passPower = calculatePassPower(this->passPower, this->decelerate);
             if (this->passPower< 0){
               this->timePassing = 0;
               this->stopRolling();
@@ -185,19 +186,19 @@ void Ball::calculateHeight() {
         this->height = (this->initialPassPower - this->passPower);
     }
     else{
-        if (this->height > BALL_DECELERATE_CONST) {
+        if (this->height > BALL_HEIGHT_CONST) {
             if ((initialPassPower * 0.6) < passPower && decelerateLevel == 0) {
-                this->height = this->height - BALL_DECELERATE_CONST;
+                this->height = this->height - BALL_HEIGHT_CONST;
                 this->decelerateLevel = 1;
             }
             else {
                 if((initialPassPower * 0.45) < passPower && decelerateLevel == 1) {
-                this->height = this->height - BALL_DECELERATE_CONST;
+                this->height = this->height - BALL_HEIGHT_CONST;
                 this->decelerateLevel = 2;
                 }
                 else {
                     if((initialPassPower * 0.3) < passPower && decelerateLevel == 2) {
-                    this->height = this->height - BALL_DECELERATE_CONST;
+                    this->height = this->height - BALL_HEIGHT_CONST;
                     this->decelerateLevel = 3;
                     }
                     else {

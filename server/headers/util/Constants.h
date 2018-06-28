@@ -71,7 +71,7 @@ const int CUERPO_JUGADOR = 20;
 // Velocidad de desplazamiento scroll camara
 const int SCROLL_SPEED = 13;
 
-const int VALOR_INVALIDO = 5;
+
 const int VALOR_OK = 0;
 const int ARCHIVO_INVALIDO = 6;
 const int CASACA_PRINCIPAL = 2;
@@ -79,9 +79,6 @@ const int CASACA_ALTERNATIVA = 3;
 const int PLAYERS_PER_TEAM = 7;
 
 //Velocidad
-const float  NORMAL_VELOCITY = 1.9;
-const float FAST_SPEED_COEF = 1.6;
-const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;

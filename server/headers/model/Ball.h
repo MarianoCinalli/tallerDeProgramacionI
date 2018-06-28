@@ -15,6 +15,8 @@ class Ball {
         int maxVelocity;
         Coordinates* position;
         float passPower;
+        float maxSpeed;
+        float decelerate;
         float initialPassPower;
         int height;
         int heightLevel;
@@ -31,7 +33,7 @@ class Ball {
         Player* player;
 
     public:
-        Ball(Coordinates* position);
+        Ball(Coordinates* position, float speed, float decel);
 
         Coordinates* getPosition();
         void setPosition(Coordinates* pos);

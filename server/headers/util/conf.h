@@ -26,6 +26,10 @@ class Conf : public Loggable {
     int maxClients;
     int port;
     int timePerHalf;
+    double playerSpeed;
+    double playerMaxSpeed;
+    double ballSpeed;
+    double ballDecrease;
 
     Conf(string, string);
     ~Conf();
@@ -35,6 +39,10 @@ class Conf : public Loggable {
     int getMargen();
     int getMaxClients();
     int getPort();
+    double getPlayerSpeed();
+    double getPlayerMaxSpeed();
+    double getBallSpeed();
+    double getBallDecrease();
     int getTimePerHalf();
     string toString();
     map<string, string> getUsuarios();
@@ -47,7 +55,7 @@ class Conf : public Loggable {
     int debugLevel;
     int cargarParametro(string parametro, int (*fn)(YAML::Node));
     int cargarParametro(string parametro, map<string, string>* usr, int (*fn)(YAML::Node, map<string,string>*));
-    float cargarParametro(string parametro, float (*fn)(YAML::Node));
+    double cargarParametroFl(string parametro, double (*fn)(YAML::Node));
     string cargarParametro(string parametro, string (*fn)(YAML::Node));
 
 };

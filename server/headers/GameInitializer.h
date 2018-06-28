@@ -48,7 +48,7 @@ class GameInitializer {
     private:
         void initializePitch(Conf* conf);
         void initializeTeam(Conf* conf, int teamNumber);
-        void initializeBall();
+        void initializeBall(Conf* conf);
         void initializeGameController();
         void initializeConnectionManager(Conf* configuration);
         void initializeGameControllerProxy();

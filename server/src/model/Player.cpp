@@ -2,8 +2,10 @@
 
 int Player::ID = 0;
 
-Player::Player(Coordinates* position, int team) {
+const float  NORMAL_VELOCITY = 1.6;
+const float FAST_SPEED_COEF = 1.6;
 
+Player::Player(Coordinates* position, int team, float speed, float sprint) {
     log("Player: Creando jugador...", LOG_INFO);
     this->id = ++ID;
     if (team == 0) {
@@ -14,7 +16,8 @@ Player::Player(Coordinates* position, int team) {
     this->position = position;
     this->team = team;
     this->basePosition = new Coordinates(800, 500);
-    this->maxVelocity = NORMAL_VELOCITY; // TODO: Probar si va muy rapido.
+    this->maxVelocity = speed; // TODO: Probar si va muy rapido.
+    this->sprintVelocity = sprint;
     this->velocity = new Velocity(0, 0); // Empieza quieto.
     this->sliding = false;
     this->slided = false; //Deberia estar en PlayerSpriteManager
@@ -222,7 +225,7 @@ void Player::updateSliding(Coordinates* ballPosition) {
 void Player::updatePosition(Coordinates* positionToFollow) {
     float speed = 1;
     if (this->runningFast) {
-        speed = FAST_SPEED_COEF; //TODO hardcode
+        speed = this->sprintVelocity; //TODO hardcode
     }
     if (!this->isSelected) {
         if (this->playerMovement->isInsideArea(this->position, this->id)) {

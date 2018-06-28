@@ -146,9 +146,9 @@ void Velocity::changeOnDirection(int direction) {
         else if ((newy == -1) && (this->y >0)) {
                 this->y = 0;
         }
-        else if (this->x ==0){
+        else if ((newx != 0) && (this->x == 0)){
           this->x = newx;
-        }else if (this->y ==0){
+        } else if ((newy != 0) && (this->y == 0)){
           this->y = newy;
         }
 

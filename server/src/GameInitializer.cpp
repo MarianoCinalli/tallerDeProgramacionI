@@ -12,7 +12,7 @@ GameInitializer::GameInitializer(Conf* configuration) {
     this->initializeTeam(configuration, 1);
     // this->pitch->setUserTeam(0,0);  //inicializacion de usuarios
     // this->pitch->setUserTeam(1,1);
-    this->initializeBall();
+    this->initializeBall(configuration);
     this->initializeTimer(configuration); // arriba de initializeGameController
     this->initializeGameController();
     this->initializeGameControllerProxy(); // abajo de initializeGameController
@@ -75,13 +75,15 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     std::map<int, std::string> nombresEquipos;
     nombresEquipos[0] = "Argentina";
     nombresEquipos[1] = "Brasil";
+    float speed = (float)conf->getPlayerSpeed();
+    float sprint = (float)conf->getPlayerMaxSpeed();
     log("GameInitializer: Creando equipo.", LOG_INFO);
     Team* team = new Team(teamNumber, nombresEquipos[teamNumber]);
     log("GameInitializer: Seteando formacion.", LOG_INFO);
     for (int i = 0; i < PLAYERS_PER_TEAM; ++i) {
         log("GameInitializer: Creando jugador numero: ", i, LOG_INFO);
         Coordinates* coordinates = new Coordinates(800, 500);
-        Player* player = new Player(coordinates, teamNumber);
+        Player* player = new Player(coordinates, teamNumber, speed, sprint);
         team->addPlayer(player);
     }
     team->setFormacion(33); //TODO formacion default, despues le pregunta al usuario
@@ -92,10 +94,10 @@ void GameInitializer::initializeTeam(Conf* conf, int teamNumber) {
     this->pitch->setTeam(team, teamNumber); // Se usa para algo esto? Si, para despues elegir jugador activo
 }
 
-void GameInitializer::initializeBall() {
+void GameInitializer::initializeBall(Conf* conf) {
     log("GameInitializer: Inicializando pelota...", LOG_INFO);
     Coordinates* coords = new Coordinates(800, 600);
-    Ball* ball = new Ball(coords);  //TODO: pasarle el jugador del medio
+    Ball* ball = new Ball(coords, (float)conf->getBallSpeed(), (float)conf->getBallDecrease());  //TODO: pasarle el jugador del medio
     this->pitch->setBall(ball);
     Player* jugador = this->pitch->getTeam(0)->getPlayers().back();
     ball->isIntercepted(jugador); //darle la pelota al jugador mas cerca

@@ -103,7 +103,7 @@ void ConnectionManager::processDisconection(pthread_t connectionHandlerId) {
         close(socketToClose);
         --this->acceptedConnections;
     } else {
-        log("ConnectionManager: No se encontro el cliente a desconectar, correspondiente a: ", connectionHandlerId, LOG_ERROR);
+        log("ConnectionManager: No se encontro el cliente a desconectar, correspondiente a: ", (int)connectionHandlerId, LOG_ERROR);
     }
 }
 
@@ -116,7 +116,7 @@ void ConnectionManager::waitForAllConnectionsToFinish() {
 void ConnectionManager::closeOpenedSockets() {
     log("ConnectionManager: Cerrando sockets aceptados que quedaron abiertos...", LOG_INFO);
     for (auto const& threadAndSocket : this->threadIdsAndSockets) {
-        log("ConnectionManager: Cerrando socket de: ", threadAndSocket.first, LOG_INFO);
+        log("ConnectionManager: Cerrando socket de: ", (int)threadAndSocket.first, LOG_INFO);
         close(threadAndSocket.second);
     }
     log("ConnectionManager: Cerrando sockets rechazados que quedaron abiertos...", LOG_INFO);

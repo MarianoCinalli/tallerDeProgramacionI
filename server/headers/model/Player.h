@@ -14,6 +14,7 @@ class Player {
         int team;
         int orientation;
         float maxVelocity;
+        float sprintVelocity;
         int kickPower;
         bool highPass;
         bool isSelected;
@@ -36,7 +37,7 @@ class Player {
         PlayerMovement* playerMovement;
     public:
         static int ID;
-        Player(Coordinates* position, int team);
+        Player(Coordinates* position, int team, float speed, float maxSpeed);
 
         // Getters
         Coordinates* getPosition();
