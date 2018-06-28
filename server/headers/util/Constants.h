@@ -75,7 +75,7 @@ const int CASACA_ALTERNATIVA = 3;
 const int PLAYERS_PER_TEAM = 7;
 
 //Velocidad
-const int NORMAL_VELOCITY = 2;
+const float  NORMAL_VELOCITY = 1.9;
 const float FAST_SPEED_COEF = 1.6;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 

@@ -21,8 +21,8 @@ std::string Camera::getAsYaml() {
     std::string message = "";
     Coordinates center = getCenter();
     message += "cam:\n";
-    message += " cx: " + std::to_string(center.getX()) + "\n";
-    message += " cy: " + std::to_string(center.getY()) + "\n";
+    message += " cx: " + std::to_string((int)center.getX()) + "\n";
+    message += " cy: " + std::to_string((int)center.getY()) + "\n";
     return message;
 }
 

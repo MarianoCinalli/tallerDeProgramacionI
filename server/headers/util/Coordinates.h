@@ -7,26 +7,23 @@
 
 class Coordinates : public Loggable {
     private:
-        int x;
-        int y;
+        float x;
+        float y;
 
     public:
-        Coordinates(int x, int y);
-        int getX();
-        int getY();
-        int setX(int otherX);
-        int setY(int otherY);
+        // Coordinates(int x, int y);
+        Coordinates(float x, float y);
+        float getX();
+        float getY();
+        int setX(float otherX);
+        int setY(float otherY);
 
-        int addX(int amount);
-        void subtractX(int amount);
-
-        int addY(int amount);
-        void subtractY(int amount);
-
+        int addX(float amount);
+        int addY(float amount);
         int validatePositionInBoundsY();
         int validatePositionInBoundsX();
         void set(Coordinates other);
-        int distanceTo(Coordinates* other);
+        float distanceTo(Coordinates* other);
         std::string toString();
 
         ~Coordinates();

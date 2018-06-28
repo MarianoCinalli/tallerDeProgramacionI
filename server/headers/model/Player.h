@@ -13,7 +13,7 @@ class Player {
         int id;
         int team;
         int orientation;
-        int maxVelocity;
+        float maxVelocity;
         int kickPower;
         bool highPass;
         bool isSelected;
@@ -84,7 +84,6 @@ class Player {
         void setBasePosition(Coordinates coord);
         void setPosition(Coordinates* coord);
         void setBasePosition(Coordinates* coord);
-        void returnToBasePosition();
         void setMovement(PlayerMovement* playerMovement);
         // Acciones
         void startsRunningFast();

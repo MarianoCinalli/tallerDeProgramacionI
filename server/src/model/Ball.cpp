@@ -261,8 +261,8 @@ ba:
 std::string Ball::getAsYaml() {
     std::string message = "";
     message += "ba:\n";
-    message += " cx: " + std::to_string(this->position->getX()) + "\n";
-    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " cx: " + std::to_string((int)this->position->getX()) + "\n";
+    message += " cy: " + std::to_string((int)this->position->getY()) + "\n";
     message += " st: " + std::to_string(this->velocity->isZero()) + "\n";
     message += " hg: " + std::to_string(this->height) + "\n";
     message += " or: " + std::to_string(this->orientation) + "\n";

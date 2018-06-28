@@ -243,8 +243,9 @@ void Player::updatePosition(Coordinates* positionToFollow) {
             this->changeVelocityTo(this->basePosition, false, false);
         }
     } if (this->canMove){
-      int amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
-      int amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
+      // log("PLAYER: velocidad: ", this->velocity, LOG_DEBUG);
+      float amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
+      float amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
       this->position->addY(amountY);
       this->position->addX(amountX);
     }
@@ -254,12 +255,6 @@ void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool on
     int deltaX = positionToFollow->getX() - this->position->getX();
     int deltaY = positionToFollow->getY() - this->position->getY();
     // Normalizacion.
-    if (deltaX != 0) {
-        deltaX = deltaX / abs(deltaX);
-    }
-    if (deltaY != 0) {
-        deltaY = deltaY / abs(deltaY);
-    }
     this->stop();
     if (onlyX) {
         deltaY = 0;
@@ -268,6 +263,7 @@ void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool on
     }
     this->velocity->setComponentX(deltaX);
     this->velocity->setComponentY(deltaY);
+    this->velocity->normalize();
 }
 
 bool Player::isGoalkeeper() {
@@ -283,52 +279,11 @@ void Player::setBasePosition(Coordinates pos) {
 }
 
 void Player::setPosition(Coordinates* pos) {
-    this->position->setX(pos->getX());
-    this->position->setY(pos->getY());
+    this->position->set(*pos);
 }
 
 void Player::setBasePosition(Coordinates* pos) {
-    this->basePosition->setX(pos->getX());
-    this->basePosition->setY(pos->getY());
-}
-
-void Player::returnToBasePosition() {
-    log("Player: Volviendo a su posicion original ", LOG_SPAM);
-    this->isReturning = true;
-
-    // Calcular en que direccion debe regresar
-    int newX = this->position->getX() - this->basePosition->getX();
-    int newY = this->position->getY() - this->basePosition->getY();
-
-    //TODO: Normalizar el vector al factor maxVelocity para que corra por el camino mas corto
-    int setX = newX;
-    int setY = newY;
-    if (newX == 0) {
-        setX = 0;
-    }
-
-    if (newX < 0) {
-        setX = 1;
-    }
-
-    if (newX > 0) {
-        setX = -1;
-    }
-
-    if (newY == 0) {
-        setY = 0;
-    }
-
-    if (newY < 0) {
-        setY = 1;
-    }
-
-    if (newY > 0) {
-        setY = -1;
-    }
-
-    this->velocity->setComponentX(setX);
-    this->velocity->setComponentY(setY);
+    this->basePosition->set(*pos);
 }
 
 Player::~Player() {
@@ -451,8 +406,8 @@ std::string Player::getAsYaml() {
     std::string message = "";
     message += std::to_string(this->id) + ":\n";
     message += " te: " + std::to_string(this->team) + "\n";
-    message += " cx: " + std::to_string(this->position->getX()) + "\n";
-    message += " cy: " + std::to_string(this->position->getY()) + "\n";
+    message += " cx: " + std::to_string((int)this->position->getX()) + "\n";
+    message += " cy: " + std::to_string((int)this->position->getY()) + "\n";
     message += " se: " + std::to_string(this->isSelected) + "\n";
     message += " ki: " + std::to_string(this->kicking) + "\n";
     message += " sl: " + std::to_string(this->sliding) + "\n";

@@ -1,4 +1,5 @@
 #include "util/Constants.h"
+#include <cmath>
 #include <string>
 #include "interfaces/Loggable.h"
 
@@ -7,24 +8,26 @@
 
 class Velocity : public Loggable {
     private:
-        int x;
-        int y;
+        float x;
+        float y;
     public:
         Velocity(int x, int y);
-        void accelerate(int direction, int amount);
+        Velocity(float x, float y);
+        void accelerate(int direction, float amount);
         void accelerate(int direction);
         void decelerate(int direction, int amount);
-        int getComponentX();
-        int getComponentY();
+        float getComponentX();
+        float getComponentY();
         void set(Velocity* velocity);
         void setComponentX(int x);
         void setComponentY(int y);
-        void scale(int num);
+        void scale(float num);
         void scaleY(int num);
         void scaleX(int num);
         void decelerate(int amount);
         bool isZero();
         int getAsOrientation();
+        void normalize();
 
         void stop();
         void stopDirection(int direction);
@@ -32,7 +35,7 @@ class Velocity : public Loggable {
         ~Velocity();
 
     private:
-        void changeOnDirection(int direction, int amount);
+        void changeOnDirection(int direction, float amount);
         void changeOnDirection(int direction);
 };
 #endif // VELOCITY_H
