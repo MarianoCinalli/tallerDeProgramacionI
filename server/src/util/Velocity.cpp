@@ -161,7 +161,7 @@ Velocity::~Velocity() {
 
 int Velocity::getAsOrientation() {
         if ((this->x > 0)&&(this->y == 0)) {
-                return PLAYER_ORIENTATION_RIGHT;
+              return PLAYER_ORIENTATION_RIGHT;
         }
         else if ((this->x < 0)&&(this->y == 0)) {
                 return PLAYER_ORIENTATION_LEFT;
@@ -178,14 +178,14 @@ int Velocity::getAsOrientation() {
         else if ((this->x > 0)&&(this->y < 0)){
           return PLAYER_ORIENTATION_UP_R;
         }
-        else if ((this->x < 0)&&(this->y < 0)){
+        else if ((this->x < 0)&&(this->y > 0)){
           return PLAYER_ORIENTATION_DOWN_L;
         }
-        else if ((this->x < 0)&&(this->y > 0)){
+        else if ((this->x < 0)&&(this->y < 0)){
           return PLAYER_ORIENTATION_UP_L;
         }
         else
-                return PLAYER_ORIENTATION_INVALID;
+            return PLAYER_ORIENTATION_INVALID;
 }
 
 std::string Velocity::toString() {

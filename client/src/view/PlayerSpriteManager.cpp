@@ -44,9 +44,10 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         this->stopSliding();
     }
     bool runningFast = this->player->isRunningFast();
+    int orientation = this->player->getOrientation();
     if (still && (!sliding) && (!kicking)) {
         // Esta quieto, se dibuja parado.
-        this->setStandingSprite(this->player->getOrientation());
+        this->setStandingSprite(orientation);
     } else {
         this->setSprite(sliding, kicking, runningFast);
     }
@@ -54,11 +55,19 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
     SDL_Rect positionOnScreen = this->getPositionOnScreen(this->sprite, coordinates);
     SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
 
-    SDL_RenderCopy(
+    double degrees = 0;
+    if ((orientation >= PLAYER_ORIENTATION_UP_R) && (orientation<= PLAYER_ORIENTATION_DOWN_L)){
+      degrees = 45;
+    }
+
+    SDL_RenderCopyEx(
         screen,
         spriteSheet,
         &this->sprite,
-        &positionOnScreen
+        &positionOnScreen,
+        degrees,
+        NULL,
+        SDL_FLIP_NONE
     );
     // Active player marker.
     if (this->player->getIsSelected() && (this->player->userName != "NONE")) {
@@ -198,13 +207,25 @@ void PlayerSpriteManager::setRunningSprite(bool runningFast) {
             case PLAYER_ORIENTATION_UP:
                 this->setRunningUpSprite(cteVelocidad);
                 break;
+            case PLAYER_ORIENTATION_UP_R:
+                this->setRunningUpSprite(cteVelocidad);
+                break;
             case PLAYER_ORIENTATION_RIGHT:
+                this->setRunningRightSprite(cteVelocidad);
+                break;
+            case PLAYER_ORIENTATION_DOWN_R:
                 this->setRunningRightSprite(cteVelocidad);
                 break;
             case PLAYER_ORIENTATION_DOWN:
                 this->setRunningDownSprite(cteVelocidad);
                 break;
+            case PLAYER_ORIENTATION_DOWN_L:
+                this->setRunningDownSprite(cteVelocidad);
+                break;
             case PLAYER_ORIENTATION_LEFT:
+                this->setRunningLeftSprite(cteVelocidad);
+                break;
+            case PLAYER_ORIENTATION_UP_L:
                 this->setRunningLeftSprite(cteVelocidad);
                 break;
         }
