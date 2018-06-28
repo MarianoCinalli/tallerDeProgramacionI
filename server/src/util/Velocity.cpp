@@ -160,17 +160,29 @@ Velocity::~Velocity() {
 }
 
 int Velocity::getAsOrientation() {
-        if (this->x > 0) {
+        if ((this->x > 0)&&(this->y == 0)) {
                 return PLAYER_ORIENTATION_RIGHT;
         }
-        else if (this->x < 0) {
+        else if ((this->x < 0)&&(this->y == 0)) {
                 return PLAYER_ORIENTATION_LEFT;
         }
-        else if (this->y > 0) {
+        else if ((this->y > 0)&&(this->x == 0)) {
                 return PLAYER_ORIENTATION_DOWN;
         }
-        else if (this->y < 0) {
+        else if ((this->y < 0)&&(this->x == 0)) {
                 return PLAYER_ORIENTATION_UP;
+        }
+        else if ((this->x > 0)&&(this->y > 0)){
+          return PLAYER_ORIENTATION_DOWN_R;
+        }
+        else if ((this->x > 0)&&(this->y < 0)){
+          return PLAYER_ORIENTATION_UP_R;
+        }
+        else if ((this->x < 0)&&(this->y < 0)){
+          return PLAYER_ORIENTATION_DOWN_L;
+        }
+        else if ((this->x < 0)&&(this->y > 0)){
+          return PLAYER_ORIENTATION_UP_L;
         }
         else
                 return PLAYER_ORIENTATION_INVALID;
