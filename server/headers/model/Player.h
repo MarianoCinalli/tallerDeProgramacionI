@@ -57,6 +57,7 @@ class Player {
         bool isRunningFast();
         bool isGoalkeeper();
         bool isStill();
+        bool isThisPlayer(Player* player);
         std::string getUsername();
         int getStealCoef();
         // Modifiers

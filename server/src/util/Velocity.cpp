@@ -10,6 +10,15 @@ Velocity::Velocity(float x, float y) {
         this->y = y;
 }
 
+void Velocity::setFloatX(float x){
+    this->x = x;
+}
+
+
+void Velocity::setFloatY(float y){
+    this->y = y;
+}
+
 void Velocity::normalize(){
         float x  = this->x;
         float y  = this->y;

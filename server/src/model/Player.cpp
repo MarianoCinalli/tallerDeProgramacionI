@@ -65,6 +65,10 @@ bool Player::isAHighPass() {
     return this->highPass;
 }
 
+bool Player::isThisPlayer(Player* player){
+    return (this->position->isThisPosition(player->getPosition()));
+}
+
 int Player::getOrientation() {
     if (!this->velocity->isZero()){
       this->orientation = this->velocity->getAsOrientation();

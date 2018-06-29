@@ -11,6 +11,15 @@ Coordinates::Coordinates(float x, float y) {
     this->y = y;
 }
 
+bool Coordinates::isThisPosition(Coordinates* pos){
+    if ((this->x == pos->getX()) && (this->y == pos->getY())) {
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 Coordinates::~Coordinates() {
 }
 

@@ -22,6 +22,7 @@ class Coordinates : public Loggable {
         int addY(float amount);
         int validatePositionInBoundsY();
         int validatePositionInBoundsX();
+        bool isThisPosition(Coordinates* pos);
         void set(Coordinates other);
         float distanceTo(Coordinates* other);
         std::string toString();

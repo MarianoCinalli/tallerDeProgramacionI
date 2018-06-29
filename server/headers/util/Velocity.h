@@ -21,6 +21,8 @@ class Velocity : public Loggable {
         void set(Velocity* velocity);
         void setComponentX(int x);
         void setComponentY(int y);
+        void setFloatX(float x);
+        void setFloatY(float y);
         void scale(float num);
         void scaleY(int num);
         void scaleX(int num);

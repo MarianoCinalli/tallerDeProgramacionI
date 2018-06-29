@@ -117,6 +117,33 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
     }
 }
 
+void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
+    if (this->isDominated()) {
+        this->interceptable = false;
+        this->velocity->set(velocity);
+        log("Ball: La velocidad del pase es: ", LOG_DEBUG);
+        log(this->velocity->toString(),LOG_DEBUG);
+        if (velocity->isZero()) {
+            log("Ball: el pase es sin ayuda", LOG_DEBUG);
+            this->orientation = this->player->getOrientation();
+            this->velocity->accelerate(this->orientation);
+        }
+        this->dominated = false; //HACK? para que sirve?
+        this->player->setWithBall(this->dominated);
+        this->isInAPass = true;
+        if(highPass) {
+            this->isInAHighPass = true;
+            this->passPower = passPower*PASS_SPEED*1.4; //para que sea mas sensible el pase elevado
+            this->initialPassPower = this->passPower;
+        }
+        else{
+          this->passPower = passPower*PASS_SPEED;
+          this->initialPassPower = this->passPower;
+        }
+        this->startingPassPosition = this->position;
+    }
+}
+
 float calculatePassPower(float passPower, float decel){
   float finalPassPower;
   if (passPower >  3){
@@ -136,8 +163,8 @@ const float BALL_HEIGHT_CONST = 1.3;
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
-        this->calculateDominatedPosition();
         this->orientation = player->getOrientation();
+        this->calculateDominatedPosition();
     }
     if (this->isInAPass) {
         this->timePassing += 1;

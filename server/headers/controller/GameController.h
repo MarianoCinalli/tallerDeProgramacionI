@@ -65,6 +65,7 @@ class GameController {
         bool shouldGameEnd();
         bool gameEnd();
         void setEnd();
+        Velocity* calculatePassVelocity(Player* player);
         std::string getMessageToBroadcast(bool allPlayers);
         std::string getStatsToBroadcast(bool allMessage);
         std::string getDebugLines();
