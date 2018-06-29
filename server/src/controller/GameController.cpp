@@ -271,7 +271,7 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                 int newY = (p->getPosition()->getY());
                 int failingFor = abs(x-newX);
                 if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (y < newY)){
-                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    //log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
                     if (distance > newDistance || distance == 0){
                         finalX = (newX - x);
@@ -288,7 +288,7 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                 int newY = (p->getPosition()->getY());
                 int failingFor = abs(x-newX);
                 if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (y > newY)){
-                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    //log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
                     if (distance > newDistance || distance == 0){
                         finalX = (newX - x);
@@ -321,7 +321,7 @@ Velocity* GameController::calculatePassVelocity(Player* player){
                 int newX = (p->getPosition()->getX());
                 int failingFor = abs(y-newY);
                 if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x > newX)){
-                    log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
+                    //log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
                     int newDistance = passPosition->distanceTo(p->getPosition());
                     if (distance > newDistance || distance == 0){
                         finalX = (newX - x);
@@ -343,9 +343,9 @@ Velocity* GameController::calculatePassVelocity(Player* player){
         velocity->setFloatX(finalX);
         velocity->setFloatY(finalY);
         velocity->normalize();
-        log("GameController: Y normal = ", velocity->getComponentY(), LOG_DEBUG);
-        log("GameController: X normal = ", velocity->getComponentX(), LOG_DEBUG);
-        log("GameController: velocidad de pase normalizada ", LOG_DEBUG);
+        //log("GameController: Y normal = ", velocity->getComponentY(), LOG_DEBUG);
+        //log("GameController: X normal = ", velocity->getComponentX(), LOG_DEBUG);
+        //log("GameController: velocidad de pase normalizada ", LOG_DEBUG);
     }
     else{
         log("GameController:Pase sin ayuda. ", LOG_DEBUG);
