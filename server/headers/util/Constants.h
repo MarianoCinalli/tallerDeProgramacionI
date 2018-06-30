@@ -88,7 +88,7 @@ const int DEFENSE_STEAL_COEF = 80;
 const int MIDFIELD_STEAL_COEF = 70;
 const int STRIKER_STEAL_COEF = 60;
 const int PASS_HELPING_CONST = 100;
-const int PASS_SPEED = 3.3;
+
 
 //counts
 const int KICK_COUNT = 35;
