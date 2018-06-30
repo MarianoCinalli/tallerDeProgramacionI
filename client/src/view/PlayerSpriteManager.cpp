@@ -33,6 +33,11 @@ PlayerSpriteManager::PlayerSpriteManager(Texture* spriteSheet, Player* player) {
 // Con eso arma un cuadrado que encierra el sprite a dibujar.
 // Tambien arma otro cuadrado que representa el lugar de la pantalla (renderer)
 // en el que se dibuja el sprite.
+
+double calculateDegrees(int orientation) {
+        return (orientation-1)*45;
+    }
+
 void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates) {
     bool still = this->player->isStill();
     bool sliding = this->player->isSliding();
@@ -56,8 +61,11 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
     SDL_Texture* spriteSheet = this->spriteSheet->getSpriteSheetTexture();
 
     double degrees = 0;
-    if ((orientation >= PLAYER_ORIENTATION_UP_R) && (orientation<= PLAYER_ORIENTATION_DOWN_L)){
+    if ((orientation % 2) == 0){
       degrees = 45;
+    }
+    if (sliding || kicking){
+        degrees = calculateDegrees(orientation);
     }
 
     SDL_RenderCopyEx(
@@ -84,6 +92,8 @@ void PlayerSpriteManager::render(SDL_Renderer* screen, Coordinates* coordinates)
         );
     }
     // SDL_RenderSetScale(screen,1,1);
+
+    
 }
 
 int PlayerSpriteManager::getPlayerTeam() {
@@ -137,13 +147,25 @@ void PlayerSpriteManager::setStandingSprite(int orientation) {
             case PLAYER_ORIENTATION_UP:
                 this->setStandingSpriteViewUp();
                 break;
+            case PLAYER_ORIENTATION_UP_R:
+                this->setStandingSpriteViewUp();
+                break;
             case PLAYER_ORIENTATION_RIGHT:
+                this->setStandingSpriteViewRight();
+                break;
+            case PLAYER_ORIENTATION_DOWN_R:
                 this->setStandingSpriteViewRight();
                 break;
             case PLAYER_ORIENTATION_DOWN:
                 this->setStandingSpriteViewDown();
                 break;
+            case PLAYER_ORIENTATION_DOWN_L:
+                this->setStandingSpriteViewDown();
+                break;
             case PLAYER_ORIENTATION_LEFT:
+                this->setStandingSpriteViewLeft();
+                break;
+            case PLAYER_ORIENTATION_UP_L:
                 this->setStandingSpriteViewLeft();
                 break;
         }
@@ -353,7 +375,7 @@ void PlayerSpriteManager::setKickingSprite() {
         kickingCount = 0;
     }
     if ((kickingCount % KICKING_DIVISOR) == 0) {
-        int orientation = this->player->getOrientation();
+        int orientation = 1;
         if (!this->wasKickingYet()) {
             log("PlayerSpriteManager: Creando el sprite pateando arriba.", LOG_SPAM);
             this->sprite.x = 0;
@@ -378,7 +400,7 @@ void PlayerSpriteManager::setSlidingSprite() {
         slidingCount = 0;
     }
     if ((slidingCount % SLIDING_DIVISOR) == 0) {
-        int orientation = this->player->getOrientation();
+        int orientation = 1;
         if (!this->wasSlidingYet()) {
             log("PlayerSpriteManager: Creando el sprite deslizando arriba.", LOG_SPAM);
             this->sprite.x = 0;
