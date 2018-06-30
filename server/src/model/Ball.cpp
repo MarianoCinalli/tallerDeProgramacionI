@@ -88,18 +88,23 @@ void Ball::isIntercepted(Player* player) {
     log("Ball: Pelota interceptada por jugador.", LOG_DEBUG);
 }
 
-void Ball::isPassed(int direction, float passPower, bool highPass) {
+void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     if (this->isDominated()) {
         this->timePassing = 0;
         this->interceptable = false;
         Velocity* passDirection = new Velocity(0,0);
-        passDirection->set(this->player->getVelocity());  //direction;
+        passDirection->set(velocity);
         this->velocity = passDirection;
         log("BALL: velocidad ", this->velocity, LOG_DEBUG);
+        log(this->velocity->toString(),LOG_DEBUG);
         if (passDirection->isZero()) {
-            log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
-            int passOrientation = this->player->getOrientation();
-            this->velocity->accelerate(passOrientation);
+            log("Ball: el pase es sin ayuda", this->orientation, LOG_DEBUG);
+            this->velocity->set(this->player->getVelocity());
+            if (this->velocity->isZero()) {
+                log("Ball: jugador tiene velocidad cero", LOG_DEBUG);
+                int passOrientation = this->player->getOrientation();
+                this->velocity->accelerate(passOrientation);
+            }
         }
         this->dominated = false; //HACK? para que sirve?
         this->player->setWithBall(false);
@@ -107,33 +112,6 @@ void Ball::isPassed(int direction, float passPower, bool highPass) {
         if(highPass) {
             this->isInAHighPass = true;
             this->passPower = passPower*this->maxSpeed*1.2; //para que sea mas sensible el pase elevado
-            this->initialPassPower = this->passPower;
-        }
-        else{
-          this->passPower = passPower*this->maxSpeed;
-          this->initialPassPower = this->passPower;
-        }
-        this->startingPassPosition = this->position;
-    }
-}
-
-void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
-    if (this->isDominated()) {
-        this->interceptable = false;
-        this->velocity->set(velocity);
-        log("Ball: La velocidad del pase es: ", LOG_DEBUG);
-        log(this->velocity->toString(),LOG_DEBUG);
-        if (velocity->isZero()) {
-            log("Ball: el pase es sin ayuda", this->orientation, LOG_DEBUG);
-            this->orientation = this->player->getOrientation();
-            this->velocity->accelerate(this->orientation);
-        }
-        this->dominated = false; //HACK? para que sirve?
-        this->player->setWithBall(this->dominated);
-        this->isInAPass = true;
-        if(highPass) {
-            this->isInAHighPass = true;
-            this->passPower = passPower*this->maxSpeed*1.4; //para que sea mas sensible el pase elevado
             this->initialPassPower = this->passPower;
         }
         else{

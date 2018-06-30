@@ -45,7 +45,6 @@ class Ball {
         bool isInterceptable();
         void restart(int position);
         void isIntercepted(Player* player);
-        void isPassed(int direction, float passPower, bool highPass);
         void isPassed(Velocity* velocity, float passPower, bool highPass);
         void updatePosition();
 

@@ -160,8 +160,6 @@ void Velocity::changeOnDirection(int direction) {
         } else if ((newy != 0) && (this->y == 0)){
           this->y = newy;
         }
-
-
         this->normalize();
 }
 
