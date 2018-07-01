@@ -97,7 +97,7 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
         this->velocity = passDirection;
         log("BALL: velocidad ", this->velocity, LOG_DEBUG);
         log(this->velocity->toString(),LOG_DEBUG);
-        if (passDirection->isZero()) {
+        if (passDirection->isZero() || (highPass)) {
             log("Ball: el pase es sin ayuda", this->orientation, LOG_DEBUG);
             this->velocity->set(this->player->getVelocity());
             if (this->velocity->isZero()) {
