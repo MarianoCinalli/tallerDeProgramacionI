@@ -46,14 +46,12 @@ void Areas::insertUnrestricted(int position) {
 }
 
 Rectangle* Areas::get(int playerNumber, bool isLeftsideTeam) {
-    // Povisorio. Por ahora soporto un solo equipo.
     int number = 0;
     if (playerNumber > 7) {
         number = playerNumber - 7;
     } else {
         number = playerNumber;
     }
-    // --------------------------------------------
     Rectangle* area = NULL;
     if (isLeftsideTeam) {
         auto search = this->areasForPlayersLeftSide.find(number);

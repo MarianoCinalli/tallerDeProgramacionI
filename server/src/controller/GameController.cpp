@@ -234,7 +234,10 @@ void GameController::updatePlayers() {
     teamPlayers.insert(teamPlayers.end(), awayPlayers.begin(), awayPlayers.end());
     if (!teamPlayers.empty()) {
         for (Player* p : teamPlayers) {
-            p->updateState(this->ball->getPosition());
+            p->updateState(
+                this->ball->getPosition(),
+                this->ball->doesHisTeamHaveTheBall(p)
+            );
         }
     }
     log("GameController: se actualizaron los jugadores.", LOG_SPAM);

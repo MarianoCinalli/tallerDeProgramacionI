@@ -291,6 +291,11 @@ std::string Ball::getAsYaml() {
     return message;
 }
 
+// Devuelve true si el equipo del jugador tiene la pelota.
+bool Ball::doesHisTeamHaveTheBall(Player* somePlayer) {
+    return (this->player->getTeam() == somePlayer->getTeam());
+}
+
 Ball::~Ball() {
     delete(this->position);
     // delete(this->player);

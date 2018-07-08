@@ -53,6 +53,8 @@ class Ball {
         void stopRolling();
         void calculateHeight();
 
+        bool doesHisTeamHaveTheBall(Player* player);
+
         std::string getAsYaml();
 
         ~Ball();

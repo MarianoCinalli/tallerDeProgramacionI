@@ -65,13 +65,13 @@ bool Player::isAHighPass() {
     return this->highPass;
 }
 
-bool Player::isThisPlayer(Player* player){
+bool Player::isThisPlayer(Player* player) {
     return (this->position->isThisPosition(player->getPosition()));
 }
 
 int Player::getOrientation() {
-    if (!this->velocity->isZero()){
-      this->orientation = this->velocity->getAsOrientation();
+    if (!this->velocity->isZero()) {
+        this->orientation = this->velocity->getAsOrientation();
     }
     return this->orientation;
 }
@@ -179,8 +179,8 @@ void Player::stop() {
 }
 
 
-void Player::updateState(Coordinates* ballPosition) {
-    this->updatePosition(ballPosition); //follows this position
+void Player::updateState(Coordinates* ballPosition, bool isAttacking) {
+    this->updatePosition(ballPosition, isAttacking); //follows this position
     this->updateKicking();
     this->updateSliding(ballPosition);
 }
@@ -211,10 +211,10 @@ void Player::updateSliding(Coordinates* ballPosition) {
     if (number > 7) {
         number -= 7;
     }
-    if (number ==1){
-      if (this->position->distanceTo(ballPosition) < DISTANCE_TO_STEAL){
-        this->startsSliding();
-      }
+    if (number == 1) {
+        if (this->position->distanceTo(ballPosition) < DISTANCE_TO_STEAL) {
+            this->startsSliding();
+        }
     }
     if (this->sliding) {
         slideCount++;
@@ -226,7 +226,7 @@ void Player::updateSliding(Coordinates* ballPosition) {
 
 }
 
-void Player::updatePosition(Coordinates* positionToFollow) {
+void Player::updatePosition(Coordinates* positionToFollow, bool isAttacking) {
     float speed = 1;
     if (this->runningFast) {
         speed = this->sprintVelocity; //TODO hardcode
@@ -244,12 +244,11 @@ void Player::updatePosition(Coordinates* positionToFollow) {
             // Si no vuelve a la posicion original.
             this->changeVelocityTo(this->basePosition, false, false);
         }
-    } if (this->canMove){
-      // log("PLAYER: velocidad: ", this->velocity, LOG_DEBUG);
-      float amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
-      float amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
-      this->position->addY(amountY);
-      this->position->addX(amountX);
+    } if (this->canMove) {
+        float amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
+        float amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
+        this->position->addY(amountY);
+        this->position->addX(amountX);
     }
 }
 
@@ -266,8 +265,8 @@ void Player::changeVelocityTo(Coordinates* positionToFollow, bool onlyX, bool on
     this->velocity->setComponentX(deltaX);
     this->velocity->setComponentY(deltaY);
     this->velocity->normalize();
-    if (!this->velocity->isZero()){
-      this->orientation = this->velocity->getAsOrientation();
+    if (!this->velocity->isZero()) {
+        this->orientation = this->velocity->getAsOrientation();
     }
 }
 

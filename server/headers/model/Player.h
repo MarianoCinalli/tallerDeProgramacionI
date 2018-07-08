@@ -74,12 +74,12 @@ class Player {
         void setCanMove(bool canMove);
 
         // Cambia la posicion con respecto a su velocidad.
-        void updatePosition(Coordinates* positionToFollow);
+        void updatePosition(Coordinates* positionToFollow, bool isAttacking);
         void updateKicking();
         void setKicked(bool);
         void setSlided(bool s);   //TODO mejorar nombres de slide!
         void updateSliding(Coordinates*);
-        void updateState(Coordinates* positionToFollow);
+        void updateState(Coordinates* positionToFollow, bool isAttacking);
         void setOrientation(int orientation);
         void setPosition(Coordinates coord);
         void setBasePosition(Coordinates coord);
