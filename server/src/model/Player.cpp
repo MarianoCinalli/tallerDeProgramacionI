@@ -244,7 +244,8 @@ void Player::updatePosition(Coordinates* positionToFollow, bool isAttacking) {
             // Si no vuelve a la posicion original.
             this->changeVelocityTo(this->basePosition, false, false);
         }
-    } if (this->canMove) {
+    }
+    if (this->canMove) {
         float amountX = this->velocity->getComponentX() * speed * this->maxVelocity;
         float amountY = this->velocity->getComponentY() * speed * this->maxVelocity;
         this->position->addY(amountY);
