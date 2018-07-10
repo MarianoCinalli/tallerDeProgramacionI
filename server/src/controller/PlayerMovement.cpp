@@ -5,6 +5,7 @@ PlayerMovement::PlayerMovement() {
 
     this->playerAreas = NULL;
     this->isLeftsideTeam = true;
+    this->formation = 0;
 }
 
 void PlayerMovement::setFormation(int formation) {
@@ -12,6 +13,7 @@ void PlayerMovement::setFormation(int formation) {
         log("PlayerMovement: Habia areas especificadas previamente. Borrandolas...", LOG_INFO);
         delete(this->playerAreas);
     }
+    this->formation = formation;
     log("PlayerMovement: Creando areas para formacion: ", formation, LOG_DEBUG);
     this->playerAreas = new PlayerAreas(formation);
 }
@@ -63,6 +65,53 @@ std::string PlayerMovement::getDebugLines() {
         message += this->playerAreas->getDebugLines();
     }
     return message;
+}
+
+Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, Coordinates* basePosition, int playerNumber, bool isAttacking) {
+    Coordinates* coordinates = new Coordinates(ballPosition->getX(), ballPosition->getY());
+    int number = 0;
+    if (playerNumber > 7) {
+        number = playerNumber - 7;
+    } else {
+        number = playerNumber;
+    }
+    if (this->isDefender(number)) {
+        if (isAttacking) {
+            coordinates->setX(basePosition->getX());
+            coordinates->setY(basePosition->getY());
+        }
+    } else if (this->isAttacker(number)) {
+        if (!isAttacking) {
+            coordinates->setX(basePosition->getX());
+            coordinates->setY(basePosition->getY());
+        }
+    }
+    return coordinates;
+}
+
+bool PlayerMovement::isDefender(int playerNumber) {
+    bool isDefencePlayer = false;
+    if (this->formation == 33) {
+        // Para la formacion 33 considero a los tres como defensores.
+        isDefencePlayer = (playerNumber <= 4);
+    } else {
+        // Para las demas solo el dos es defensor.
+        isDefencePlayer = (playerNumber == 2);
+    }
+    return isDefencePlayer;
+}
+
+bool PlayerMovement::isAttacker(int playerNumber) {
+    bool isAttackPlayer = false;
+    if (this->formation == 33) {
+        // Para la formacion 33 considero solo el 5 delantero.
+        isAttackPlayer = (playerNumber == 5);
+    } else if (this->formation == 312) {
+        isAttackPlayer = (playerNumber == 6 || playerNumber == 7);
+    } else if (this->formation == 321) {
+        isAttackPlayer = (playerNumber == 7);
+    }
+    return isAttackPlayer;
 }
 
 PlayerMovement::~PlayerMovement() {

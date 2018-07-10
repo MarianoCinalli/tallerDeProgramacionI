@@ -237,8 +237,15 @@ void Player::updatePosition(Coordinates* positionToFollow, bool isAttacking) {
                 // El arquero solo se mueve en Y.
                 this->changeVelocityTo(positionToFollow, false, true);
             } else {
-                this->changeVelocityTo(positionToFollow, false, false);
+                Coordinates* coordinatesToFollow = this->playerMovement->getCoordinatesToFollow(
+                    positionToFollow,
+                    this->basePosition,
+                    this->id,
+                    isAttacking
+                );
+                this->changeVelocityTo(coordinatesToFollow, false, false);
                 this->playerMovement->cleanVelocity(this->velocity, this->position, this->id);
+                delete(coordinatesToFollow);
             }
         } else {
             // Si no vuelve a la posicion original.

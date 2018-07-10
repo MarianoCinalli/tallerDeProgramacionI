@@ -12,12 +12,16 @@ class PlayerMovement {
     private:
         PlayerAreas* playerAreas;
         bool isLeftsideTeam;
+        int formation;
     public:
         PlayerMovement();
         void setFormation(int formation);
         void setSide(bool isLeftsideTeam);
         bool isInsideArea(Coordinates* coordinates, int playerNumber);
         void cleanVelocity(Velocity* velocity, Coordinates* coordinates, int playerNumber);
+        Coordinates* getCoordinatesToFollow(Coordinates* ballPosition, Coordinates* basePosition, int playerNumber, bool isAttacking);
+        bool isDefender(int playerNumber);
+        bool isAttacker(int playerNumber);
         std::string getDebugLines();
         ~PlayerMovement();
 };
