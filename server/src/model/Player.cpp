@@ -182,7 +182,7 @@ void Player::stop() {
 void Player::updateState(Coordinates* ballPosition, bool isAttacking) {
     this->updatePosition(ballPosition, isAttacking); //follows this position
     this->updateKicking();
-    this->updateSliding(ballPosition);
+    this->updateSliding(ballPosition, isAttacking);
 }
 //
 // int frameDiference(int current, int last){
@@ -206,14 +206,11 @@ void Player::updateKicking() {
 
 const int DISTANCE_TO_STEAL = 15;
 
-void Player::updateSliding(Coordinates* ballPosition) {
-    int number = this->id;
-    if (number > 7) {
-        number -= 7;
-    }
-    if (number == 1) {
+void Player::updateSliding(Coordinates* ballPosition, bool isAttacking) {
+    if (!isAttacking) {
         if (this->position->distanceTo(ballPosition) < DISTANCE_TO_STEAL) {
             this->startsSliding();
+            log("Jugador esta atacando y cerca de la pelota", this, LOG_DEBUG);
         }
     }
     if (this->sliding) {
@@ -429,4 +426,9 @@ std::string Player::getAsYaml() {
     message += " nm: " + this->userName + "\n";
     message += " st: " + std::to_string(isStill()) + "\n";
     return message;
+}
+
+std::string Player::toString()
+{
+    return "jugador N°: " + std::to_string(this->id) + ",  Pos= x:" + std::to_string((int)this->position->getX()) + " y: " + std::to_string((int)this->position->getY()) + ". Equipo: ", std::to_string(this->team);
 }
