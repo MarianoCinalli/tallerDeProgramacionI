@@ -30,11 +30,11 @@ void Areas321::loadDefendersAreas() {
 void Areas321::loadMidFildersAreas() {
     log("Areas321: Cargando areas, del lado izquierdo, para los mediocampistas...", LOG_DEBUG);
     this->areasForPlayersLeftSide[5] = new Rectangle(551, 204, 486, 288);
-    this->areasForPlayersLeftSide[6] = new Rectangle(551, 510, 486, 300);
+    this->areasForPlayersLeftSide[6] = new Rectangle(551, 520, 486, 280);
 
     log("Areas321: Cargando areas, del lado derecho, para los mediocampistas...", LOG_DEBUG);
-    this->areasForPlayersRightSide[5] = new Rectangle(551, 201, 486, 290);
-    this->areasForPlayersRightSide[6] = new Rectangle(551, 513, 486, 303);
+    this->areasForPlayersRightSide[5] = new Rectangle(561, 214, 462, 264);
+    this->areasForPlayersRightSide[6] = new Rectangle(560, 535, 460, 260);
 }
 
 void Areas321::loadAtackersAreas() {

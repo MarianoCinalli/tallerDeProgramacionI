@@ -64,7 +64,7 @@ Coordinates* Formation::getCoordinatesForPlayer321(int playerNumber) {
             coordinates = new Coordinates(798, 344);
             break;
         case 6:
-            coordinates = new Coordinates(798, 660);
+            coordinates = new Coordinates(798, 663);
             break;
         case 7:
             coordinates = new Coordinates(1232, 501);
@@ -151,13 +151,13 @@ Coordinates* Formation::getCoordinatesForPlayerOnTheRightside321(int playerNumbe
             coordinates = new Coordinates(1245, 910);
             break;
         case 5:
-            coordinates = new Coordinates(940, 501);
+            coordinates = new Coordinates(800, 336);
             break;
         case 6:
-            coordinates = new Coordinates(360, 323);
+            coordinates = new Coordinates(800, 640);
             break;
         case 7:
-            coordinates = new Coordinates(360, 674);
+            coordinates = new Coordinates(360, 501);
             break;
         default:
             log("Formation: Numero de jugador no entendido: ", playerNumber, LOG_ERROR);
