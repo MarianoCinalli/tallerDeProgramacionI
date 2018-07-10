@@ -239,6 +239,7 @@ void Player::updatePosition(Coordinates* positionToFollow, bool isAttacking) {
             } else {
                 Coordinates* coordinatesToFollow = this->playerMovement->getCoordinatesToFollow(
                     positionToFollow,
+                    this->position,
                     this->basePosition,
                     this->id,
                     isAttacking

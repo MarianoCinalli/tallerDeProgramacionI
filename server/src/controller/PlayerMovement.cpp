@@ -67,8 +67,9 @@ std::string PlayerMovement::getDebugLines() {
     return message;
 }
 
-Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, Coordinates* basePosition, int playerNumber, bool isAttacking) {
-    Coordinates* coordinates = new Coordinates(ballPosition->getX(), ballPosition->getY());
+Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, Coordinates* currentPosition, Coordinates* basePosition, int playerNumber, bool isAttacking) {
+    int x = ballPosition->getX();
+    int y = ballPosition->getY();
     int number = 0;
     if (playerNumber > 7) {
         number = playerNumber - 7;
@@ -77,15 +78,30 @@ Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, C
     }
     if (this->isDefender(number)) {
         if (isAttacking) {
-            coordinates->setX(basePosition->getX());
-            coordinates->setY(basePosition->getY());
+            x = basePosition->getX();
+            y = basePosition->getY();
+        } else {
+            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), DEFENDER_MARGIN);
+            y += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getY(), DEFENDER_MARGIN);
         }
     } else if (this->isAttacker(number)) {
         if (!isAttacking) {
-            coordinates->setX(basePosition->getX());
-            coordinates->setY(basePosition->getY());
+            x = basePosition->getX();
+            y = basePosition->getY();
+        } else {
+            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), ATTACKER_MARGIN);
+            y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), ATTACKER_MARGIN);
+        }
+    } else {
+        if (isAttacking) {
+            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), MIDFILDER_MARGIN_FAR);
+            y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), MIDFILDER_MARGIN_FAR);
+        } else {
+            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), MIDFILDER_MARGIN_CLOSE);
+            y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), MIDFILDER_MARGIN_CLOSE);
         }
     }
+    Coordinates* coordinates = new Coordinates(x, y);
     return coordinates;
 }
 
@@ -112,6 +128,19 @@ bool PlayerMovement::isAttacker(int playerNumber) {
         isAttackPlayer = (playerNumber == 7);
     }
     return isAttackPlayer;
+}
+
+// Devuelve el margen que mantienen los jugadores a la pelota.
+int PlayerMovement::getAmountToModifyPosition(int destination, int origin, int margin) {
+    int value = 0;
+    if (origin < destination) {
+        // Si estoy atras de la pelota el margen es negativo.
+        // Porque se lo resto a la posicion final.
+        value = -1 * margin;
+    } else {
+        value = margin;
+    }
+    return value;
 }
 
 PlayerMovement::~PlayerMovement() {
