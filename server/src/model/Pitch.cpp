@@ -294,8 +294,10 @@ std::list<Player*> Pitch::getPlayersInsideCamera() {
 const int BALL_STEAL_HEIGHT = 3;
 
 void Pitch::checkSteals() {
+    // cuando un jugador se la quiere robar a otro
     log("Pitch: Chequeando intercepciones...", LOG_SPAM);
-    if (this->ball->getHeight() < BALL_STEAL_HEIGHT) {
+    if (this->ball->isInterceptable() && (this->ball->getHeight() < BALL_STEAL_HEIGHT))
+    {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
         players.insert(players.end(), awayPlayers.begin(), awayPlayers.end());
@@ -330,7 +332,8 @@ void Pitch::checkSteals() {
 }
 
 void Pitch::changeBallOwnership() {
-    if (this->ball->isInterceptable() && (this->ball->getHeight() < 1)) {
+    // cuando la pelota esta suelta en el piso y un jugador quiere agarrarla
+    if ((this->ball->isInterceptable() && (this->ball->getHeight() < 1)) && (!this->ball->isDominated())) {
         int value = CHANGE_OWNERSHIP_VALUE;
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();

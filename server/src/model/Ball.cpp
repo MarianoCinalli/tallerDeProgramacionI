@@ -17,7 +17,7 @@ Ball::Ball(Coordinates* position, float maxSpeed, float decelerate) {
     this->passDirection = 0;
     this->decelerateLevel = 0;
     this->decelerateDistance = 0;
-    this->timePassing = 0; // corrector para frames TODO
+    this->timeIntercept = 0; // corrector para frames TODO
     this->startingPassPosition = new Coordinates(800, 500); // Esto esta perdiendo memoria?
     this->interceptable = true;
     // this->player = player;
@@ -81,7 +81,8 @@ bool Ball::isInterceptable() {
 }
 
 void Ball::isIntercepted(Player* player) {
-    this->stopRolling();
+    this->timeIntercept = 0;
+    // this->stopRolling();
     this->interceptable = false;
     this->setPlayer(player);
     this->orientation = player->getOrientation();
@@ -90,7 +91,7 @@ void Ball::isIntercepted(Player* player) {
 
 void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     if (this->isDominated()) {
-        this->timePassing = 0;
+        this->timeIntercept = 0;
         this->interceptable = false;
         Velocity* passDirection = new Velocity(0,0);
         passDirection->set(velocity);
@@ -133,7 +134,7 @@ float calculatePassPower(float passPower, float decel){
   return finalPassPower;
 }
 
-const int TIME_BALL_NO_INTERCEPT = 6;
+const int TIME_BALL_NO_INTERCEPT = 9;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 
 
@@ -145,7 +146,7 @@ void Ball::updatePosition() {
         this->calculateDominatedPosition();
     }
     if (this->isInAPass) {
-        this->timePassing += 1;
+        ++this->timeIntercept;
         if(this->isInAHighPass && !this->velocity->isZero()) {
             this->calculateHeight();
             if(this->height > BALL_HEIGHT_CONST){
@@ -154,8 +155,8 @@ void Ball::updatePosition() {
             log("Ball: altura del balon: ", this->height, LOG_SPAM);
             log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
         }
-        log("Ball: paso este tiempo:", this->timePassing, LOG_SPAM);
-        if (!this->interceptable && (timePassing > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
+        log("Ball: paso este tiempo:", this->timeIntercept, LOG_SPAM);
+        if (!this->interceptable && (timeIntercept > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
         if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
@@ -164,20 +165,23 @@ void Ball::updatePosition() {
         if(this->position->addY(this->velocity->getComponentY()*this->passPower)<0){
           this->velocity->scaleY(-1);
         }
-    }
-    if ((this->isInAPass) && (!this->velocity->isZero())) {
-        if (this->timePassing % BALL_DECELERATE_TIME == 0) {
-            this->passPower = calculatePassPower(this->passPower, this->decelerate);
-            if (this->passPower< 0){
-              this->timePassing = 0;
-              this->stopRolling();
+        if (!this->velocity->isZero()) {
+            if (this->timeIntercept % BALL_DECELERATE_TIME == 0) {
+                this->passPower = calculatePassPower(this->passPower, this->decelerate);
+                if (this->passPower< 0){
+                    this->timeIntercept = 0;
+                    this->stopRolling();
+                }
             }
         }
     }
     else {
-        if (this->velocity->isZero()) {
-            this->timePassing = 0;
-            this->stopRolling();
+        if(!this->interceptable){
+            ++this->timeIntercept;
+            if (timeIntercept > TIME_BALL_NO_INTERCEPT*8)   //para que no me la saque al toque que se la saque
+            { //TODO numero harcodeado tiempo de pase
+                this->interceptable = true;
+            }
         }
     }
 }

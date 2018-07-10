@@ -28,7 +28,7 @@ class Ball {
         int passDirection;
         Coordinates* startingPassPosition;
         int decelerateDistance;
-        int timePassing;
+        int timeIntercept;
         int decelerateLevel;
         Player* player;
 
