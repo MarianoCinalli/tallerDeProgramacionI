@@ -16,8 +16,8 @@ performance:
 juego:
   minutosPorTiempo: 1
 pelota:
-  velocidad: 2.7
-  desacelerar: 1.1
+  velocidad: 2.8
+  desacelerar: 0.26
 jugador:
-  velocidad: 1.6
+  velocidad: 1.7
   masRapido: 1.6

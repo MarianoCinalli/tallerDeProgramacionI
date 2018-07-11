@@ -136,16 +136,17 @@ const float BALL_HEIGHT_CONST = 1.3;
 
 float Ball::calculatePassPower(float passPower, int timePassing)
 {
-    float decel = 0.27;
+    float decel = this->decelerate;
     float finalPassPower;
-    float deltaTimePassing = (this->initialPassPower - 3)/decel;
-    if (passPower > 4)
+    float limit = 4;
+    float deltaTimePassing = (this->initialPassPower - limit)/decel;
+    if (passPower > limit)
     {
         finalPassPower = this->initialPassPower - decel*timePassing;
     }
     else
     {
-        finalPassPower = 3 - decel/3 * (timePassing-deltaTimePassing);
+        finalPassPower = limit - decel/4 * (timePassing-deltaTimePassing);
     }
     return finalPassPower;
 }
@@ -190,12 +191,6 @@ void Ball::updatePosition() {
         ++this->timeIntercept;
         if (!this->interceptable && (timeIntercept > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
-        }
-        if(this->isInAHighPass && !this->velocity->isZero()) {
-            // if(this->height > BALL_HEIGHT_CONST){    ///ya se verifica esto en las funciones
-            //     this->interceptable = false;
-            // }
-           
         }
         log("Ball: paso este tiempo:", this->timeIntercept, LOG_SPAM);
         if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){

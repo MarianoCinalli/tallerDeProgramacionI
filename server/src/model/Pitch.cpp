@@ -296,7 +296,7 @@ const int BALL_STEAL_HEIGHT = 3;
 void Pitch::checkSteals() {
     // cuando un jugador se la quiere robar a otro
     log("Pitch: Chequeando intercepciones...", LOG_SPAM);
-    if (this->ball->isInterceptable())
+    if (this->ball->isInterceptable() && this->ball->isDominated())
     {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
@@ -322,9 +322,9 @@ void Pitch::checkSteals() {
                 this->ball->getPlayer()->setWithBall(false);
                 this->ball->isIntercepted(nearestPlayer);
                 nearestPlayer->setSlided(true);
-                // Team* team = this->getTeam(nearestPlayer->getTeam());
-                // std::string user = teams[team].front();
-                // this->setActivePlayer(user, nearestPlayer); //which user?
+                Team* team = this->getTeam(nearestPlayer->getTeam());
+                std::string user = teams[team].front();
+                this->setActivePlayer(user, nearestPlayer); //which user?
                 log("Pitch: Cambiando de jugador con la posesion de la pelota.", LOG_DEBUG);
             }
         }
