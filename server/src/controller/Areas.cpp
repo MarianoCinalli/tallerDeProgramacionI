@@ -18,8 +18,8 @@ void Areas::loadAreas() {
 
 void Areas::loadGoalkeeperArea() {
     log("Areas: Cargando areas para el arquero...", LOG_DEBUG);
-    this->areasForPlayersLeftSide[1] = new Rectangle(85, 410, 40, 129);
-    this->areasForPlayersRightSide[1] = new Rectangle(1445, 410, 60, 129);
+    this->areasForPlayersLeftSide[1] = new Rectangle(85, 350, 40, 250);
+    this->areasForPlayersRightSide[1] = new Rectangle(1445, 350, 60, 250);
 }
 
 void Areas::loadDefendersAreas() {
