@@ -80,5 +80,18 @@ Coordinates* Rectangle::getFurthestVertex(Coordinates* point, bool onRightSide) 
     return coordinates;
 }
 
+Coordinates* Rectangle::getFurthestMiddleVertex(Coordinates* point) {
+    int middleY = this->y + this->height / 2;
+    int x = this->x + this->width / 2;
+    int y = point->getY();
+    if (point->getY() < middleY) {
+        y = this->y + this->height - 30;
+    } else {
+        y = this->y + 30;
+    }
+    Coordinates* coordinates = new Coordinates(x, y);
+    return coordinates;
+}
+
 Rectangle::~Rectangle() {
 }

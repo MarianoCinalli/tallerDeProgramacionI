@@ -21,6 +21,7 @@ class Rectangle {
         bool isVelocityPointingInside(Velocity* velocity, Coordinates* coordinates);
         Coordinates* getFurthestVertex(Coordinates* point);
         Coordinates* getFurthestVertex(Coordinates* point, bool onRightSide);
+        Coordinates* getFurthestMiddleVertex(Coordinates* point);
         std::string getAsString();
         ~Rectangle();
     private:
