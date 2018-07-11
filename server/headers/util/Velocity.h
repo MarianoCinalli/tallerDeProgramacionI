@@ -30,8 +30,9 @@ class Velocity : public Loggable {
         bool isZero();
         int getAsOrientation();
         void normalize();
+        float distanceTo(Velocity *other);
 
-        void stop();
+            void stop();
         void stopDirection(int direction);
         std::string toString();
         ~Velocity();

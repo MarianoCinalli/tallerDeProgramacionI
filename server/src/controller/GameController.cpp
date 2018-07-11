@@ -254,106 +254,29 @@ void GameController::updateBall() {
     }
     this->ball->updatePosition();
 }
-
+const float PI = 3.141;
 Velocity* GameController::calculatePassVelocity(Player* player){
-    int orientation = player->getOrientation();
     int teamNumber = player->getTeam();
-    int distance = 30000;
-    Coordinates* passPosition = player->getPosition();
-    int x = passPosition->getX();
-    int y = passPosition->getY();
-    float finalX = 0;
-    float finalY = 0;
-    bool setted = false;
     Team* team = this->pitch->getTeam(teamNumber);
     std::list<Player*> players = team->getPlayers();
-    switch(orientation) {
-        case PLAYER_ORIENTATION_DOWN:
-            for(Player* p: players){
-                int newX = (p->getPosition()->getX());
-                int newY = (p->getPosition()->getY());
-                int failingFor = abs(x-newX);
-                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (y < newY)){
-                    //log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
-                    int newDistance = passPosition->distanceTo(p->getPosition());
-                    if (distance > newDistance || distance == 0){
-                        finalX = (newX - x);
-                        finalY = (newY - y);
-                        distance = newDistance;
-                        setted = true;
-                    }
-                }
+    Velocity *playerVel = player->getVelocity();
+    float maxDistance = 0.7;
+    float minDistance = 1000;
+    Velocity *finalVel = new Velocity(0,0);
+    for (Player* p : players){
+        int newX = p->getPosition()->getX() - player->getPosition()->getX();
+        int newY = p->getPosition()->getY() - player->getPosition()->getY();
+        Velocity *newVel = new Velocity(newX, newY);
+        newVel->normalize();
+        if (playerVel->distanceTo(newVel) < maxDistance){ // si esta en el rango del angulo 
+            float distance = player->getPosition()->distanceTo(p->getPosition());
+            if (distance < minDistance){    //el mas cerca de los posibles
+                minDistance = distance;
+                finalVel->set(newVel);
             }
-            break;
-        case PLAYER_ORIENTATION_UP:
-            for(Player* p: players){
-                int newX = (p->getPosition()->getX());
-                int newY = (p->getPosition()->getY());
-                int failingFor = abs(x-newX);
-                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (y > newY)){
-                    //log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
-                    int newDistance = passPosition->distanceTo(p->getPosition());
-                    if (distance > newDistance || distance == 0){
-                        finalX = (newX - x);
-                        finalY = (newY - y);
-                        distance = newDistance;
-                        setted = true;
-                    }
-                }
-            }
-            break;
-        case PLAYER_ORIENTATION_RIGHT:
-            for(Player* p: players){
-                int newY = (p->getPosition()->getY());
-                int newX = (p->getPosition()->getY());
-                int failingFor = abs(y-newY);
-                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x < newX)){
-                    int newDistance = passPosition->distanceTo(p->getPosition());
-                    if (distance > newDistance){
-                        finalX = (newX - x);
-                        finalY = (newY - y);
-                        distance = newDistance;
-                        setted = true;
-                    }
-                }
-            }
-            break;
-        case PLAYER_ORIENTATION_LEFT:
-            for(Player* p: players){
-                int newY = (p->getPosition()->getY());
-                int newX = (p->getPosition()->getX());
-                int failingFor = abs(y-newY);
-                if ((failingFor < PASS_HELPING_CONST) && (!p->isThisPlayer(player)) && (x > newX)){
-                    //log("GameController: Pase con ayuda, JUGADOR CERCA ", LOG_DEBUG); //SACAR
-                    int newDistance = passPosition->distanceTo(p->getPosition());
-                    if (distance > newDistance || distance == 0){
-                        finalX = (newX - x);
-                        finalY = (newY - y);
-                        distance = newDistance;
-                        setted = true;
-                    }
-                }
-            }
-            break;
-        default:
-            break;
+        }
     }
-    Velocity* velocity = new Velocity(0,0);
-    if(setted) {
-        log("GameController: Pase con ayuda, componentes", LOG_DEBUG);
-        log("x = ", finalX, LOG_DEBUG);
-        log("y = ", finalY, LOG_DEBUG);
-        velocity->setFloatX(finalX);
-        velocity->setFloatY(finalY);
-        velocity->normalize();
-        //log("GameController: Y normal = ", velocity->getComponentY(), LOG_DEBUG);
-        //log("GameController: X normal = ", velocity->getComponentX(), LOG_DEBUG);
-        //log("GameController: velocidad de pase normalizada ", LOG_DEBUG);
-    }
-    else{
-        log("GameController:Pase sin ayuda. ", LOG_DEBUG);
-    }
-    return velocity;
+    return finalVel;
 }
 
 // Cuando el jugador pise el borde mueve la camara.

@@ -130,6 +130,24 @@ int Coordinates::validatePositionInBoundsX() {
     return false;
 }
 
+void Coordinates::normalize()
+{
+    float x = this->x;
+    float y = this->y;
+    float len = sqrt(x * x + y * y);
+    if (len != 0)
+    {
+        if (x != 0)
+        {
+            this->x = x / len;
+        }
+        if (y != 0)
+        {
+            this->y = y / len;
+        }
+    }
+}
+
 std::string Coordinates::toString() {
     return "x: " + std::to_string((int)this->x) + " y: " + std::to_string((int)this->y);
 }

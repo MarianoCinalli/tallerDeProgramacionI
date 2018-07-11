@@ -18,6 +18,7 @@ class Coordinates : public Loggable {
         int setX(float otherX);
         int setY(float otherY);
 
+        void normalize();
         int addX(float amount);
         int addY(float amount);
         int validatePositionInBoundsY();

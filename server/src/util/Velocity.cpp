@@ -33,6 +33,11 @@ void Velocity::normalize(){
         }
 }
 
+float Velocity::distanceTo(Velocity *other)
+{
+        return sqrt(pow(this->x - other->x, 2) + pow(this->y - other->y, 2));
+}
+
 float Velocity::getComponentX() {
         return this->x;
 }
