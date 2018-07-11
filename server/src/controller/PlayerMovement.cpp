@@ -93,16 +93,16 @@ Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, C
     Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber, this->isLeftsideTeam);
     if (this->isDefender(number)) {
         if (isAttacking) {
-            /*
             // Se acerca al arco.
-            Coordinates* furthestPoint = rectangle->getFurthestVertex(ballPosition, !this->isLeftsideTeam);
+            Coordinates* furthestPoint = rectangle->getFurthestMiddleVertex(ballPosition);
             x = furthestPoint->getX();
             y = furthestPoint->getY();
             delete(furthestPoint);
-            */
+            /*
             // Se queda quieto.
             x = basePosition->getX();
             y = basePosition->getY();
+            */
         }
         // Ahora corre a la pelota.
         // Dejo lo de abajo por si queremos restaurar la distancia del defensor a la pelota.
@@ -122,16 +122,16 @@ Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, C
             }
             // Sino corre hacia la pelota. Hasta el borde de su area.
         } else {
-            /*
             // Se acerca al arco.
-            Coordinates* furthestPoint = rectangle->getFurthestVertex(ballPosition, this->isLeftsideTeam);
+            Coordinates* furthestPoint = rectangle->getFurthestMiddleVertex(ballPosition);
             x = furthestPoint->getX();
             y = furthestPoint->getY();
             delete(furthestPoint);
-            */
+            /*
             // Con esto se queda quieto.
             x = basePosition->getX();
             y = basePosition->getY();
+            */
         }
     } else {
         if (isAttacking) {
