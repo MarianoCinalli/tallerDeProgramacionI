@@ -18,13 +18,13 @@ void Areas312::loadAreas() {
 void Areas312::loadDefendersAreas() {
     log("Areas312: Cargando areas, del lado izquierdo, para los defensores...", LOG_DEBUG);
     this->areasForPlayersLeftSide[2] = new Rectangle(206, 202, 302, 608);
-    this->areasForPlayersLeftSide[3] = new Rectangle(88, 24, 1428, 133);
-    this->areasForPlayersLeftSide[4] = new Rectangle(88, 844, 1428, 131);
+    this->areasForPlayersLeftSide[3] = new Rectangle(200, 24, 1150, 133);
+    this->areasForPlayersLeftSide[4] = new Rectangle(190, 844, 1250, 131);
 
     log("Areas312: Cargando areas, del lado derecho, para los defensores...", LOG_DEBUG);
     this->areasForPlayersRightSide[2] = new Rectangle(1078, 202, 302, 608);
-    this->areasForPlayersRightSide[3] = new Rectangle(88, 24, 1428, 132);
-    this->areasForPlayersRightSide[4] = new Rectangle(88, 844, 1428, 132);
+    this->areasForPlayersRightSide[3] = new Rectangle(180, 24, 1150, 132);
+    this->areasForPlayersRightSide[4] = new Rectangle(210, 844, 1250, 132);
 }
 
 void Areas312::loadMidFildersAreas() {
