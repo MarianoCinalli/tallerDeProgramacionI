@@ -40,7 +40,11 @@ class PitchView {
         BallSpriteManager* ballView;
         int messageTime;
         TTF_Font* font;
-    public:
+        bool playedAlready;
+        int lastTimePlay;
+        int soundPlayTime;
+
+      public:
         PitchView(Texture* pitch, Texture* pitchMini, Camera* camera);
         void addPlayerView(PlayerSpriteManager* playerView);
         void addBallView(BallSpriteManager* ballView);

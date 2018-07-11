@@ -213,7 +213,9 @@ void GameController::checkGoal() {
                 message += "00-00";
             }
             Player* player = this->ball->getPlayer();
-            if (player != NULL) {
+            player->stopKicking();
+            if (player != NULL)
+            {
                 message += " " + player->getUsername();
             } else {
                 log("GameController: El player es null.", LOG_ERROR);

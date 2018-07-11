@@ -164,51 +164,75 @@ void* drawer(void* argument) {
     Score* score = gameController->getScore();
     const int MILISECONDS_TIMEOUT = 20;
     int timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-    while (!quit) {
-      if (!lostConnectionQuit){
-        if(SDL_TICKS_PASSED(SDL_GetTicks(), timeout)){
-          timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
-          clock->render(renderer);
-          score->render(renderer);
-          pitchView->renderMinimap(renderer);
-          pitchView->render(renderer);
-          if (gameController->state == GAME_START_STATE){
-            //renderea el countdown para que inicie el partido
-            // pitchView->render(renderer);
-            pitchView->renderCountdown(renderer, gameController->stateOption);
-          }
-          if (gameController->state == HALF_START_STATE) {
-            std::string msg = "Cambio de Lado";
-            pitchView->renderMessage(renderer, msg);
-            Mix_PlayChannel( -1, gWhistleSound, 0 );
-          }
-          if (gameController->state == GAME_END_STATE) {
-            std::string msg = "Fin del partido";
-            log("DRAWER: game end state: ",gameController->stats, LOG_INFO);
-            pitchView->renderMessage(renderer, msg);
-            pitchView->renderStats(renderer, gameController->stats);
-          }
-          if (gameController->state == GOAL_STATE) {
-            std::string msg = "GOOOOOOOOOOL!!!";
-            pitchView->renderMessage(renderer, msg);
-          }
-          if (gameController->state == GOALKICK_STATE) {
-            std::string msg;
-            if((gameController->stateOption == CENTER_LEFT_START) || (gameController->stateOption == CENTER_RIGHT_START)){
-                msg = "Saque del medio";
-            }else{
-                msg = "Saque de arco";
-            }
-            pitchView->renderMessage(renderer, msg);
-            // para debug
-            //std::string ballPos = gameController->getBall()->getPosition()->toString();
-            //pitchView->renderDebug(renderer, ballPos);
-          }
+    bool playedAlready = true;
+    int lastTimePlay = 0;
+    int soundPlayTime = 400;
+    while (!quit)
+    {
+        if (!lostConnectionQuit)
+        {
+            if (SDL_TICKS_PASSED(SDL_GetTicks(), timeout))
+            {
+                // if (SDL_GetTicks() - lastTimePlay > soundPlayTime)
+                // {
+                //     playedAlready = false;
+                // }
+                timeout = SDL_GetTicks() + MILISECONDS_TIMEOUT;
+                clock->render(renderer);
+                score->render(renderer);
+                pitchView->renderMinimap(renderer);
+                pitchView->render(renderer);
+                if (gameController->state == GAME_START_STATE)
+                {
+                    //renderea el countdown para que inicie el partido
+                    // pitchView->render(renderer);
+                    pitchView->renderCountdown(renderer, gameController->stateOption);
+                }
+                if (gameController->state == HALF_START_STATE)
+                {
+                    std::string msg = "Cambio de Lado";
+                    pitchView->renderMessage(renderer, msg);
+                    if (!playedAlready)
+                    {
+                        Mix_PlayChannel(-1, gWhistleSound, 0);
+                        playedAlready = true;
+                        // lastTimePlay = SDL_GetTicks();
+                    }
+                }
+                if (gameController->state == GAME_END_STATE)
+                {
+                    std::string msg = "Fin del partido";
+                    log("DRAWER: game end state: ", gameController->stats, LOG_INFO);
+                    pitchView->renderMessage(renderer, msg);
+                    pitchView->renderStats(renderer, gameController->stats);
+                }
+                if (gameController->state == GOAL_STATE)
+                {
+                    playedAlready = false;
+                    std::string msg = "GOOOOOOOOOOL!!!";
+                    pitchView->renderMessage(renderer, msg);
+                }
+                if (gameController->state == GOALKICK_STATE)
+                {
+                    std::string msg;
+                    if ((gameController->stateOption == CENTER_LEFT_START) || (gameController->stateOption == CENTER_RIGHT_START))
+                    {
+                        msg = "Saque del medio";
+                    }
+                    else
+                    {
+                        msg = "Saque de arco";
+                    }
+                    pitchView->renderMessage(renderer, msg);
+                    // para debug
+                    //std::string ballPos = gameController->getBall()->getPosition()->toString();
+                    //pitchView->renderDebug(renderer, ballPos);
+                }
 
-        //renderea la cancha de cualquier modo
-        SDL_RenderPresent(renderer);
+                //renderea la cancha de cualquier modo
+                SDL_RenderPresent(renderer);
+            }
         }
-      }
     }
     log("drawer: Finalizado.", LOG_INFO);
     return NULL;

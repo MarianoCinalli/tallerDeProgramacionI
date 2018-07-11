@@ -11,6 +11,9 @@ PitchView::PitchView(Texture* pitch, Texture* pitchMini, Camera* camera) {
         this->camera = camera;
         this->messageTime = -1;
         this->font = TTF_OpenFont("lazy.ttf", 30);
+        this->playedAlready = false;
+        this->lastTimePlay = 0;
+        this->soundPlayTime = 40;
         if (this->font == NULL) {
                 log("openLoginFormacion: Error al cargar la fuente! SDL_ttf Error: ", TTF_GetError(), LOG_INFO);
         }
@@ -85,6 +88,7 @@ void PitchView::renderMinimap(SDL_Renderer* screen) {
         }
 }
 
+
 void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
         SDL_Rect cancha;
         cancha.x = 0;
@@ -99,11 +103,17 @@ void PitchView::renderCountdown(SDL_Renderer* screen, int countdown){
         if (!countdownTexture.loadFromRenderedText(message, screen, SDL_WHITE, this->font)) {
                 log("No se pudo mostrar el texto", LOG_ERROR);
         }else{
+                // if (SDL_GetTicks() - lastTimePlay > soundPlayTime)
+                // {
+                //         playedAlready = false;
+                // }
                 SDL_Rect renderQuad1 = { (SCREEN_WIDTH - countdownTexture.getWidth()) / 2, 150, countdownTexture.getWidth(), countdownTexture.getHeight() };
                 SDL_RenderCopyEx(screen, countdownTexture.getSpriteSheetTexture(), NULL, &renderQuad1, 0.0, NULL, SDL_FLIP_NONE);
                 // SDL_RenderPresent(screen);
-                if (countdown >= 5) {
+                if (countdown >= 5 && !playedAlready) {
                         Mix_PlayChannel( -1, gWhistleSound, 0 );
+                        playedAlready = true;
+                        lastTimePlay = SDL_GetTicks();
                 }
         }
 

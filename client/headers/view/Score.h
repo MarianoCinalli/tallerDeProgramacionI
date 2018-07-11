@@ -18,6 +18,9 @@ class Score {
         int local;
         int visitante;
         Score();
+        bool playedAlready;
+        int lastTimePlay;
+        int soundPlayTime;
         // parsea YAML
         void parseYaml(YAML::Node node);
         void render(SDL_Renderer* screen);

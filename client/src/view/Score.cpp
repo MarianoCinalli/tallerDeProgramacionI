@@ -8,6 +8,9 @@ extern Mix_Chunk *gGoalSound;
 
 Score::Score() {
     log("Score: Creando score...", LOG_INFO);
+    this->playedAlready = false;
+    this->lastTimePlay = 0;
+    this->soundPlayTime = 40;
     this->local = 0;
     this->visitante = 0;
     this->gFont = NULL;
@@ -39,14 +42,22 @@ void Score::parseYaml(YAML::Node node){
 }
 
 void Score::gol() {
-    if ( Mix_PlayingMusic() != 0 ) {
-        while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
-          SDL_Delay(100);
+    if ((SDL_GetTicks() - lastTimePlay) > this->soundPlayTime){
+        playedAlready = false;
+    }
+    if (!playedAlready)
+    {
+        if ( Mix_PlayingMusic() != 0 ) {
+            while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
+            SDL_Delay(100);
+            }
+            Mix_PlayChannel( -1, gGoalSound, 0 );
+            Mix_FadeInMusic(gMusic, -1, 1000);
+        } else {
+            Mix_PlayChannel( -1, gGoalSound, 0 );
         }
-        Mix_PlayChannel( -1, gGoalSound, 0 );
-        Mix_FadeInMusic(gMusic, -1, 1000);
-    } else {
-        Mix_PlayChannel( -1, gGoalSound, 0 );
+        playedAlready = true;
+        lastTimePlay = SDL_GetTicks();
     }
 }
 
