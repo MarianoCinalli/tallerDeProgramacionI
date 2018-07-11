@@ -121,6 +121,8 @@ void GameController::checkState() {
                 }else
                 if (this->stateOption >= 0) {
                     this->state = GOALKICK_STATE;
+                    this->ball->getPlayer()->stopKicking();
+
                     //HACK para forzar fin de juego
                     //this->state = GAME_END_STATE;
                 }
