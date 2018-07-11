@@ -296,7 +296,7 @@ const int BALL_STEAL_HEIGHT = 3;
 void Pitch::checkSteals() {
     // cuando un jugador se la quiere robar a otro
     log("Pitch: Chequeando intercepciones...", LOG_SPAM);
-    if (this->ball->isInterceptable() && (this->ball->getHeight() < BALL_STEAL_HEIGHT))
+    if (this->ball->isInterceptable())
     {
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
@@ -333,7 +333,7 @@ void Pitch::checkSteals() {
 
 void Pitch::changeBallOwnership() {
     // cuando la pelota esta suelta en el piso y un jugador quiere agarrarla
-    if ((this->ball->isInterceptable() && (this->ball->getHeight() < 1)) && (!this->ball->isDominated())) {
+    if (this->ball->isInterceptable() && !this->ball->isDominated()) {
         int value = CHANGE_OWNERSHIP_VALUE;
         std::list<Player*> players = this->localTeam->getPlayers();
         std::list<Player*> awayPlayers = this->awayTeam->getPlayers();
@@ -342,9 +342,13 @@ void Pitch::changeBallOwnership() {
             int nearestDistance = 300; //max distance harcodeadeo TODO
             Player* nearestPlayer = NULL;
             for (Player* p : players) {
+                value = p->getStealRange();
+                float height = this->ball->getHeight();
+                bool highEnough = (height < (1 + 100/p->getStealCoef()));
                 int distance = p->getPosition()->distanceTo(this->ball->getPosition());
                 log("Pitch: Distancia a pelota: ", distance, LOG_SPAM);
-                if (distance < nearestDistance && distance > 0 && distance < value) {
+                if ((distance < nearestDistance && distance > 0 && distance < value) && highEnough)
+                {
                     nearestDistance = distance;
                     nearestPlayer = p;
                 }

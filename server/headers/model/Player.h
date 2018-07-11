@@ -13,6 +13,7 @@ class Player : public Loggable {
     int id;
     int team;
     int orientation;
+    int stealRange;
     float maxVelocity;
     float sprintVelocity;
     int kickPower;
@@ -62,6 +63,7 @@ class Player : public Loggable {
     std::string getUsername();
     std::string toString();
     int getStealCoef();
+    int getStealRange();
     // Modifiers
     // Cambia la velocidad a su maximo, por ahora.
     void accelerate(int direction);

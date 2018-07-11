@@ -82,7 +82,11 @@ bool Ball::isInterceptable() {
 
 void Ball::isIntercepted(Player* player) {
     this->timeIntercept = 0;
-    // this->stopRolling();
+    this->isInAPass = false;
+    this->isInAHighPass = false;
+    this->passPower = 0;
+    this->height = 0;
+    this->heightLevel = 0;
     this->interceptable = false;
     this->setPlayer(player);
     this->orientation = player->getOrientation();
@@ -123,22 +127,59 @@ void Ball::isPassed(Velocity* velocity, float passPower, bool highPass) {
     }
 }
 
-float calculatePassPower(float passPower, float decel){
-  float finalPassPower;
-  if (passPower >  3){
-    finalPassPower = passPower -decel;
-  }
-  else{
-    finalPassPower = passPower - decel/3;
-  }
-  return finalPassPower;
-}
 
 const int TIME_BALL_NO_INTERCEPT = 9;
 const int BALL_DECELERATE_TIME = 3; //a numeros mas grandes, tarda mas
 
 
 const float BALL_HEIGHT_CONST = 1.3;
+
+float Ball::calculatePassPower(float passPower, int timePassing)
+{
+    float decel = 0.27;
+    float finalPassPower;
+    float deltaTimePassing = (this->initialPassPower - 3)/decel;
+    if (passPower > 4)
+    {
+        finalPassPower = this->initialPassPower - decel*timePassing;
+    }
+    else
+    {
+        finalPassPower = 3 - decel/3 * (timePassing-deltaTimePassing);
+    }
+    return finalPassPower;
+}
+
+float calculateHeight2(float maxPassPower, float passPower)
+{
+    float X1;
+    float X2;
+    float roof = 0.2;
+    float maxHeight = maxPassPower/2;
+    if (maxPassPower < 2)
+    {
+        X1 = 0;
+        X2 = maxPassPower / 2;
+    }
+    else
+    {
+        X1 = (maxPassPower * 1 / 4);
+        X2 = maxPassPower - X1;
+    }
+    if (passPower > X2+1)
+    {
+        return (maxHeight * (maxPassPower - passPower) / (maxPassPower - X2));
+    }
+    else if((passPower < X2 + roof) && (passPower > X2 -roof)){
+        return maxHeight;
+    }
+    else if (passPower > X1-1)
+    {
+        return maxHeight * (passPower - X1) / (X2 - X1);
+    }
+    else
+        return 0;
+}
 
 void Ball::updatePosition() {
     if (this->isDominated()) {
@@ -147,18 +188,16 @@ void Ball::updatePosition() {
     }
     if (this->isInAPass) {
         ++this->timeIntercept;
-        if(this->isInAHighPass && !this->velocity->isZero()) {
-            this->calculateHeight();
-            if(this->height > BALL_HEIGHT_CONST){
-                this->interceptable = false;
-            }
-            log("Ball: altura del balon: ", this->height, LOG_SPAM);
-            log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
-        }
-        log("Ball: paso este tiempo:", this->timeIntercept, LOG_SPAM);
         if (!this->interceptable && (timeIntercept > TIME_BALL_NO_INTERCEPT)) { //TODO numero harcodeado tiempo de pase
             this->interceptable = true;
         }
+        if(this->isInAHighPass && !this->velocity->isZero()) {
+            // if(this->height > BALL_HEIGHT_CONST){    ///ya se verifica esto en las funciones
+            //     this->interceptable = false;
+            // }
+           
+        }
+        log("Ball: paso este tiempo:", this->timeIntercept, LOG_SPAM);
         if(this->position->addX(this->velocity->getComponentX()*this->passPower)<0){
           this->velocity->scaleX(-1);
         }
@@ -166,13 +205,20 @@ void Ball::updatePosition() {
           this->velocity->scaleY(-1);
         }
         if (!this->velocity->isZero()) {
-            if (this->timeIntercept % BALL_DECELERATE_TIME == 0) {
-                this->passPower = calculatePassPower(this->passPower, this->decelerate);
-                if (this->passPower< 0){
-                    this->timeIntercept = 0;
-                    this->stopRolling();
-                }
+            if (this->isInAHighPass)
+            {
+                // this->calculateHeight();
+                this->height = calculateHeight2(this->initialPassPower, this->passPower);
+                log("Ball: altura del balon: ", this->height, LOG_SPAM);
+                log("Ball: poder de pase: ", this->passPower, LOG_SPAM);
             }
+            // if (this->timeIntercept % BALL_DECELERATE_TIME == 0) {
+            this->passPower = calculatePassPower(this->passPower, this->timeIntercept);
+            if (this->passPower< 0){
+                this->timeIntercept = 0;
+                this->stopRolling();
+            }
+            // }
         }
     }
     else {
@@ -185,6 +231,7 @@ void Ball::updatePosition() {
         }
     }
 }
+
 
 //--------------------------PRIVATE----------------------------------
 
@@ -224,6 +271,7 @@ void Ball::calculateHeight() {
         }
     }
 }
+
 
 void Ball::calculateDominatedPosition() {
     int x = this->player->getPosition()->getX(); // TODO: ver q no viole independencia
