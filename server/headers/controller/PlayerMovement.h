@@ -19,7 +19,7 @@ class PlayerMovement {
         void setSide(bool isLeftsideTeam);
         bool isInsideArea(Coordinates* coordinates, int playerNumber);
         void cleanVelocity(Velocity* velocity, Coordinates* coordinates, int playerNumber);
-        Coordinates* getCoordinatesToFollow(Coordinates* ballPosition, Coordinates* currentPosition, Coordinates* basePosition, int playerNumber, bool isAttacking);
+        Coordinates* getCoordinatesToFollow(Coordinates* ballPosition, Coordinates* currentPosition, Coordinates* basePosition, int playerNumber, bool isAttacking, bool ballIsDominated);
         bool isDefender(int playerNumber);
         bool isAttacker(int playerNumber);
         std::string getDebugLines();
