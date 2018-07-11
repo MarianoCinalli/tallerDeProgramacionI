@@ -55,7 +55,7 @@ void Pitch::changeSides() {
     this->awayTeam->order();
 }
 
-void Pitch::setStart(int position) {
+Player* Pitch::setStart(int position) {
     this->localTeam->order();
     this->awayTeam->order();
     Team* leftTeam;
@@ -67,26 +67,33 @@ void Pitch::setStart(int position) {
         rightTeam = this->localTeam;
         leftTeam = this->awayTeam;
     }
-
+    Team *team;
     Player* player = this->localTeam->getPlayer(7); //TODO DEFAULT
     if (position == LEFT_START) {
         player = leftTeam->getPlayer(1);
+        team = leftTeam;
         player->setOrientation(PLAYER_ORIENTATION_RIGHT);
     } else if (position == RIGHT_START) {
         player = rightTeam->getPlayer(1);
+        team = rightTeam;
         player->setOrientation(PLAYER_ORIENTATION_LEFT);
 
     } else if (position == CENTER_LEFT_START) {
         player = leftTeam->getPlayer(7);
+        team = leftTeam;
         player->setOrientation(PLAYER_ORIENTATION_RIGHT);
 
     } else if (position == CENTER_RIGHT_START) {
         player = rightTeam->getPlayer(7);
+        team = rightTeam;
         player->setOrientation(PLAYER_ORIENTATION_LEFT);
     }
     this->ball->restart(position);
     this->ball->setPlayer(player);
+    std::string user = teams[team].front();
+    this->setActivePlayer(user, player); //which user?
     player->setCanMove(false);
+    return player;
 }
 
 // Si la formacion es menor que 0, se ignora.

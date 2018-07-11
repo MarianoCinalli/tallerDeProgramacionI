@@ -36,7 +36,7 @@ class Pitch {
         Ball* getBall();
         Camera* getCamera();
         int goalkick();
-        void setStart(int position);
+        Player* setStart(int position);
         void checkSteals();
         void changeBallOwnership();
         void removeActivePlayer(std::string user);
