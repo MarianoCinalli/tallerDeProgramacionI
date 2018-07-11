@@ -292,7 +292,7 @@ void GameController::checkTime(Time* elapsedTime) {
         this->isFistHalf = false;
         log("GameController: Termino el primer tiempo.", LOG_INFO);
         this->state = HALF_START_STATE;
-        this->stateOption = CENTER_RIGHT_START;
+        this->stateOption = CENTER_LEFT_START;
     } else if (!this->isFistHalf && this->hasHalfEnded(elapsedTime, 2)) {
         log("GameController: Termino el segundo tiempo.", LOG_INFO);
         this->state = GAME_END_STATE;
