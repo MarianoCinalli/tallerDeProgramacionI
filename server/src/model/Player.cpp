@@ -187,8 +187,8 @@ void Player::stop() {
 }
 
 
-void Player::updateState(Coordinates* ballPosition, bool isAttacking) {
-    this->updatePosition(ballPosition, isAttacking); //follows this position
+void Player::updateState(Coordinates* ballPosition, bool isAttacking, bool ballIsDominated) {
+    this->updatePosition(ballPosition, isAttacking, ballIsDominated); //follows this position
     this->updateKicking();
     this->updateSliding(ballPosition, isAttacking);
 }
@@ -231,7 +231,7 @@ void Player::updateSliding(Coordinates* ballPosition, bool isAttacking) {
 
 }
 
-void Player::updatePosition(Coordinates* positionToFollow, bool isAttacking) {
+void Player::updatePosition(Coordinates* ballPosition, bool isAttacking, bool ballIsDominated) {
     float speed = 1;
     if (this->runningFast) {
         speed = this->sprintVelocity; //TODO hardcode
@@ -240,14 +240,15 @@ void Player::updatePosition(Coordinates* positionToFollow, bool isAttacking) {
         if (this->playerMovement->isInsideArea(this->position, this->id)) {
             if (this->isGoalkeeper()) {
                 // El arquero solo se mueve en Y.
-                this->changeVelocityTo(positionToFollow, false, true);
+                this->changeVelocityTo(ballPosition, false, true);
             } else {
                 Coordinates* coordinatesToFollow = this->playerMovement->getCoordinatesToFollow(
-                    positionToFollow,
+                    ballPosition,
                     this->position,
                     this->basePosition,
                     this->id,
-                    isAttacking
+                    isAttacking,
+                    ballIsDominated
                 );
                 this->changeVelocityTo(coordinatesToFollow, false, false);
                 this->playerMovement->cleanVelocity(this->velocity, this->position, this->id);

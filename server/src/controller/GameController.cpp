@@ -236,7 +236,8 @@ void GameController::updatePlayers() {
         for (Player* p : teamPlayers) {
             p->updateState(
                 this->ball->getPosition(),
-                this->ball->doesHisTeamHaveTheBall(p)
+                this->ball->doesHisTeamHaveTheBall(p),
+                this->ball->isDominated()
             );
         }
     }
