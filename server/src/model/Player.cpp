@@ -51,6 +51,10 @@ int Player::getId() {
 int Player::getStealCoef() {
     return this->stealCoef;
 }
+int Player::getStealRange()
+{
+    return this->stealRange;
+}
 
 void Player::setWithBall(bool dominated) {
     this->withBall = dominated;
@@ -110,15 +114,19 @@ void Player::setFieldPosition(int formation) {
     if (number == 1) {
         this->fieldPosition = KEEPER_POSITION;
         this->stealCoef = KEEPER_STEAL_COEF;
+        this->stealRange = CHANGE_OWNERSHIP_VALUE*1.5;
     } else if (number <= (1 + defense)) {
         this->fieldPosition = DEFENSE_POSITION;
         this->stealCoef = DEFENSE_STEAL_COEF;
+        this->stealRange = CHANGE_OWNERSHIP_VALUE * 1.3;
     } else if (number <= (1 + defense + midfield)) {
         this->fieldPosition = MIDFIELD_POSITION;
         this->stealCoef = MIDFIELD_STEAL_COEF;
+        this->stealRange = CHANGE_OWNERSHIP_VALUE;
     } else {
         this->fieldPosition = STRIKER_POSITION;
         this->stealCoef = STRIKER_STEAL_COEF;
+        this->stealRange = CHANGE_OWNERSHIP_VALUE;
     }
     log("Player: posicion en cancha: ", this->fieldPosition, LOG_DEBUG);
 }

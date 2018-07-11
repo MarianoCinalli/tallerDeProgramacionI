@@ -51,8 +51,8 @@ class Ball {
         void calculateDominatedPosition();
         void progressiveDecelerate(float passDistance);
         void stopRolling();
+        float calculatePassPower(float passPower, int timePassing);
         void calculateHeight();
-
         bool doesHisTeamHaveTheBall(Player* player);
 
         std::string getAsYaml();
