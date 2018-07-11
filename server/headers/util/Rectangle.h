@@ -19,6 +19,8 @@ class Rectangle {
         bool isCloseToBordersInY(int y);
         bool isInside(int pointX, int pointY);
         bool isVelocityPointingInside(Velocity* velocity, Coordinates* coordinates);
+        Coordinates* getFurthestVertex(Coordinates* point);
+        Coordinates* getFurthestVertex(Coordinates* point, bool onRightSide);
         std::string getAsString();
         ~Rectangle();
     private:

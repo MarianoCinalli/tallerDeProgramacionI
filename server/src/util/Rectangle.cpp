@@ -8,19 +8,11 @@ Rectangle::Rectangle(int x, int y, int width, int height) {
 }
 
 bool Rectangle::isCloseToBordersInX(int x) {
-    bool isTrue = this->isCloseTo(x, this->x) || this->isCloseTo(x, this->x + this->width);
-    /*if (isTrue) {
-        std::cout << "Jugador en: " << x << "  x1: " << this->x <<  " x2: " << this->x + this->width << std::endl;
-    }*/
-    return isTrue;
+    return this->isCloseTo(x, this->x) || this->isCloseTo(x, this->x + this->width);
 }
 
 bool Rectangle::isCloseToBordersInY(int y) {
-    bool isTrue = this->isCloseTo(y, this->y) || this->isCloseTo(y, this->y + this->height);
-    /*if (isTrue) {
-        std::cout << "Jugador en: " << y << "  x1: " << this->y <<  " x2: " << this->y + this->height << std::endl;
-    }*/
-    return isTrue;
+    return this->isCloseTo(y, this->y) || this->isCloseTo(y, this->y + this->height);
 }
 
 bool Rectangle::isCloseTo(int a, int b) {
@@ -55,6 +47,37 @@ bool Rectangle::isYInside(int pointY) {
 
 std::string Rectangle::getAsString() {
     return std::to_string(this->x) + ", " + std::to_string(this->y) + ", " + std::to_string(this->width) + ", " + std::to_string(this->height);
+}
+
+// Devuelve el punto mas lejano, con respecto a otro.
+Coordinates* Rectangle::getFurthestVertex(Coordinates* point) {
+    int middleX = this->x + this->width / 2;
+    int middleY = this->y + this->height / 2;
+    int x = point->getX();
+    int y = point->getY();
+    if (point->getY() < middleY) {
+        y = this->y + this->height;
+    } else {
+        y = this->y;
+    }
+    if (point->getX() < middleX) {
+        x = this->x + this->width;
+    } else {
+        x = this->x;
+    }
+    Coordinates* coordinates = new Coordinates(x, y);
+    return coordinates;
+}
+
+// Devuelve el punto mas lejano, con respecto a otro, en un lado particular del rectangulo.
+Coordinates* Rectangle::getFurthestVertex(Coordinates* point, bool onRightSide) {
+    Coordinates* coordinates = this->getFurthestVertex(point);
+    if (onRightSide) {
+        coordinates->setX(this->x + this->width);
+    } else {
+        coordinates->setX(this->x);
+    }
+    return coordinates;
 }
 
 Rectangle::~Rectangle() {

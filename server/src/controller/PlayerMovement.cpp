@@ -50,9 +50,23 @@ void PlayerMovement::cleanVelocity(Velocity* velocity, Coordinates* coordinates,
         // Me fijo si la posicion actual es cercana a los bordes del area de movimiento.
         // Si lo estoy solo me muevo en la direccion que no estoy cerca de los bordes.
         if (!rectangle->isVelocityPointingInside(velocity, coordinates)) {
-            if (rectangle->isCloseToBordersInX(coordinates->getX())) {
+            int margin = 0;
+            int number = 0;
+            if (playerNumber > 7) {
+                number = playerNumber - 7;
+            } else {
+                number = playerNumber;
+            }
+            if (this->isDefender(number)) {
+                margin = DEFENDER_MARGIN;
+            } else if (this->isAttacker(number)) {
+                margin = ATTACKER_MARGIN;
+            } else {
+                margin = MIDFILDER_MARGIN_CLOSE;
+            }
+            if (rectangle->isCloseToBordersInX(coordinates->getX() + margin)) {
                 velocity->setComponentX(0);
-            } else if (rectangle->isCloseToBordersInY(coordinates->getY())) {
+            } else if (rectangle->isCloseToBordersInY(coordinates->getY() + margin)) {
                 velocity->setComponentY(0);
             }
         }
@@ -76,30 +90,50 @@ Coordinates* PlayerMovement::getCoordinatesToFollow(Coordinates* ballPosition, C
     } else {
         number = playerNumber;
     }
+    Rectangle* rectangle = this->playerAreas->getForPlayer(playerNumber, this->isLeftsideTeam);
     if (this->isDefender(number)) {
         if (isAttacking) {
             x = basePosition->getX();
             y = basePosition->getY();
-        } else {
-            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), DEFENDER_MARGIN);
-            y += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getY(), DEFENDER_MARGIN);
         }
+        // Ahora corre a la pelota.
+        // Dejo lo de abajo por si queremos restaurar la distancia del defensor a la pelota.
+        /*else {
+            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), DEFENDER_MARGIN);
+            y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), DEFENDER_MARGIN);
+        }*/
     } else if (this->isAttacker(number)) {
-        if (!isAttacking) {
+        if (isAttacking) {
+            if (rectangle->isInside(ballPosition->getX(), ballPosition->getY())) {
+                // Si la pelota esta dentro del cuadrado corro al punto
+                // mas lejano en Y, el X es el mas cercano al arco.
+                Coordinates* furthestPoint = rectangle->getFurthestVertex(ballPosition, this->isLeftsideTeam);
+                x = furthestPoint->getX();
+                y = furthestPoint->getY();
+                delete(furthestPoint);
+            }
+            // Sino corre hacia la pelota. Hasta el borde de su area.
+        } else {
+            // En defensa vuelve a su posicion original.
             x = basePosition->getX();
             y = basePosition->getY();
-        } else {
-            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), ATTACKER_MARGIN);
-            y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), ATTACKER_MARGIN);
         }
     } else {
         if (isAttacking) {
-            x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), MIDFILDER_MARGIN_FAR);
-            y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), MIDFILDER_MARGIN_FAR);
-        } else {
+            // Este se va siempre al punto mas lejano.
+            // Si el jugador de su equipo con la pelota pasa la mitad
+            // del area del mediocampista va atras de la pelota.
+            Coordinates* furthestPoint = rectangle->getFurthestVertex(ballPosition);
+            x = furthestPoint->getX();
+            y = furthestPoint->getY();
+            delete(furthestPoint);
+        }
+        // Ahora corre a la pelota.
+        // Dejo lo de abajo por si queremos restaurar la distancia del mediocampista a la pelota.
+        /*else {
             x += this->getAmountToModifyPosition(ballPosition->getX(), currentPosition->getX(), MIDFILDER_MARGIN_CLOSE);
             y += this->getAmountToModifyPosition(ballPosition->getY(), currentPosition->getY(), MIDFILDER_MARGIN_CLOSE);
-        }
+        }*/
     }
     Coordinates* coordinates = new Coordinates(x, y);
     return coordinates;
