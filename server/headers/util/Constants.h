@@ -61,7 +61,7 @@ const int LEVEL_WIDTH = 1600;
 const int LEVEL_HEIGHT = 1000;
 
 const int BOTTOM_POST_POSITION = 592;
-const int TOP_POST_POSITION = 300;
+const int TOP_POST_POSITION = 315;
 const int OUT_FIELD_VALIDATE = 1;
 const int POST_BOUNCE_VALIDATE = 2;
 
@@ -82,7 +82,7 @@ const int PLAYERS_PER_TEAM = 7;
 
 //interceptar pases
 const int CHANGE_OWNERSHIP_VALUE = 40;
-const int STEAL_DISTANCE = 90;
+const int STEAL_DISTANCE = 80;
 const int KEEPER_STEAL_COEF = 100;
 const int DEFENSE_STEAL_COEF = 80;
 const int MIDFIELD_STEAL_COEF = 70;
